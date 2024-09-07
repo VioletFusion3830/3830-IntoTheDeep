@@ -12,7 +12,7 @@ public class FtcDashboard
     }
 
     @Config
-    public static class DriveTuneParams
+    public static class PPTuneParams
     {
         public static double tuneDistance = 8;
         public static double tuneAngleDistance = 90;

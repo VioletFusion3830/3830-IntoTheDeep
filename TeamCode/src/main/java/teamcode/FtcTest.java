@@ -141,6 +141,7 @@ public class FtcTest extends FtcTeleOp
     private WebcamName frontWebcam = null;
     private WebcamName rearWebcam = null;
     private boolean fpsMeterEnabled = false;
+    private boolean pathForward = false;
     //
     // Overrides FtcOpMode abstract method.
     //
@@ -290,31 +291,10 @@ public class FtcTest extends FtcTeleOp
                 break;
 
             case TUNE_X_PID:
-                if (testCommand != null)
-                {
-                    ((CmdPidDrive) testCommand).start(
-                        0.0, testChoices.drivePower, testChoices.tunePidCoeffs,
-                        new TrcPose2D(testChoices.tuneDistance*12.0, 0.0, 0.0));
-                    robot.robotDrive.pidDrive.setTraceLevel(TrcDbgTrace.MsgLevel.INFO, logEvents, debugPid, false);
-                }
-                break;
-
             case TUNE_Y_PID:
-                if (testCommand != null)
-                {
-                    ((CmdPidDrive) testCommand).start(
-                        0.0, testChoices.drivePower, testChoices.tunePidCoeffs,
-                        new TrcPose2D(0.0, testChoices.tuneDistance*12.0, 0.0));
-                    robot.robotDrive.pidDrive.setTraceLevel(TrcDbgTrace.MsgLevel.INFO, logEvents, debugPid, false);
-                }
-                break;
-
             case TUNE_TURN_PID:
                 if (testCommand != null)
                 {
-                    ((CmdPidDrive) testCommand).start(
-                        0.0, testChoices.drivePower, testChoices.tunePidCoeffs,
-                        new TrcPose2D(0.0, 0.0, testChoices.tuneHeading));
                     robot.robotDrive.pidDrive.setTraceLevel(TrcDbgTrace.MsgLevel.INFO, logEvents, debugPid, false);
                 }
                 break;
@@ -648,6 +628,30 @@ public class FtcTest extends FtcTeleOp
                     {
                         exposure += 100;
                         robot.vision.vision.setManualExposure(exposure, null);
+                    }
+                    passToTeleOp = false;
+                }
+                else if (robot.robotDrive != null &&
+                        (testChoices.test == Test.TUNE_Y_PID ||
+                                testChoices.test == Test.TUNE_X_PID ||
+                                testChoices.test == Test.TUNE_TURN_PID))
+                {
+                    if (pressed)
+                    {
+                        pathForward = !pathForward;
+                        double value = testChoices.test == Test.TUNE_TURN_PID ? FtcDashboard.PPTuneParams.tuneAngleDistance : FtcDashboard.PPTuneParams.tuneDistance;
+                        if(!pathForward) value = -value;
+                        switch (testChoices.test) {
+                            case TUNE_X_PID:
+                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.TunePID.tunePidCoeff, new TrcPose2D(value*12,0,0));
+                                break;
+                            case TUNE_Y_PID:
+                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.TunePID.tunePidCoeff, new TrcPose2D(0,value*12,0));
+                                break;
+                            case TUNE_TURN_PID:
+                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.TunePID.tunePidCoeff, new TrcPose2D(0,0,value));
+                                break;
+                        }
                     }
                     passToTeleOp = false;
                 }
