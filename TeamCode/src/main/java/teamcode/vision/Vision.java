@@ -63,6 +63,18 @@ public class Vision
     //
     // YCrCb Color Space.
     private static final int colorConversion = Imgproc.COLOR_RGB2YCrCb;
+    private static final double[] redSampleColorThresholds = {};
+    private static final double[] blueSampleColorThresholds = {};
+    private static final double[] yellowSampleColorThresholds = {92,204,84,84,166,135};
+//    private static final TrcOpenCvColorBlobPipeline.FilterContourParams colorSampleFilterContourParams =
+//            new TrcOpenCvColorBlobPipeline.FilterContourParams()
+//                    .setMinArea()
+//                    .setMinPerimeter()
+//                    .setWidthRange()
+//                    .setHeightRange()
+//                    .setSolidityRange()
+//                    .setVerticesRange()
+//                    .setAspectRatioRange();
     private static final double[] redBlobColorThresholds = {20.0, 120.0, 180.0, 240.0, 90.0, 120.0};
     private static final double[] blueBlobColorThresholds = {20.0, 250.0, 40.0, 250.0, 160.0, 240.0};
     private static final TrcOpenCvColorBlobPipeline.FilterContourParams colorBlobFilterContourParams =
@@ -186,7 +198,7 @@ public class Vision
             {
                 // Use USB webcams.
                 vision = new FtcVision(
-                    webcam1, webcam2, robot.robotInfo.webCam1.camImageWidth, robot.robotInfo.webCam1.camImageHeight,
+                    webcam1, /*webcam2,*/ robot.robotInfo.webCam1.camImageWidth, robot.robotInfo.webCam1.camImageHeight,
                     RobotParams.Preferences.showVisionView, RobotParams.Preferences.showVisionStat, visionProcessors);
             }
             else
