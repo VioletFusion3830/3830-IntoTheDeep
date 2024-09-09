@@ -198,7 +198,7 @@ public class Vision
             {
                 // Use USB webcams.
                 vision = new FtcVision(
-                    webcam1, /*webcam2,*/ robot.robotInfo.webCam1.camImageWidth, robot.robotInfo.webCam1.camImageHeight,
+                    webcam1, webcam2, robot.robotInfo.webCam1.camImageWidth, robot.robotInfo.webCam1.camImageHeight,
                     RobotParams.Preferences.showVisionView, RobotParams.Preferences.showVisionStat, visionProcessors);
             }
             else
