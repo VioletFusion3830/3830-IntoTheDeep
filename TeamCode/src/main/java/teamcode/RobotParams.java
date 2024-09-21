@@ -143,10 +143,10 @@ public class RobotParams
         public static final boolean doStatusUpdate              = !inCompetition;
         public static final boolean showSubsystems              = true;
         // Vision
-        public static final boolean useVision                   = false;
-        public static final boolean useWebCam                   = false;
+        public static final boolean useVision                   = true;
+        public static final boolean useWebCam                   = true;
         public static final boolean useBuiltinCamBack           = false;    // For Android Phone as Robot Controller.
-        public static final boolean tuneColorBlobVision         = false;
+        public static final boolean tuneColorBlobVision         = true;
         public static final boolean useAprilTagVision           = false;
         public static final boolean useColorBlobVision          = false;
         public static final boolean useLimelightVision          = false;
@@ -173,9 +173,9 @@ public class RobotParams
             camImageWidth = 640;
             camImageHeight = 480;
             camXOffset = 0.0;                   // Inches to the right from robot center
-            camYOffset = 2.0;                   // Inches forward from robot center
-            camZOffset = 9.75;                  // Inches up from the floor
-            camPitch = 15.0;                    // degrees down from horizontal
+            camYOffset = 0;                   // Inches forward from robot center
+            camZOffset = 0;                  // Inches up from the floor
+            camPitch = 0;                    // degrees down from horizontal
             camYaw = 0.0;                       // degrees clockwise from robot front
             camRoll = 0.0;
             camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
@@ -201,13 +201,13 @@ public class RobotParams
     {
         public BackCamParams()
         {
-            camName = "WebCam 2";
+            camName = null;
             camImageWidth = 640;
             camImageHeight = 480;
             camXOffset = 0.0;                   // Inches to the right from robot center
-            camYOffset = 2.0;                   // Inches forward from robot center
-            camZOffset = 9.75;                  // Inches up from the floor
-            camPitch = 15.0;                    // degrees down from horizontal
+            camYOffset = 0;                   // Inches forward from robot center
+            camZOffset = 0;                  // Inches up from the floor
+            camPitch = 0;                    // degrees down from horizontal
             camYaw = 0.0;                       // degrees clockwise from robot front
             camRoll = 0.0;
             camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
@@ -233,21 +233,21 @@ public class RobotParams
     {
         public LimelightParams()
         {
-            camName = "limelight3a";
+            camName = null;
             camImageWidth = 640;
             camImageHeight = 480;
             camXOffset = 0.0;                   // Inches to the right from robot center
-            camYOffset = 2.0;                   // Inches forward from robot center
-            camZOffset = 9.75;                  // Inches up from the floor
-            camPitch = 15.0;                    // degrees down from horizontal
+            camYOffset = 0;                   // Inches forward from robot center
+            camZOffset = 0;                  // Inches up from the floor
+            camPitch = 0;                    // degrees down from horizontal
             camYaw = 0.0;                       // degrees clockwise from robot front
             camRoll = 0.0;
             camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
             camOrientation = OpenCvCameraRotation.UPRIGHT;
             // Homography: cameraRect in pixels, worldRect in inches
             cameraRect = new TrcHomographyMapper.Rectangle(
-                0.0, 120.0,                                             // Camera Top Left
-                camImageWidth - 1, 120.0,                                // Camera Top Right
+                0.0, 0.0,                                             // Camera Top Left
+                camImageWidth - 1, 0.0,                                // Camera Top Right
                 0.0, camImageHeight - 1,                                // Camera Bottom Left
                 camImageWidth - 1, camImageHeight - 1);                 // Camera Bottom Right
             worldRect = new TrcHomographyMapper.Rectangle(
@@ -378,7 +378,7 @@ public class RobotParams
             yOdWheelXOffsets = new double[] {-144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
             yOdWheelYOffsets = new double[] {144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
             // Absolute Odometry
-            if (odometryType == TrcDriveBase.OdometryType.AbsoluteOdometry)
+            if (odometryType == TrcDriveBase.OdometryType.OdometryWheels)
             {
                 FtcSparkFunOtos.Config otosConfig = new FtcSparkFunOtos.Config()
                     .setOffset(0.0, 0.0, 0.0)
@@ -421,7 +421,7 @@ public class RobotParams
             webCam2 = new BackCamParams();
             limelight = new LimelightParams();
             // Miscellaneous
-            blinkinName = "blinkin";
+            blinkinName = null;
         }   //MecanumParams
     }   //class MecanumParams
 
