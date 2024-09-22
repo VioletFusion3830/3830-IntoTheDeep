@@ -30,8 +30,10 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import ftclib.drivebase.FtcRobotDrive;
 import ftclib.drivebase.FtcSwerveDrive;
+import ftclib.motor.FtcMotorActuator;
 import ftclib.motor.FtcMotorActuator.MotorType;
 import ftclib.sensor.FtcSparkFunOtos;
+import teamcode.subsystems.Elevator;
 import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcDriveBase;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
@@ -146,9 +148,9 @@ public class RobotParams
         public static final boolean useVision                   = true;
         public static final boolean useWebCam                   = true;
         public static final boolean useBuiltinCamBack           = false;    // For Android Phone as Robot Controller.
-        public static final boolean tuneColorBlobVision         = true;
+        public static final boolean tuneColorBlobVision         = false;
         public static final boolean useAprilTagVision           = false;
-        public static final boolean useColorBlobVision          = false;
+        public static final boolean useColorBlobVision          = true;
         public static final boolean useLimelightVision          = false;
         public static final boolean showVisionView              = !inCompetition;
         public static final boolean showVisionStat              = false;
@@ -156,6 +158,7 @@ public class RobotParams
         public static final boolean useDriveBase                = false;
         // Subsystems
         public static final boolean useSubsystems               = false;
+        public static final boolean useElevator                 = false;
     }   //class Preferences
 
     //
@@ -512,5 +515,46 @@ public class RobotParams
     //
     // Subsystems.
     //
+    //
+    //Elevator Subsystem
+    //
+    public static final String HWNAME_ELEVATOR_PRIMARY                  = "Elevator.Primary";
+    public static final String HWNAME_ELEVATOR_FOLLOWER                 = "Elevator.Follower";
+    public static final boolean ELEVATOR_MOTOR_INVERTED_PRIMARY         = false;
+    public static final boolean ELEVATOR_MOTOR_INVERTED_FOLLOWER        = false;
+    public static final String ELEVATOR_LOWER_LIMIT_SWITCH              = null;
+    public static final boolean ELEVATOR_LOWER_LIMIT_INVERTED           = false;
+    public static final String ELEVATOR_UPPER_LIMIT_SWITCH              = null;
+    public static final boolean ELEVATOR_UPPER_LIMIT_INVERTED           = false;
+    public static final boolean ELEVATOR_VOLTAGE_COMP_ENABLED           = true;
+
+    public static final double ELEVATOR_POWER_LIMIT             = 0;
+    public static final double ELEVATOR_GRAVITY_COMP            = 0;
+    public static final double ELEVATOR_INCHES_PER_COUNT        = 0;
+    public static final double ELEVATOR_OFFSET                  = 0;
+    public static final double ELEVATOR_MIN                     = ELEVATOR_OFFSET;
+    public static final double ELEVATOR_MAX                     = 0;
+    public static final double ELEVATOR_POS_1                   = 0;
+    public static final double ELEVATOR_POS_2                  = 0;
+
+    public static final double[] ELEVATOR_PRESETS = new double[] {
+            ELEVATOR_POS_1, ELEVATOR_POS_2
+    };
+    public static final double ELEVATOR_PRESETS_TOLERANCE      = 1;
+
+    //Power
+    public static final double ELEVATOR_CAL_POWER = -0.15;
+    //Stall Protection
+    public static final double ELEVATOR_STALL_MIN_POWER= Math.abs(ELEVATOR_CAL_POWER);
+    public static final double ELEVATOR_STALL_TOLERANCE= 0.1;
+    public static final double ELEVATOR_STALL_TIMEOUT= 0.2;
+    public static final double ELEVATOR_STALL_RESET_TIMEOUT= 0.0;
+    // PID Actuator parameters.
+    public static final double ELEVATOR_KP                      = 0.85;
+    public static final double ELEVATOR_KI                      = 0.7;
+    public static final double ELEVATOR_KD                      = 0.025;
+    public static final double ELEVATOR_KF                      = 0.0;
+    public static final double ELEVATOR_TOLERANCE               = 0.25;
+    public static final double ELEVATOR_IZONE                   = 1;
 
 }   //class RobotParams
