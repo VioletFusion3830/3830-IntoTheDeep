@@ -146,7 +146,7 @@ public class RobotParams
         public static final boolean showSubsystems              = true;
         // Vision
         public static final boolean useVision                   = true;
-        public static final boolean useWebCam                   = true;
+        public static final boolean useWebCam                   = true;     // false to use Android phone camera
         public static final boolean useBuiltinCamBack           = false;    // For Android Phone as Robot Controller.
         public static final boolean tuneColorBlobVision         = false;
         public static final boolean useAprilTagVision           = false;
