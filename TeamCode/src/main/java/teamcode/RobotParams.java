@@ -40,6 +40,7 @@ import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.driverio.TrcGameController.DriveMode;
 import trclib.pathdrive.TrcPose2D;
 import trclib.pathdrive.TrcPose3D;
+import trclib.robotcore.TrcPidController;
 import trclib.robotcore.TrcPidController.PidCoefficients;
 import trclib.vision.TrcHomographyMapper;
 
@@ -515,46 +516,37 @@ public class RobotParams
     //
     // Subsystems.
     //
-    //
-    //Elevator Subsystem
-    //
-    public static final String HWNAME_ELEVATOR_PRIMARY                  = "Elevator.Primary";
-    public static final String HWNAME_ELEVATOR_FOLLOWER                 = "Elevator.Follower";
-    public static final boolean ELEVATOR_MOTOR_INVERTED_PRIMARY         = false;
-    public static final boolean ELEVATOR_MOTOR_INVERTED_FOLLOWER        = false;
-    public static final String ELEVATOR_LOWER_LIMIT_SWITCH              = null;
-    public static final boolean ELEVATOR_LOWER_LIMIT_INVERTED           = false;
-    public static final String ELEVATOR_UPPER_LIMIT_SWITCH              = null;
-    public static final boolean ELEVATOR_UPPER_LIMIT_INVERTED           = false;
-    public static final boolean ELEVATOR_VOLTAGE_COMP_ENABLED           = true;
+    public static final class Elevator
+    {
+        public static final String SUBSYSTEM_NAME                          = "Elevator";
 
-    public static final double ELEVATOR_POWER_LIMIT             = 0;
-    public static final double ELEVATOR_GRAVITY_COMP            = 0;
-    public static final double ELEVATOR_INCHES_PER_COUNT        = 0;
-    public static final double ELEVATOR_OFFSET                  = 0;
-    public static final double ELEVATOR_MIN                     = ELEVATOR_OFFSET;
-    public static final double ELEVATOR_MAX                     = 0;
-    public static final double ELEVATOR_POS_1                   = 0;
-    public static final double ELEVATOR_POS_2                  = 0;
+        public static final String PRIMARY_MOTOR_NAME                       = SUBSYSTEM_NAME + ".Primary";
+        public static final String FOLLOWER_MOTOR_NAME                      = SUBSYSTEM_NAME + ".Follower";
+        public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
+        public static final MotorType FOLLOWER_MOTOR_TYPE                   = MotorType.DcMotor;
+        public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
+        public static final boolean FOLLOWER_MOTOR_INVERTED                 = false;
 
-    public static final double[] ELEVATOR_PRESETS = new double[] {
-            ELEVATOR_POS_1, ELEVATOR_POS_2
-    };
-    public static final double ELEVATOR_PRESETS_TOLERANCE      = 1;
+        public static final double INCHES_PER_COUNT                         = 1; //Need to be Updated
+        public static final double POS_OFFSET                               = 0; //Need to be Updated
+        public static final double POWER_LIMIT                              = 1.0; //Need to be Updated
+        public static final double ZERO_CAL_POWER                           = -0.25; //Need to be Updated
 
-    //Power
-    public static final double ELEVATOR_CAL_POWER = -0.15;
-    //Stall Protection
-    public static final double ELEVATOR_STALL_MIN_POWER= Math.abs(ELEVATOR_CAL_POWER);
-    public static final double ELEVATOR_STALL_TOLERANCE= 0.1;
-    public static final double ELEVATOR_STALL_TIMEOUT= 0.2;
-    public static final double ELEVATOR_STALL_RESET_TIMEOUT= 0.0;
-    // PID Actuator parameters.
-    public static final double ELEVATOR_KP                      = 0.85;
-    public static final double ELEVATOR_KI                      = 0.7;
-    public static final double ELEVATOR_KD                      = 0.025;
-    public static final double ELEVATOR_KF                      = 0.0;
-    public static final double ELEVATOR_TOLERANCE               = 0.25;
-    public static final double ELEVATOR_IZONE                   = 1;
+        public static final double MIN_POS                                  = POS_OFFSET; //Need to be Updated
+        public static final double MAX_POS                                  = 10; //Need to be Updated
+        public static final double[] posPresets                             = {MIN_POS, MAX_POS}; //Need to be Updated
+        public static final double POS_PRESET_TOLERANCE                     = 1.0; //Need to be Updated
+
+        public static final boolean SOFTWARE_PID_ENABLED                        = true;
+        public static final TrcPidController.PidCoefficients posPIDCoeffs   =
+                new TrcPidController.PidCoefficients(1.0,0,0,0,0);
+        public static final double POS_PID_TOLERANCE                        = 0.1;
+        public static final double GRAVITY_COMP_POWER                       = 0.0; //Need to be Updated
+        public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
+        public static final double STALL_TOLERANCE                          = 0.1;
+        public static final double STALL_TIMEOUT                            = 0.1;
+        public static final double STALL_RESET_TIMEOUT                      = 0.0;
+    } //Elevator
+
 
 }   //class RobotParams

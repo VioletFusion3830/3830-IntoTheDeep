@@ -1,4 +1,4 @@
 package teamcode.subsystems;
 
-public class OuttakeArm {
+public class Claw {
 }

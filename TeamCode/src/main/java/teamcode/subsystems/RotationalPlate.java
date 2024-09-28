@@ -1,4 +1,4 @@
 package teamcode.subsystems;
 
-public class IntakeArm {
+public class RotationalPlate {
 }
