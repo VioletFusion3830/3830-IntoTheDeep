@@ -83,9 +83,10 @@ public class Robot
         robotDrive = robotBase.getRobotDrive();
         // Create and initialize vision subsystems.
         if (RobotParams.Preferences.useVision &&
-            (RobotParams.Preferences.tuneColorBlobVision ||
-             RobotParams.Preferences.useAprilTagVision ||
-             RobotParams.Preferences.useColorBlobVision))
+                (RobotParams.Preferences.tuneColorBlobVision ||
+                        RobotParams.Preferences.useAprilTagVision ||
+                        RobotParams.Preferences.useColorBlobVision ||
+                        RobotParams.Preferences.useLimelightVision))
         {
             vision = new Vision(this);
         }
@@ -206,20 +207,32 @@ public class Robot
                 vision.setAprilTagVisionEnabled(false);
             }
 
-            if (vision.redBlobVision != null)
+            if (vision.redSampleVision != null)
             {
-                globalTracer.traceInfo(moduleName, "Disabling RedBlobVision.");
-                vision.setRedBlobVisionEnabled(false);
+                globalTracer.traceInfo(moduleName, "Disabling RedSampleVision.");
+                vision.setSampleVisionEnabled(Vision.SampleType.RedSample, false);
             }
 
-            if (vision.blueBlobVision != null)
+            if (vision.blueSampleVision != null)
             {
-                globalTracer.traceInfo(moduleName, "Disabling BlueBlobVision.");
-                vision.setBlueBlobVisionEnabled(false);
+                globalTracer.traceInfo(moduleName, "Disabling BlueSampleVision.");
+                vision.setSampleVisionEnabled(Vision.SampleType.BlueSample, false);
+            }
+
+            if (vision.yellowSampleVision != null)
+            {
+                globalTracer.traceInfo(moduleName, "Disabling YellowSampleVision.");
+                vision.setSampleVisionEnabled(Vision.SampleType.YellowSample, false);
+            }
+
+            if (vision.limelightVision != null)
+            {
+                globalTracer.traceInfo(moduleName, "Disabling LimelightVision.");
+                vision.setLimelightVisionEnabled(0, false);
             }
 
             vision.close();
-       }
+        }
 
         if (robotDrive != null)
         {

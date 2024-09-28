@@ -18,4 +18,8 @@ public class FtcDashboard
         public static double tuneAngleDistance = 90;
         public static double powerLimit = 0.7;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 7223de78937c20c526231eb3b76ddd0c0d451532

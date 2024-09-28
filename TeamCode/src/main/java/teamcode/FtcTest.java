@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Titan Robotics Club (http://www.titanrobotics.com)
+ * Copyright (c) 2022 Titan Robotics Club (http://www.titanrobotics.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,6 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -38,6 +36,8 @@ import ftclib.driverio.FtcGamepad;
 import ftclib.driverio.FtcMenu;
 import ftclib.driverio.FtcValueMenu;
 import ftclib.robotcore.FtcPidCoeffCache;
+import teamcode.vision.Vision;
+import ftclib.vision.FtcLimelightVision;
 import trclib.command.CmdDriveMotorsTest;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
@@ -100,19 +100,19 @@ public class FtcTest extends FtcTeleOp
         public String toString()
         {
             return String.format(
-                Locale.US,
-                "test=\"%s\" " +
-                "xTarget=%.1f " +
-                "yTarget=%.1f " +
-                "turnTarget=%1f " +
-                "driveTime=%.1f " +
-                "drivePower=%.1f " +
-                "tunePidCoeffs=%s " +
-                "tuneDistance=%.1f " +
-                "tuneHeading=%.1f " +
-                "tuneDrivePower=%.1f",
-                test, xTarget, yTarget, turnTarget, driveTime, drivePower, tunePidCoeffs, tuneDistance, tuneHeading,
-                tuneDrivePower);
+                    Locale.US,
+                    "test=\"%s\" " +
+                            "xTarget=%.1f " +
+                            "yTarget=%.1f " +
+                            "turnTarget=%1f " +
+                            "driveTime=%.1f " +
+                            "drivePower=%.1f " +
+                            "tunePidCoeffs=%s " +
+                            "tuneDistance=%.1f " +
+                            "tuneHeading=%.1f " +
+                            "tuneDrivePower=%.1f",
+                    test, xTarget, yTarget, turnTarget, driveTime, drivePower, tunePidCoeffs, tuneDistance, tuneHeading,
+                    tuneDrivePower);
         }   //toString
 
     }   //class TestChoices
@@ -138,8 +138,6 @@ public class FtcTest extends FtcTeleOp
     private double colorThresholdMultiplier = 1.0;
     private boolean teleOpControlEnabled = true;
     private long exposure;
-    private WebcamName frontWebcam = null;
-    private WebcamName rearWebcam = null;
     private boolean fpsMeterEnabled = false;
     private boolean pathForward = false;
     //
@@ -157,12 +155,6 @@ public class FtcTest extends FtcTeleOp
         // TeleOp initialization.
         //
         super.robotInit();
-        if (robot.vision != null)
-        {
-            frontWebcam = robot.vision.getFrontWebcam();
-            rearWebcam = robot.vision.getRearWebcam();
-        }
-
         if (RobotParams.Preferences.useLoopPerformanceMonitor)
         {
             elapsedTimer = new TrcElapsedTimer("TestLoopMonitor", 2.0);
@@ -187,7 +179,7 @@ public class FtcTest extends FtcTeleOp
                 if (robot.robotDrive != null)
                 {
                     testCommand = new CmdTimedDrive(
-                        robot.robotDrive.driveBase, 0.0, testChoices.driveTime, testChoices.drivePower, 0.0, 0.0);
+                            robot.robotDrive.driveBase, 0.0, testChoices.driveTime, testChoices.drivePower, 0.0, 0.0);
                 }
                 break;
 
@@ -195,7 +187,7 @@ public class FtcTest extends FtcTeleOp
                 if (robot.robotDrive != null)
                 {
                     testCommand = new CmdTimedDrive(
-                        robot.robotDrive.driveBase, 0.0, testChoices.driveTime, 0.0, testChoices.drivePower, 0.0);
+                            robot.robotDrive.driveBase, 0.0, testChoices.driveTime, 0.0, testChoices.drivePower, 0.0);
                 }
                 break;
 
@@ -204,7 +196,7 @@ public class FtcTest extends FtcTeleOp
             case TUNE_Y_PID:
             case TUNE_TURN_PID:
                 if (robot.robotDrive != null &&
-                    (testChoices.test != Test.TUNE_X_PID || robot.robotDrive.driveBase.supportsHolonomicDrive()))
+                        (testChoices.test != Test.TUNE_X_PID || robot.robotDrive.driveBase.supportsHolonomicDrive()))
                 {
                     testCommand = new CmdPidDrive(robot.robotDrive.driveBase, robot.robotDrive.pidDrive);
                 }
@@ -232,7 +224,10 @@ public class FtcTest extends FtcTeleOp
             case VISION_TEST:
                 if (robot.vision != null)
                 {
-                    exposure = robot.vision.vision.getCurrentExposure();
+                    if (robot.vision.vision != null)
+                    {
+                        exposure = robot.vision.vision.getCurrentExposure();
+                    }
                     // Vision generally will impact performance, so we only enable it if it's needed.
                     if (robot.vision.aprilTagVision != null)
                     {
@@ -240,16 +235,27 @@ public class FtcTest extends FtcTeleOp
                         robot.vision.setAprilTagVisionEnabled(true);
                     }
 
-                    if (robot.vision.redBlobVision != null)
+                    if (robot.vision.redSampleVision != null)
                     {
-                        robot.globalTracer.traceInfo(moduleName, "Enabling RedBlobVision.");
-                        robot.vision.setRedBlobVisionEnabled(true);
+                        robot.globalTracer.traceInfo(moduleName, "Enabling RedSampleVision.");
+                        robot.vision.setSampleVisionEnabled(Vision.SampleType.RedSample,true);
                     }
 
-                    if (robot.vision.blueBlobVision != null)
+                    if (robot.vision.blueSampleVision != null)
                     {
-                        robot.globalTracer.traceInfo(moduleName, "Enabling BlueBlobVision.");
-                        robot.vision.setBlueBlobVisionEnabled(true);
+                        robot.globalTracer.traceInfo(moduleName, "Enabling BlueSampleVision.");
+                        robot.vision.setSampleVisionEnabled(Vision.SampleType.BlueSample,true);
+                    }
+
+                    if (robot.vision.yellowSampleVision != null)
+                    {
+                        robot.globalTracer.traceInfo(moduleName, "Enabling YellowSampleVision.");
+                        robot.vision.setSampleVisionEnabled(Vision.SampleType.YellowSample,true);
+                    }
+                    if (robot.vision.limelightVision != null)
+                    {
+                        robot.globalTracer.traceInfo(moduleName, "Enabling LimelightVision.");
+                        robot.vision.setLimelightVisionEnabled(0, true);
                     }
                 }
                 break;
@@ -270,8 +276,8 @@ public class FtcTest extends FtcTeleOp
                 if (testCommand != null)
                 {
                     ((CmdPidDrive) testCommand).start(
-                        0.0, testChoices.drivePower, null,
-                        new TrcPose2D(testChoices.xTarget*12.0, testChoices.yTarget*12.0, testChoices.turnTarget));
+                            0.0, testChoices.drivePower, null,
+                            new TrcPose2D(testChoices.xTarget*12.0, testChoices.yTarget*12.0, testChoices.turnTarget));
                     robot.robotDrive.pidDrive.setTraceLevel(TrcDbgTrace.MsgLevel.INFO, logEvents, debugPid, false);
                 }
                 break;
@@ -289,7 +295,7 @@ public class FtcTest extends FtcTeleOp
                 if (robot.robotDrive != null)
                 {
                     robot.robotDrive.purePursuitDrive.setTraceLevel(
-                        TrcDbgTrace.MsgLevel.INFO, logEvents, debugPid, false);
+                            TrcDbgTrace.MsgLevel.INFO, logEvents, debugPid, false);
                     //
                     // Doing a 48x48-inch square box with robot heading always pointing to the center of the box.
                     //
@@ -377,7 +383,7 @@ public class FtcTest extends FtcTeleOp
 
                     robot.dashboard.displayPrintf(lineNum++, "Drive Vel: (%.1f/%.1f)", velocity, maxDriveVelocity);
                     robot.dashboard.displayPrintf(
-                        lineNum++, "Drive Accel: (%.1f/%.1f)", acceleration, maxDriveAcceleration);
+                            lineNum++, "Drive Accel: (%.1f/%.1f)", acceleration, maxDriveAcceleration);
                 }
                 break;
         }
@@ -386,9 +392,9 @@ public class FtcTest extends FtcTeleOp
         {
             elapsedTimer.recordPeriodTime();
             robot.dashboard.displayPrintf(
-                15, "Period: %.3f(%.3f/%.3f)",
-                elapsedTimer.getAverageElapsedTime(), elapsedTimer.getMinElapsedTime(),
-                elapsedTimer.getMaxElapsedTime());
+                    15, "Period: %.3f(%.3f/%.3f)",
+                    elapsedTimer.getAverageElapsedTime(), elapsedTimer.getMinElapsedTime(),
+                    elapsedTimer.getMaxElapsedTime());
         }
 
         if (slowPeriodicLoop)
@@ -419,13 +425,13 @@ public class FtcTest extends FtcTeleOp
                     {
                         robot.dashboard.displayPrintf(lineNum++, "Timed Drive: %.0f sec", testChoices.driveTime);
                         robot.dashboard.displayPrintf(
-                            lineNum++, "RobotPose=%s", robot.robotDrive.driveBase.getFieldPosition());
+                                lineNum++, "RobotPose=%s", robot.robotDrive.driveBase.getFieldPosition());
                         robot.dashboard.displayPrintf(
-                            lineNum++, "rawEnc=lf:%.0f,rf:%.0f,lb:%.0f,rb:%.0f",
-                            robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_FRONT].getPosition(),
-                            robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_FRONT].getPosition(),
-                            robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_BACK].getPosition(),
-                            robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_BACK].getPosition());
+                                lineNum++, "rawEnc=lf:%.0f,rf:%.0f,lb:%.0f,rb:%.0f",
+                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_FRONT].getPosition(),
+                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_FRONT].getPosition(),
+                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_BACK].getPosition(),
+                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_BACK].getPosition());
                     }
                     break;
 
@@ -458,12 +464,12 @@ public class FtcTest extends FtcTeleOp
                         }
 
                         robot.dashboard.displayPrintf(
-                            lineNum++, "RobotPose=%s,rawEnc=lf:%.0f,rf:%.0f,lb:%.0f,rb:%.0f",
-                            robot.robotDrive.driveBase.getFieldPosition(),
-                            robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_FRONT].getPosition(),
-                            robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_FRONT].getPosition(),
-                            robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_BACK].getPosition(),
-                            robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_BACK].getPosition());
+                                lineNum++, "RobotPose=%s,rawEnc=lf:%.0f,rf:%.0f,lb:%.0f,rb:%.0f",
+                                robot.robotDrive.driveBase.getFieldPosition(),
+                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_FRONT].getPosition(),
+                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_FRONT].getPosition(),
+                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_BACK].getPosition(),
+                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_BACK].getPosition());
                         if (xPidCtrl != null)
                         {
                             xPidCtrl.displayPidInfo(lineNum);
@@ -529,22 +535,11 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                else if ((testChoices.test == Test.TUNE_COLORBLOB_VISION || testChoices.test == Test.VISION_TEST) &&
-                         robot.vision != null)
-                {
-                    // Can only switch camera if we have two.
-                    if (pressed && frontWebcam != null && rearWebcam != null)
-                    {
-                        robot.vision.setActiveWebcam(
-                            robot.vision.getActiveWebcam() != frontWebcam? frontWebcam: rearWebcam);
-                    }
-                    passToTeleOp = false;
-                }
                 break;
 
             case B:
                 if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
-                    robot.vision != null && robot.vision.rawColorBlobVision != null)
+                        robot.vision != null && robot.vision.rawColorBlobVision != null)
                 {
                     if (pressed)
                     {
@@ -567,7 +562,7 @@ public class FtcTest extends FtcTeleOp
 
             case X:
                 if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
-                    robot.vision != null && robot.vision.rawColorBlobVision != null)
+                        robot.vision != null && robot.vision.rawColorBlobVision != null)
                 {
                     if (pressed)
                     {
@@ -584,7 +579,7 @@ public class FtcTest extends FtcTeleOp
 
             case Y:
                 if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
-                    robot.vision != null && robot.vision.rawColorBlobVision != null)
+                        robot.vision != null && robot.vision.rawColorBlobVision != null)
                 {
                     if (pressed)
                     {
@@ -596,7 +591,7 @@ public class FtcTest extends FtcTeleOp
                 break;
 
             case LeftBumper:
-                if (testChoices.test == Test.VISION_TEST && robot.vision != null)
+                if (testChoices.test == Test.VISION_TEST && robot.vision != null && robot.vision.vision != null)
                 {
                     if (pressed)
                     {
@@ -656,11 +651,11 @@ public class FtcTest extends FtcTeleOp
                     passToTeleOp = false;
                 }
                 else if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
-                         robot.vision != null && robot.vision.rawColorBlobVision != null)
+                        robot.vision != null && robot.vision.rawColorBlobVision != null)
                 {
                     if (pressed &&
-                        colorThresholds[colorThresholdIndex] + colorThresholdMultiplier <=
-                        COLOR_THRESHOLD_HIGH_RANGES[colorThresholdIndex/2])
+                            colorThresholds[colorThresholdIndex] + colorThresholdMultiplier <=
+                                    COLOR_THRESHOLD_HIGH_RANGES[colorThresholdIndex/2])
                     {
                         // Increment color threshold value.
                         colorThresholds[colorThresholdIndex] += colorThresholdMultiplier;
@@ -683,11 +678,11 @@ public class FtcTest extends FtcTeleOp
                     passToTeleOp = false;
                 }
                 else if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
-                         robot.vision != null && robot.vision.rawColorBlobVision != null)
+                        robot.vision != null && robot.vision.rawColorBlobVision != null)
                 {
                     if (pressed &&
-                        colorThresholds[colorThresholdIndex] - colorThresholdMultiplier >=
-                        COLOR_THRESHOLD_LOW_RANGES[colorThresholdIndex/2])
+                            colorThresholds[colorThresholdIndex] - colorThresholdMultiplier >=
+                                    COLOR_THRESHOLD_LOW_RANGES[colorThresholdIndex/2])
                     {
                         // Decrement color threshold value.
                         colorThresholds[colorThresholdIndex] -= colorThresholdMultiplier;
@@ -710,7 +705,7 @@ public class FtcTest extends FtcTeleOp
                     passToTeleOp = false;
                 }
                 else if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
-                         robot.vision != null && robot.vision.rawColorBlobVision != null)
+                        robot.vision != null && robot.vision.rawColorBlobVision != null)
                 {
                     if (pressed && colorThresholdMultiplier * 10.0 <= 100.0)
                     {
@@ -734,7 +729,7 @@ public class FtcTest extends FtcTeleOp
                     passToTeleOp = false;
                 }
                 else if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
-                         robot.vision != null && robot.vision.rawColorBlobVision != null)
+                        robot.vision != null && robot.vision.rawColorBlobVision != null)
                 {
                     if (pressed && colorThresholdMultiplier / 10.0 >= 1.0)
                     {
@@ -816,35 +811,35 @@ public class FtcTest extends FtcTeleOp
         //
         testMenu = new FtcChoiceMenu<>("Tests:", null);
         FtcValueMenu xTargetMenu = new FtcValueMenu(
-            "xTarget:", testMenu, -10.0, 10.0, 0.5, 0.0, " %.1f ft");
+                "xTarget:", testMenu, -10.0, 10.0, 0.5, 0.0, " %.1f ft");
         FtcValueMenu yTargetMenu = new FtcValueMenu(
-            "yTarget:", testMenu, -10.0, 10.0, 0.5, 0.0, " %.1f ft");
+                "yTarget:", testMenu, -10.0, 10.0, 0.5, 0.0, " %.1f ft");
         FtcValueMenu turnTargetMenu = new FtcValueMenu(
-            "turnTarget:", testMenu, -180.0, 180.0, 5.0, 0.0, " %.0f deg");
+                "turnTarget:", testMenu, -180.0, 180.0, 5.0, 0.0, " %.0f deg");
         FtcValueMenu driveTimeMenu = new FtcValueMenu(
-            "Drive time:", testMenu, 1.0, 10.0, 1.0, 4.0, " %.0f sec");
+                "Drive time:", testMenu, 1.0, 10.0, 1.0, 4.0, " %.0f sec");
         FtcValueMenu drivePowerMenu = new FtcValueMenu(
-            "Drive power:", testMenu, -1.0, 1.0, 0.1, 0.5, " %.1f");
+                "Drive power:", testMenu, -1.0, 1.0, 0.1, 0.5, " %.1f");
         //
         // PID Tuning menus.
         //
         FtcValueMenu tuneKpMenu = new FtcValueMenu(
-            "Kp:", testMenu, 0.0, 1.0, 0.001, this::getTuneKp, " %f");
+                "Kp:", testMenu, 0.0, 1.0, 0.001, this::getTuneKp, " %f");
         FtcValueMenu tuneKiMenu = new FtcValueMenu(
-            "Ki:", tuneKpMenu, 0.0, 1.0, 0.001, this::getTuneKi, " %f");
+                "Ki:", tuneKpMenu, 0.0, 1.0, 0.001, this::getTuneKi, " %f");
         FtcValueMenu tuneKdMenu = new FtcValueMenu(
-            "Kd:", tuneKiMenu, 0.0, 1.0, 0.001, this::getTuneKd, " %f");
+                "Kd:", tuneKiMenu, 0.0, 1.0, 0.001, this::getTuneKd, " %f");
         FtcValueMenu tuneKfMenu = new FtcValueMenu(
-            "Kf:", tuneKdMenu, 0.0, 1.0, 0.001, this::getTuneKf, " %f");
+                "Kf:", tuneKdMenu, 0.0, 1.0, 0.001, this::getTuneKf, " %f");
         FtcValueMenu tuneDistanceMenu = new FtcValueMenu(
-            "PID Tune distance:", tuneKfMenu, -10.0, 10.0, 0.5, 0.0,
-            " %.1f ft");
+                "PID Tune distance:", tuneKfMenu, -10.0, 10.0, 0.5, 0.0,
+                " %.1f ft");
         FtcValueMenu tuneHeadingMenu = new FtcValueMenu(
-            "PID Tune heading:", tuneDistanceMenu, -180.0, 180.0, 5.0, 0.0,
-            " %.0f deg");
+                "PID Tune heading:", tuneDistanceMenu, -180.0, 180.0, 5.0, 0.0,
+                " %.0f deg");
         FtcValueMenu tuneDrivePowerMenu = new FtcValueMenu(
-            "PID Tune drive power:", tuneHeadingMenu, -1.0, 1.0, 0.1, 1.0,
-            " %.1f");
+                "PID Tune drive power:", tuneHeadingMenu, -1.0, 1.0, 0.1, 1.0,
+                " %.1f");
         //
         // Populate menus.
         //
@@ -857,9 +852,9 @@ public class FtcTest extends FtcTeleOp
         testMenu.addChoice("X Timed drive", Test.X_TIMED_DRIVE, false, driveTimeMenu);
         testMenu.addChoice("Y Timed drive", Test.Y_TIMED_DRIVE, false, driveTimeMenu);
         testMenu.addChoice("PID drive", Test.PID_DRIVE, false, xTargetMenu);
-        testMenu.addChoice("Tune X PID", Test.TUNE_X_PID, false, tuneKpMenu);
-        testMenu.addChoice("Tune Y PID", Test.TUNE_Y_PID, false, tuneKpMenu);
-        testMenu.addChoice("Tune Turn PID", Test.TUNE_TURN_PID, false, tuneKpMenu);
+        testMenu.addChoice("Tune X PID", Test.TUNE_X_PID, false);
+        testMenu.addChoice("Tune Y PID", Test.TUNE_Y_PID, false);
+        testMenu.addChoice("Tune Turn PID", Test.TUNE_TURN_PID, false);
         testMenu.addChoice("Pure Pursuit Drive", Test.PURE_PURSUIT_DRIVE, false);
         testMenu.addChoice("Calibrate Swerve Steering", Test.CALIBRATE_SWERVE_STEERING, false);
 
@@ -887,8 +882,8 @@ public class FtcTest extends FtcTeleOp
         testChoices.driveTime = driveTimeMenu.getCurrentValue();
         testChoices.drivePower = drivePowerMenu.getCurrentValue();
         testChoices.tunePidCoeffs = new TrcPidController.PidCoefficients(
-            tuneKpMenu.getCurrentValue(), tuneKiMenu.getCurrentValue(),
-            tuneKdMenu.getCurrentValue(),tuneKfMenu.getCurrentValue());
+                tuneKpMenu.getCurrentValue(), tuneKiMenu.getCurrentValue(),
+                tuneKdMenu.getCurrentValue(),tuneKfMenu.getCurrentValue());
         testChoices.tuneDistance = tuneDistanceMenu.getCurrentValue();
         testChoices.tuneHeading = tuneHeadingMenu.getCurrentValue();
         testChoices.tuneDrivePower = tuneDrivePowerMenu.getCurrentValue();
@@ -1026,36 +1021,36 @@ public class FtcTest extends FtcTeleOp
         if (robot.robotDrive != null)
         {
             robot.dashboard.displayPrintf(
-                lineNum++, "DriveEnc: lf=%.0f,rf=%.0f,lb=%.0f,rb=%.0f",
-                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_FRONT].getPosition(),
-                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_FRONT].getPosition(),
-                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_BACK].getPosition(),
-                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_BACK].getPosition());
+                    lineNum++, "DriveEnc: lf=%.0f,rf=%.0f,lb=%.0f,rb=%.0f",
+                    robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_FRONT].getPosition(),
+                    robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_FRONT].getPosition(),
+                    robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_BACK].getPosition(),
+                    robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_BACK].getPosition());
 
             if (robot.robotDrive instanceof FtcSwerveDrive)
             {
                 FtcSwerveDrive swerveDrive = (FtcSwerveDrive) robot.robotDrive;
                 robot.dashboard.displayPrintf(
-                    lineNum++, "SteerEnc: lf=%.2f, rf=%.2f, lb=%.2f, rb=%.2f",
-                    swerveDrive.steerEncoders[FtcRobotDrive.INDEX_LEFT_FRONT].getScaledPosition(),
-                    swerveDrive.steerEncoders[FtcRobotDrive.INDEX_RIGHT_FRONT].getScaledPosition(),
-                    swerveDrive.steerEncoders[FtcRobotDrive.INDEX_LEFT_BACK].getScaledPosition(),
-                    swerveDrive.steerEncoders[FtcRobotDrive.INDEX_RIGHT_BACK].getScaledPosition());
+                        lineNum++, "SteerEnc: lf=%.2f, rf=%.2f, lb=%.2f, rb=%.2f",
+                        swerveDrive.steerEncoders[FtcRobotDrive.INDEX_LEFT_FRONT].getScaledPosition(),
+                        swerveDrive.steerEncoders[FtcRobotDrive.INDEX_RIGHT_FRONT].getScaledPosition(),
+                        swerveDrive.steerEncoders[FtcRobotDrive.INDEX_LEFT_BACK].getScaledPosition(),
+                        swerveDrive.steerEncoders[FtcRobotDrive.INDEX_RIGHT_BACK].getScaledPosition());
                 robot.dashboard.displayPrintf(
-                    lineNum++, "SteerRaw: lf=%.2f, rf=%.2f, lb=%.2f, rb=%.2f",
-                    swerveDrive.steerEncoders[FtcRobotDrive.INDEX_LEFT_FRONT].getRawPosition(),
-                    swerveDrive.steerEncoders[FtcRobotDrive.INDEX_RIGHT_FRONT].getRawPosition(),
-                    swerveDrive.steerEncoders[FtcRobotDrive.INDEX_LEFT_BACK].getRawPosition(),
-                    swerveDrive.steerEncoders[FtcRobotDrive.INDEX_RIGHT_BACK].getRawPosition());
+                        lineNum++, "SteerRaw: lf=%.2f, rf=%.2f, lb=%.2f, rb=%.2f",
+                        swerveDrive.steerEncoders[FtcRobotDrive.INDEX_LEFT_FRONT].getRawPosition(),
+                        swerveDrive.steerEncoders[FtcRobotDrive.INDEX_RIGHT_FRONT].getRawPosition(),
+                        swerveDrive.steerEncoders[FtcRobotDrive.INDEX_LEFT_BACK].getRawPosition(),
+                        swerveDrive.steerEncoders[FtcRobotDrive.INDEX_RIGHT_BACK].getRawPosition());
             }
 
             if (robot.robotDrive.gyro != null)
             {
                 robot.dashboard.displayPrintf(
-                    lineNum++, "Gyro(x,y,z): Heading=(%.1f,%.1f,%.1f), Rate=(%.3f,%.3f,%.3f)",
-                    robot.robotDrive.gyro.getXHeading().value, robot.robotDrive.gyro.getYHeading().value,
-                    robot.robotDrive.gyro.getZHeading().value, robot.robotDrive.gyro.getXRotationRate().value,
-                    robot.robotDrive.gyro.getYRotationRate().value, robot.robotDrive.gyro.getZRotationRate().value);
+                        lineNum++, "Gyro(x,y,z): Heading=(%.1f,%.1f,%.1f), Rate=(%.3f,%.3f,%.3f)",
+                        robot.robotDrive.gyro.getXHeading().value, robot.robotDrive.gyro.getYHeading().value,
+                        robot.robotDrive.gyro.getZHeading().value, robot.robotDrive.gyro.getXRotationRate().value,
+                        robot.robotDrive.gyro.getYRotationRate().value, robot.robotDrive.gyro.getZRotationRate().value);
             }
         }
     }   //doSensorsTest
@@ -1076,20 +1071,26 @@ public class FtcTest extends FtcTeleOp
             {
                 robot.vision.getDetectedRawColorBlob(lineNum++);
             }
-
             if (robot.vision.aprilTagVision != null)
             {
                 robot.vision.getDetectedAprilTag(null, lineNum++);
             }
-
-            if (robot.vision.redBlobVision != null)
+            if (robot.vision.redSampleVision != null)
             {
-                robot.vision.getDetectedRedBlob(lineNum++);
+                robot.vision.getDetectedSample(Vision.SampleType.RedSample, lineNum++);
+            }
+            if (robot.vision.blueSampleVision != null)
+            {
+                robot.vision.getDetectedSample(Vision.SampleType.BlueSample, lineNum++);
+            }
+            if (robot.vision.yellowSampleVision != null)
+            {
+                robot.vision.getDetectedSample(Vision.SampleType.YellowSample, lineNum++);
             }
 
-            if (robot.vision.blueBlobVision != null)
+            if (robot.vision.limelightVision != null)
             {
-                robot.vision.getDetectedBlueBlob(lineNum++);
+                robot.vision.getLimelightDetectedObject(FtcLimelightVision.ResultType.Fiducial, null, lineNum++);
             }
         }
     }   //doVisionTest
@@ -1102,7 +1103,7 @@ public class FtcTest extends FtcTeleOp
     private boolean allowTeleOp()
     {
         return teleOpControlEnabled &&
-               (testChoices.test == Test.SUBSYSTEMS_TEST || testChoices.test == Test.DRIVE_SPEED_TEST);
+                (testChoices.test == Test.SUBSYSTEMS_TEST || testChoices.test == Test.DRIVE_SPEED_TEST);
     }   //allowTeleOp
 
 }   //class FtcTest

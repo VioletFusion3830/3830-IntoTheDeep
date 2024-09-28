@@ -30,11 +30,17 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import ftclib.drivebase.FtcRobotDrive;
 import ftclib.drivebase.FtcSwerveDrive;
+import ftclib.motor.FtcMotorActuator;
 import ftclib.motor.FtcMotorActuator.MotorType;
+import ftclib.sensor.FtcSparkFunOtos;
+import teamcode.subsystems.Elevator;
 import trclib.dataprocessor.TrcUtil;
+import trclib.drivebase.TrcDriveBase;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.driverio.TrcGameController.DriveMode;
 import trclib.pathdrive.TrcPose2D;
+import trclib.pathdrive.TrcPose3D;
+import trclib.robotcore.TrcPidController;
 import trclib.robotcore.TrcPidController.PidCoefficients;
 import trclib.vision.TrcHomographyMapper;
 
@@ -75,13 +81,23 @@ public class RobotParams
      */
     public static class Game
     {
-        public static final TrcPose2D[] APRILTAG_POSES          = new TrcPose2D[] {
-            new TrcPose2D(0.0, 0.0, 0.0),   // TagId 1
-            new TrcPose2D(0.0, 0.0, 0.0),   // TagId 2
-            new TrcPose2D(0.0, 0.0, 0.0),   // TagId 3
-            new TrcPose2D(0.0, 0.0, 0.0)    // TagId 4
+        // DO NOT CHANGE the AprilTag location numbers. They are from the AprilTag metadata.
+        // All AprilTags are at the height of 5.75-inch from the tile floor.
+        public static final double APRILTAG_AUDIENCE_WALL_X         = -70.25;
+        public static final double APRILTAG_BACK_WALL_X             = 70.25;
+        public static final double APRILTAG_BLUE_ALLIANCE_WALL_Y    = 70.25;
+        public static final double APRILTAG_RED_ALLIANCE_WALL_Y     = -70.25;
+        public static final double APRILTAG_WALL_OFFSET_Y           = 46.83;
+        public static final TrcPose2D[] APRILTAG_POSES              = new TrcPose2D[] {
+            new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, APRILTAG_WALL_OFFSET_Y, -90.0), // TagId 11
+            new TrcPose2D(0.0, APRILTAG_BLUE_ALLIANCE_WALL_Y, 0.0),                 // TagId 12
+            new TrcPose2D(APRILTAG_BACK_WALL_X, APRILTAG_WALL_OFFSET_Y, 90.0),      // TagId 13
+            new TrcPose2D(APRILTAG_BACK_WALL_X, -APRILTAG_WALL_OFFSET_Y, 90.0),     // TagId 14
+            new TrcPose2D(0.0, APRILTAG_RED_ALLIANCE_WALL_Y, 180.0),                // TagId 15
+            new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, -APRILTAG_WALL_OFFSET_Y, -90.0) // TagId 16
         };
     }   //class Game
+
 
     /**
      * This class contains miscellaneous robot info.
@@ -141,18 +157,23 @@ public class RobotParams
         public static final boolean showSubsystems              = true;
         // Vision
         public static final boolean useVision                   = true;
+<<<<<<< HEAD
         public static final boolean useWebCam                   = true;
+=======
+        public static final boolean useWebCam                   = true;     // false to use Android phone camera
+>>>>>>> 7223de78937c20c526231eb3b76ddd0c0d451532
         public static final boolean useBuiltinCamBack           = false;    // For Android Phone as Robot Controller.
         public static final boolean tuneColorBlobVision         = true;
         public static final boolean useAprilTagVision           = false;
-        public static final boolean useColorBlobVision          = false;
+        public static final boolean useColorBlobVision          = true;
+        public static final boolean useLimelightVision          = false;
         public static final boolean showVisionView              = !inCompetition;
         public static final boolean showVisionStat              = false;
         // Drive Base
         public static final boolean useDriveBase                = false;
-        public static final boolean useExternalOdometry         = false;
         // Subsystems
         public static final boolean useSubsystems               = false;
+        public static final boolean useElevator                 = false;
     }   //class Preferences
 
     //
@@ -175,7 +196,7 @@ public class RobotParams
             camPitch = 0;                    // degrees down from horizontal
             camYaw = 0.0;                       // degrees clockwise from robot front
             camRoll = 0.0;
-            camPose = new TrcPose2D(camXOffset, camYOffset, camYaw);
+            camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
             camOrientation = OpenCvCameraRotation.UPRIGHT;
             // Homography: cameraRect in pixels, worldRect in inches
             cameraRect = new TrcHomographyMapper.Rectangle(
@@ -192,7 +213,7 @@ public class RobotParams
     }   //class FrontCamParams
 
     /**
-     * This class contains the parameters of the front camera.
+     * This class contains the parameters of the back camera.
      */
     public static class BackCamParams extends FtcRobotDrive.VisionInfo
     {
@@ -202,12 +223,12 @@ public class RobotParams
             camImageWidth = 640;
             camImageHeight = 480;
             camXOffset = 0.0;                   // Inches to the right from robot center
-            camYOffset = 2.0;                   // Inches forward from robot center
-            camZOffset = 9.75;                  // Inches up from the floor
-            camPitch = 15.0;                    // degrees down from horizontal
+            camYOffset = 0;                   // Inches forward from robot center
+            camZOffset = 0;                  // Inches up from the floor
+            camPitch = 0;                    // degrees down from horizontal
             camYaw = 0.0;                       // degrees clockwise from robot front
             camRoll = 0.0;
-            camPose = new TrcPose2D(camXOffset, camYOffset, camYaw);
+            camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
             camOrientation = OpenCvCameraRotation.UPRIGHT;
             // Homography: cameraRect in pixels, worldRect in inches
             cameraRect = new TrcHomographyMapper.Rectangle(
@@ -223,6 +244,38 @@ public class RobotParams
         }   //BackCamParams
     }   //class BackCamParams
 
+    /**
+     * This class contains the parameters of the Limelight vision processor.
+     */
+    public static class LimelightParams extends FtcRobotDrive.VisionInfo
+    {
+        public LimelightParams()
+        {
+            camName = null;
+            camImageWidth = 640;
+            camImageHeight = 480;
+            camXOffset = 0.0;                   // Inches to the right from robot center
+            camYOffset = 0;                   // Inches forward from robot center
+            camZOffset = 0;                  // Inches up from the floor
+            camPitch = 0;                    // degrees down from horizontal
+            camYaw = 0.0;                       // degrees clockwise from robot front
+            camRoll = 0.0;
+            camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
+            camOrientation = OpenCvCameraRotation.UPRIGHT;
+            // Homography: cameraRect in pixels, worldRect in inches
+            cameraRect = new TrcHomographyMapper.Rectangle(
+                0.0, 0.0,                                             // Camera Top Left
+                camImageWidth - 1, 0.0,                                // Camera Top Right
+                0.0, camImageHeight - 1,                                // Camera Bottom Left
+                camImageWidth - 1, camImageHeight - 1);                 // Camera Bottom Right
+            worldRect = new TrcHomographyMapper.Rectangle(
+                -12.5626, 48.0 - Robot.ROBOT_LENGTH/2.0 - camYOffset,   // World Top Left
+                11.4375, 44.75 - Robot.ROBOT_LENGTH/2.0 - camYOffset,   // World Top Right
+                -2.5625, 21.0 - Robot.ROBOT_LENGTH/2.0 - camYOffset,    // World Bottom Left
+                2.5626, 21.0 - Robot.ROBOT_LENGTH/2.0 - camYOffset);    // World Bottom Right
+        }   //LimelightParams
+    }   //class LimelightParams
+
     public static class VisionOnlyParams extends FtcRobotDrive.RobotInfo
     {
         public VisionOnlyParams()
@@ -232,6 +285,7 @@ public class RobotParams
             webCam1 = new FrontCamParams();
             // Back Camera
             webCam2 = new BackCamParams();
+            limelight = new LimelightParams();
         }   //VisionOnlyParams
     }   //class VisionOnlyParams
 
@@ -260,14 +314,19 @@ public class RobotParams
             driveMotorType = MotorType.DcMotor;
             driveMotorNames = new String[] {"lfDriveMotor", "rfDriveMotor"};
             driveMotorInverted = new boolean[] {true, false};
+            odometryType = TrcDriveBase.OdometryType.MotorOdometry;
             // Odometry Wheels
-            odWheelScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;    // 0.00105687652708656383937269814237 in/count
-            xOdWheelOffsetX = 0.0;
-            xOdWheelOffsetY = -168.0 * TrcUtil.INCHES_PER_MM;
-            yLeftOdWheelOffsetX = -144.0 * TrcUtil.INCHES_PER_MM;
-            yLeftOdWheelOffsetY = -12.0 * TrcUtil.INCHES_PER_MM;
-            yRightOdWheelOffsetX = 144.0 * TrcUtil.INCHES_PER_MM;
-            yRightOdWheelOffsetY = -12.0 * TrcUtil.INCHES_PER_MM;
+            odWheelXScale = odWheelYScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;
+            xOdWheelSensorNames = null;
+            xOdWheelIndices = new int[] {FtcRobotDrive.INDEX_RIGHT_BACK};
+            xOdWheelXOffsets = new double[] {0.0};
+            xOdWheelYOffsets = new double[] {-168.0 * TrcUtil.INCHES_PER_MM};
+            yOdWheelSensorNames = null;
+            yOdWheelIndices = new int[] {FtcRobotDrive.INDEX_LEFT_FRONT, FtcRobotDrive.INDEX_RIGHT_FRONT};
+            yOdWheelXOffsets = new double[] {-144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
+            yOdWheelYOffsets = new double[] {144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
+            // Absolute Odometry
+            absoluteOdometry = null;
             // Drive Motor Odometry
             yDrivePosScale = 0.02166184604662450653409090909091;        // in/count
             // Robot Drive Characteristics
@@ -294,6 +353,7 @@ public class RobotParams
             // Vision
             webCam1 = new FrontCamParams();
             webCam2 = new BackCamParams();
+            limelight = new LimelightParams();
             // Miscellaneous
             blinkinName = "blinkin";
         }   //DifferentialParams
@@ -324,14 +384,29 @@ public class RobotParams
             driveMotorType = MotorType.DcMotor;
             driveMotorNames = new String[] {"lfDriveMotor", "rfDriveMotor", "lbDriveMotor", "rbDriveMotor"};
             driveMotorInverted = new boolean[] {true, false, true, false};
+            odometryType = TrcDriveBase.OdometryType.OdometryWheels;
             // Odometry Wheels
-            odWheelScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;    // 0.00105687652708656383937269814237 in/count
-            xOdWheelOffsetX = 0.0;
-            xOdWheelOffsetY = -168.0 * TrcUtil.INCHES_PER_MM;
-            yLeftOdWheelOffsetX = -144.0 * TrcUtil.INCHES_PER_MM;
-            yLeftOdWheelOffsetY = -12.0 * TrcUtil.INCHES_PER_MM;
-            yRightOdWheelOffsetX = 144.0 * TrcUtil.INCHES_PER_MM;
-            yRightOdWheelOffsetY = -12.0 * TrcUtil.INCHES_PER_MM;
+            odWheelXScale = odWheelYScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;
+            xOdWheelSensorNames = new String[] {"xOdWheelSensor"};
+            xOdWheelIndices = new int[] {0};
+            xOdWheelXOffsets = new double[] {0.0};
+            xOdWheelYOffsets = new double[] {-168.0 * TrcUtil.INCHES_PER_MM};
+            yOdWheelSensorNames = new String[] {"yLeftOdWheelSensor", "yRightOdWheelSensor"};
+            yOdWheelIndices = new int[] {1, 2};
+            yOdWheelXOffsets = new double[] {-144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
+            yOdWheelYOffsets = new double[] {144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
+            // Absolute Odometry
+            if (odometryType == TrcDriveBase.OdometryType.AbsoluteOdometry)
+            {
+                FtcSparkFunOtos.Config otosConfig = new FtcSparkFunOtos.Config()
+                    .setOffset(0.0, 0.0, 0.0)
+                    .setScale(1.0, 1.0);
+                absoluteOdometry = new FtcSparkFunOtos("SparkfunOtos", otosConfig);
+            }
+            else
+            {
+                absoluteOdometry = null;
+            }
             // Drive Motor Odometry
             xDrivePosScale = 0.01924724265461924299065420560748;        // in/count
             yDrivePosScale = 0.02166184604662450653409090909091;        // in/count
@@ -362,6 +437,7 @@ public class RobotParams
             // Vision
             webCam1 = new FrontCamParams();
             webCam2 = new BackCamParams();
+            limelight = new LimelightParams();
             // Miscellaneous
             blinkinName = null;
         }   //MecanumParams
@@ -392,14 +468,19 @@ public class RobotParams
             driveMotorType = MotorType.DcMotor;
             driveMotorNames = new String[] {"lfDriveMotor", "rfDriveMotor", "lbDriveMotor", "rbDriveMotor"};
             driveMotorInverted = new boolean[] {true, false, true, false};
+            odometryType = TrcDriveBase.OdometryType.OdometryWheels;
             // Odometry Wheels
-            odWheelScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;    // 0.00105687652708656383937269814237 in/count
-            xOdWheelOffsetX = 0.0;
-            xOdWheelOffsetY = -168.0 * TrcUtil.INCHES_PER_MM;
-            yLeftOdWheelOffsetX = -144.0 * TrcUtil.INCHES_PER_MM;
-            yLeftOdWheelOffsetY = -12.0 * TrcUtil.INCHES_PER_MM;
-            yRightOdWheelOffsetX = 144.0 * TrcUtil.INCHES_PER_MM;
-            yRightOdWheelOffsetY = -12.0 * TrcUtil.INCHES_PER_MM;
+            odWheelXScale = odWheelYScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;
+            xOdWheelSensorNames = null;
+            xOdWheelIndices = new int[] {FtcRobotDrive.INDEX_RIGHT_BACK};
+            xOdWheelXOffsets = new double[] {0.0};
+            xOdWheelYOffsets = new double[] {-168.0 * TrcUtil.INCHES_PER_MM};
+            yOdWheelSensorNames = null;
+            yOdWheelIndices = new int[] {FtcRobotDrive.INDEX_LEFT_FRONT, FtcRobotDrive.INDEX_RIGHT_FRONT};
+            yOdWheelXOffsets = new double[] {-144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
+            yOdWheelYOffsets = new double[] {144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
+            // Absolute Odometry
+            absoluteOdometry = null;
             // Drive Motor Odometry
             xDrivePosScale = 0.01924724265461924299065420560748;        // in/count
             yDrivePosScale = 0.01924724265461924299065420560748;        // in/count
@@ -427,6 +508,7 @@ public class RobotParams
             // Vision
             webCam1 = new FrontCamParams();
             webCam2 = new BackCamParams();
+            limelight = new LimelightParams();
             // Miscellaneous
             blinkinName = "blinkin";
             // Steer Encoders
@@ -448,5 +530,37 @@ public class RobotParams
     //
     // Subsystems.
     //
+    public static final class Elevator
+    {
+        public static final String SUBSYSTEM_NAME                          = "Elevator";
+
+        public static final String PRIMARY_MOTOR_NAME                       = SUBSYSTEM_NAME + ".Primary";
+        public static final String FOLLOWER_MOTOR_NAME                      = SUBSYSTEM_NAME + ".Follower";
+        public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
+        public static final MotorType FOLLOWER_MOTOR_TYPE                   = MotorType.DcMotor;
+        public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
+        public static final boolean FOLLOWER_MOTOR_INVERTED                 = false;
+
+        public static final double INCHES_PER_COUNT                         = 1; //Need to be Updated
+        public static final double POS_OFFSET                               = 0; //Need to be Updated
+        public static final double POWER_LIMIT                              = 1.0; //Need to be Updated
+        public static final double ZERO_CAL_POWER                           = -0.25; //Need to be Updated
+
+        public static final double MIN_POS                                  = POS_OFFSET; //Need to be Updated
+        public static final double MAX_POS                                  = 10; //Need to be Updated
+        public static final double[] posPresets                             = {MIN_POS, MAX_POS}; //Need to be Updated
+        public static final double POS_PRESET_TOLERANCE                     = 1.0; //Need to be Updated
+
+        public static final boolean SOFTWARE_PID_ENABLED                        = true;
+        public static final TrcPidController.PidCoefficients posPIDCoeffs   =
+                new TrcPidController.PidCoefficients(1.0,0,0,0,0);
+        public static final double POS_PID_TOLERANCE                        = 0.1;
+        public static final double GRAVITY_COMP_POWER                       = 0.0; //Need to be Updated
+        public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
+        public static final double STALL_TOLERANCE                          = 0.1;
+        public static final double STALL_TIMEOUT                            = 0.1;
+        public static final double STALL_RESET_TIMEOUT                      = 0.0;
+    } //Elevator
+
 
 }   //class RobotParams
