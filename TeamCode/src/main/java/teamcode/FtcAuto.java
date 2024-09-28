@@ -390,17 +390,17 @@ public class FtcAuto extends FtcOpMode
         allianceMenu.addChoice("Red", Alliance.RED_ALLIANCE, true, startPosMenu);
         allianceMenu.addChoice("Blue", Alliance.BLUE_ALLIANCE, false, startPosMenu);
 
-        strategyMenu.addChoice("Net Zone Far, Auto Score 1+3+Cycle", AutoStrategy.AUTO_SCORE_NET_1PLUS3PLUS_CYCLE, false, useAprilTagVisionMenu);
+        strategyMenu.addChoice("Net Zone Far, Auto Score 1+3+Cycle", AutoStrategy.AUTO_SCORE_NET_1PLUS3PLUS_CYCLE, true, useAprilTagVisionMenu);
         strategyMenu.addChoice("Net Zone Close, Auto Score 0+4+Cycle", AutoStrategy.AUTO_SCORE_NET_0PLUS4PLUS_CYCLE, false, useAprilTagVisionMenu);
         strategyMenu.addChoice("Net Zone Far, Auto Score 1+3", AutoStrategy.AUTO_SCORE_NET_1PLUS3, true, useAprilTagVisionMenu);
         strategyMenu.addChoice("Net Zone Close, Auto Score 0+4", AutoStrategy.AUTO_SCORE_NET_0PLUS4, false, useAprilTagVisionMenu);
         strategyMenu.addChoice("Observation Zone Far, Auto Score 1+Cycle", AutoStrategy.AUTO_SCORE_OBSERVATION_1PLUS_CYCLE, false, useAprilTagVisionMenu);
-        strategyMenu.addChoice("Observation Zone Far, Auto Score 1+MoveSamples+Cycle", AutoStrategy.AUTO_SCORE_OBSERVATION_1PLUS_MOVE_SAMPLES_PLUS_CYCLE, true,useAprilTagVisionMenu);
+        strategyMenu.addChoice("Observation Zone Far, Auto Score 1+MoveSamples+Cycle", AutoStrategy.AUTO_SCORE_OBSERVATION_1PLUS_MOVE_SAMPLES_PLUS_CYCLE, false,useAprilTagVisionMenu);
         strategyMenu.addChoice("Observation Zone Far, Auto Score 1+MoveSamples", AutoStrategy.AUTO_SCORE_OBSERVATION_1PLUS_MOVE_SAMPLES, false, useAprilTagVisionMenu);
-        strategyMenu.addChoice("Observation Zone Close, Auto Score 0+MoveSamples", AutoStrategy.AUTO_SCORE_OBSERVATION_0PLUS_MOVE_SAMPLES, true,useAprilTagVisionMenu);
+        strategyMenu.addChoice("Observation Zone Close, Auto Score 0+MoveSamples", AutoStrategy.AUTO_SCORE_OBSERVATION_0PLUS_MOVE_SAMPLES, false,useAprilTagVisionMenu);
         strategyMenu.addChoice("PID Drive", AutoStrategy.PID_DRIVE, false, xTargetMenu);
         strategyMenu.addChoice("Timed Drive", AutoStrategy.TIMED_DRIVE, false, driveTimeMenu);
-        strategyMenu.addChoice("Do nothing", AutoStrategy.DO_NOTHING, true);
+        strategyMenu.addChoice("Do nothing", AutoStrategy.DO_NOTHING, false);
 
         useAprilTagVisionMenu.addChoice("Use April Vision", true, true);
         useAprilTagVisionMenu.addChoice("Dont Use AprilVision", false, false);

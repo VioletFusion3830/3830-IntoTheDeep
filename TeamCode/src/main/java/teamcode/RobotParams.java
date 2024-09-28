@@ -560,21 +560,28 @@ public class RobotParams
         public static final double STALL_RESET_TIMEOUT                      = 0.0;
     } //Elevator
 
-    public static final class ClawParams{
-        public static final String SUBSYSTEM_NAME                           = "Claw";
-        public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".Primary";
-        public static final String FOLLOWER_SERVO_NAME                      = SUBSYSTEM_NAME + ".Follower";
-        public static final boolean PRIMARY_SERVO_INVERTED                  = false;
-        public static final boolean FOLLOWER_SERVO_INVERTED                 = false;
-        public static final double MIN_POS                                  = 0.0; //Need to be Updated
-        public static final double MAX_POS                                  = 1.0; //Need to be Updated
-        public static final double  MAX_STEPRATE                            = 1.0; //Need to be Updated
-        public static final double POS_PRESET_TOLERANCE                     = 1.0;
-        public static final double[] POS_PRESETS                            = {MIN_POS, MAX_POS};
+    public static final class ClawParams
+    {
+        public static final String SUBSYSTEM_NAME               = "Grabber";
 
-    }
+        public static final String PRIMARY_SERVO_NAME           = SUBSYSTEM_NAME + ".primary";
+        public static final boolean PRIMARY_SERVO_INVERTED      = false;
 
-    public static final class ArmParams{
+        public static final double OPEN_POS                     = 0;
+        public static final double OPEN_TIME                    = 0.3;
+        public static final double CLOSE_POS                    = 0;
+        public static final double CLOSE_TIME                   = 0.5;
+
+        public static final boolean USE_REV_V3_COLOR_SENSOR           = true;
+        public static final String REV_V3_COLOR_SENSOR_NAME           = SUBSYSTEM_NAME + ".sensor";
+        public static final double SENSOR_TRIGGER_THRESHOLD     = 2.0;
+        public static final double HAS_OBJECT_THRESHOLD         = 2.0;
+        public static final boolean ANALOG_TRIGGER_INVERTED     = true;
+
+    }   //class Grabber
+
+    public static final class ArmParams
+    {
         public static final String SUBSYSTEM_NAME                           = "Arm";
         public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".Primary";
         public static final String FOLLOWER_SERVO_NAME                      = SUBSYSTEM_NAME + ".Follower";

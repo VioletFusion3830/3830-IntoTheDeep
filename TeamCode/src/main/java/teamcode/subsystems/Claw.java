@@ -1,26 +1,67 @@
 package teamcode.subsystems;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 
-import ftclib.motor.FtcServoActuator;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+import ftclib.robotcore.FtcOpMode;
+import ftclib.subsystem.FtcServoGrabber;
 import teamcode.RobotParams;
 import trclib.motor.TrcServo;
 
 public class Claw {
     private final TrcServo claw; //one servo for open/close
+    private final RevColorSensorV3 revColorSensorV3;
 
-    public Claw(){
-        FtcServoActuator.Params clawParams = new FtcServoActuator.Params()
-                .setPrimaryServo(RobotParams.ClawParams.PRIMARY_SERVO_NAME, false)
-                .setLogicalPosRange(RobotParams.ClawParams.MIN_POS, RobotParams.ClawParams.MAX_POS)
-                .setPhysicalPosRange(RobotParams.ClawParams.MIN_POS, RobotParams.ClawParams.MAX_POS)
-                .setMaxStepRate(RobotParams.ClawParams.MAX_STEPRATE)
-                .setPositionPresets(RobotParams.ClawParams.POS_PRESET_TOLERANCE, RobotParams.ClawParams.POS_PRESETS);
+    public Claw()
+    {
+        if (RobotParams.ClawParams.USE_REV_V3_COLOR_SENSOR)
+        {
+            revColorSensorV3 = FtcOpMode.getInstance().hardwareMap.get(
+                    RevColorSensorV3.class, RobotParams.ClawParams.REV_V3_COLOR_SENSOR_NAME);
+        }
+        else
+        {
+            revColorSensorV3 = null;
+        }
 
-        claw = new FtcServoActuator(clawParams).getServo();
+        FtcServoGrabber.Params grabberParams = new FtcServoGrabber.Params()
+                .setPrimaryServo(RobotParams.ClawParams.PRIMARY_SERVO_NAME, RobotParams.ClawParams.PRIMARY_SERVO_INVERTED)
+                .setOpenCloseParams(RobotParams.ClawParams.OPEN_POS, RobotParams.ClawParams.OPEN_TIME,
+                        RobotParams.ClawParams.CLOSE_POS, RobotParams.ClawParams.CLOSE_TIME);
 
+        if (rev2mSensor != null)
+        {
+            grabberParams.setAnalogSensorTrigger(
+                    this::getSensorData, RobotParams.ClawParams.ANALOG_TRIGGER_INVERTED,
+                    RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD, RobotParams.ClawParams.HAS_OBJECT_THRESHOLD,
+                    null);
+        }
+        else if (RobotParams.ClawParams.USE_DIGITAL_SENSOR)
+        {
+            grabberParams.setDigitalInputTrigger(
+                    RobotParams.ClawParams.DIGITAL_SENSOR_NAME, RobotParams.ClawParams.DIGITAL_TRIGGER_INVERTED, null);
+        }
+
+        grabber = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
+        grabber.open();
     }
 
-    public TrcServo getClaw(){return claw;}
+    public TrcServoGrabber getGrabber()
+    {
+        return grabber;
+    }
 
-}
+    private double getSensorData()
+    {
+        if (revColorSensorV3 != null)
+        {
+            return revColorSensorV3.getDistance(DistanceUnit.CM);
+        }
+        else
+        {
+            return 0.0;
+        }
+    }
+
+}   //class Grabber

@@ -48,5 +48,5 @@ public class Elevator {
 //        }
         return powerComp;
     }
-}
+} //Class Elevator
 
