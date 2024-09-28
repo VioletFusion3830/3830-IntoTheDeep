@@ -76,36 +76,6 @@ public class Vision
     //
     // YCrCb Color Space.
     private static final int colorConversion = Imgproc.COLOR_RGB2YCrCb;
-<<<<<<< HEAD
-    private static final double[] redSampleColorThresholds = {};
-    private static final double[] blueSampleColorThresholds = {};
-    private static final double[] yellowSampleColorThresholds = {92,204,84,84,166,135};
-//    private static final TrcOpenCvColorBlobPipeline.FilterContourParams colorSampleFilterContourParams =
-//            new TrcOpenCvColorBlobPipeline.FilterContourParams()
-//                    .setMinArea()
-//                    .setMinPerimeter()
-//                    .setWidthRange()
-//                    .setHeightRange()
-//                    .setSolidityRange()
-//                    .setVerticesRange()
-//                    .setAspectRatioRange();
-    private static final double[] redBlobColorThresholds = {20.0, 120.0, 180.0, 240.0, 90.0, 120.0};
-    private static final double[] blueBlobColorThresholds = {20.0, 250.0, 40.0, 250.0, 160.0, 240.0};
-    private static final TrcOpenCvColorBlobPipeline.FilterContourParams colorBlobFilterContourParams =
-        new TrcOpenCvColorBlobPipeline.FilterContourParams()
-            .setMinArea(5000.0)
-            .setMinPerimeter(200.0)
-            .setWidthRange(50.0, 1000.0)
-            .setHeightRange(80.0, 1000.0)
-            .setSolidityRange(0.0, 100.0)
-            .setVerticesRange(0.0, 1000.0)
-            .setAspectRatioRange(0.3, 1.0);
-
-    private static final String TFOD_MODEL_ASSET = "MyObject.tflite";
-    private static final float TFOD_MIN_CONFIDENCE = 0.75f;
-    public static final String TFOD_OBJECT_LABEL = "MyObject";
-    public static final String[] TFOD_TARGET_LABELS = {TFOD_OBJECT_LABEL};
-=======
     private static final double[] redSampleColorThresholds = {20.0, 120.0, 170.0, 220.0, 80.0, 120.0};
     private static final double[] blueSampleColorThresholds = {20.0, 60.0, 100.0, 150.0, 150.0, 180.0};
     private static final double[] yellowSampleColorThresholds = {80.0, 250.0, 150.0, 180.0, 30.0, 80.0};
@@ -118,7 +88,6 @@ public class Vision
                     .setSolidityRange(0.0, 100.0)
                     .setVerticesRange(0.0, 1000.0)
                     .setAspectRatioRange(0.5, 2.5);
->>>>>>> 7223de78937c20c526231eb3b76ddd0c0d451532
 
     private final TrcDbgTrace tracer;
     private final Robot robot;
@@ -143,8 +112,8 @@ public class Vision
      */
     public Vision(Robot robot)
     {
-        FtcOpMode opMode = FtcOpMode.getInstance();
 
+        FtcOpMode opMode = FtcOpMode.getInstance();
         if (robot.robotInfo.webCam1.camName == null &&
                 (RobotParams.Preferences.useWebCam || RobotParams.Preferences.tuneColorBlobVision))
         {

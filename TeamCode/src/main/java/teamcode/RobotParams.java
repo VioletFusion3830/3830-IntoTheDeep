@@ -157,11 +157,7 @@ public class RobotParams
         public static final boolean showSubsystems              = true;
         // Vision
         public static final boolean useVision                   = true;
-<<<<<<< HEAD
-        public static final boolean useWebCam                   = true;
-=======
         public static final boolean useWebCam                   = true;     // false to use Android phone camera
->>>>>>> 7223de78937c20c526231eb3b76ddd0c0d451532
         public static final boolean useBuiltinCamBack           = false;    // For Android Phone as Robot Controller.
         public static final boolean tuneColorBlobVision         = true;
         public static final boolean useAprilTagVision           = false;
@@ -174,6 +170,8 @@ public class RobotParams
         // Subsystems
         public static final boolean useSubsystems               = false;
         public static final boolean useElevator                 = false;
+        public static final boolean useClaw                     = false;
+        public static final boolean useArm                      = false;
     }   //class Preferences
 
     //
@@ -530,7 +528,7 @@ public class RobotParams
     //
     // Subsystems.
     //
-    public static final class Elevator
+    public static final class ElevatorParams
     {
         public static final String SUBSYSTEM_NAME                          = "Elevator";
 
@@ -562,5 +560,34 @@ public class RobotParams
         public static final double STALL_RESET_TIMEOUT                      = 0.0;
     } //Elevator
 
+    public static final class ClawParams{
+        public static final String SUBSYSTEM_NAME                           = "Claw";
+        public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".Primary";
+        public static final String FOLLOWER_SERVO_NAME                      = SUBSYSTEM_NAME + ".Follower";
+        public static final boolean PRIMARY_SERVO_INVERTED                  = false;
+        public static final boolean FOLLOWER_SERVO_INVERTED                 = false;
+        public static final double MIN_POS                                  = 0.0; //Need to be Updated
+        public static final double MAX_POS                                  = 1.0; //Need to be Updated
+        public static final double  MAX_STEPRATE                            = 1.0; //Need to be Updated
+        public static final double POS_PRESET_TOLERANCE                     = 1.0;
+        public static final double[] POS_PRESETS                            = {MIN_POS, MAX_POS};
+
+    }
+
+    public static final class ArmParams{
+        public static final String SUBSYSTEM_NAME                           = "Arm";
+        public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".Primary";
+        public static final String FOLLOWER_SERVO_NAME                      = SUBSYSTEM_NAME + ".Follower";
+        public static final boolean PRIMARY_SERVO_INVERTED                  = false;
+        public static final boolean FOLLOWER_SERVO_INVERTED                 = false;
+        public static final double MIN_POS                                  = 0.0; //Need to be Updated
+        public static final double MAX_POS                                  = 1.0; //Need to be Updated
+        public static final double ROTATE_MIN_POS                           = 0.0; //Need to be Updated
+        public static final double ROTATE_MAX_POS                           = 1.0; //Need to be Updated
+        public static final double  MAX_STEPRATE                            = 1.0; //Need to be Updated
+        public static final double POS_PRESET_TOLERANCE                     = 1.0;
+        public static final double[] POS_PRESETS                            = {MIN_POS, MAX_POS};
+        public static final double[] ROTATION_POS_PRESETS                   = {MIN_POS, MAX_POS * 0.34, MAX_POS * 0.67, MAX_POS}; // Need to be Updated
+    }
 
 }   //class RobotParams

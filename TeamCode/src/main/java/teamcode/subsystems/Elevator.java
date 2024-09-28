@@ -9,21 +9,21 @@ public class Elevator {
 
     public Elevator() {
         FtcMotorActuator.Params elevatorParams = new FtcMotorActuator.Params()
-                .setPrimaryMotor(RobotParams.Elevator.PRIMARY_MOTOR_NAME, RobotParams.Elevator.PRIMARY_MOTOR_TYPE, RobotParams.Elevator.PRIMARY_MOTOR_INVERTED)
-                .setFollowerMotor(RobotParams.Elevator.FOLLOWER_MOTOR_NAME, RobotParams.Elevator.FOLLOWER_MOTOR_TYPE,RobotParams.Elevator.FOLLOWER_MOTOR_INVERTED)
-                .setPositionScaleAndOffset(RobotParams.Elevator.INCHES_PER_COUNT, RobotParams.Elevator.POS_OFFSET)
-                .setPositionPresets(RobotParams.Elevator.POS_PRESET_TOLERANCE,RobotParams.Elevator.posPresets);
+                .setPrimaryMotor(RobotParams.ElevatorParams.PRIMARY_MOTOR_NAME, RobotParams.ElevatorParams.PRIMARY_MOTOR_TYPE, RobotParams.ElevatorParams.PRIMARY_MOTOR_INVERTED)
+                .setFollowerMotor(RobotParams.ElevatorParams.FOLLOWER_MOTOR_NAME, RobotParams.ElevatorParams.FOLLOWER_MOTOR_TYPE,RobotParams.ElevatorParams.FOLLOWER_MOTOR_INVERTED)
+                .setPositionScaleAndOffset(RobotParams.ElevatorParams.INCHES_PER_COUNT, RobotParams.ElevatorParams.POS_OFFSET)
+                .setPositionPresets(RobotParams.ElevatorParams.POS_PRESET_TOLERANCE,RobotParams.ElevatorParams.posPresets);
         elevator = new FtcMotorActuator(elevatorParams).getMotor();
-        elevator.setSoftwarePidEnabled(RobotParams.Elevator.SOFTWARE_PID_ENABLED);
+        elevator.setSoftwarePidEnabled(RobotParams.ElevatorParams.SOFTWARE_PID_ENABLED);
         elevator.setPositionPidParameters(
-                RobotParams.Elevator.posPIDCoeffs, RobotParams.Elevator.POS_PID_TOLERANCE);
+                RobotParams.ElevatorParams.posPIDCoeffs, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
         elevator.setPositionPidPowerComp(this::getGravityComp);
         elevator.setStallProtection(
-                RobotParams.Elevator.STALL_MIN_POWER, RobotParams.Elevator.STALL_TOLERANCE,
-                RobotParams.Elevator.STALL_TIMEOUT, RobotParams.Elevator.STALL_RESET_TIMEOUT);
+                RobotParams.ElevatorParams.STALL_MIN_POWER, RobotParams.ElevatorParams.STALL_TOLERANCE,
+                RobotParams.ElevatorParams.STALL_TIMEOUT, RobotParams.ElevatorParams.STALL_RESET_TIMEOUT);
     }
 
-    public TrcMotor getElevator()
+    public TrcMotor getElevatorParams()
     {
         return elevator;
     }
@@ -31,9 +31,9 @@ public class Elevator {
     private double getGravityComp(double power)
     {
         double elevatorPos = elevator.getPosition();
-//        double distanceToTop = Math.abs(RobotParams.Elevator.MAX_POS - elevatorPos);
-        double distanceToBottom = Math.abs(elevatorPos - RobotParams.Elevator.MIN_POS);
-        double powerComp = distanceToBottom > RobotParams.Elevator.POS_PID_TOLERANCE ? RobotParams.Elevator.GRAVITY_COMP_POWER: 0.0;
+//        double distanceToTop = Math.abs(RobotParams.ElevatorParams.MAX_POS - elevatorPos);
+        double distanceToBottom = Math.abs(elevatorPos - RobotParams.ElevatorParams.MIN_POS);
+        double powerComp = distanceToBottom > RobotParams.ElevatorParams.POS_PID_TOLERANCE ? RobotParams.ElevatorParams.GRAVITY_COMP_POWER: 0.0;
 
 //        if(power < 0.0) {
 //            if (distanceToBottom <= RobotParams.ELEVATOR_POWERCOMP_DISTANCE_THRESHOLD_LOWER) {
