@@ -29,7 +29,10 @@ import ftclib.driverio.FtcDashboard;
 import ftclib.driverio.FtcMatchInfo;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.sensor.FtcRobotBattery;
+import teamcode.subsystems.Arm;
 import teamcode.subsystems.BlinkinLEDs;
+import teamcode.subsystems.Claw;
+import teamcode.subsystems.Elevator;
 import teamcode.subsystems.RobotBase;
 import teamcode.vision.Vision;
 import trclib.motor.TrcMotor;
@@ -56,6 +59,10 @@ public class Robot
     // Robot Drive.
     public FtcRobotDrive.RobotInfo robotInfo;
     public FtcRobotDrive robotDrive;
+    public TrcServo claw;
+    public TrcMotor elevator;
+    public TrcServo arm;
+    public TrcServo armRotator;
     // Vision subsystems.
     public Vision vision;
     // Sensors and indicators.
@@ -109,6 +116,21 @@ public class Robot
             //
             if (RobotParams.Preferences.useSubsystems)
             {
+                if (RobotParams.Preferences.useElevator){
+                    elevator = new Elevator().getElevatorParams();
+                }
+
+                if (RobotParams.Preferences.useClaw){
+                    claw = new Claw().getClaw();
+                }
+
+                if (RobotParams.Preferences.useArm){
+                    Arm armPackage = new Arm();
+                    arm = armPackage.getArm();
+                    armRotator = armPackage.getArmRotator();
+                }
+
+
             }
         }
 
@@ -270,11 +292,26 @@ public class Robot
             {
                 dashboard.displayPrintf(lineNum++, "DriveBase: Pose=%s", robotDrive.driveBase.getFieldPosition());
             }
+
             //
             // Display other subsystem status here.
             //
             if (RobotParams.Preferences.showSubsystems)
             {
+                if (claw != null){
+                    dashboard.displayPrintf(
+                            lineNum++,
+                            "claw: logical position=" + claw.getPosition() +
+                            ", actual position=" + claw.getLogicalPosition()); //needs to be updated
+                }
+
+                if (elevator != null){
+                    dashboard.displayPrintf(
+                            lineNum++,
+                            "elevator: power=" + elevator.getPower() +
+                            ", actual position=" + elevator.getPosition() + "/" + elevator.getPidTarget() +
+                            ", lower limit=" + elevator.isLowerLimitSwitchActive()); //needs to be updated
+                }
             }
         }
     }   //updateStatus

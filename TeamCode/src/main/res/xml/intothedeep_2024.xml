@@ -1,9 +1,18 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <Robot type="FirstInspires-FTC" name="IntoTheDeep_2024">
+<<<<<<< HEAD
+    <Webcam name="WebCam 1" serialNumber="5CC1731F"/>
+=======
     <Webcam name="WebCam 1" serialNumber="5CC1731F" />
+>>>>>>> 7223de78937c20c526231eb3b76ddd0c0d451532
     <LynxUsbDevice name="Control Hub Portal" serialNumber="(embedded)" parentModuleAddress="173">
         <LynxModule name="Control Hub" port="173">
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
         </LynxModule>
+<<<<<<< HEAD
+        <LynxModule name="Expansion Hub 3" port="3">
+        </LynxModule>
+=======
+>>>>>>> 7223de78937c20c526231eb3b76ddd0c0d451532
     </LynxUsbDevice>
 </Robot>

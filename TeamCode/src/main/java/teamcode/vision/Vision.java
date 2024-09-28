@@ -112,8 +112,8 @@ public class Vision
      */
     public Vision(Robot robot)
     {
-        FtcOpMode opMode = FtcOpMode.getInstance();
 
+        FtcOpMode opMode = FtcOpMode.getInstance();
         if (robot.robotInfo.webCam1.camName == null &&
                 (RobotParams.Preferences.useWebCam || RobotParams.Preferences.tuneColorBlobVision))
         {
