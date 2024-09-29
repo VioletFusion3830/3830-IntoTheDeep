@@ -120,16 +120,6 @@ public class Robot
                     elevator = new Elevator().getElevatorParams();
                 }
 
-                if (RobotParams.Preferences.useClaw){
-                    claw = new Claw().getClaw();
-                }
-
-                if (RobotParams.Preferences.useArm){
-                    Arm armPackage = new Arm();
-                    arm = armPackage.getArm();
-                    armRotator = armPackage.getArmRotator();
-                }
-
 
             }
         }
