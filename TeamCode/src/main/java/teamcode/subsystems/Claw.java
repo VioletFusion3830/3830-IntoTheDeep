@@ -1,9 +1,5 @@
 package teamcode.subsystems;
 
-import com.qualcomm.hardware.rev.RevColorSensorV3;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import ftclib.robotcore.FtcOpMode;
 import ftclib.subsystem.FtcServoGrabber;
 import teamcode.RobotParams;
