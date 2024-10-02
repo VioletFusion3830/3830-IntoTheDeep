@@ -1,16 +1,17 @@
 package teamcode.subsystems;
 
 import com.qualcomm.hardware.rev.RevColorSensorV3;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import com.qualcomm.hardware.rev.
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import ftclib.robotcore.FtcOpMode;
 import ftclib.subsystem.FtcServoGrabber;
 import teamcode.RobotParams;
-import trclib.motor.TrcServo;
+import trclib.subsystem.TrcServoGrabber;
 
 public class Claw {
-    private final TrcServo claw; //one servo for open/close
+    private final TrcServoGrabber claw; //one servo for open/close
     private final RevColorSensorV3 revColorSensorV3;
 
     public Claw()
@@ -30,29 +31,24 @@ public class Claw {
                 .setOpenCloseParams(RobotParams.ClawParams.OPEN_POS, RobotParams.ClawParams.OPEN_TIME,
                         RobotParams.ClawParams.CLOSE_POS, RobotParams.ClawParams.CLOSE_TIME);
 
-        if (rev2mSensor != null)
+        if (revColorSensorV3 != null)
         {
             grabberParams.setAnalogSensorTrigger(
-                    this::getSensorData, RobotParams.ClawParams.ANALOG_TRIGGER_INVERTED,
+                    this::getSensorDataDistance, RobotParams.ClawParams.ANALOG_TRIGGER_INVERTED,
                     RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD, RobotParams.ClawParams.HAS_OBJECT_THRESHOLD,
                     null);
         }
-        else if (RobotParams.ClawParams.USE_DIGITAL_SENSOR)
-        {
-            grabberParams.setDigitalInputTrigger(
-                    RobotParams.ClawParams.DIGITAL_SENSOR_NAME, RobotParams.ClawParams.DIGITAL_TRIGGER_INVERTED, null);
-        }
 
-        grabber = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
-        grabber.open();
+        claw = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
+        claw.open();
     }
 
-    public TrcServoGrabber getGrabber()
+    public TrcServoGrabber getClaw()
     {
-        return grabber;
+        return claw;
     }
 
-    private double getSensorData()
+    private double getSensorDataDistance()
     {
         if (revColorSensorV3 != null)
         {
@@ -64,4 +60,13 @@ public class Claw {
         }
     }
 
+    private NormalizedRGBA getSensorDataColor() {
+        if (revColorSensorV3 != null)
+        {
+            return revColorSensorV3.getNormalizedColors();
+        } else
+        {
+            return null;
+        }
+    }
 }   //class Grabber
