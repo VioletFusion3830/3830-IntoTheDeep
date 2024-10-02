@@ -1,5 +1,10 @@
 package teamcode.subsystems;
 
+import com.qualcomm.hardware.rev.RevColorSensorV3;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import com.qualcomm.hardware.rev.
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+
 import ftclib.robotcore.FtcOpMode;
 import ftclib.subsystem.FtcServoGrabber;
 import teamcode.RobotParams;
@@ -55,13 +60,13 @@ public class Claw {
         }
     }
 
-    private double getSensorDataColor() {
+    private NormalizedRGBA getSensorDataColor() {
         if (revColorSensorV3 != null)
         {
-            return revColorSensorV3.getLightDetected();
+            return revColorSensorV3.getNormalizedColors();
         } else
         {
-            return 0.0;
+            return null;
         }
     }
 }   //class Grabber
