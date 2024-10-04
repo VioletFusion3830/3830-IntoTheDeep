@@ -9,6 +9,7 @@ import java.util.Objects;
 import teamcode.RobotParams;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.subsystem.FtcServoGrabber;
+import trclib.robotcore.TrcEvent;
 import trclib.subsystem.TrcServoGrabber;
 
 public class Claw {
@@ -25,7 +26,7 @@ public class Claw {
         redSample,
         blueSample,
         yellowSample,
-        nonSample
+        noSampleColor
     }
 
     public Claw()
@@ -52,8 +53,8 @@ public class Claw {
                     RobotParams.ClawParams.ANALOG_TRIGGER_INVERTED,
                     RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD,
                     RobotParams.ClawParams.HAS_OBJECT_THRESHOLD,
-                    null,
-                    isSampleCorrectColor(getSensorDataColor(),samplePickupType)
+                    isSampleCorrectColor(getSensorDataColor(),samplePickupType),
+                    true
                     );
         }
 
@@ -113,7 +114,7 @@ public class Claw {
             }
             else
             {
-                return SampleSensorColor.nonSample;
+                return SampleSensorColor.noSampleColor;
             }
         }
         else
@@ -122,37 +123,35 @@ public class Claw {
         }
     }
 
-    public boolean isSampleCorrectColor(SampleSensorColor sampleSensorColor, String samplePickupType)
+    public void isSampleCorrectColor(SampleSensorColor sampleSensorColor, String samplePickupType)
     {
-        boolean noGrab = false;
-        if(revColorSensorV3 != null)
-        {
-            switch (sampleSensorColor)
+        if(claw != null) {
+            if (revColorSensorV3 != null) {
+                switch (sampleSensorColor) {
+                    case redSample:
+                        if (!Objects.equals(samplePickupType, "redAllianceSamples") || !Objects.equals(samplePickupType, "redSample") || !Objects.equals(samplePickupType, "anySample")) {
+                            return claw.close();
+                        }
+                        break;
+                    case blueSample:
+                        if (!Objects.equals(samplePickupType, "blueAllianceSamples") || !Objects.equals(samplePickupType, "blueSample") || !Objects.equals(samplePickupType, "anySample")) {
+                            claw.close();
+                        }
+                        break;
+                    case yellowSample:
+                        if (!Objects.equals(samplePickupType, "redAllianceSamples") || !Objects.equals(samplePickupType, "blueAllianceSamples") || !Objects.equals(samplePickupType, "anySample")) {
+                            claw.close();
+                        }
+                        break;
+                    case noSampleColor:
+                        break;
+                }
+            }
+            else
             {
-                case redSample:
-                    if(!Objects.equals(samplePickupType, "redAllianceSamples") || !Objects.equals(samplePickupType, "redSample") || !Objects.equals(samplePickupType, "anySample"))
-                    {
-                        noGrab = true;
-                    }
-                    break;
-                case blueSample:
-                    if(!Objects.equals(samplePickupType, "blueAllianceSamples") || !Objects.equals(samplePickupType, "blueSample") || !Objects.equals(samplePickupType, "anySample"))
-                    {
-                        noGrab = true;
-                    }
-                    break;
-                case yellowSample:
-                    if(!Objects.equals(samplePickupType, "redAllianceSamples") || !Objects.equals(samplePickupType, "blueAllianceSamples") || !Objects.equals(samplePickupType, "anySample"))
-                    {
-                        noGrab = true;
-                    }
-                    break;
-                case nonSample:
-                    noGrab = true;
-                    break;
+                claw.close();
             }
         }
-        return noGrab;
     }
 
     // Helper class to manage color ranges.
