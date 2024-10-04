@@ -172,6 +172,7 @@ public class RobotParams
         public static final boolean useElevator                 = false;
         public static final boolean useClaw                     = false;
         public static final boolean useArm                      = false;
+        public static final boolean useTurret                   = false;
     }   //class Preferences
 
     //
@@ -596,5 +597,12 @@ public class RobotParams
         public static final double[] POS_PRESETS                            = {MIN_POS, MAX_POS};
         public static final double[] ROTATION_POS_PRESETS                   = {MIN_POS, MAX_POS * 0.34, MAX_POS * 0.67, MAX_POS}; // Need to be Updated
     }
+
+    public static final class TurretParams
+    {
+        public static final String SUBSYSTEM_NAME                           = "Turret";
+        public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".Primary";
+        public static final boolean PRIMARY_SERVO_INVERTED                  = false;
+    }   //class Turret
 
 }   //class RobotParams

@@ -34,6 +34,7 @@ import teamcode.subsystems.BlinkinLEDs;
 import teamcode.subsystems.Claw;
 import teamcode.subsystems.Elevator;
 import teamcode.subsystems.RobotBase;
+import teamcode.subsystems.Turret;
 import teamcode.vision.Vision;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcServo;
@@ -63,6 +64,7 @@ public class Robot
     public TrcMotor elevator;
     public TrcServo arm;
     public TrcServo armRotator;
+    public TrcServo turret;
     // Vision subsystems.
     public Vision vision;
     // Sensors and indicators.
@@ -120,6 +122,19 @@ public class Robot
                     elevator = new Elevator().getElevatorParams();
                 }
 
+                if (RobotParams.Preferences.useClaw){
+                    claw = new Claw().getClaw();
+                }
+
+                if (RobotParams.Preferences.useArm){
+                    Arm armPackage = new Arm();
+                    arm = armPackage.getArm();
+                    armRotator = armPackage.getArmRotator();
+                }
+
+                if (RobotParams.Preferences.useTurret){
+                    turret = new Turret().getTurretParams();
+                }
 
             }
         }
