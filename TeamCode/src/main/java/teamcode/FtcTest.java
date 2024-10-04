@@ -1,10 +1,30 @@
+/*
+ * Copyright (c) 2022 Titan Robotics Club (http://www.titanrobotics.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package teamcode;
 
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -17,6 +37,7 @@ import ftclib.driverio.FtcMenu;
 import ftclib.driverio.FtcValueMenu;
 import ftclib.robotcore.FtcPidCoeffCache;
 import teamcode.vision.Vision;
+import ftclib.vision.FtcLimelightVision;
 import trclib.command.CmdDriveMotorsTest;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
@@ -117,8 +138,6 @@ public class FtcTest extends FtcTeleOp
     private double colorThresholdMultiplier = 1.0;
     private boolean teleOpControlEnabled = true;
     private long exposure;
-    private WebcamName frontWebcam = null;
-    private WebcamName rearWebcam = null;
     private boolean fpsMeterEnabled = false;
     private boolean pathForward = false;
     //
@@ -136,12 +155,6 @@ public class FtcTest extends FtcTeleOp
         // TeleOp initialization.
         //
         super.robotInit();
-        if (robot.vision != null)
-        {
-            frontWebcam = robot.vision.getFrontWebcam();
-            rearWebcam = robot.vision.getRearWebcam();
-        }
-
         if (RobotParams.Preferences.useLoopPerformanceMonitor)
         {
             elapsedTimer = new TrcElapsedTimer("TestLoopMonitor", 2.0);
@@ -211,7 +224,10 @@ public class FtcTest extends FtcTeleOp
             case VISION_TEST:
                 if (robot.vision != null)
                 {
-                    exposure = robot.vision.vision.getCurrentExposure();
+                    if (robot.vision.vision != null)
+                    {
+                        exposure = robot.vision.vision.getCurrentExposure();
+                    }
                     // Vision generally will impact performance, so we only enable it if it's needed.
                     if (robot.vision.aprilTagVision != null)
                     {
@@ -235,6 +251,11 @@ public class FtcTest extends FtcTeleOp
                     {
                         robot.globalTracer.traceInfo(moduleName, "Enabling YellowSampleVision.");
                         robot.vision.setSampleVisionEnabled(Vision.SampleType.YellowSample,true);
+                    }
+                    if (robot.vision.limelightVision != null)
+                    {
+                        robot.globalTracer.traceInfo(moduleName, "Enabling LimelightVision.");
+                        robot.vision.setLimelightVisionEnabled(0, true);
                     }
                 }
                 break;
@@ -514,17 +535,6 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                else if ((testChoices.test == Test.TUNE_COLORBLOB_VISION || testChoices.test == Test.VISION_TEST) &&
-                        robot.vision != null)
-                {
-                    // Can only switch camera if we have two.
-                    if (pressed && frontWebcam != null && rearWebcam != null)
-                    {
-                        robot.vision.setActiveWebcam(
-                                robot.vision.getActiveWebcam() != frontWebcam? frontWebcam: rearWebcam);
-                    }
-                    passToTeleOp = false;
-                }
                 break;
 
             case B:
@@ -581,7 +591,7 @@ public class FtcTest extends FtcTeleOp
                 break;
 
             case LeftBumper:
-                if (testChoices.test == Test.VISION_TEST && robot.vision != null)
+                if (testChoices.test == Test.VISION_TEST && robot.vision != null && robot.vision.vision != null)
                 {
                     if (pressed)
                     {
@@ -1076,6 +1086,11 @@ public class FtcTest extends FtcTeleOp
             if (robot.vision.yellowSampleVision != null)
             {
                 robot.vision.getDetectedSample(Vision.SampleType.YellowSample, lineNum++);
+            }
+
+            if (robot.vision.limelightVision != null)
+            {
+                robot.vision.getLimelightDetectedObject(FtcLimelightVision.ResultType.Fiducial, null, lineNum++);
             }
         }
     }   //doVisionTest
