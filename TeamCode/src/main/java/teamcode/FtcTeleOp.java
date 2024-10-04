@@ -41,7 +41,7 @@ import trclib.timer.TrcTimer;
 @TeleOp(name="FtcTeleOp", group="Ftcxxxx")
 public class FtcTeleOp extends FtcOpMode
 {
-    private static final String moduleName = FtcTeleOp.class.getSimpleName();
+    private final String moduleName = getClass().getSimpleName();
 
     protected Robot robot;
     protected FtcGamepad driverGamepad;
@@ -208,7 +208,7 @@ public class FtcTeleOp extends FtcOpMode
             // Display subsystem status.
             if (RobotParams.Preferences.doStatusUpdate)
             {
-                robot.updateStatus();
+                robot.updateStatus(2);
             }
         }
     }   //periodic

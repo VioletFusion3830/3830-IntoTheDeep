@@ -47,7 +47,7 @@ import trclib.timer.TrcTimer;
 @Autonomous(name="FtcAutonomous", group="Ftcxxxx")
 public class FtcAuto extends FtcOpMode
 {
-    private static final String moduleName = FtcAuto.class.getSimpleName();
+    private final String moduleName = getClass().getSimpleName();
 
     public enum Alliance
     {

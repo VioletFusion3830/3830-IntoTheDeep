@@ -286,7 +286,7 @@ public class Robot
     /**
      * This method update all subsystem status on the dashboard.
      */
-    public void updateStatus()
+    public void updateStatus(int startLineNum)
     {
         double currTime = TrcTimer.getCurrentTime();
         if (currTime > nextStatusUpdateTime)

@@ -1,44 +1,31 @@
 package teamcode.subsystems;
 
 import android.graphics.Color;
-
 import com.qualcomm.hardware.rev.RevColorSensorV3;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 
 import java.util.Objects;
 
+import teamcode.RobotParams;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.subsystem.FtcServoGrabber;
-import teamcode.RobotParams;
 import trclib.subsystem.TrcServoGrabber;
 
 public class Claw {
     private final TrcServoGrabber claw; //one servo for open/close
     private final RevColorSensorV3 revColorSensorV3;
-    private double redValue;
-    private double blueValue;
-    private double yellowValue;
-    private double alphaValue; //Light Intensity
-    private String samplePickupType = "yellow";
 
-//    private enum SamplePickupType
-//    {
-//        RedSample,
-//        BlueSample,
-//        YellowSample,
-//        RedAllianceSamples,
-//        BlueAllianceSamples,
-//        AnySample
-//    }
+    private final ColorRange yellowSampleHue = new ColorRange(60,90);
+    private final ColorRange blueSampleHue = new ColorRange(180,240);
+    private final ColorRange redSampleHue = new ColorRange(330,30);
+    private String samplePickupType = "yellow";
 
     public enum SampleSensorColor
     {
-        RedSample,
-        BlueSample,
-        YellowSample
+        redSample,
+        blueSample,
+        yellowSample,
+        nonSample
     }
 
     public Claw()
@@ -61,8 +48,12 @@ public class Claw {
         if (revColorSensorV3 != null)
         {
             grabberParams.setAnalogSensorTrigger(
-                    this::getSensorDataDistance, RobotParams.ClawParams.ANALOG_TRIGGER_INVERTED,
-                    RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD, RobotParams.ClawParams.HAS_OBJECT_THRESHOLD,null
+                    this::getSensorDataDistance,
+                    RobotParams.ClawParams.ANALOG_TRIGGER_INVERTED,
+                    RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD,
+                    RobotParams.ClawParams.HAS_OBJECT_THRESHOLD,
+                    null,
+                    isSampleCorrectColor(getSensorDataColor(),samplePickupType)
                     );
         }
 
@@ -73,6 +64,16 @@ public class Claw {
     public TrcServoGrabber getClaw()
     {
         return claw;
+    }
+
+    public String getSamplePickupType()
+    {
+        return samplePickupType;
+    }
+
+    public String setSamplePickupType(String newSamplePickupType)
+    {
+        return samplePickupType = newSamplePickupType;
     }
 
     private double getSensorDataDistance()
@@ -86,55 +87,90 @@ public class Claw {
             return 0.0;
         }
     }
-    public boolean isCorrectColor(SampleSensorColor sampleSensorColor, String samplePickupType)
-    {
-        if(revColorSensorV3 != null)
-        {
-            switch (sampleSensorColor)
-            {
-                case RedSample:
-                    if(Objects.equals(samplePickupType, "redAllianceSamples") || Objects.equals(samplePickupType, "redSample") || Objects.equals(samplePickupType, "anySample"))
-                    {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                    break;
-                case BlueSample:
-                    if(Objects.equals(samplePickupType, "blueAllianceSamples") || Objects.equals(samplePickupType, "blueSample") || Objects.equals(samplePickupType, "anySample"))
-                    {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                    break;
-                case YellowSample:
-                    if(Objects.equals(samplePickupType, "redAllianceSamples") || Objects.equals(samplePickupType, "blueAllianceSamples") || Objects.equals(samplePickupType, "anySample"))
-                    {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                    break;
-            }
-        }
-    }
 
-    private NormalizedRGBA getSensorDataColor() {
+    private SampleSensorColor getSensorDataColor()
+    {
         if (revColorSensorV3 != null)
         {
-            return revColorSensorV3.getNormalizedColors();
-        } else
+            float[] hsvValues = {0F,0F,0F};
+            Color.RGBToHSV(revColorSensorV3.red() * 255,
+                    revColorSensorV3.green() * 255,
+                    revColorSensorV3.blue() * 255,
+                    hsvValues);
+            float hue = hsvValues[0];
+
+            if(yellowSampleHue.isHueInRange(hue))
+            {
+                return SampleSensorColor.yellowSample;
+            }
+            else if(redSampleHue.isHueInRange(hue))
+            {
+                return SampleSensorColor.redSample;
+            }
+            else if(blueSampleHue.isHueInRange(hue))
+            {
+                return SampleSensorColor.blueSample;
+            }
+            else
+            {
+                return SampleSensorColor.nonSample;
+            }
+        }
+        else
         {
             return null;
         }
     }
 
-    public void getColor() {
-        redValue = revColorSensorV3.red();
-        blueValue = revColorSensorV3.blue();
-        //yellowValue =revColorSensorV3.
-        alphaValue = revColorSensorV3.alpha();
-        Color.RGBToHSV();
+    public boolean isSampleCorrectColor(SampleSensorColor sampleSensorColor, String samplePickupType)
+    {
+        boolean noGrab = false;
+        if(revColorSensorV3 != null)
+        {
+            switch (sampleSensorColor)
+            {
+                case redSample:
+                    if(!Objects.equals(samplePickupType, "redAllianceSamples") || !Objects.equals(samplePickupType, "redSample") || !Objects.equals(samplePickupType, "anySample"))
+                    {
+                        noGrab = true;
+                    }
+                    break;
+                case blueSample:
+                    if(!Objects.equals(samplePickupType, "blueAllianceSamples") || !Objects.equals(samplePickupType, "blueSample") || !Objects.equals(samplePickupType, "anySample"))
+                    {
+                        noGrab = true;
+                    }
+                    break;
+                case yellowSample:
+                    if(!Objects.equals(samplePickupType, "redAllianceSamples") || !Objects.equals(samplePickupType, "blueAllianceSamples") || !Objects.equals(samplePickupType, "anySample"))
+                    {
+                        noGrab = true;
+                    }
+                    break;
+                case nonSample:
+                    noGrab = true;
+                    break;
+            }
+        }
+        return noGrab;
+    }
+
+    // Helper class to manage color ranges.
+    private static class ColorRange {
+        private final int minHue;
+        private final int maxHue;
+
+        public ColorRange(int minHue, int maxHue) {
+            this.minHue = minHue;
+            this.maxHue = maxHue;
+        }
+
+        public boolean isHueInRange(float hue) {
+            if (minHue <= maxHue) {
+                return hue >= minHue && hue <= maxHue;
+            } else {
+                return hue >= minHue || hue <= maxHue;
+            }
+        }
     }
 }   //class Grabber
