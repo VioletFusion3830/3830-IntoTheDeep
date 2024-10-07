@@ -130,7 +130,7 @@ public class Claw {
                 switch (sampleSensorColor) {
                     case redSample:
                         if (!Objects.equals(samplePickupType, "redAllianceSamples") || !Objects.equals(samplePickupType, "redSample") || !Objects.equals(samplePickupType, "anySample")) {
-                            return claw.close();
+                            claw.close();
                         }
                         break;
                     case blueSample:
