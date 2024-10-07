@@ -174,7 +174,9 @@ public class RobotParams
         public static final boolean useClaw                     = false;
         public static final boolean useArm                      = false;
         public static final boolean useTurret                   = false;
-        public static final boolean useWrist                    = false;
+        public static final boolean useWristVertical            = false;
+        public static final boolean useWristRotational           = false;
+
         public static final boolean useElbow                    = false;
     }   //class Preferences
 
@@ -678,7 +680,7 @@ public class RobotParams
         public static final double POS_PRESET_TOLERANCE                     = 1.0;
     }   //class WristParamsVertical
 
-    public static class WristParamsRotator
+    public static class WristParamsRotational
     {
         public static final String SUBSYSTEM_NAME                             = "WristRotator";
         public static final String PRIMARY_SERVO_ROTATOR                   = SUBSYSTEM_NAME + ".primary";
@@ -696,6 +698,6 @@ public class RobotParams
         public static final double MAX_POS                                  = 50;
         public static final double[] POS_PRESETS                             = {MIN_POS, 50, 60, 60, MAX_POS};
         public static final double POS_PRESET_TOLERANCE                     = 1.0;
-    }   //class WristParamsRotator
+    }   //class WristParamsRotational
 
 }   //class RobotParams

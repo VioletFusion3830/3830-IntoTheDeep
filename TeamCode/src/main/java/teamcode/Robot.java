@@ -36,6 +36,7 @@ import teamcode.subsystems.Elbow;
 import teamcode.subsystems.Elevator;
 import teamcode.subsystems.RobotBase;
 import teamcode.subsystems.Turret;
+import teamcode.subsystems.WristRotational;
 import teamcode.subsystems.WristVertical;
 import teamcode.vision.Vision;
 import trclib.motor.TrcMotor;
@@ -74,7 +75,8 @@ public class Robot
     public TrcMotor elbow;
     public TrcMotor elevator;
     public TrcServo turret;
-    public TrcServo wrist;
+    public TrcServo wristVertical;
+    public TrcServo wristRotational;
 
     /**
      * Constructor: Create an instance of the object.
@@ -142,11 +144,13 @@ public class Robot
                     elbow = new Elbow().getElbow();
                 }
 
-                if (RobotParams.Preferences.useWrist){
-                    wrist = new WristVertical().getWristVertical();
+                if (RobotParams.Preferences.useWristVertical){
+                    wristVertical = new WristVertical().getWristVertical();
                 }
 
-
+                if (RobotParams.Preferences.useWristRotational){
+                    wristRotational = new WristRotational().getWristRotational();
+                }
 
             }
         }
