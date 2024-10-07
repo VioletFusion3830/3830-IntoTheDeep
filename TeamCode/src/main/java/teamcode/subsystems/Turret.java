@@ -15,5 +15,8 @@ public class Turret {
         turret = new FtcServoActuator(TurretParams).getServo();
     }
 
-    public TrcServo getTurretParams(){ return turret;}
+    public TrcServo getTurretParams()
+    {
+        return turret;
+    }
 }

@@ -19,7 +19,17 @@ public class Claw {
     private final ColorRange yellowSampleHue = new ColorRange(60,90);
     private final ColorRange blueSampleHue = new ColorRange(180,240);
     private final ColorRange redSampleHue = new ColorRange(330,30);
-    private String samplePickupType = "yellow";
+    private SamplePickupType samplePickupType = SamplePickupType.yellowSample;
+
+    public enum SamplePickupType
+    {
+        redAllianceSamples,
+        blueAllianceSamples,
+        redSample,
+        blueSample,
+        yellowSample,
+        anySample
+    }
 
     public enum SampleSensorColor
     {
@@ -67,12 +77,12 @@ public class Claw {
         return claw;
     }
 
-    public String getSamplePickupType()
+    public SamplePickupType getSamplePickupType()
     {
         return samplePickupType;
     }
 
-    public String setSamplePickupType(String newSamplePickupType)
+    public SamplePickupType setSamplePickupType(SamplePickupType newSamplePickupType)
     {
         return samplePickupType = newSamplePickupType;
     }
@@ -123,23 +133,30 @@ public class Claw {
         }
     }
 
-    public void isSampleCorrectColor(SampleSensorColor sampleSensorColor, String samplePickupType)
+    public TrcEvent.Callback isSampleCorrectColor(SampleSensorColor sampleSensorColor, SamplePickupType samplePickupType)
     {
         if(claw != null) {
             if (revColorSensorV3 != null) {
                 switch (sampleSensorColor) {
                     case redSample:
-                        if (!Objects.equals(samplePickupType, "redAllianceSamples") || !Objects.equals(samplePickupType, "redSample") || !Objects.equals(samplePickupType, "anySample")) {
+                        if (samplePickupType == SamplePickupType.redAllianceSamples ||
+                                samplePickupType == SamplePickupType.redSample ||
+                                samplePickupType == SamplePickupType.anySample) {
                             claw.close();
                         }
                         break;
                     case blueSample:
-                        if (!Objects.equals(samplePickupType, "blueAllianceSamples") || !Objects.equals(samplePickupType, "blueSample") || !Objects.equals(samplePickupType, "anySample")) {
+                        if (samplePickupType == SamplePickupType.blueAllianceSamples ||
+                                samplePickupType == SamplePickupType.blueSample ||
+                                samplePickupType == SamplePickupType.anySample) {
                             claw.close();
                         }
                         break;
                     case yellowSample:
-                        if (!Objects.equals(samplePickupType, "redAllianceSamples") || !Objects.equals(samplePickupType, "blueAllianceSamples") || !Objects.equals(samplePickupType, "anySample")) {
+                        if (samplePickupType == SamplePickupType.redAllianceSamples ||
+                                samplePickupType == SamplePickupType.blueAllianceSamples ||
+                                samplePickupType == SamplePickupType.yellowSample ||
+                                samplePickupType == SamplePickupType.anySample) {
                             claw.close();
                         }
                         break;
@@ -152,6 +169,7 @@ public class Claw {
                 claw.close();
             }
         }
+        return null;
     }
 
     // Helper class to manage color ranges.
