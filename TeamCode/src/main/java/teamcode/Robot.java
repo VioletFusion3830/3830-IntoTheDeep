@@ -32,9 +32,11 @@ import ftclib.sensor.FtcRobotBattery;
 import teamcode.subsystems.Arm;
 import teamcode.subsystems.BlinkinLEDs;
 import teamcode.subsystems.Claw;
+import teamcode.subsystems.Elbow;
 import teamcode.subsystems.Elevator;
 import teamcode.subsystems.RobotBase;
 import teamcode.subsystems.Turret;
+import teamcode.subsystems.WristVertical;
 import teamcode.vision.Vision;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcServo;
@@ -69,9 +71,10 @@ public class Robot
     // Subsystems.
     public TrcServo arm;
     public TrcServoGrabber claw;
-    public TrcMotor Elbow;
+    public TrcMotor elbow;
     public TrcMotor elevator;
     public TrcServo turret;
+    public TrcServo wrist;
 
     /**
      * Constructor: Create an instance of the object.
@@ -136,8 +139,14 @@ public class Robot
                 }
 
                 if (RobotParams.Preferences.useElbow){
-                    Elbow = new Elbow().getMotor();
+                    elbow = new Elbow().getElbow();
                 }
+
+                if (RobotParams.Preferences.useWrist){
+                    wrist = new WristVertical().getWristVertical();
+                }
+
+
 
             }
         }

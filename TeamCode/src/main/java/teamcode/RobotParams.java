@@ -175,6 +175,7 @@ public class RobotParams
         public static final boolean useArm                      = false;
         public static final boolean useTurret                   = false;
         public static final boolean useWrist                    = false;
+        public static final boolean useElbow                    = false;
     }   //class Preferences
 
     //

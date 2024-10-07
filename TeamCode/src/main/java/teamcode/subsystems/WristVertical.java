@@ -4,12 +4,12 @@ import ftclib.motor.FtcServoActuator;
 import teamcode.RobotParams;
 import trclib.motor.TrcServo;
 
-public class Wrist {
+public class WristVertical {
 
     private final TrcServo wristVertical;
     private final TrcServo wristRotator;
 
-    public Wrist {
+    public WristVertical {
         FtcServoActuator.Params WristVerticalParams = new FtcServoActuator.Params()
                 .setPrimaryServo(RobotParams.WristParamsVertical.SUBSYSTEM_NAME,
                         RobotParams.WristParamsVertical.PRIMARY_SERVO_VERTICAL_INVERTED)
@@ -35,7 +35,13 @@ public class Wrist {
         wristRotator = new FtcServoActuator(WristRotatorParams).getServo();
     }
 
-    public TrcServo getWristVertical() {return wristVertical;}
-    public TrcServo getWristRotator() {return wristRotator;}
+    public TrcServo getWristVertical()
+    {
+        return wristVertical;
+    }
+    public TrcServo getWristRotator()
+    {
+        return wristRotator;
+    }
 
 }

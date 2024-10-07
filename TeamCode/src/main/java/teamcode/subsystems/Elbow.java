@@ -3,7 +3,6 @@ package teamcode.subsystems;
 import ftclib.motor.FtcMotorActuator;
 import teamcode.RobotParams;
 import trclib.motor.TrcMotor;
-import trclib.robotcore.TrcDbgTrace;
 
 
 public class Elbow
@@ -34,7 +33,7 @@ public class Elbow
                 RobotParams.ElbowParams.STALL_TOLERANCE);
     }   //Elbow
 
-    public TrcMotor getMotor()
+    public TrcMotor getElbow()
     {
         return elbow;
     }   //getMotor
