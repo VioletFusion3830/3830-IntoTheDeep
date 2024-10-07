@@ -66,8 +66,8 @@ public class Robot
     public TrcServo arm;
     public TrcServo armRotator;
     public TrcServo turret;
-    public TrcServo clawVertical;
-    public TrcServo clawRotator;
+    public TrcServo wristVertical;
+    public TrcServo wristRotator;
 
     // Vision subsystems.
     public Vision vision;
@@ -140,8 +140,8 @@ public class Robot
                 }
 
                 if (RobotParams.Preferences.useWrist){
-                    clawVertical = new Wrist().getClawVertical();
-                    clawRotator = new Wrist().getClawRotator();
+                    wristVertical = new Wrist().getWristVertical();
+                    wristRotator = new Wrist().getWristRotator();
                 }
 
             }
