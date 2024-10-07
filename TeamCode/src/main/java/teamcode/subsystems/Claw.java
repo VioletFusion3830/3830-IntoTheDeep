@@ -52,9 +52,12 @@ public class Claw {
         }
 
         FtcServoGrabber.Params grabberParams = new FtcServoGrabber.Params()
-                .setPrimaryServo(RobotParams.ClawParams.PRIMARY_SERVO_NAME, RobotParams.ClawParams.PRIMARY_SERVO_INVERTED)
-                .setOpenCloseParams(RobotParams.ClawParams.OPEN_POS, RobotParams.ClawParams.OPEN_TIME,
-                        RobotParams.ClawParams.CLOSE_POS, RobotParams.ClawParams.CLOSE_TIME);
+                .setPrimaryServo(RobotParams.ClawParams.PRIMARY_SERVO_NAME,
+                        RobotParams.ClawParams.PRIMARY_SERVO_INVERTED)
+                .setOpenCloseParams(RobotParams.ClawParams.OPEN_POS,
+                        RobotParams.ClawParams.OPEN_TIME,
+                        RobotParams.ClawParams.CLOSE_POS,
+                        RobotParams.ClawParams.CLOSE_TIME);
 
         if (revColorSensorV3 != null)
         {

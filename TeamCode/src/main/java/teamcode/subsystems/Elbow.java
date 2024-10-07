@@ -14,18 +14,23 @@ public class Elbow
     {
         FtcMotorActuator.Params elbowParams = new FtcMotorActuator.Params()
                 .setPrimaryMotor(
-                        RobotParams.ElbowParams.PRIMARY_MOTOR_NAME, RobotParams.ElbowParams.PRIMARY_MOTOR_TYPE,
+                        RobotParams.ElbowParams.PRIMARY_MOTOR_NAME,
+                        RobotParams.ElbowParams.PRIMARY_MOTOR_TYPE,
                         RobotParams.ElbowParams.PRIMARY_MOTOR_INVERTED)
                 .setPositionScaleAndOffset(
-                        RobotParams.ElbowParams.DEG_SCALE, RobotParams.ElbowParams.POS_OFFSET,
+                        RobotParams.ElbowParams.DEG_SCALE,
+                        RobotParams.ElbowParams.POS_OFFSET,
                         RobotParams.ElbowParams.ZERO_OFFSET)
-                .setPositionPresets(RobotParams.ElbowParams.POS_PRESET_TOLERANCE, RobotParams.ElbowParams.posPresets);
+                .setPositionPresets(RobotParams.ElbowParams.POS_PRESET_TOLERANCE,
+                        RobotParams.ElbowParams.posPresets);
         elbow = new FtcMotorActuator(elbowParams).getMotor();
         elbow.setPositionPidParameters(
-                RobotParams.ElbowParams.posPidCoeffs, RobotParams.ElbowParams.POS_PID_TOLERANCE);
+                RobotParams.ElbowParams.posPidCoeffs,
+                RobotParams.ElbowParams.POS_PID_TOLERANCE);
         elbow.setPositionPidPowerComp(this::getElbowPowerComp);
         elbow.setPidStallDetectionEnabled(
-                RobotParams.ElbowParams.STALL_RESET_TIMEOUT, RobotParams.ElbowParams.STALL_TIMEOUT,
+                RobotParams.ElbowParams.STALL_RESET_TIMEOUT,
+                RobotParams.ElbowParams.STALL_TIMEOUT,
                 RobotParams.ElbowParams.STALL_TOLERANCE);
     }   //Elbow
 

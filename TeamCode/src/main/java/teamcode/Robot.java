@@ -42,6 +42,7 @@ import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcRobot;
 import trclib.sensor.TrcDigitalInput;
+import trclib.subsystem.TrcServoGrabber;
 import trclib.timer.TrcTimer;
 
 /**
@@ -60,17 +61,17 @@ public class Robot
     // Robot Drive.
     public FtcRobotDrive.RobotInfo robotInfo;
     public FtcRobotDrive robotDrive;
-    public TrcServo claw;
-    public TrcMotor elevator;
-    public TrcServo arm;
-    public TrcServo armRotator;
-    public TrcServo turret;
     // Vision subsystems.
     public Vision vision;
     // Sensors and indicators.
     public BlinkinLEDs blinkin;
     public FtcRobotBattery battery;
     // Subsystems.
+    public TrcServo arm;
+    public TrcServoGrabber claw;
+    public TrcMotor Elbow;
+    public TrcMotor elevator;
+    public TrcServo turret;
 
     /**
      * Constructor: Create an instance of the object.
@@ -123,16 +124,19 @@ public class Robot
                 }
 
                 if (RobotParams.Preferences.useClaw){
-//                    claw = new Claw().getClaw();
+                    claw = new Claw().getClaw();
                 }
 
                 if (RobotParams.Preferences.useArm){
-                    Arm armPackage = new Arm();
-                    arm = armPackage.getArm();
+                    arm = new Arm().getArm();
                 }
 
                 if (RobotParams.Preferences.useTurret){
                     turret = new Turret().getTurretParams();
+                }
+
+                if (RobotParams.Preferences.useElbow){
+                    Elbow = new Elbow().getMotor();
                 }
 
             }

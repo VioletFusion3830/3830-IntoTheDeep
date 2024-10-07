@@ -10,7 +10,8 @@ public class Turret {
 
     public Turret(){
         FtcServoActuator.Params TurretParams = new FtcServoActuator.Params()
-                .setPrimaryServo(RobotParams.TurretParams.PRIMARY_SERVO_NAME, RobotParams.TurretParams.PRIMARY_SERVO_INVERTED);
+                .setPrimaryServo(RobotParams.TurretParams.PRIMARY_SERVO_NAME,
+                        RobotParams.TurretParams.PRIMARY_SERVO_INVERTED);
 
         turret = new FtcServoActuator(TurretParams).getServo();
     }
