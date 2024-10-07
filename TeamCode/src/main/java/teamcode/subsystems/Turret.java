@@ -5,7 +5,7 @@ import teamcode.RobotParams;
 import trclib.motor.TrcServo;
 
 public class Turret {
-
+//      one servo for something
     private final TrcServo turret;
 
     public Turret(){
@@ -15,5 +15,8 @@ public class Turret {
         turret = new FtcServoActuator(TurretParams).getServo();
     }
 
-    public TrcServo getTurret(){ return turret;}
+    public TrcServo getTurretParams()
+    {
+        return turret;
+    }
 }

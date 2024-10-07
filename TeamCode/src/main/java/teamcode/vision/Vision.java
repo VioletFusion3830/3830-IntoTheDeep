@@ -660,6 +660,11 @@ public class Vision
         {
             robot.dashboard.displayPrintf(
                     lineNum, "%s: %s", sampleName, sampleInfo != null? sampleInfo: "Not found.");
+            if (sampleInfo != null)
+            {
+                robot.dashboard.displayPrintf(
+                        lineNum + 1, "%s: angle: %.3f", sampleName, sampleInfo.detectedObj.rotatedRect.angle);
+            }
         }
 
         return sampleInfo;

@@ -30,10 +30,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import ftclib.drivebase.FtcRobotDrive;
 import ftclib.drivebase.FtcSwerveDrive;
-import ftclib.motor.FtcMotorActuator;
 import ftclib.motor.FtcMotorActuator.MotorType;
 import ftclib.sensor.FtcSparkFunOtos;
-import teamcode.subsystems.Elevator;
+import ftclib.sensor.FtcPinpointOdometry;
 import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcDriveBase;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
@@ -89,12 +88,12 @@ public class RobotParams
         public static final double APRILTAG_RED_ALLIANCE_WALL_Y     = -70.25;
         public static final double APRILTAG_WALL_OFFSET_Y           = 46.83;
         public static final TrcPose2D[] APRILTAG_POSES              = new TrcPose2D[] {
-            new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, APRILTAG_WALL_OFFSET_Y, -90.0), // TagId 11
-            new TrcPose2D(0.0, APRILTAG_BLUE_ALLIANCE_WALL_Y, 0.0),                 // TagId 12
-            new TrcPose2D(APRILTAG_BACK_WALL_X, APRILTAG_WALL_OFFSET_Y, 90.0),      // TagId 13
-            new TrcPose2D(APRILTAG_BACK_WALL_X, -APRILTAG_WALL_OFFSET_Y, 90.0),     // TagId 14
-            new TrcPose2D(0.0, APRILTAG_RED_ALLIANCE_WALL_Y, 180.0),                // TagId 15
-            new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, -APRILTAG_WALL_OFFSET_Y, -90.0) // TagId 16
+                new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, APRILTAG_WALL_OFFSET_Y, -90.0), // TagId 11
+                new TrcPose2D(0.0, APRILTAG_BLUE_ALLIANCE_WALL_Y, 0.0),                 // TagId 12
+                new TrcPose2D(APRILTAG_BACK_WALL_X, APRILTAG_WALL_OFFSET_Y, 90.0),      // TagId 13
+                new TrcPose2D(APRILTAG_BACK_WALL_X, -APRILTAG_WALL_OFFSET_Y, 90.0),     // TagId 14
+                new TrcPose2D(0.0, APRILTAG_RED_ALLIANCE_WALL_Y, 180.0),                // TagId 15
+                new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, -APRILTAG_WALL_OFFSET_Y, -90.0) // TagId 16
         };
     }   //class Game
 
@@ -167,13 +166,14 @@ public class RobotParams
         public static final boolean showVisionStat              = false;
         // Drive Base
         public static final boolean useDriveBase                = false;
+        public static final boolean usePinpointOdometry         = false;
+        public static final boolean useSparkfunOTOS             = false;
         // Subsystems
         public static final boolean useSubsystems               = false;
         public static final boolean useElevator                 = false;
         public static final boolean useClaw                     = false;
         public static final boolean useArm                      = false;
         public static final boolean useTurret                   = false;
-        public static final boolean useWrist                    = false;
     }   //class Preferences
 
     //
@@ -398,10 +398,21 @@ public class RobotParams
             // Absolute Odometry
             if (odometryType == TrcDriveBase.OdometryType.AbsoluteOdometry)
             {
-                FtcSparkFunOtos.Config otosConfig = new FtcSparkFunOtos.Config()
-                    .setOffset(0.0, 0.0, 0.0)
-                    .setScale(1.0, 1.0);
-                absoluteOdometry = new FtcSparkFunOtos("SparkfunOtos", otosConfig);
+                if (RobotParams.Preferences.usePinpointOdometry)
+                {
+                    FtcPinpointOdometry.Config ppOdoConfig = new FtcPinpointOdometry.Config()
+                            .setPodOffsets(0.0, 0.0)    // ???
+                            .setEncoderResolution(ODWHEEL_CPR / Math.PI * ODWHEEL_DIAMETER)
+                            .setEncodersInverted(false, false); //???
+                    absoluteOdometry = new FtcPinpointOdometry("pinpointOdo", ppOdoConfig);
+                }
+                else if (RobotParams.Preferences.useSparkfunOTOS)
+                {
+                    FtcSparkFunOtos.Config otosConfig = new FtcSparkFunOtos.Config()
+                            .setOffset(0.0, 0.0, 0.0)   //???
+                            .setScale(1.0, 1.0);        //???
+                    absoluteOdometry = new FtcSparkFunOtos("sparkfunOtos", otosConfig);
+                }
             }
             else
             {
@@ -574,8 +585,8 @@ public class RobotParams
         public static final double CLOSE_POS                    = 0;
         public static final double CLOSE_TIME                   = 0.5;
 
-        public static final boolean USE_REV_V3_COLOR_SENSOR           = true;
-        public static final String REV_V3_COLOR_SENSOR_NAME           = SUBSYSTEM_NAME + ".sensor";
+        public static final boolean USE_REV_V3_COLOR_SENSOR     = true;
+        public static final String REV_V3_COLOR_SENSOR_NAME     = SUBSYSTEM_NAME + ".sensor";
         public static final double SENSOR_TRIGGER_THRESHOLD     = 2.0; //cm
         public static final double HAS_OBJECT_THRESHOLD         = 2.0; //cm
         public static final boolean ANALOG_TRIGGER_INVERTED     = true;
@@ -587,16 +598,24 @@ public class RobotParams
         public static final String SUBSYSTEM_NAME                           = "Arm";
         public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".Primary";
         public static final String FOLLOWER_SERVO_NAME                      = SUBSYSTEM_NAME + ".Follower";
+
         public static final boolean PRIMARY_SERVO_INVERTED                  = false;
         public static final boolean FOLLOWER_SERVO_INVERTED                 = false;
-        public static final double MIN_POS                                  = 0.0; //Need to be Updated
-        public static final double MAX_POS                                  = 1.0; //Need to be Updated
-        public static final double ROTATE_MIN_POS                           = 0.0; //Need to be Updated
-        public static final double ROTATE_MAX_POS                           = 1.0; //Need to be Updated
-        public static final double  MAX_STEPRATE                            = 1.0; //Need to be Updated
-        public static final double POS_PRESET_TOLERANCE                     = 1.0;
-        public static final double[] POS_PRESETS                            = {MIN_POS, MAX_POS};
-        public static final double[] ROTATION_POS_PRESETS                   = {MIN_POS, MAX_POS * 0.34, MAX_POS * 0.67, MAX_POS}; // Need to be Updated
+
+        public static final double LOGICAL_MIN_POS                          = 0.0;
+        public static final double LOGICAL_MAX_POS                          = 1.0;
+        public static final double PHYSICAL_MIN_POS                         = 0.0;
+        public static final double PHYSICAL_MAX_POS                         = 1.0;
+        public static final double MAX_STEPRATE                             = 1.0;
+
+        public static final double SAMPLE_PICKUP_POS                        = 0;
+        public static final double SAMPLE_DROP_POS                          = 1;
+        public static final double SPECIMEN_PICKUP                          = 0;
+        public static final double SPECIMEN_DROP                            = 0;
+        public static final double PICKUP_TIME                              = 0;
+        public static final double DROP_TIME                                = 0;
+        public static final double POS_PRESET_TOLERANCE                     = 1.0; //What should this be
+        public static final double[] POS_PRESETS                            = {};
     }
 
     public static final class TurretParams
@@ -606,17 +625,35 @@ public class RobotParams
         public static final boolean PRIMARY_SERVO_INVERTED                  = false;
     }   //class Turret
 
-    public static final class WristParams
+    public static class ElbowParams
     {
-        public static final String SUBSYSTEM_NAME                           = "Wrist";
-        public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".Primary";
-        public static final boolean PRIMARY_SERVO_INVERTED                  = false;
-        public static final double ROTATE_MIN_POS                           = 0.0; //Need to be Updated
-        public static final double ROTATE_MAX_POS                           = 1.0; //Need to be Updated
-        public static final double  MAX_STEPRATE                            = 1.0; //Need to be Updated
-        public static final double POS_PRESET_TOLERANCE                     = 1.0;
-        public static final double[] POS_PRESETS                            = {MIN_POS, MAX_POS};
-        public static final double[] ROTATION_POS_PRESETS                   = {MIN_POS, MAX_POS * 0.34, MAX_POS * 0.67, MAX_POS};
-    }   //class Wrist
+        public static final String SUBSYSTEM_NAME               = "Elbow";
+
+        public static final String PRIMARY_MOTOR_NAME           = SUBSYSTEM_NAME + ".primary";
+        public static final MotorType PRIMARY_MOTOR_TYPE        = MotorType.DcMotor;
+        public static final boolean PRIMARY_MOTOR_INVERTED      = true;
+
+        public static final double GOBILDA312_CPR               = Gobilda.MOTOR_5203_312_ENC_PPR;
+        public static final double DEG_SCALE                    = 360.0 / GOBILDA312_CPR;
+        public static final double POS_OFFSET                   = 0;
+        public static final double ZERO_OFFSET                  = 0.0;
+        public static final double POWER_LIMIT                  = 1.0;
+        public static final double ZERO_CAL_POWER               = -0.25;
+
+        public static final double MIN_POS                      = POS_OFFSET;
+        public static final double MAX_POS                      = 130;
+        public static final double[] posPresets                 = {MIN_POS, 90.0,100,110, 120.0, MIN_POS};
+        public static final double POS_PRESET_TOLERANCE         = 10.0;
+
+        public static final boolean SOFTWARE_PID_ENABLED        = true;
+        public static final TrcPidController.PidCoefficients posPidCoeffs =
+                new TrcPidController.PidCoefficients(0.018, 0.1, 0.001, 0.0, 2.0);
+        public static final double POS_PID_TOLERANCE            = 1.0;
+        public static final double GRAVITY_COMP_MAX_POWER       = 0.158;
+        public static final double STALL_MIN_POWER              = Math.abs(ZERO_CAL_POWER);
+        public static final double STALL_TOLERANCE              = 0.1;
+        public static final double STALL_TIMEOUT                = 0.1;
+        public static final double STALL_RESET_TIMEOUT          = 0.0;
+    }   //class ElbowParams
 
 }   //class RobotParams
