@@ -451,8 +451,8 @@ public class RobotParams
             velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / profiledMaxVelocity, 0.0);
             // Vision
             webCam1 = new FrontCamParams();
-            webCam2 = new BackCamParams();
-            limelight = new LimelightParams();
+            webCam2 = null; //new BackCamParams()
+            limelight = null; //new LimelightParams()
             // Miscellaneous
             blinkinName = null;
         }   //MecanumParams
@@ -593,7 +593,7 @@ public class RobotParams
         public static final String REV_V3_COLOR_SENSOR_NAME     = SUBSYSTEM_NAME + ".sensor";
         public static final double SENSOR_TRIGGER_THRESHOLD     = 2.0; //cm
         public static final double HAS_OBJECT_THRESHOLD         = 2.0; //cm
-        public static final boolean ANALOG_TRIGGER_INVERTED     = true;
+        public static final boolean ANALOG_TRIGGER_INVERTED     = false;
 
     }   //class Grabber
 

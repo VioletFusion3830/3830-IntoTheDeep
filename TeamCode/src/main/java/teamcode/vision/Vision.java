@@ -514,7 +514,6 @@ public class Vision
                     vision.setProcessorEnabled(yellowSampleProcessor, enabled);
                 }
                 break;
-
             case RedAllianceSamples:
             case BlueAllianceSamples:
             case AnySample:

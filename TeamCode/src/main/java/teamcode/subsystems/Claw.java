@@ -13,7 +13,7 @@ import trclib.robotcore.TrcEvent;
 import trclib.subsystem.TrcServoGrabber;
 
 public class Claw {
-    private final TrcServoGrabber claw; //one servo for open/close
+    private final TrcServoGrabber clawServo; //one servo for open/close
     private final RevColorSensorV3 revColorSensorV3;
 
     private final ColorRange yellowSampleHue = new ColorRange(60,90);
@@ -66,18 +66,19 @@ public class Claw {
                     RobotParams.ClawParams.ANALOG_TRIGGER_INVERTED,
                     RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD,
                     RobotParams.ClawParams.HAS_OBJECT_THRESHOLD,
-                    isSampleCorrectColor(getSensorDataColor(),samplePickupType),
+                    this::isSampleCorrectColor,
+                    null,
                     true
                     );
         }
 
-        claw = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
-        claw.open();
+        clawServo = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
+        clawServo.open();
     }
 
-    public TrcServoGrabber getClaw()
+    public TrcServoGrabber getClawServo()
     {
-        return claw;
+        return clawServo;
     }
 
     public SamplePickupType getSamplePickupType()
@@ -102,77 +103,53 @@ public class Claw {
         }
     }
 
-    private SampleSensorColor getSensorDataColor()
+    //Will only work if rev color sensor is never null when called
+    private float getSensorDataColor()
     {
-        if (revColorSensorV3 != null)
-        {
             float[] hsvValues = {0F,0F,0F};
             Color.RGBToHSV(revColorSensorV3.red() * 255,
                     revColorSensorV3.green() * 255,
                     revColorSensorV3.blue() * 255,
                     hsvValues);
-            float hue = hsvValues[0];
-
-            if(yellowSampleHue.isHueInRange(hue))
-            {
-                return SampleSensorColor.yellowSample;
-            }
-            else if(redSampleHue.isHueInRange(hue))
-            {
-                return SampleSensorColor.redSample;
-            }
-            else if(blueSampleHue.isHueInRange(hue))
-            {
-                return SampleSensorColor.blueSample;
-            }
-            else
-            {
-                return SampleSensorColor.noSampleColor;
-            }
-        }
-        else
-        {
-            return null;
-        }
+            return hsvValues[0];
     }
 
-    public TrcEvent.Callback isSampleCorrectColor(SampleSensorColor sampleSensorColor, SamplePickupType samplePickupType)
+    public void isSampleCorrectColor()
     {
-        if(claw != null) {
-            if (revColorSensorV3 != null) {
-                switch (sampleSensorColor) {
-                    case redSample:
-                        if (samplePickupType == SamplePickupType.redAllianceSamples ||
-                                samplePickupType == SamplePickupType.redSample ||
-                                samplePickupType == SamplePickupType.anySample) {
-                            claw.close();
-                        }
-                        break;
-                    case blueSample:
-                        if (samplePickupType == SamplePickupType.blueAllianceSamples ||
-                                samplePickupType == SamplePickupType.blueSample ||
-                                samplePickupType == SamplePickupType.anySample) {
-                            claw.close();
-                        }
-                        break;
-                    case yellowSample:
-                        if (samplePickupType == SamplePickupType.redAllianceSamples ||
-                                samplePickupType == SamplePickupType.blueAllianceSamples ||
-                                samplePickupType == SamplePickupType.yellowSample ||
-                                samplePickupType == SamplePickupType.anySample) {
-                            claw.close();
-                        }
-                        break;
-                    case noSampleColor:
-                        break;
+        switch (samplePickupType) {
+            case redSample:
+                if (redSampleHue.isHueInRange(getSensorDataColor()))
+                {
+                    clawServo.close();
                 }
-            }
-            else
-            {
-                claw.close();
-            }
-        }
-        return null;
+                break;
+            case blueSample:
+                if (blueSampleHue.isHueInRange(getSensorDataColor()))
+                {
+                    clawServo.close();
+                }
+                break;
+            case yellowSample:
+                if (yellowSampleHue.isHueInRange(getSensorDataColor())) {
+                    clawServo.close();
+                }
+                break;
+            case redAllianceSamples:
+                if (yellowSampleHue.isHueInRange(getSensorDataColor()) || redSampleHue.isHueInRange(getSensorDataColor()))
+                {
+                    clawServo.close();
+                }
+                break;
+            case blueAllianceSamples:
+                if (yellowSampleHue.isHueInRange(getSensorDataColor()) || blueSampleHue.isHueInRange(getSensorDataColor()))
+                {
+                    clawServo.close();
+                }
+                break;
+            case anySample:
+                clawServo.close();
+                break;
+                }
     }
 
     // Helper class to manage color ranges.

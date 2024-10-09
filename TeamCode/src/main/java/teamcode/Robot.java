@@ -71,7 +71,8 @@ public class Robot
     public FtcRobotBattery battery;
     // Subsystems.
     public TrcServo arm;
-    public TrcServoGrabber claw;
+    public Claw claw;
+    public TrcServoGrabber clawServo;
     public TrcMotor elbow;
     public TrcMotor elevator;
     public TrcServo turret;
@@ -126,10 +127,12 @@ public class Robot
             {
                 if (RobotParams.Preferences.useElevator){
                     elevator = new Elevator().getElevatorParams();
+                    elevator.zeroCalibrate(RobotParams.ElevatorParams.ZERO_CAL_POWER);
                 }
 
                 if (RobotParams.Preferences.useClaw){
-                    claw = new Claw().getClaw();
+                    claw = new Claw();
+                    clawServo = new Claw().getClawServo();
                 }
 
                 if (RobotParams.Preferences.useArm){
@@ -142,6 +145,7 @@ public class Robot
 
                 if (RobotParams.Preferences.useElbow){
                     elbow = new Elbow().getElbow();
+                    elbow.zeroCalibrate(RobotParams.ElbowParams.ZERO_CAL_POWER);
                 }
 
                 if (RobotParams.Preferences.useWristVertical){
@@ -319,19 +323,25 @@ public class Robot
             //
             if (RobotParams.Preferences.showSubsystems)
             {
+                if (elevator != null){
+                    dashboard.displayPrintf(
+                            lineNum++, "Elevator: power=%.3f, pos=%.3f/%.3f, limitSw=%s/%s",
+                            elevator.getPower(), elevator.getPosition(), elevator.getPidTarget(),
+                            elevator.isLowerLimitSwitchActive(), elevator.isUpperLimitSwitchActive());
+                }
+
                 if (claw != null){
+                    if (RobotParams.ClawParams.USE_REV_V3_COLOR_SENSOR)
+                    {
+                        dashboard.displayPrintf(
+                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, sensorState=%s, autoActive=%s, pickupType=%.3f,sensorDistence=%.3f, sensorColor=%.3f",
+                                claw.getPosition(), claw.hasObject(), claw.getSensorValue(),
+                                claw.isAutoAssistActive(),claw.getSamplePickupType(),claw.getSensorDataColor()););
+                    }
                     dashboard.displayPrintf(
                             lineNum++,
                             "claw: logical position=" + claw.getPosition() +
-                            ", actual position=" + claw.getLogicalPosition()); //needs to be updated
-                }
-
-                if (elevator != null){
-                    dashboard.displayPrintf(
-                            lineNum++,
-                            "elevator: power=" + elevator.getPower() +
-                            ", actual position=" + elevator.getPosition() + "/" + elevator.getPidTarget() +
-                            ", lower limit=" + elevator.isLowerLimitSwitchActive()); //needs to be updated
+                                    ", actual position=" + claw.getLogicalPosition()); //needs to be updated
                 }
             }
         }
@@ -358,6 +368,15 @@ public class Robot
      */
     public void zeroCalibrate(String owner)
     {
+        if(elevator != null)
+        {
+            elevator.zeroCalibrate(owner, RobotParams.ElevatorParams.ZERO_CAL_POWER);
+        }
+
+        if(elbow != null)
+        {
+            elbow.zeroCalibrate(owner, RobotParams.ElbowParams.ZERO_CAL_POWER);
+        }
     }   //zeroCalibrate
 
     /**

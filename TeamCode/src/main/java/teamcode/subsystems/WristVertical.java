@@ -8,7 +8,8 @@ public class WristVertical {
 
     private final TrcServo wristVertical;
 
-    public WristVertical {
+    public WristVertical()
+    {
         FtcServoActuator.Params WristVerticalParams = new FtcServoActuator.Params()
                 .setPrimaryServo(
                         RobotParams.WristParamsVertical.SUBSYSTEM_NAME,

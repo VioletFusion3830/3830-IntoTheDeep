@@ -5,7 +5,6 @@ import teamcode.RobotParams;
 import trclib.motor.TrcServo;
 
 public class Arm {
-
     private final TrcServo arm;
 
 

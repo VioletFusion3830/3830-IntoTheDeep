@@ -5,10 +5,10 @@ import teamcode.RobotParams;
 import trclib.motor.TrcServo;
 
 public class WristRotational {
-
     private final TrcServo wristRotator;
 
-    public WristRotational {
+    public WristRotational()
+    {
         FtcServoActuator.Params WristRotatorParams = new FtcServoActuator.Params()
                 .setPrimaryServo(
                         RobotParams.WristParamsVertical.SUBSYSTEM_NAME,
@@ -31,5 +31,4 @@ public class WristRotational {
     {
         return wristRotator;
     }
-
 }
