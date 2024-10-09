@@ -323,26 +323,26 @@ public class Robot
             //
             if (RobotParams.Preferences.showSubsystems)
             {
-                if (elevator != null){
+                if (elevator != null)
+                {
                     dashboard.displayPrintf(
                             lineNum++, "Elevator: power=%.3f, pos=%.3f/%.3f, limitSw=%s/%s",
                             elevator.getPower(), elevator.getPosition(), elevator.getPidTarget(),
                             elevator.isLowerLimitSwitchActive(), elevator.isUpperLimitSwitchActive());
                 }
 
-                if (claw != null){
+                if (claw != null)
+                {
                     if (RobotParams.ClawParams.USE_REV_V3_COLOR_SENSOR)
                     {
                         dashboard.displayPrintf(
                                 lineNum++, "Grabber: pos=%.3f, hasObject=%s, sensorState=%s, autoActive=%s, pickupType=%.3f,sensorDistence=%.3f, sensorColor=%.3f",
-                                claw.getPosition(), claw.hasObject(), claw.getSensorValue(),
-                                claw.isAutoAssistActive(),claw.getSamplePickupType(),claw.getSensorDataColor()););
+                                clawServo.getPosition(), clawServo.hasObject(), clawServo.getSensorValue(),
+                                clawServo.isAutoAssistActive(), claw.getSamplePickupType(), claw.getSensorDataColorHSV());
                     }
-                    dashboard.displayPrintf(
-                            lineNum++,
-                            "claw: logical position=" + claw.getPosition() +
-                                    ", actual position=" + claw.getLogicalPosition()); //needs to be updated
                 }
+
+                
             }
         }
     }   //updateStatus

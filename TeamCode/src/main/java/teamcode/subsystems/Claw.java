@@ -4,12 +4,9 @@ import android.graphics.Color;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-import java.util.Objects;
-
 import teamcode.RobotParams;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.subsystem.FtcServoGrabber;
-import trclib.robotcore.TrcEvent;
 import trclib.subsystem.TrcServoGrabber;
 
 public class Claw {
@@ -29,14 +26,6 @@ public class Claw {
         blueSample,
         yellowSample,
         anySample
-    }
-
-    public enum SampleSensorColor
-    {
-        redSample,
-        blueSample,
-        yellowSample,
-        noSampleColor
     }
 
     public Claw()
@@ -71,7 +60,6 @@ public class Claw {
                     true
                     );
         }
-
         clawServo = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
         clawServo.open();
     }
@@ -89,6 +77,18 @@ public class Claw {
     public SamplePickupType setSamplePickupType(SamplePickupType newSamplePickupType)
     {
         return samplePickupType = newSamplePickupType;
+    }
+
+    public float getSensorDataColorHSV()
+    {
+        if (revColorSensorV3 != null)
+        {
+            return getSensorDataColor();
+        }
+        else
+        {
+            return 0.00000f;
+        }
     }
 
     private double getSensorDataDistance()
@@ -114,58 +114,58 @@ public class Claw {
             return hsvValues[0];
     }
 
-    private void isSampleCorrectColor()
+    private void isSampleCorrectColor(Object context)
     {
-        switch (samplePickupType) {
+        float sampleHue = getSensorDataColor();
+        boolean sampleColorCorrect = false;
+
+        switch (samplePickupType)
+        {
             case redSample:
-                if (redSampleHue.isHueInRange(getSensorDataColor()))
-                {
-                    clawServo.close();
-                }
+                sampleColorCorrect = redSampleHue.isHueInRange(sampleHue);
                 break;
             case blueSample:
-                if (blueSampleHue.isHueInRange(getSensorDataColor()))
-                {
-                    clawServo.close();
-                }
+                sampleColorCorrect = blueSampleHue.isHueInRange(sampleHue);
                 break;
             case yellowSample:
-                if (yellowSampleHue.isHueInRange(getSensorDataColor())) {
-                    clawServo.close();
-                }
+                sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue);
                 break;
             case redAllianceSamples:
-                if (yellowSampleHue.isHueInRange(getSensorDataColor()) || redSampleHue.isHueInRange(getSensorDataColor()))
-                {
-                    clawServo.close();
-                }
+                sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
                 break;
             case blueAllianceSamples:
-                if (yellowSampleHue.isHueInRange(getSensorDataColor()) || blueSampleHue.isHueInRange(getSensorDataColor()))
-                {
-                    clawServo.close();
-                }
+                sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue);
                 break;
             case anySample:
-                clawServo.close();
+                sampleColorCorrect = true;
                 break;
-                }
+        }
+        if (sampleColorCorrect)
+        {
+            clawServo.close();
+        }
     }
 
     // Helper class to manage color ranges.
-    private static class ColorRange {
+    private static class ColorRange
+    {
         private final int minHue;
         private final int maxHue;
 
-        public ColorRange(int minHue, int maxHue) {
+        public ColorRange(int minHue, int maxHue)
+        {
             this.minHue = minHue;
             this.maxHue = maxHue;
         }
 
-        public boolean isHueInRange(float hue) {
-            if (minHue <= maxHue) {
+        public boolean isHueInRange(float hue)
+        {
+            if (minHue <= maxHue)
+            {
                 return hue >= minHue && hue <= maxHue;
-            } else {
+            }
+            else
+            {
                 return hue >= minHue || hue <= maxHue;
             }
         }
