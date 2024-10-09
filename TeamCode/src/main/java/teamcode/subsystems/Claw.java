@@ -114,7 +114,7 @@ public class Claw {
             return hsvValues[0];
     }
 
-    public void isSampleCorrectColor()
+    private void isSampleCorrectColor()
     {
         switch (samplePickupType) {
             case redSample:
