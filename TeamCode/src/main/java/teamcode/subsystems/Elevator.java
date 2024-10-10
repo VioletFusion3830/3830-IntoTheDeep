@@ -18,15 +18,14 @@ public class Elevator {
                 .setPositionScaleAndOffset(RobotParams.ElevatorParams.INCHES_PER_COUNT,
                         RobotParams.ElevatorParams.POS_OFFSET)
                 .setPositionPresets(RobotParams.ElevatorParams.POS_PRESET_TOLERANCE,
-                        RobotParams.ElevatorParams.posPresets);
+                        RobotParams.ElevatorParams.POS_PRESETS);
         elevator = new FtcMotorActuator(elevatorParams).getMotor();
         elevator.setSoftwarePidEnabled(RobotParams.ElevatorParams.SOFTWARE_PID_ENABLED);
         elevator.setPositionPidParameters(
-                RobotParams.ElevatorParams.posPIDCoeffs,
+                RobotParams.ElevatorParams.POS_PID_COEFFS,
                 RobotParams.ElevatorParams.POS_PID_TOLERANCE);
         elevator.setPositionPidPowerComp(this::getGravityComp);
-        elevator.setStallProtection(
-                RobotParams.ElevatorParams.STALL_MIN_POWER,
+        elevator.setStallProtection(RobotParams.ElevatorParams.STALL_MIN_POWER,
                 RobotParams.ElevatorParams.STALL_TOLERANCE,
                 RobotParams.ElevatorParams.STALL_TIMEOUT,
                 RobotParams.ElevatorParams.STALL_RESET_TIMEOUT);

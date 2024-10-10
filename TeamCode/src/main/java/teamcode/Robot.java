@@ -70,12 +70,12 @@ public class Robot
     public BlinkinLEDs blinkin;
     public FtcRobotBattery battery;
     // Subsystems.
-    public TrcServo arm;
+    public TrcMotor arm;
     public Claw claw;
     public TrcServoGrabber clawServo;
     public TrcMotor elbow;
     public TrcMotor elevator;
-    public TrcServo turret;
+    public TrcMotor turret;
     public TrcServo wristVertical;
     public TrcServo wristRotational;
 
@@ -342,7 +342,33 @@ public class Robot
                     }
                 }
 
-                
+                if (arm != null)
+                {
+                    dashboard.displayPrintf(lineNum++, "Arm: pos=%.3f", arm.getPosition());
+                }
+
+                if (elbow != null)
+                {
+                    dashboard.displayPrintf(
+                            lineNum++, "Elbow: power=%.3f, pos=%.3f/%.3f, limitSw=%s/%s",
+                            elbow.getPower(), elbow.getPosition(), elbow.getPidTarget(),
+                            elbow.isLowerLimitSwitchActive(), elbow.isUpperLimitSwitchActive());
+                }
+
+                if (turret != null)
+                {
+                    dashboard.displayPrintf(lineNum++, "Turret: pos=%.3f", turret.getPosition());
+                }
+
+                if (wristVertical != null)
+                {
+
+                }
+
+                if (wristRotational != null)
+                {
+
+                }
             }
         }
     }   //updateStatus

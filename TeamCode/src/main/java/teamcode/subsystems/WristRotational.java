@@ -11,19 +11,16 @@ public class WristRotational {
     {
         FtcServoActuator.Params WristRotatorParams = new FtcServoActuator.Params()
                 .setPrimaryServo(
-                        RobotParams.WristParamsVertical.SUBSYSTEM_NAME,
+                        RobotParams.WristParamsRotational.PRIMARY_SERVO_ROTATOR,
                         RobotParams.WristParamsRotational.PRIMARY_SERVO_ROTATOR_INVERTED)
                 .setLogicalPosRange(
-                        RobotParams.WristParamsVertical.LOGICAL_MIN_POS,
-                        RobotParams.WristParamsVertical.LOGICAL_MAX_POS)
+                        RobotParams.WristParamsRotational.LOGICAL_MIN_POS,
+                        RobotParams.WristParamsRotational.LOGICAL_MAX_POS)
                 .setPhysicalPosRange(
-                        RobotParams.WristParamsVertical.PHYSICAL_MIN_POS,
-                        RobotParams.WristParamsVertical.PHYSICAL_MAX_POS)
+                        RobotParams.WristParamsRotational.PHYSICAL_MIN_POS,
+                        RobotParams.WristParamsRotational.PHYSICAL_MAX_POS)
                 .setMaxStepRate(
-                        RobotParams.WristParamsVertical.MAX_STEPRATE)
-                .setPositionPresets(
-                        RobotParams.WristParamsVertical.POS_PRESET_TOLERANCE,
-                        RobotParams.WristParamsVertical.POS_PRESETS);
+                        RobotParams.WristParamsRotational.MAX_STEPRATE);
         wristRotator = new FtcServoActuator(WristRotatorParams).getServo();
     }
 

@@ -47,7 +47,6 @@ public class Claw {
                         RobotParams.ClawParams.OPEN_TIME,
                         RobotParams.ClawParams.CLOSE_POS,
                         RobotParams.ClawParams.CLOSE_TIME);
-
         if (revColorSensorV3 != null)
         {
             grabberParams.setAnalogSensorTrigger(

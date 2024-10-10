@@ -22,6 +22,8 @@
 
 package teamcode.vision;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -135,6 +137,7 @@ public class Vision
                 int cameraViewId = opMode.hardwareMap.appContext.getResources().getIdentifier(
                         "cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
                 openCvCamera = OpenCvCameraFactory.getInstance().createWebcam(webcam1, cameraViewId);
+                FtcDashboard.getInstance().startCameraStream(openCvCamera, 0);
             }
             else
             {

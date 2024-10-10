@@ -562,14 +562,14 @@ public class RobotParams
         public static final double ZERO_CAL_POWER                           = -0.25; //Need to be Updated
 
         public static final double MIN_POS                                  = POS_OFFSET; //Need to be Updated
-        public static final double MAX_POS                                  = 10; //Need to be Updated
-        public static final double[] posPresets                             = {MIN_POS, MAX_POS}; //Need to be Updated
-        public static final double POS_PRESET_TOLERANCE                     = 1.0; //Need to be Updated
+        public static final double MAX_POS                                  = 48; //Need to be Updated
+        public static final double[] POS_PRESETS                            = {MIN_POS, MAX_POS}; //Need to be Updated
+        public static final double POS_PRESET_TOLERANCE                     = 1.0;
 
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
-        public static final TrcPidController.PidCoefficients posPIDCoeffs   =
-                new TrcPidController.PidCoefficients(1.0,0,0,0,0);
-        public static final double POS_PID_TOLERANCE                        = 0.1;
+        public static final TrcPidController.PidCoefficients POS_PID_COEFFS =
+                new TrcPidController.PidCoefficients(1.0,0,0,0,0); //Need to tune
+        public static final double POS_PID_TOLERANCE                        = 0.2;
         public static final double GRAVITY_COMP_POWER                       = 0.0; //Need to be Updated
         public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE                          = 0.1;
@@ -584,10 +584,10 @@ public class RobotParams
         public static final String PRIMARY_SERVO_NAME           = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_INVERTED      = false;
 
-        public static final double OPEN_POS                     = 0;
-        public static final double OPEN_TIME                    = 0.5;
-        public static final double CLOSE_POS                    = 0;
-        public static final double CLOSE_TIME                   = 0.5;
+        public static final double OPEN_POS                     = 0; //Need to update
+        public static final double OPEN_TIME                    = 0.2;
+        public static final double CLOSE_POS                    = 0; //Need to update
+        public static final double CLOSE_TIME                   = 0.2;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR     = true;
         public static final String REV_V3_COLOR_SENSOR_NAME     = SUBSYSTEM_NAME + ".sensor";
@@ -602,32 +602,30 @@ public class RobotParams
         public static final String SUBSYSTEM_NAME                           = "Arm";
         public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".Primary";
         public static final String FOLLOWER_SERVO_NAME                      = SUBSYSTEM_NAME + ".Follower";
-
+        public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
+        public static final MotorType FOLLOWER_SERVO_TYPE                   = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = false;
         public static final boolean FOLLOWER_SERVO_INVERTED                 = false;
 
-        public static final double LOGICAL_MIN_POS                          = 0.0;
-        public static final double LOGICAL_MAX_POS                          = 1.0;
-        public static final double PHYSICAL_MIN_POS                         = 0.0;
-        public static final double PHYSICAL_MAX_POS                         = 1.0;
-        public static final double MAX_STEPRATE                             = 1.0;
+        public static final double DEGREES_PER_COUNT                        = 1; //Need to be Updated
+        public static final double POS_OFFSET                               = 0; //Need to be Updated
+        public static final double POWER_LIMIT                              = 1.0; //Need to be Updated
 
-        public static final double SAMPLE_PICKUP_POS                        = 0;
-        public static final double SAMPLE_DROP_POS                          = 1;
-        public static final double SPECIMEN_PICKUP                          = 0;
-        public static final double SPECIMEN_DROP                            = 0;
-        public static final double PICKUP_TIME                              = 0;
-        public static final double DROP_TIME                                = 0;
-        public static final double POS_PRESET_TOLERANCE                     = 1.0; //What should this be
-        public static final double[] POS_PRESETS                            = {};
+        public static final String EXTERNAL_ENCODER_NAME                    = SUBSYSTEM_NAME + ".encoder";
+        public static final boolean EXTERNAL_ENCODER_INVERTED               = false;
+
+        public static final double MIN_POS                                  = POS_OFFSET; //Need to be Updated
+        public static final double MAX_POS                                  = 10; //Need to be Updated
+        public static final double[] POS_PRESETS                            = {MIN_POS, MAX_POS}; //Need to be Updated
+        public static final double POS_PRESET_TOLERANCE                     = 0.0;
+
+        public static final double SAMPLE_PICKUP_POS                        = 0; //Need to be Updated
+        public static final double SAMPLE_DROP_POS                          = 0; //Need to be Updated
+        public static final double SPECIMEN_PICKUP                          = 0; //Need to be Updated
+        public static final double SPECIMEN_DROP                            = 0; //Need to be Updated
+        public static final double PICKUP_TIME                              = 0.5; //Need to be Updated
+        public static final double DROP_TIME                                = 0.5; //Need to be Updated
     }
-
-    public static final class TurretParams
-    {
-        public static final String SUBSYSTEM_NAME                           = "Turret";
-        public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".Primary";
-        public static final boolean PRIMARY_SERVO_INVERTED                  = false;
-    }   //class Turret
 
     public static class ElbowParams
     {
@@ -637,28 +635,46 @@ public class RobotParams
         public static final MotorType PRIMARY_MOTOR_TYPE        = MotorType.DcMotor;
         public static final boolean PRIMARY_MOTOR_INVERTED      = true;
 
-        public static final double GOBILDA312_CPR               = Gobilda.MOTOR_5203_312_ENC_PPR;
-        public static final double DEG_SCALE                    = 360.0 / GOBILDA312_CPR;
-        public static final double POS_OFFSET                   = 0;
-        public static final double ZERO_OFFSET                  = 0.0;
-        public static final double POWER_LIMIT                  = 1.0;
-        public static final double ZERO_CAL_POWER               = -0.25;
+        public static final double GOBILDA312_CPR               = Gobilda.MOTOR_5203_312_ENC_PPR; //Need to be Updated
+        public static final double DEG_SCALE                    = 360.0 / GOBILDA312_CPR; //Need to be Updated
+        public static final double POS_OFFSET                   = 0; //Need to be Updated
+        public static final double ZERO_OFFSET                  = 0.0; //Need to be Updated
+        public static final double POWER_LIMIT                  = 1.0; //Need to be Updated
+        public static final double ZERO_CAL_POWER               = -0.25; //Need to be Updated
 
-        public static final double MIN_POS                      = POS_OFFSET;
-        public static final double MAX_POS                      = 130;
-        public static final double[] posPresets                 = {MIN_POS, 90.0,100,110, 120.0, MAX_POS};
-        public static final double POS_PRESET_TOLERANCE         = 10.0;
+        public static final double MIN_POS                      = POS_OFFSET; //Need to be Updated
+        public static final double MAX_POS                      = 130; //Need to be Updated
+        public static final double[] posPresets                 = {MIN_POS, 90.0,100,110, 120.0, MAX_POS}; //Need to be Updated
+        public static final double POS_PRESET_TOLERANCE         = 10.0; //Need to be Updated
 
         public static final boolean SOFTWARE_PID_ENABLED        = true;
-        public static final TrcPidController.PidCoefficients posPidCoeffs =
-                new TrcPidController.PidCoefficients(0.018, 0.1, 0.001, 0.0, 2.0);
-        public static final double POS_PID_TOLERANCE            = 1.0;
-        public static final double GRAVITY_COMP_MAX_POWER       = 0.158;
+        public static final TrcPidController.PidCoefficients POS_PID_COEFFS =
+                new TrcPidController.PidCoefficients(0.018, 0.1, 0.001, 0.0, 2.0); //Need to tune
+        public static final double POS_PID_TOLERANCE            = 0.3;
+        public static final double GRAVITY_COMP_MAX_POWER       = 0; //Need to be Updated
         public static final double STALL_MIN_POWER              = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE              = 0.1;
         public static final double STALL_TIMEOUT                = 0.1;
         public static final double STALL_RESET_TIMEOUT          = 0.0;
     }   //class ElbowParams
+
+    public static final class TurretParams
+    {
+        public static final String SUBSYSTEM_NAME                           = "Turret";
+        public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".Primary";
+        public static final boolean PRIMARY_SERVO_INVERTED                  = false;
+
+        public static final double DEGREES_PER_COUNT                        = 1; //Need to be Updated
+        public static final double POS_OFFSET                               = 90; //Need to be Updated
+        public static final double POWER_LIMIT                              = 1.0; //Need to be Updated
+
+        public static final String EXTERNAL_ENCODER_NAME                    = SUBSYSTEM_NAME + ".encoder";
+        public static final boolean EXTERNAL_ENCODER_INVERTED               = false;
+
+        public static final double MIN_POS                                  = 0; //Need to be Updated
+        public static final double MAX_POS                                  = 180; //Need to be Updated
+
+    }   //class Turret
 
     public static class WristParamsVertical
     {
@@ -676,8 +692,6 @@ public class RobotParams
         public static final double POS_OFFSET                               = 0;
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 50;
-        public static final double[] POS_PRESETS                             = {MIN_POS, 50, 60, 60, MAX_POS};
-        public static final double POS_PRESET_TOLERANCE                     = 1.0;
     }   //class WristParamsVertical
 
     public static class WristParamsRotational
@@ -696,8 +710,6 @@ public class RobotParams
         public static final double POS_OFFSET                               = 0;
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 50;
-        public static final double[] POS_PRESETS                             = {MIN_POS, 50, 60, 60, MAX_POS};
-        public static final double POS_PRESET_TOLERANCE                     = 1.0;
     }   //class WristParamsRotational
 
 }   //class RobotParams

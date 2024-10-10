@@ -1,32 +1,35 @@
 package teamcode.subsystems;
 
+import ftclib.motor.FtcMotorActuator;
 import ftclib.motor.FtcServoActuator;
 import teamcode.RobotParams;
-import trclib.motor.TrcServo;
+import trclib.motor.TrcMotor;
 
 public class Arm {
-    private final TrcServo arm;
-
+    private final TrcMotor arm;
 
     public Arm(){
-        FtcServoActuator.Params armParams = new FtcServoActuator.Params()
-                .setPrimaryServo(RobotParams.ArmParams.PRIMARY_SERVO_NAME,
+        FtcMotorActuator.Params armParams = new FtcMotorActuator.Params()
+                .setPrimaryMotor(RobotParams.ArmParams.PRIMARY_SERVO_NAME,
+                        RobotParams.ArmParams.PRIMARY_SERVO_TYPE,
                         RobotParams.ArmParams.PRIMARY_SERVO_INVERTED)
-                .setFollowerServo(RobotParams.ArmParams.FOLLOWER_SERVO_NAME,
+                .setFollowerMotor(RobotParams.ArmParams.FOLLOWER_SERVO_NAME,
+                        RobotParams.ArmParams.FOLLOWER_SERVO_TYPE,
                         RobotParams.ArmParams.FOLLOWER_SERVO_INVERTED)
-                .setLogicalPosRange(RobotParams.ArmParams.LOGICAL_MIN_POS,
-                        RobotParams.ArmParams.LOGICAL_MAX_POS)
-                .setPhysicalPosRange(RobotParams.ArmParams.PHYSICAL_MIN_POS,
-                        RobotParams.ArmParams.PHYSICAL_MAX_POS)
-                .setMaxStepRate(RobotParams.ArmParams.MAX_STEPRATE)
+                .setPositionScaleAndOffset(RobotParams.ArmParams.DEGREES_PER_COUNT,
+                        RobotParams.ElevatorParams.POS_OFFSET)
+                .setExternalEncoder(RobotParams.ArmParams.EXTERNAL_ENCODER_NAME,
+                        RobotParams.ArmParams.EXTERNAL_ENCODER_INVERTED)
                 .setPositionPresets(RobotParams.ArmParams.POS_PRESET_TOLERANCE,
                         RobotParams.ArmParams.POS_PRESETS);
-        arm = new FtcServoActuator(armParams).getServo();
+        arm = new FtcMotorActuator(armParams).getMotor();
     }
 
-    public TrcServo getArm()
+    public TrcMotor getArm()
     {
         return arm;
-    }
+    } //get CRServo
+
+    //Need to add external encoder code here.
 
 }

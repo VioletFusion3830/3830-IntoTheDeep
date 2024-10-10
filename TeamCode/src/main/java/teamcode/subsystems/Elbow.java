@@ -24,13 +24,13 @@ public class Elbow
                         RobotParams.ElbowParams.posPresets);
         elbow = new FtcMotorActuator(elbowParams).getMotor();
         elbow.setPositionPidParameters(
-                RobotParams.ElbowParams.posPidCoeffs,
+                RobotParams.ElbowParams.POS_PID_COEFFS,
                 RobotParams.ElbowParams.POS_PID_TOLERANCE);
         elbow.setPositionPidPowerComp(this::getElbowPowerComp);
-        elbow.setPidStallDetectionEnabled(
-                RobotParams.ElbowParams.STALL_RESET_TIMEOUT,
+        elbow.setStallProtection(RobotParams.ElbowParams.STALL_MIN_POWER,
+                RobotParams.ElbowParams.STALL_TOLERANCE,
                 RobotParams.ElbowParams.STALL_TIMEOUT,
-                RobotParams.ElbowParams.STALL_TOLERANCE);
+                RobotParams.ElbowParams.STALL_RESET_TIMEOUT);
     }   //Elbow
 
     public TrcMotor getElbow()
@@ -38,7 +38,7 @@ public class Elbow
         return elbow;
     }   //getMotor
 
-
+    //May need to make it so gravity comp also takes in the elevators extension amount
     private double getElbowPowerComp(double currPower)
     {
         return RobotParams.ElbowParams.GRAVITY_COMP_MAX_POWER * Math.sin(Math.toRadians(elbow.getPosition()));
