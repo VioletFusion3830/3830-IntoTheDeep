@@ -156,12 +156,13 @@ public class RobotParams
         public static final boolean showSubsystems              = true;
         // Vision
         public static final boolean useVision                   = true;
-        public static final boolean useWebCam                   = true;     // false to use Android phone camera
-        public static final boolean useBuiltinCamBack           = false;    // For Android Phone as Robot Controller.
-        public static final boolean tuneColorBlobVision         = true;
-        public static final boolean useAprilTagVision           = false;
+        public static final boolean useWebCam                   = true; // false to use Android phone camera.
+        public static final boolean useBuiltinCamBack           = false; // For Android Phone as Robot Controller.
+        public static final boolean tuneColorBlobVision         = false;
+        public static final boolean useLimelightVision          = true;
+        public static final boolean useCameraStreamProcessor    = false;
+        public static final boolean useAprilTagVision           = true;
         public static final boolean useColorBlobVision          = true;
-        public static final boolean useLimelightVision          = false;
         public static final boolean showVisionView              = !inCompetition;
         public static final boolean showVisionStat              = false;
         // Drive Base
@@ -176,7 +177,6 @@ public class RobotParams
         public static final boolean useTurret                   = false;
         public static final boolean useWristVertical            = false;
         public static final boolean useWristRotational           = false;
-
         public static final boolean useElbow                    = false;
     }   //class Preferences
 

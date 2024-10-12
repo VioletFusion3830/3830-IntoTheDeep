@@ -98,6 +98,8 @@ public class Vision
     public FtcRawEocvVision rawColorBlobVision;
     public FtcVisionAprilTag aprilTagVision;
     private AprilTagProcessor aprilTagProcessor;
+    public FtcLimelightVision limelightVision;
+    public CameraStreamProcessor cameraStreamProcessor;
     public FtcVisionEocvColorBlob redSampleVision;
     private FtcEocvColorBlobProcessor redSampleProcessor;
     public FtcVisionEocvColorBlob blueSampleVision;
@@ -105,7 +107,6 @@ public class Vision
     public FtcVisionEocvColorBlob yellowSampleVision;
     private FtcEocvColorBlobProcessor yellowSampleProcessor;
     public FtcVision vision;
-    public FtcLimelightVision limelightVision;
 
     /**
      * Constructor: Create an instance of the object.
@@ -137,11 +138,15 @@ public class Vision
                 int cameraViewId = opMode.hardwareMap.appContext.getResources().getIdentifier(
                         "cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
                 openCvCamera = OpenCvCameraFactory.getInstance().createWebcam(webcam1, cameraViewId);
-                FtcDashboard.getInstance().startCameraStream(openCvCamera, 0);
             }
             else
             {
                 openCvCamera = OpenCvCameraFactory.getInstance().createWebcam(webcam1);
+            }
+
+            if (RobotParams.Preferences.useCameraStreamProcessor)
+            {
+                FtcDashboard.getInstance().startCameraStream(openCvCamera, 0);
             }
 
             tracer.traceInfo(moduleName, "Starting RawEocvColorBlobVision...");
@@ -166,6 +171,14 @@ public class Vision
             }
             // Creating Vision Processors for VisionPortal.
             ArrayList<VisionProcessor> visionProcessorsList = new ArrayList<>();
+
+            if (RobotParams.Preferences.useCameraStreamProcessor)
+            {
+                cameraStreamProcessor = new CameraStreamProcessor();
+                visionProcessorsList.add(cameraStreamProcessor);
+                FtcDashboard.getInstance().startCameraStream(processor, 0);
+            }
+
             if (RobotParams.Preferences.useAprilTagVision)
             {
                 tracer.traceInfo(moduleName, "Starting AprilTagVision...");
