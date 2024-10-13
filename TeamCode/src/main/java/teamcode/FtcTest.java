@@ -257,6 +257,11 @@ public class FtcTest extends FtcTeleOp
                         robot.globalTracer.traceInfo(moduleName, "Enabling LimelightVision.");
                         robot.vision.setLimelightVisionEnabled(0, true);
                     }
+                    if (RobotParams.Preferences.useCameraStreamProcessor)
+                    {
+                        robot.globalTracer.traceInfo(moduleName, "Enabling CameraStream.");
+                        robot.vision.setCameraStreamEnabled(true);
+                    }
                 }
                 break;
 

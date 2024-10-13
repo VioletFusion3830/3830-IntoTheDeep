@@ -336,9 +336,9 @@ public class Robot
                     if (RobotParams.ClawParams.USE_REV_V3_COLOR_SENSOR)
                     {
                         dashboard.displayPrintf(
-                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, sensorState=%s, autoActive=%s, pickupType=%.3f,sensorDistence=%.3f, sensorColor=%.3f",
-                                clawServo.getPosition(), clawServo.hasObject(), clawServo.getSensorValue(),
-                                clawServo.isAutoAssistActive(), claw.getSamplePickupType(), claw.getSensorDataColorHSV());
+                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, autoActive=%s,sensorDistence=%.3f, sensorColor=%.3f",
+                                clawServo.getPosition(), clawServo.hasObject(),
+                                clawServo.isAutoAssistActive(), claw.getSensorDataColorHSV());
                     }
                 }
 
