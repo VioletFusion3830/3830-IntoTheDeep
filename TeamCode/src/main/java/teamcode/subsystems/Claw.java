@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import teamcode.RobotParams;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.subsystem.FtcServoGrabber;
+import trclib.robotcore.TrcEvent;
 import trclib.subsystem.TrcServoGrabber;
 
 public class Claw {
@@ -16,7 +17,6 @@ public class Claw {
     private final ColorRange yellowSampleHue = new ColorRange(60,90);
     private final ColorRange blueSampleHue = new ColorRange(180,240);
     private final ColorRange redSampleHue = new ColorRange(330,30);
-    private SamplePickupType samplePickupType = SamplePickupType.yellowSample;
 
     public enum SamplePickupType
     {
@@ -53,11 +53,7 @@ public class Claw {
                     this::getSensorDataDistance,
                     RobotParams.ClawParams.ANALOG_TRIGGER_INVERTED,
                     RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD,
-                    RobotParams.ClawParams.HAS_OBJECT_THRESHOLD,
-                    this::isSampleCorrectColor,
-                    null,
-                    true
-                    );
+                    RobotParams.ClawParams.HAS_OBJECT_THRESHOLD);
         }
         clawServo = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
         clawServo.open();
@@ -68,14 +64,9 @@ public class Claw {
         return clawServo;
     }
 
-    public SamplePickupType getSamplePickupType()
+    public void autoAssistPickup(String owner, double delay, TrcEvent event, double timeout, SamplePickupType sampleType)
     {
-        return samplePickupType;
-    }
-
-    public SamplePickupType setSamplePickupType(SamplePickupType newSamplePickupType)
-    {
-        return samplePickupType = newSamplePickupType;
+        clawServo.enableAutoAssist(owner, delay, event, timeout, this::isSampleColorCorrect, sampleType);
     }
 
     public float getSensorDataColorHSV()
@@ -113,12 +104,13 @@ public class Claw {
             return hsvValues[0];
     }
 
-    private void isSampleCorrectColor(Object context)
+    private void isSampleColorCorrect(Object context)
     {
+        SamplePickupType sampleType = (SamplePickupType) context;
         float sampleHue = getSensorDataColor();
         boolean sampleColorCorrect = false;
 
-        switch (samplePickupType)
+        switch (sampleType)
         {
             case redSample:
                 sampleColorCorrect = redSampleHue.isHueInRange(sampleHue);
