@@ -135,6 +135,10 @@ public class Claw {
         {
             clawServo.close();
         }
+        else
+        {
+            //Need to add code to fix error when sample is not the correct color
+        }
     }
 
     // Helper class to manage color ranges.

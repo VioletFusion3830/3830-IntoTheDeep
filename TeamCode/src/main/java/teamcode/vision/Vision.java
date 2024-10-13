@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import ftclib.robotcore.FtcOpMode;
+import ftclib.vision.FtcCameraStreamProcessor;
 import ftclib.vision.FtcEocvColorBlobProcessor;
 import ftclib.vision.FtcLimelightVision;
 import ftclib.vision.FtcRawEocvColorBlobPipeline;
@@ -99,7 +100,7 @@ public class Vision
     public FtcVisionAprilTag aprilTagVision;
     private AprilTagProcessor aprilTagProcessor;
     public FtcLimelightVision limelightVision;
-    public CameraStreamProcessor cameraStreamProcessor;
+    public FtcCameraStreamProcessor cameraStreamProcessor;
     public FtcVisionEocvColorBlob redSampleVision;
     private FtcEocvColorBlobProcessor redSampleProcessor;
     public FtcVisionEocvColorBlob blueSampleVision;
@@ -174,7 +175,7 @@ public class Vision
 
             if (RobotParams.Preferences.useCameraStreamProcessor)
             {
-                cameraStreamProcessor = new CameraStreamProcessor();
+                cameraStreamProcessor = new FtcCameraStreamProcessor();
                 visionProcessorsList.add(cameraStreamProcessor);
                 FtcDashboard.getInstance().startCameraStream(cameraStreamProcessor, 0);
             }
@@ -252,7 +253,7 @@ public class Vision
     {
         if (vision != null)
         {
-            vision.getVisionPortal().close();
+            vision.close();
         }
     }   //close
 
@@ -388,6 +389,12 @@ public class Vision
         TrcVisionTargetInfo<TrcOpenCvDetector.DetectedObject<?>> colorBlobInfo =
                 rawColorBlobVision != null? rawColorBlobVision.getBestDetectedTargetInfo(null, null, 0.0, 0.0): null;
 
+        if (cameraStreamProcessor != null && colorBlobInfo != null)
+        {
+            cameraStreamProcessor.addRectInfo(
+                    colorBlobInfo.detectedObj.label, colorBlobInfo.detectedObj.getRotatedRectVertices());
+        }
+
         if (lineNum != -1)
         {
             robot.dashboard.displayPrintf(
@@ -495,7 +502,10 @@ public class Vision
      */
     public void setCameraStreamEnabled(boolean enabled)
     {
-        setVisionProcessorEnabled(cameraStreamProcessor, enabled);
+        if (vision != null && cameraStreamProcessor != null)
+        {
+            cameraStreamProcessor.setCameraStreamEnabled(vision, enabled);
+        }
     }   //setCameraStreamEnabled
 
     /**
@@ -505,7 +515,7 @@ public class Vision
      */
     public boolean isCameraStreamEnabled()
     {
-        return isVisionProcessorEnabled(cameraStreamProcessor);
+        return cameraStreamProcessor != null && cameraStreamProcessor.isCameraStreamEnabled();
     }   //isAprilTagVisionEnabled
 
     /**
@@ -539,6 +549,13 @@ public class Vision
     {
         TrcVisionTargetInfo<FtcVisionAprilTag.DetectedObject> aprilTagInfo =
                 aprilTagVision.getBestDetectedTargetInfo(id, null);
+
+        if (cameraStreamProcessor != null && aprilTagInfo != null)
+        {
+            cameraStreamProcessor.addRectInfo(
+                    Integer.toString(aprilTagInfo.detectedObj.aprilTagDetection.id),
+                    aprilTagInfo.detectedObj.getRotatedRectVertices());
+        }
 
         if (aprilTagInfo != null && robot.blinkin != null)
         {
@@ -705,6 +722,109 @@ public class Vision
      * @return detected Sample object info.
      */
     public TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject> getDetectedSample(
+            SampleType sampleType, int lineNum)
+    {
+        TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject> sampleInfo = null;
+        String sampleName = null;
+
+        switch (sampleType)
+        {
+            case RedSample:
+                sampleInfo = redSampleVision != null? redSampleVision.getBestDetectedTargetInfo(
+                        null, this::compareDistance, 0.0, 0.0): null;
+                sampleName = BlinkinLEDs.RED_SAMPLE;
+                break;
+
+            case BlueSample:
+                sampleInfo = blueSampleVision != null? blueSampleVision.getBestDetectedTargetInfo(
+                        null, this::compareDistance, 0.0, 0.0): null;
+                sampleName = BlinkinLEDs.BLUE_SAMPLE;
+                break;
+
+            case YellowSample:
+                sampleInfo = yellowSampleVision != null? yellowSampleVision.getBestDetectedTargetInfo(
+                        null, this::compareDistance, 0.0, 0.0): null;
+                sampleName = BlinkinLEDs.YELLOW_SAMPLE;
+                break;
+
+            case RedAllianceSamples:
+            case BlueAllianceSamples:
+            case AnySample:
+                ArrayList<TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject>> sampleList =
+                        new ArrayList<>();
+
+                if (sampleType != SampleType.BlueAllianceSamples)
+                {
+                    sampleInfo = redSampleVision != null ? redSampleVision.getBestDetectedTargetInfo(
+                            null, this::compareDistance, 0.0, 0.0) : null;
+                    if (sampleInfo != null)
+                    {
+                        sampleList.add(sampleInfo);
+                    }
+                }
+
+                if (sampleType != SampleType.RedAllianceSamples)
+                {
+                    sampleInfo = blueSampleVision != null ? blueSampleVision.getBestDetectedTargetInfo(
+                            null, this::compareDistance, 0.0, 0.0) : null;
+                    if (sampleInfo != null)
+                    {
+                        sampleList.add(sampleInfo);
+                    }
+                }
+
+                sampleInfo = yellowSampleVision != null? yellowSampleVision.getBestDetectedTargetInfo(
+                        null, this::compareDistance, 0.0, 0.0): null;
+                if (sampleInfo != null)
+                {
+                    sampleList.add(sampleInfo);
+                }
+
+                TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject>[] samples =
+                        new TrcVisionTargetInfo[sampleList.size()];
+                sampleList.toArray(samples);
+                if (samples.length > 1)
+                {
+                    Arrays.sort(samples, this::compareDistance);
+                }
+                sampleInfo = samples[0];
+                sampleName = sampleInfo.detectedObj.label;
+                break;
+        }
+
+        if (cameraStreamProcessor != null && sampleInfo != null)
+        {
+            cameraStreamProcessor.addRectInfo(
+                    sampleInfo.detectedObj.label, sampleInfo.detectedObj.getRotatedRectVertices());
+        }
+
+        if (sampleInfo != null && robot.blinkin != null)
+        {
+            robot.blinkin.setDetectedPattern(sampleName);
+        }
+
+        if (lineNum != -1)
+        {
+            robot.dashboard.displayPrintf(
+                    lineNum, "%s: %s", sampleName, sampleInfo != null? sampleInfo: "Not found.");
+            if (sampleInfo != null)
+            {
+                robot.dashboard.displayPrintf(
+                        lineNum + 1, "%s: angle: %.3f", sampleName, sampleInfo.detectedObj.rotatedRect.angle);
+            }
+        }
+
+        return sampleInfo;
+    }   //getDetectedSample
+
+    /**
+     * This method calls ColorBlob vision to detect the specified Sample object.
+     *
+     * @param sampleType specifies the sample type to be detected.
+     * @param lineNum specifies the dashboard line number to display the detected object info, -1 to disable printing.
+     * @return detected Sample object info.
+     */
+    public TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject> detectedSampleRects(
             SampleType sampleType, int lineNum)
     {
         TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject> sampleInfo = null;
