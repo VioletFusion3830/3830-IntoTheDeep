@@ -51,6 +51,7 @@ import teamcode.RobotParams;
 import teamcode.subsystems.BlinkinLEDs;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
+import trclib.timer.TrcTimer;
 import trclib.vision.TrcOpenCvColorBlobPipeline;
 import trclib.vision.TrcOpenCvDetector;
 import trclib.vision.TrcVisionTargetInfo;
@@ -79,13 +80,13 @@ public class Vision
     //
     // YCrCb Color Space.
     private static final int colorConversion = Imgproc.COLOR_RGB2YCrCb;
-    private static final double[] redSampleColorThresholds = {20.0, 120.0, 170.0, 220.0, 80.0, 120.0};
+    private static final double[] redSampleColorThresholds = {30.0, 180.0, 160.0, 250.0, 70.0, 120.0};
     private static final double[] blueSampleColorThresholds = {20.0, 60.0, 100.0, 150.0, 150.0, 180.0};
     private static final double[] yellowSampleColorThresholds = {80.0, 250.0, 150.0, 180.0, 30.0, 80.0};
     private static final TrcOpenCvColorBlobPipeline.FilterContourParams sampleFilterContourParams =
             new TrcOpenCvColorBlobPipeline.FilterContourParams()
-                    .setMinArea(500.0)
-                    .setMinPerimeter(100.0)
+                    .setMinArea(700)
+                    .setMinPerimeter(200.0)
                     .setWidthRange(10.0, 1000.0)
                     .setHeightRange(10.0, 1000.0)
                     .setSolidityRange(0.0, 100.0)
@@ -810,104 +811,7 @@ public class Vision
             if (sampleInfo != null)
             {
                 robot.dashboard.displayPrintf(
-                        lineNum + 1, "%s: angle: %.3f", sampleName, sampleInfo.detectedObj.rotatedRect.angle);
-            }
-        }
-
-        return sampleInfo;
-    }   //getDetectedSample
-
-    /**
-     * This method calls ColorBlob vision to detect the specified Sample object.
-     *
-     * @param sampleType specifies the sample type to be detected.
-     * @param lineNum specifies the dashboard line number to display the detected object info, -1 to disable printing.
-     * @return detected Sample object info.
-     */
-    public TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject> detectedSampleRects(
-            SampleType sampleType, int lineNum)
-    {
-        TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject> sampleInfo = null;
-        String sampleName = null;
-
-        switch (sampleType)
-        {
-            case RedSample:
-                sampleInfo = redSampleVision != null? redSampleVision.getBestDetectedTargetInfo(
-                        null, this::compareDistance, 0.0, 0.0): null;
-                sampleName = BlinkinLEDs.RED_SAMPLE;
-                break;
-
-            case BlueSample:
-                sampleInfo = blueSampleVision != null? blueSampleVision.getBestDetectedTargetInfo(
-                        null, this::compareDistance, 0.0, 0.0): null;
-                sampleName = BlinkinLEDs.BLUE_SAMPLE;
-                break;
-
-            case YellowSample:
-                sampleInfo = yellowSampleVision != null? yellowSampleVision.getBestDetectedTargetInfo(
-                        null, this::compareDistance, 0.0, 0.0): null;
-                sampleName = BlinkinLEDs.YELLOW_SAMPLE;
-                break;
-
-            case RedAllianceSamples:
-            case BlueAllianceSamples:
-            case AnySample:
-                ArrayList<TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject>> sampleList =
-                        new ArrayList<>();
-
-                if (sampleType != SampleType.BlueAllianceSamples)
-                {
-                    sampleInfo = redSampleVision != null ? redSampleVision.getBestDetectedTargetInfo(
-                            null, this::compareDistance, 0.0, 0.0) : null;
-                    if (sampleInfo != null)
-                    {
-                        sampleList.add(sampleInfo);
-                    }
-                }
-
-                if (sampleType != SampleType.RedAllianceSamples)
-                {
-                    sampleInfo = blueSampleVision != null ? blueSampleVision.getBestDetectedTargetInfo(
-                            null, this::compareDistance, 0.0, 0.0) : null;
-                    if (sampleInfo != null)
-                    {
-                        sampleList.add(sampleInfo);
-                    }
-                }
-
-                sampleInfo = yellowSampleVision != null? yellowSampleVision.getBestDetectedTargetInfo(
-                        null, this::compareDistance, 0.0, 0.0): null;
-                if (sampleInfo != null)
-                {
-                    sampleList.add(sampleInfo);
-                }
-
-                TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject>[] samples =
-                        new TrcVisionTargetInfo[sampleList.size()];
-                sampleList.toArray(samples);
-                if (samples.length > 1)
-                {
-                    Arrays.sort(samples, this::compareDistance);
-                }
-                sampleInfo = samples[0];
-                sampleName = sampleInfo.detectedObj.label;
-                break;
-        }
-
-        if (sampleInfo != null && robot.blinkin != null)
-        {
-            robot.blinkin.setDetectedPattern(sampleName);
-        }
-
-        if (lineNum != -1)
-        {
-            robot.dashboard.displayPrintf(
-                    lineNum, "%s: %s", sampleName, sampleInfo != null? sampleInfo: "Not found.");
-            if (sampleInfo != null)
-            {
-                robot.dashboard.displayPrintf(
-                        lineNum + 1, "%s: angle: %.3f", sampleName, sampleInfo.detectedObj.rotatedRect.angle);
+                        lineNum + 1, "[%.3f %s: angle: %.3f", TrcTimer.getModeElapsedTime(), sampleName, sampleInfo.detectedObj.rotatedRect.angle);
             }
         }
 
