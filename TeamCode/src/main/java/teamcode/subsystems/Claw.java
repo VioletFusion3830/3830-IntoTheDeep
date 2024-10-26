@@ -66,7 +66,7 @@ public class Claw {
 
     public void autoAssistPickup(String owner, double delay, TrcEvent event, double timeout, SamplePickupType sampleType)
     {
-        clawServo.enableAutoAssist(owner, delay, event, timeout, this::isSampleColorCorrect, sampleType);
+        clawServo.autoAssistGrab(owner, delay, event, timeout, this::isSampleColorCorrect, sampleType);
     }
 
     public float getSensorDataColorHSV()
