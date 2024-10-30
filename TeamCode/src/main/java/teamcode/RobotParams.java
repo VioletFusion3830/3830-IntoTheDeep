@@ -95,6 +95,14 @@ public class RobotParams
                 new TrcPose2D(0.0, APRILTAG_RED_ALLIANCE_WALL_Y, 180.0),                // TagId 15
                 new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, -APRILTAG_WALL_OFFSET_Y, -90.0) // TagId 16
         };
+
+        // Blue alliance positions will be derived using adjustPoseByAlliance.
+        // Robot start locations in inches.
+        public static final double STARTPOS_X                       = Robot.ROBOT_WIDTH/2.0;
+        public static final double STARTPOS_Y                       =
+                Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0;
+        public static final TrcPose2D STARTPOSE_RED_NET_ZONE        = new TrcPose2D(-STARTPOS_X, -STARTPOS_Y, 0.0);
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE= new TrcPose2D(STARTPOS_X, -STARTPOS_Y, 0.0);
     }   //class Game
 
 
@@ -294,76 +302,6 @@ public class RobotParams
     }   //class VisionOnlyParams
 
     /**
-     * This class contains the Differential Robot Parameters.
-     */
-    public static class DifferentialParams extends FtcRobotDrive.RobotInfo
-    {
-        // Optii Odometry Wheel
-        private static final double ODWHEEL_DIAMETER = 35.0 * TrcUtil.INCHES_PER_MM;
-        private static final double ODWHEEL_CPR = 4096.0;
-
-        public DifferentialParams()
-        {
-            robotName = "DifferentialRobot";
-            // Robot Dimensions
-            robotLength = Robot.ROBOT_LENGTH;
-            robotWidth = Robot.ROBOT_WIDTH;
-            wheelBaseLength = (24.0 * 14)*TrcUtil.INCHES_PER_MM;
-            wheelBaseWidth = 16.0;
-            // IMU
-            imuName = "imu";
-            hubLogoDirection = LogoFacingDirection.UP;
-            hubUsbDirection = UsbFacingDirection.FORWARD;
-            // Drive Motors
-            driveMotorType = MotorType.DcMotor;
-            driveMotorNames = new String[] {"lfDriveMotor", "rfDriveMotor"};
-            driveMotorInverted = new boolean[] {true, false};
-            odometryType = TrcDriveBase.OdometryType.MotorOdometry;
-            // Odometry Wheels
-            odWheelXScale = odWheelYScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;
-            xOdWheelSensorNames = null;
-            xOdWheelIndices = new int[] {FtcRobotDrive.INDEX_RIGHT_BACK};
-            xOdWheelXOffsets = new double[] {0.0};
-            xOdWheelYOffsets = new double[] {-168.0 * TrcUtil.INCHES_PER_MM};
-            yOdWheelSensorNames = null;
-            yOdWheelIndices = new int[] {FtcRobotDrive.INDEX_LEFT_FRONT, FtcRobotDrive.INDEX_RIGHT_FRONT};
-            yOdWheelXOffsets = new double[] {-144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
-            yOdWheelYOffsets = new double[] {144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
-            // Absolute Odometry
-            absoluteOdometry = null;
-            // Drive Motor Odometry
-            yDrivePosScale = 0.02166184604662450653409090909091;        // in/count
-            // Robot Drive Characteristics
-            robotMaxVelocity = 23.0;        // inches/sec
-            robotMaxAcceleration  = 500.0;  // inches/sec2
-            robotMaxTurnRate = 100.0;       // degrees/sec
-            profiledMaxVelocity = robotMaxVelocity;
-            profiledMaxAcceleration = robotMaxAcceleration;
-            profiledMaxTurnRate = robotMaxTurnRate;
-            // DriveBase PID Parameters
-            drivePidTolerance = 1.0;
-            turnPidTolerance = 1.0;
-            yDrivePidCoeffs = new PidCoefficients(0.06, 0.0, 0.002, 0.0, 0.0);
-            yDrivePidPowerLimit = 1.0;
-            yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.02, 0.0, 0.002, 0.0, 0.0);
-            turnPidPowerLimit = 0.5;
-            turnMaxPidRampRate = null;
-            // PID Stall Detection
-            pidStallDetectionEnabled = true;
-            // PurePursuit Parameters
-            ppdFollowingDistance = 6.0;
-            velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / profiledMaxVelocity, 0.0);
-            // Vision
-            webCam1 = new FrontCamParams();
-            webCam2 = new BackCamParams();
-            limelight = new LimelightParams();
-            // Miscellaneous
-            blinkinName = "blinkin";
-        }   //DifferentialParams
-    }   //class DifferentialParams
-
-    /**
      * This class contains the Mecanum Robot Parameters.
      */
     public static class MecanumParams extends FtcRobotDrive.RobotInfo
@@ -458,90 +396,6 @@ public class RobotParams
         }   //MecanumParams
     }   //class MecanumParams
 
-    /**
-     * This class contains the Swerve Drive Base Parameters.
-     */
-    public static class SwerveParams extends FtcSwerveDrive.SwerveInfo
-    {
-        // Optii Odometry Wheel
-        private static final double ODWHEEL_DIAMETER = 35.0 * TrcUtil.INCHES_PER_MM;
-        private static final double ODWHEEL_CPR = 4096.0;
-
-        public SwerveParams()
-        {
-            robotName = "SwerveRobot";
-            // Robot Dimensions
-            robotLength = Robot.ROBOT_LENGTH;
-            robotWidth = Robot.ROBOT_WIDTH;
-            wheelBaseLength = (24.0 * 14)*TrcUtil.INCHES_PER_MM;
-            wheelBaseWidth = 16.0;
-            // IMU
-            imuName = "imu";
-            hubLogoDirection = LogoFacingDirection.UP;
-            hubUsbDirection = UsbFacingDirection.FORWARD;
-            // Drive Motors
-            driveMotorType = MotorType.DcMotor;
-            driveMotorNames = new String[] {"lfDriveMotor", "rfDriveMotor", "lbDriveMotor", "rbDriveMotor"};
-            driveMotorInverted = new boolean[] {true, false, true, false};
-            odometryType = TrcDriveBase.OdometryType.OdometryWheels;
-            // Odometry Wheels
-            odWheelXScale = odWheelYScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;
-            xOdWheelSensorNames = null;
-            xOdWheelIndices = new int[] {FtcRobotDrive.INDEX_RIGHT_BACK};
-            xOdWheelXOffsets = new double[] {0.0};
-            xOdWheelYOffsets = new double[] {-168.0 * TrcUtil.INCHES_PER_MM};
-            yOdWheelSensorNames = null;
-            yOdWheelIndices = new int[] {FtcRobotDrive.INDEX_LEFT_FRONT, FtcRobotDrive.INDEX_RIGHT_FRONT};
-            yOdWheelXOffsets = new double[] {-144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
-            yOdWheelYOffsets = new double[] {144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
-            // Absolute Odometry
-            absoluteOdometry = null;
-            // Drive Motor Odometry
-            xDrivePosScale = 0.01924724265461924299065420560748;        // in/count
-            yDrivePosScale = 0.01924724265461924299065420560748;        // in/count
-            // Robot Drive Characteristics
-            robotMaxVelocity = 23.0;        // inches/sec
-            robotMaxAcceleration  = 500.0;  // inches/sec2
-            robotMaxTurnRate = 100.0;       // degrees/sec
-            profiledMaxVelocity = robotMaxVelocity;
-            profiledMaxAcceleration = robotMaxAcceleration;
-            profiledMaxTurnRate = robotMaxTurnRate;
-            // DriveBase PID Parameters
-            drivePidTolerance = 1.0;
-            turnPidTolerance = 1.0;
-            xDrivePidCoeffs = yDrivePidCoeffs = new PidCoefficients(0.95, 0.0, 0.001, 0.0, 0.0);
-            xDrivePidPowerLimit = yDrivePidPowerLimit = 1.0;
-            xDriveMaxPidRampRate = yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.02, 0.0, 0.002, 0.0, 0.0);
-            turnPidPowerLimit = 0.5;
-            turnMaxPidRampRate = null;
-            // PID Stall Detection
-            pidStallDetectionEnabled = true;
-            // PurePursuit Parameters
-            ppdFollowingDistance = 6.0;
-            velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / profiledMaxVelocity, 0.0);
-            // Vision
-            webCam1 = new FrontCamParams();
-            webCam2 = new BackCamParams();
-            limelight = new LimelightParams();
-            // Miscellaneous
-            blinkinName = "blinkin";
-            // Steer Encoders
-            steerEncoderNames = new String[] {"lfSteerEncoder", "rfSteerEncoder", "lbSteerEncoder", "rbSteerEncoder"};
-            steerEncoderInverted = new boolean[] {false, false, false, false};
-            steerEncoderZeros = new double[] {0.474812, 0.467663, 0.541338, 0.545340};
-            steerZerosFilePath = Robot.STEER_ZERO_CAL_FILE;
-            // Steer Motors
-            steerMotorType = MotorType.CRServo;
-            steerMotorNames = new String[] {"lfSteerServo", "rfSteerServo", "lbSteerServo", "rbSteerServo"};
-            steerMotorInverted = new boolean[] {true, true, true, true};
-            steerMotorPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 0.0, 0.0);
-            steerMotorPidTolerance = 1.0;
-            // Swerve Modules
-            swerveModuleNames = new String[] {"lfWheel", "rfWheel", "lbWheel", "rbWheel"};
-        }   //SwerveParams
-    }   //class SwerveParams
-
     //
     // Subsystems.
     //
@@ -551,12 +405,15 @@ public class RobotParams
 
         public static final String PRIMARY_MOTOR_NAME                       = SUBSYSTEM_NAME + ".Primary";
         public static final String FOLLOWER_MOTOR_NAME                      = SUBSYSTEM_NAME + ".Follower";
+        public static final String SECOND_FOLLOWER_MOTOR_NAME               = SUBSYSTEM_NAME + ".SecondFollower";
         public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
         public static final MotorType FOLLOWER_MOTOR_TYPE                   = MotorType.DcMotor;
+        public static final MotorType SECOND_FOLLOWER_MOTOR_TYPE            = MotorType.DcMotor;
         public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
         public static final boolean FOLLOWER_MOTOR_INVERTED                 = false;
+        public static final boolean SECOND_FOLLOWER_MOTOR_INVERTED          = false;
 
-        public static final double INCHES_PER_COUNT                         = 1; //Need to be Updated
+        public static final double INCHES_PER_COUNT                         = (103.8/4); //Need to be Updated
         public static final double POS_OFFSET                               = 0; //Need to be Updated
         public static final double POWER_LIMIT                              = 1.0; //Need to be Updated
         public static final double ZERO_CAL_POWER                           = -0.25; //Need to be Updated

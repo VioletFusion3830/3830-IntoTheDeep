@@ -61,6 +61,7 @@ public class Robot
     public static FtcMatchInfo matchInfo = null;
     private static TrcPose2D endOfAutoRobotPose = null;
     private static double nextStatusUpdateTime = 0.0;
+    public static Vision.SampleType sampleType = Vision.SampleType.AnySample;
     // Robot Drive.
     public FtcRobotDrive.RobotInfo robotInfo;
     public FtcRobotDrive robotDrive;
@@ -78,6 +79,13 @@ public class Robot
     public TrcMotor turret;
     public TrcServo wristVertical;
     public TrcServo wristRotational;
+    //Autotasks.
+
+    public enum GamePieceType
+    {
+        SPECIMEN,
+        SAMPLE
+    }   //enum GamePieceType
 
     /**
      * Constructor: Create an instance of the object.
@@ -127,7 +135,6 @@ public class Robot
             {
                 if (RobotParams.Preferences.useElevator){
                     elevator = new Elevator().getElevatorParams();
-                    elevator.zeroCalibrate(RobotParams.ElevatorParams.ZERO_CAL_POWER);
                 }
 
                 if (RobotParams.Preferences.useClaw){
@@ -145,7 +152,6 @@ public class Robot
 
                 if (RobotParams.Preferences.useElbow){
                     elbow = new Elbow().getElbow();
-                    elbow.zeroCalibrate(RobotParams.ElbowParams.ZERO_CAL_POWER);
                 }
 
                 if (RobotParams.Preferences.useWristVertical){
@@ -155,7 +161,7 @@ public class Robot
                 if (RobotParams.Preferences.useWristRotational){
                     wristRotational = new WristRotational().getWristRotational();
                 }
-
+                zeroCalibrate();
             }
         }
 
@@ -384,7 +390,14 @@ public class Robot
         if (robotDrive != null)
         {
             // Cancel all auto-assist driving.
-            robotDrive.cancel();
+            if(elevator != null) elevator.cancel();
+            if(clawServo != null) clawServo.cancel();
+            if(elbow != null) elbow.cancel();
+            if(arm != null) arm.cancel();
+            if(turret != null) turret.cancel();
+            if(wristVertical != null) wristVertical.cancel();
+            if(wristRotational != null) wristRotational.cancel();
+            if(robotDrive != null) robotDrive.cancel();
         }
     }   //cancelAll
 
@@ -421,7 +434,83 @@ public class Robot
      */
     public void setRobotStartPosition(FtcAuto.AutoChoices autoChoices)
     {
+        robotDrive.driveBase.setFieldPosition(
+                adjustPoseByAlliance(
+                        autoChoices.startPos == FtcAuto.StartPos.NET_ZONE?
+                                RobotParams.Game.STARTPOSE_RED_NET_ZONE: RobotParams.Game.STARTPOSE_RED_OBSERVATION_ZONE,
+                        autoChoices.alliance, false));
     }   //setRobotStartPosition
+
+    /**
+     * This method adjusts the given pose in the red alliance to be the specified alliance.
+     *
+     * @param x specifies x position in the red alliance in the specified unit.
+     * @param y specifies y position in the red alliance in the specified unit.
+     * @param heading specifies heading in the red alliance in degrees.
+     * @param alliance specifies the alliance to be converted to.
+     * @param isTileUnit specifies true if x and y are in tile unit, false if in inches.
+     * @return pose adjusted to be in the specified alliance in inches.
+     */
+    public TrcPose2D adjustPoseByAlliance(
+            double x, double y, double heading, FtcAuto.Alliance alliance, boolean isTileUnit)
+    {
+        TrcPose2D newPose = new TrcPose2D(x, y, heading);
+
+        if (alliance == FtcAuto.Alliance.BLUE_ALLIANCE)
+        {
+            // Translate Red Alliance pose to Blue Alliance pose.
+            newPose.x = -newPose.x;
+            newPose.y = -newPose.y;
+            newPose.angle = (newPose.angle + 180.0) % 360.0;
+        }
+
+        if (isTileUnit)
+        {
+            newPose.x *= RobotParams.Field.FULL_TILE_INCHES;
+            newPose.y *= RobotParams.Field.FULL_TILE_INCHES;
+        }
+
+        return newPose;
+    }   //adjustPoseByAlliance
+
+    /**
+     * This method adjusts the given pose in the red alliance to be the specified alliance.
+     *
+     * @param x specifies x position in the red alliance in tile unit.
+     * @param y specifies y position in the red alliance in tile unit.
+     * @param heading specifies heading in the red alliance in degrees.
+     * @param alliance specifies the alliance to be converted to.
+     * @return pose adjusted to be in the specified alliance in inches.
+     */
+    public TrcPose2D adjustPoseByAlliance(double x, double y, double heading, FtcAuto.Alliance alliance)
+    {
+        return adjustPoseByAlliance(x, y, heading, alliance, true);
+    }   //adjustPoseByAlliance
+
+    /**
+     * This method adjusts the given pose in the red alliance to be the specified alliance.
+     *
+     * @param pose specifies pose in the red alliance in the specified unit.
+     * @param alliance specifies the alliance to be converted to.
+     * @param isTileUnit specifies true if pose is in tile units, false in inches.
+     * @return pose adjusted to be in the specified alliance in inches.
+     */
+    public TrcPose2D adjustPoseByAlliance(TrcPose2D pose, FtcAuto.Alliance alliance, boolean isTileUnit)
+    {
+        return adjustPoseByAlliance(pose.x, pose.y, pose.angle, alliance, isTileUnit);
+    }   //adjustPoseByAlliance
+
+    /**
+     * This method adjusts the given pose in the red alliance to be the specified alliance.
+     *
+     * @param pose specifies pose in the blue alliance in tile unit.
+     * @param alliance specifies the alliance to be converted to.
+     * @return pose adjusted to be in the specified alliance in inches.
+     */
+    public TrcPose2D adjustPoseByAlliance(TrcPose2D pose, FtcAuto.Alliance alliance)
+    {
+        return adjustPoseByAlliance(pose, alliance, true);
+    }   //adjustPoseByAlliance
 
     /**
      * This method sends the text string to the Driver Station to be spoken using text to speech.

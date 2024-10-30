@@ -22,6 +22,8 @@
 
 package teamcode.vision;
 
+import android.graphics.Color;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -204,18 +206,21 @@ public class Vision
                         true, robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
                 redSampleProcessor = redSampleVision.getVisionProcessor();
                 visionProcessorsList.add(redSampleProcessor);
+                redSampleProcessor.setAnnotationAttributes(Color.GREEN,8f,Color.RED,20f);
 
                 blueSampleVision = new FtcVisionEocvColorBlob(
                         BlinkinLEDs.BLUE_SAMPLE, colorConversion, blueSampleColorThresholds, sampleFilterContourParams,
                         true, robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
                 blueSampleProcessor = blueSampleVision.getVisionProcessor();
                 visionProcessorsList.add(blueSampleProcessor);
+                blueSampleProcessor.setAnnotationAttributes(Color.GREEN,8f,Color.RED,20f);
 
                 yellowSampleVision = new FtcVisionEocvColorBlob(
                         BlinkinLEDs.YELLOW_SAMPLE, colorConversion, yellowSampleColorThresholds, sampleFilterContourParams,
                         true, robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
                 yellowSampleProcessor = yellowSampleVision.getVisionProcessor();
                 visionProcessorsList.add(yellowSampleProcessor);
+                yellowSampleProcessor.setAnnotationAttributes(Color.GREEN,8f,Color.RED,20f);
             }
 
             if (!visionProcessorsList.isEmpty())

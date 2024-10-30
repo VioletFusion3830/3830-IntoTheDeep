@@ -22,6 +22,8 @@
 
 package teamcode;
 
+import android.media.MediaRouter;
+
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -34,6 +36,9 @@ import ftclib.driverio.FtcMenu;
 import ftclib.driverio.FtcValueMenu;
 import ftclib.robotcore.FtcOpMode;
 import teamcode.autocommands.CmdAuto;
+import teamcode.autocommands.CmdAutoNetZone;
+import teamcode.autocommands.CmdAutoObservationZone;
+import teamcode.vision.Vision;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
 import trclib.pathdrive.TrcPose2D;
@@ -55,34 +60,26 @@ public class FtcAuto extends FtcOpMode
         BLUE_ALLIANCE
     }   //enum Alliance
 
-    public enum StartPos
-    {
-        NET_ZONE_CLOSE,
-        NET_ZONE_FAR,
-        OBSERVATION_ZONE_CLOSE,
-        OBSERVATION_ZONE_FAR
-    }   //enum StartPos
-
     public enum AutoStrategy
     {
-        AUTO_SCORE_NET_1PLUS3PLUS_CYCLE,
-        AUTO_SCORE_NET_0PLUS4PLUS_CYCLE,
-        AUTO_SCORE_NET_1PLUS3,
-        AUTO_SCORE_NET_0PLUS4,
-        AUTO_SCORE_OBSERVATION_1PLUS_CYCLE,
-        AUTO_SCORE_OBSERVATION_1PLUS_MOVE_SAMPLES_PLUS_CYCLE,
-        AUTO_SCORE_OBSERVATION_1PLUS_MOVE_SAMPLES,
-        AUTO_SCORE_OBSERVATION_0PLUS_MOVE_SAMPLES,
+        FULL_AUTO,
         PID_DRIVE,
         TIMED_DRIVE,
         DO_NOTHING
     }   //enum AutoStrategy
 
-    public enum ParkPos
+    public enum StartPos
     {
-        OBSERVATION_ZONE,
-        LOW_RUNG
-    }
+        NET_ZONE,
+        OBSERVATION_ZONE
+    }   //enum StartPos
+
+    public enum ParkOption
+    {
+        PARK,
+        NO_PARK
+    }   //enum ParkOption
+
 
     /**
      * This class stores the autonomous menu choices.
@@ -90,11 +87,11 @@ public class FtcAuto extends FtcOpMode
     public static class AutoChoices
     {
         public double delay = 0.0;
-        public Alliance alliance = Alliance.RED_ALLIANCE;
-        public StartPos startPos = StartPos.NET_ZONE_CLOSE;
-        public AutoStrategy autoStrategy = AutoStrategy.DO_NOTHING;
-        public ParkPos parkPos = ParkPos.LOW_RUNG;
-        public boolean useAprilTagVision = true;
+        public Alliance alliance = null;
+        public StartPos startPos = StartPos.NET_ZONE;
+        public Robot.GamePieceType preloadType = Robot.GamePieceType.SPECIMEN;
+        public AutoStrategy autoStrategy = AutoStrategy.FULL_AUTO;
+        public ParkOption parkPos = ParkOption.PARK;
         public double xTarget = 0.0;
         public double yTarget = 0.0;
         public double turnTarget = 0.0;
@@ -110,13 +107,15 @@ public class FtcAuto extends FtcOpMode
                 "delay=%.0f " +
                 "alliance=\"%s\" " +
                 "startPos=\"%s\" " +
+                "preloadType=\"%s\" " +
                 "AutoStrategy=\"%s\" " +
+                "parkOption=\"%s\" " +
                 "xTarget=%.1f " +
                 "yTarget=%.1f " +
                 "turnTarget=%.0f " +
                 "driveTime=%.0f " +
                 "drivePower=%.1f",
-                delay, alliance, startPos, autoStrategy, xTarget, yTarget, turnTarget, driveTime, drivePower);
+                delay, alliance, startPos, preloadType, autoStrategy, parkPos, xTarget, yTarget, turnTarget, driveTime, drivePower);
         }   //toString
 
     }   //class AutoChoices
@@ -159,84 +158,41 @@ public class FtcAuto extends FtcOpMode
         //
         switch (autoChoices.autoStrategy)
         {
-            case AUTO_SCORE_NET_1PLUS3PLUS_CYCLE:
-                autoChoices.startPos = StartPos.NET_ZONE_FAR;
-                autoChoices.parkPos = ParkPos.LOW_RUNG;
-                //
-                // Intentionally fall through to the next state.
-                //
-            case AUTO_SCORE_NET_1PLUS3:
-
-                break;
-            case AUTO_SCORE_NET_0PLUS4PLUS_CYCLE:
-                autoChoices.startPos = StartPos.NET_ZONE_CLOSE;
-                autoChoices.parkPos = ParkPos.LOW_RUNG;
-                //
-                // Intentionally fall through to the next state.
-                //
-            case AUTO_SCORE_NET_0PLUS4:
-
-                break;
-            case AUTO_SCORE_OBSERVATION_1PLUS_CYCLE:
-                autoChoices.startPos = StartPos.OBSERVATION_ZONE_FAR;
-                autoChoices.parkPos = ParkPos.OBSERVATION_ZONE;
-                //
-                // Intentionally fall through to the next state.
-                //
-            case AUTO_SCORE_OBSERVATION_1PLUS_MOVE_SAMPLES_PLUS_CYCLE:
-                //
-                // Intentionally fall through to the next state.
-                //
-            case AUTO_SCORE_OBSERVATION_1PLUS_MOVE_SAMPLES:
-                break;
-            case AUTO_SCORE_OBSERVATION_0PLUS_MOVE_SAMPLES:
-                autoChoices.startPos = StartPos.OBSERVATION_ZONE_CLOSE;
-                autoChoices.parkPos = ParkPos.OBSERVATION_ZONE;
+            case FULL_AUTO:
+                if (robot.robotDrive != null)
+                {
+                    if (autoChoices.startPos == StartPos.NET_ZONE)
+                    {
+                        autoCommand = new CmdAutoNetZone(robot, autoChoices);
+                    }
+                    else if (autoChoices.startPos == StartPos.OBSERVATION_ZONE)
+                    {
+                        autoCommand = new CmdAutoObservationZone(robot, autoChoices);
+                    }
+                }
                 break;
             case PID_DRIVE:
                 if (robot.robotDrive != null)
                 {
-                    autoCommand = new CmdPidDrive(robot.robotDrive.driveBase, robot.robotDrive.pidDrive);
+                autoCommand = new CmdPidDrive(robot.robotDrive.driveBase, robot.robotDrive.pidDrive);
                 }
                 break;
-
             case TIMED_DRIVE:
                 if (robot.robotDrive != null)
                 {
                     autoCommand = new CmdTimedDrive(
-                        robot.robotDrive.driveBase, autoChoices.delay, autoChoices.driveTime,
-                        0.0, autoChoices.drivePower, 0.0);
+                            robot.robotDrive.driveBase, autoChoices.delay, autoChoices.driveTime,
+                            0.0, autoChoices.drivePower, 0.0);
                 }
                 break;
+
             case DO_NOTHING:
             default:
                 autoCommand = null;
                 break;
         }
-
-        if (robot.vision != null)
-        {
-            // Enabling vision early so we can detect target before match starts if necessary.
-            // Only enable the necessary vision for that purpose.
-//            if (robot.vision.aprilTagVision != null)
-//            {
-//                robot.globalTracer.traceInfo(moduleName, "Enabling AprilTagVision.");
-//                robot.vision.setAprilTagVisionEnabled(true);
-//            }
-//
-//            if (robot.vision.redBlobVision != null)
-//            {
-//                robot.globalTracer.traceInfo(moduleName, "Enabling RedBlobVision.");
-//                robot.vision.setRedBlobVisionEnabled(true);
-//            }
-//
-//            if (robot.vision.blueBlobVision != null)
-//            {
-//                robot.globalTracer.traceInfo(moduleName, "Enabling BlueBlobVision.");
-//                robot.vision.setBlueBlobVisionEnabled(true);
-//            }
-        }
-
+        Robot.sampleType = autoChoices.alliance == Alliance.RED_ALLIANCE?
+                Vision.SampleType.RedAllianceSamples: Vision.SampleType.BlueAllianceSamples;
         robot.zeroCalibrate();
     }   //robotInit
 
@@ -362,10 +318,10 @@ public class FtcAuto extends FtcOpMode
         //
         FtcValueMenu delayMenu = new FtcValueMenu("Delay time:", null, 0.0, 30.0, 1.0, 0.0, " %.0f sec");
         FtcChoiceMenu<Alliance> allianceMenu = new FtcChoiceMenu<>("Alliance:", delayMenu);
-        FtcChoiceMenu<StartPos> startPosMenu = new FtcChoiceMenu<>("Start Position:", allianceMenu);
-        FtcChoiceMenu<Boolean> useAprilTagVisionMenu = new FtcChoiceMenu<>("AprilTag Vision:", startPosMenu);
-        FtcChoiceMenu<AutoStrategy> strategyMenu = new FtcChoiceMenu<>("Auto Strategies:", useAprilTagVisionMenu);
-        FtcChoiceMenu<ParkPos> parkPosMenu = new FtcChoiceMenu<>("Park Position:", strategyMenu);
+        FtcChoiceMenu<AutoStrategy> strategyMenu = new FtcChoiceMenu<>("Auto Strategies:", allianceMenu);
+        FtcChoiceMenu<StartPos> startPosMenu = new FtcChoiceMenu<>("Start Position:", strategyMenu);
+        FtcChoiceMenu<Robot.GamePieceType> preloadTypeMenu = new FtcChoiceMenu<>("Preload Type:", startPosMenu);
+        FtcChoiceMenu<ParkOption> parkOptionMenu = new FtcChoiceMenu<>("Park Option:", preloadTypeMenu);
 
         FtcValueMenu xTargetMenu = new FtcValueMenu(
             "xTarget:", strategyMenu, -12.0, 12.0, 0.5, 4.0, " %.1f ft");
@@ -387,23 +343,22 @@ public class FtcAuto extends FtcOpMode
         //
         // Populate choice menus.
         //
-        allianceMenu.addChoice("Red", Alliance.RED_ALLIANCE, true, startPosMenu);
-        allianceMenu.addChoice("Blue", Alliance.BLUE_ALLIANCE, false, startPosMenu);
+        allianceMenu.addChoice("Red", Alliance.RED_ALLIANCE, true, strategyMenu);
+        allianceMenu.addChoice("Blue", Alliance.BLUE_ALLIANCE, false, strategyMenu);
 
-        strategyMenu.addChoice("Net Zone Far, Auto Score 1+3+Cycle", AutoStrategy.AUTO_SCORE_NET_1PLUS3PLUS_CYCLE, true, useAprilTagVisionMenu);
-        strategyMenu.addChoice("Net Zone Close, Auto Score 0+4+Cycle", AutoStrategy.AUTO_SCORE_NET_0PLUS4PLUS_CYCLE, false, useAprilTagVisionMenu);
-        strategyMenu.addChoice("Net Zone Far, Auto Score 1+3", AutoStrategy.AUTO_SCORE_NET_1PLUS3, true, useAprilTagVisionMenu);
-        strategyMenu.addChoice("Net Zone Close, Auto Score 0+4", AutoStrategy.AUTO_SCORE_NET_0PLUS4, false, useAprilTagVisionMenu);
-        strategyMenu.addChoice("Observation Zone Far, Auto Score 1+Cycle", AutoStrategy.AUTO_SCORE_OBSERVATION_1PLUS_CYCLE, false, useAprilTagVisionMenu);
-        strategyMenu.addChoice("Observation Zone Far, Auto Score 1+MoveSamples+Cycle", AutoStrategy.AUTO_SCORE_OBSERVATION_1PLUS_MOVE_SAMPLES_PLUS_CYCLE, false,useAprilTagVisionMenu);
-        strategyMenu.addChoice("Observation Zone Far, Auto Score 1+MoveSamples", AutoStrategy.AUTO_SCORE_OBSERVATION_1PLUS_MOVE_SAMPLES, false, useAprilTagVisionMenu);
-        strategyMenu.addChoice("Observation Zone Close, Auto Score 0+MoveSamples", AutoStrategy.AUTO_SCORE_OBSERVATION_0PLUS_MOVE_SAMPLES, false,useAprilTagVisionMenu);
+        strategyMenu.addChoice("Full Auto", AutoStrategy.FULL_AUTO, true, startPosMenu);
         strategyMenu.addChoice("PID Drive", AutoStrategy.PID_DRIVE, false, xTargetMenu);
         strategyMenu.addChoice("Timed Drive", AutoStrategy.TIMED_DRIVE, false, driveTimeMenu);
         strategyMenu.addChoice("Do nothing", AutoStrategy.DO_NOTHING, false);
 
-        useAprilTagVisionMenu.addChoice("Use April Vision", true, true);
-        useAprilTagVisionMenu.addChoice("Dont Use AprilVision", false, false);
+        startPosMenu.addChoice("Start Net Zone", StartPos.NET_ZONE, true, preloadTypeMenu);
+        startPosMenu.addChoice("Start Observation Zone", StartPos.OBSERVATION_ZONE, false, preloadTypeMenu);
+
+        preloadTypeMenu.addChoice("Preload Specimen", Robot.GamePieceType.SPECIMEN, true, parkOptionMenu);
+        preloadTypeMenu.addChoice("Preload Sample", Robot.GamePieceType.SAMPLE, false, parkOptionMenu);
+
+        parkOptionMenu.addChoice("Park", ParkOption.PARK, true);
+        parkOptionMenu.addChoice("Don't Park", ParkOption.NO_PARK, false);
 
         //
         // Traverse menus.
@@ -414,10 +369,10 @@ public class FtcAuto extends FtcOpMode
         //
         autoChoices.delay = delayMenu.getCurrentValue();
         autoChoices.alliance = allianceMenu.getCurrentChoiceObject();
-        autoChoices.startPos = startPosMenu.getCurrentChoiceObject();
         autoChoices.autoStrategy = strategyMenu.getCurrentChoiceObject();
-        autoChoices.useAprilTagVision = useAprilTagVisionMenu.getCurrentChoiceObject();
-        autoChoices.parkPos = parkPosMenu.getCurrentChoiceObject();
+        autoChoices.startPos = startPosMenu.getCurrentChoiceObject();
+        autoChoices.preloadType = preloadTypeMenu.getCurrentChoiceObject();
+        autoChoices.parkPos = parkOptionMenu.getCurrentChoiceObject();
         autoChoices.xTarget = xTargetMenu.getCurrentValue();
         autoChoices.yTarget = yTargetMenu.getCurrentValue();
         autoChoices.turnTarget = turnTargetMenu.getCurrentValue();
