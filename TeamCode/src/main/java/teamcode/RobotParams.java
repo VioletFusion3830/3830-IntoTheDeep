@@ -166,11 +166,11 @@ public class RobotParams
         public static final boolean useVision                   = true;
         public static final boolean useWebCam                   = true; // false to use Android phone camera.
         public static final boolean useBuiltinCamBack           = false; // For Android Phone as Robot Controller.
-        public static final boolean tuneColorBlobVision         = false;
+        public static final boolean tuneColorBlobVision         = true;
         public static final boolean useLimelightVision          = true;
         public static final boolean useCameraStreamProcessor    = true;
         public static final boolean useAprilTagVision           = true;
-        public static final boolean useColorBlobVision          = true;
+        public static final boolean useColorBlobVision          = false;
         public static final boolean showVisionView              = !inCompetition;
         public static final boolean showVisionStat              = false;
         // Drive Base
@@ -200,8 +200,8 @@ public class RobotParams
         public FrontCamParams()
         {
             camName = "WebCam 1";
-            camImageWidth = 1920;
-            camImageHeight = 1080;
+            camImageWidth = 640;
+            camImageHeight = 480;
             camXOffset = 0.0;                   // Inches to the right from robot center
             camYOffset = 0;                   // Inches forward from robot center
             camZOffset = 0;                  // Inches up from the floor
@@ -324,8 +324,8 @@ public class RobotParams
             hubUsbDirection = UsbFacingDirection.FORWARD;
             // Drive Motors
             driveMotorType = MotorType.DcMotor;
-            driveMotorNames = new String[] {"lfDriveMotor", "rfDriveMotor", "lbDriveMotor", "rbDriveMotor"};
-            driveMotorInverted = new boolean[] {true, false, true, false};
+            driveMotorNames = new String[] {"lfDriveMotor", "lbDriveMotor", "rfDriveMotor", "rbDriveMotor"};
+            driveMotorInverted = new boolean[] {false, false, false, false};
             odometryType = TrcDriveBase.OdometryType.OdometryWheels;
             // Odometry Wheels
             odWheelXScale = odWheelYScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;

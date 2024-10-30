@@ -87,13 +87,13 @@ public class Vision
     private static final double[] yellowSampleColorThresholds = {80.0, 250.0, 150.0, 180.0, 30.0, 80.0};
     private static final TrcOpenCvColorBlobPipeline.FilterContourParams sampleFilterContourParams =
             new TrcOpenCvColorBlobPipeline.FilterContourParams()
-                    .setMinArea(700)
-                    .setMinPerimeter(200.0)
-                    .setWidthRange(10.0, 1000.0)
-                    .setHeightRange(10.0, 1000.0)
+                    .setMinArea(0)
+                    .setMinPerimeter(0)
+                    .setWidthRange(0.0, 1000.0)
+                    .setHeightRange(0.0, 1000.0)
                     .setSolidityRange(0.0, 100.0)
-                    .setVerticesRange(0.0, 1000.0)
-                    .setAspectRatioRange(0.5, 2.5);
+                    .setVerticesRange(0.0, 1000.0);
+//                    .setAspectRatioRange(0.5, 2.5);
 
     private final TrcDbgTrace tracer;
     private final Robot robot;
