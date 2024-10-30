@@ -162,6 +162,8 @@ public class RobotParams
         // Status Update: Status Update may affect robot loop time, don't do it when in competition.
         public static final boolean doStatusUpdate              = !inCompetition;
         public static final boolean showSubsystems              = true;
+        public static final boolean useBlinkinLED               = false;
+        public static final boolean useGobildaLED               = false;
         // Vision
         public static final boolean useVision                   = true;
         public static final boolean useWebCam                   = true; // false to use Android phone camera.
@@ -392,7 +394,7 @@ public class RobotParams
             webCam2 = null; //new BackCamParams()
             limelight = null; //new LimelightParams()
             // Miscellaneous
-            blinkinName = null;
+            indicatorName = null;
         }   //MecanumParams
     }   //class MecanumParams
 
