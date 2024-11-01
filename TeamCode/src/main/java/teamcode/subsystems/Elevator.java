@@ -15,11 +15,6 @@ public class Elevator {
                 .setFollowerMotor(RobotParams.ElevatorParams.FOLLOWER_MOTOR_NAME,
                         RobotParams.ElevatorParams.FOLLOWER_MOTOR_TYPE,
                         RobotParams.ElevatorParams.FOLLOWER_MOTOR_INVERTED)
-                .setFollowerMotor(RobotParams.ElevatorParams.SECOND_FOLLOWER_MOTOR_NAME,
-                        RobotParams.ElevatorParams.SECOND_FOLLOWER_MOTOR_TYPE,
-                        RobotParams.ElevatorParams.SECOND_FOLLOWER_MOTOR_INVERTED)
-                .setLowerLimitSwitch(RobotParams.ElevatorParams.LOWER_LIMIT_SWITCH_NAME,
-                        RobotParams.ElevatorParams.LOWER_LIMIT_SWITCH_INVERTED)
                 .setPositionScaleAndOffset(RobotParams.ElevatorParams.INCHES_PER_COUNT,
                         RobotParams.ElevatorParams.POS_OFFSET)
                 .setPositionPresets(RobotParams.ElevatorParams.POS_PRESET_TOLERANCE,
@@ -27,7 +22,7 @@ public class Elevator {
         elevator = new FtcMotorActuator(elevatorParams).getMotor();
         elevator.setSoftwarePidEnabled(RobotParams.ElevatorParams.SOFTWARE_PID_ENABLED);
         elevator.setPositionPidParameters(
-                RobotParams.ElevatorParams.POS_PID_COEFFS,
+                RobotParams.ElevatorParams.PID_COEFFS,
                 RobotParams.ElevatorParams.POS_PID_TOLERANCE);
         elevator.setPositionPidPowerComp(this::getGravityComp);
         elevator.setStallProtection(RobotParams.ElevatorParams.STALL_MIN_POWER,

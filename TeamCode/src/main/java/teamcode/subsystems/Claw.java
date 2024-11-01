@@ -2,6 +2,8 @@ package teamcode.subsystems;
 
 import android.graphics.Color;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import teamcode.RobotParams;
@@ -96,10 +98,11 @@ public class Claw {
     //Will only work if rev color sensor is never null when called
     private float getSensorDataColor()
     {
-            float[] hsvValues = {0F,0F,0F};
-            Color.RGBToHSV(revColorSensorV3.red() * 255,
-                    revColorSensorV3.green() * 255,
-                    revColorSensorV3.blue() * 255,
+            float[] hsvValues = {0.0f,0.0f,0.0f};
+        NormalizedRGBA normalizedColors = revColorSensorV3.getNormalizedColors();
+            Color.RGBToHSV((int) (normalizedColors.red * 255),
+                    (int) (normalizedColors.green * 255),
+                    (int) (normalizedColors.blue * 255),
                     hsvValues);
             return hsvValues[0];
     }

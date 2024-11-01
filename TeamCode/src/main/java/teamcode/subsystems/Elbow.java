@@ -24,6 +24,8 @@ public class Elbow
                         RobotParams.ElbowParams.posPresets);
         elbow = new FtcMotorActuator(elbowParams).getMotor();
         elbow.setSoftwarePidEnabled(RobotParams.ElbowParams.SOFTWARE_PID_ENABLED);
+        elbow.setPositionPidParameters(RobotParams.ElbowParams.PID_COEFFS,
+                RobotParams.ElbowParams.PID_TOLERANCE);
         elbow.setPositionPidParameters(
                 RobotParams.ElbowParams.POS_PID_COEFFS,
                 RobotParams.ElbowParams.POS_PID_TOLERANCE);

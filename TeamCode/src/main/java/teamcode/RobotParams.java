@@ -182,12 +182,12 @@ public class RobotParams
         // Subsystems
         public static final boolean useSubsystems               = false;
         public static final boolean useElevator                 = false;
-        public static final boolean useClaw                     = false;
+        public static final boolean useElbow                    = false;
         public static final boolean useArm                      = false;
+        public static final boolean useClaw                     = false;
         public static final boolean useTurret                   = false;
         public static final boolean useWristVertical            = false;
-        public static final boolean useWristRotational           = false;
-        public static final boolean useElbow                    = false;
+        public static final boolean useWristRotational          = false;
     }   //class Preferences
 
     //
@@ -326,7 +326,7 @@ public class RobotParams
             hubUsbDirection = UsbFacingDirection.FORWARD;
             // Drive Motors
             driveMotorType = MotorType.DcMotor;
-            driveMotorNames = new String[] {"lfDriveMotor", "lbDriveMotor", "rfDriveMotor", "rbDriveMotor"};
+            driveMotorNames = new String[] {"lfDriveMotor", "rfDriveMotor","lbDriveMotor", "rbDriveMotor"};
             driveMotorInverted = new boolean[] {false, false, false, false};
             odometryType = TrcDriveBase.OdometryType.OdometryWheels;
             // Odometry Wheels
@@ -407,13 +407,10 @@ public class RobotParams
 
         public static final String PRIMARY_MOTOR_NAME                       = SUBSYSTEM_NAME + ".Primary";
         public static final String FOLLOWER_MOTOR_NAME                      = SUBSYSTEM_NAME + ".Follower";
-        public static final String SECOND_FOLLOWER_MOTOR_NAME               = SUBSYSTEM_NAME + ".SecondFollower";
         public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
         public static final MotorType FOLLOWER_MOTOR_TYPE                   = MotorType.DcMotor;
-        public static final MotorType SECOND_FOLLOWER_MOTOR_TYPE            = MotorType.DcMotor;
         public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
         public static final boolean FOLLOWER_MOTOR_INVERTED                 = false;
-        public static final boolean SECOND_FOLLOWER_MOTOR_INVERTED          = false;
 
         public static final double INCHES_PER_COUNT                         = (103.8/4); //Need to be Updated
         public static final double POS_OFFSET                               = 0; //Need to be Updated
@@ -426,7 +423,7 @@ public class RobotParams
         public static final double POS_PRESET_TOLERANCE                     = 1.0;
 
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
-        public static final TrcPidController.PidCoefficients POS_PID_COEFFS =
+        public static final TrcPidController.PidCoefficients PID_COEFFS     =
                 new TrcPidController.PidCoefficients(1.0,0,0,0,0); //Need to tune
         public static final double POS_PID_TOLERANCE                        = 0.2;
         public static final double GRAVITY_COMP_POWER                       = 0.0; //Need to be Updated
@@ -507,9 +504,9 @@ public class RobotParams
         public static final double POS_PRESET_TOLERANCE         = 10.0; //Need to be Updated
 
         public static final boolean SOFTWARE_PID_ENABLED        = true;
-        public static final TrcPidController.PidCoefficients POS_PID_COEFFS =
+        public static final TrcPidController.PidCoefficients PID_COEFFS =
                 new TrcPidController.PidCoefficients(0.018, 0.1, 0.001, 0.0, 2.0); //Need to tune
-        public static final double POS_PID_TOLERANCE            = 0.3;
+        public static final double PID_TOLERANCE                = 0.3;
         public static final double GRAVITY_COMP_MAX_POWER       = 0; //Need to be Updated
         public static final double STALL_MIN_POWER              = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE              = 0.1;
