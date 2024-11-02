@@ -30,10 +30,10 @@ import ftclib.driverio.FtcMatchInfo;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.sensor.FtcRobotBattery;
 import teamcode.subsystems.Arm;
-import teamcode.subsystems.BlinkinLEDs;
 import teamcode.subsystems.Claw;
 import teamcode.subsystems.Elbow;
 import teamcode.subsystems.Elevator;
+import teamcode.subsystems.LEDIndicator;
 import teamcode.subsystems.RobotBase;
 import teamcode.subsystems.Turret;
 import teamcode.subsystems.WristRotational;
@@ -68,7 +68,7 @@ public class Robot
     // Vision subsystems.
     public Vision vision;
     // Sensors and indicators.
-    public BlinkinLEDs blinkin;
+    public LEDIndicator ledIndicator;
     public FtcRobotBattery battery;
     // Subsystems.
     public TrcMotor arm;
@@ -119,9 +119,9 @@ public class Robot
         if (RobotParams.Preferences.robotType != RobotParams.RobotType.VisionOnly)
         {
             // Create and initialize sensors and indicators.
-            if (robotInfo.blinkinName != null)
+            if (robotInfo.indicatorName != null)
             {
-                blinkin = new BlinkinLEDs(robotInfo.blinkinName);
+                ledIndicator = new LEDIndicator(robotInfo.indicatorName);
             }
 
             if (RobotParams.Preferences.useBatteryMonitor)
@@ -134,7 +134,7 @@ public class Robot
             if (RobotParams.Preferences.useSubsystems)
             {
                 if (RobotParams.Preferences.useElevator){
-                    elevator = new Elevator().getElevatorParams();
+                    elevator = new Elevator(this).getElevatorParams();
                 }
 
                 if (RobotParams.Preferences.useClaw){
@@ -151,7 +151,7 @@ public class Robot
                 }
 
                 if (RobotParams.Preferences.useElbow){
-                    elbow = new Elbow().getElbow();
+                    elbow = new Elbow(this).getElbow();
                 }
 
                 if (RobotParams.Preferences.useWristVertical){
@@ -342,10 +342,10 @@ public class Robot
                 {
                     if (RobotParams.ClawParams.USE_REV_V3_COLOR_SENSOR)
                     {
-                        dashboard.displayPrintf(
-                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, autoActive=%s,sensorDistence=%.3f, sensorColor=%.3f",
-                                clawServo.getPosition(), clawServo.hasObject(),
-                                clawServo.isAutoAssistActive(), claw.getSensorDataColorHSV());
+//                        dashboard.displayPrintf(
+//                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, autoActive=%s,sensorDistence=%.3f, sensorColor=%.3f",
+//                                clawServo.getPosition(), clawServo.hasObject(),
+//                                clawServo.isAutoAssistActive(), claw.getSensorDataColorHSV());
                     }
                 }
 

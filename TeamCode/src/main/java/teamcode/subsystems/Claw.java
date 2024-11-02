@@ -51,11 +51,11 @@ public class Claw {
                         RobotParams.ClawParams.CLOSE_TIME);
         if (revColorSensorV3 != null)
         {
-            grabberParams.setAnalogSensorTrigger(
-                    this::getSensorDataDistance,
-                    RobotParams.ClawParams.ANALOG_TRIGGER_INVERTED,
-                    RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD,
-                    RobotParams.ClawParams.HAS_OBJECT_THRESHOLD);
+//            grabberParams.setAnalogSensorTrigger(
+//                    this::getSensorDataDistance,
+//                    RobotParams.ClawParams.ANALOG_TRIGGER_INVERTED,
+//                    RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD,
+//                    RobotParams.ClawParams.HAS_OBJECT_THRESHOLD);
         }
         clawServo = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
         clawServo.open();
@@ -68,7 +68,7 @@ public class Claw {
 
     public void autoAssistPickup(String owner, double delay, TrcEvent event, double timeout, SamplePickupType sampleType)
     {
-        clawServo.autoAssistGrab(owner, delay, event, timeout, this::isSampleColorCorrect, sampleType);
+//        clawServo.autoAssistGrab(owner, delay, event, timeout, this::isSampleColorCorrect, sampleType);
     }
 
     public float getSensorDataColorHSV()

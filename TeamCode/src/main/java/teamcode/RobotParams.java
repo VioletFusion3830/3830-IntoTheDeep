@@ -426,7 +426,7 @@ public class RobotParams
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
                 new TrcPidController.PidCoefficients(1.0,0,0,0,0); //Need to tune
         public static final double POS_PID_TOLERANCE                        = 0.2;
-        public static final double GRAVITY_COMP_POWER                       = 0.0; //Need to be Updated
+        public static final double MAX_GRAVITY_COMP_POWER                       = 0.0; //Need to be Updated
         public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE                          = 0.1;
         public static final double STALL_TIMEOUT                            = 0.1;

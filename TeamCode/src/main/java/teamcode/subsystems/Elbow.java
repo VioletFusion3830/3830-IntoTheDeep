@@ -1,16 +1,19 @@
 package teamcode.subsystems;
 
 import ftclib.motor.FtcMotorActuator;
+import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.motor.TrcMotor;
 
 
 public class Elbow
 {
+    private final Robot robot;
     public final TrcMotor elbow;
 
-    public Elbow()
+    public Elbow(Robot robot)
     {
+        this.robot = robot;
         FtcMotorActuator.Params elbowParams = new FtcMotorActuator.Params()
                 .setPrimaryMotor(
                         RobotParams.ElbowParams.PRIMARY_MOTOR_NAME,
@@ -26,9 +29,6 @@ public class Elbow
         elbow.setSoftwarePidEnabled(RobotParams.ElbowParams.SOFTWARE_PID_ENABLED);
         elbow.setPositionPidParameters(RobotParams.ElbowParams.PID_COEFFS,
                 RobotParams.ElbowParams.PID_TOLERANCE);
-        elbow.setPositionPidParameters(
-                RobotParams.ElbowParams.POS_PID_COEFFS,
-                RobotParams.ElbowParams.POS_PID_TOLERANCE);
         elbow.setPositionPidPowerComp(this::getElbowPowerComp);
         elbow.setStallProtection(RobotParams.ElbowParams.STALL_MIN_POWER,
                 RobotParams.ElbowParams.STALL_TOLERANCE,
@@ -41,10 +41,16 @@ public class Elbow
         return elbow;
     }   //getMotor
 
-    //May need to make it so gravity comp also takes in the elevators extension amount
     private double getElbowPowerComp(double currPower)
     {
-        return RobotParams.ElbowParams.GRAVITY_COMP_MAX_POWER * Math.sin(Math.toRadians(elbow.getPosition()));
+        double armMass = 0; //TBD
+        double distanceFromPivot = 9.94; //TBD
+        double elevatorPos = robot.elevator.getPosition(); //Slider distance in the diagram
+        double elbowAngle = elbow.getPosition(); //L1 in the diagram or base joint angle in degrees
+        double drivingTorque = armMass * (elevatorPos/distanceFromPivot) * Math.cos(Math.toRadians(elbowAngle));
+
+        return RobotParams.ElbowParams.GRAVITY_COMP_MAX_POWER * drivingTorque;
+
     }   //getElbowPowerComp
 
 }   //class Elbow
