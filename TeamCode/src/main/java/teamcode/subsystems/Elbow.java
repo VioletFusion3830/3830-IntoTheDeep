@@ -43,13 +43,11 @@ public class Elbow
 
     private double getElbowPowerComp(double currPower)
     {
-        double armMass = 0; //I am thinking i dont need this constant because the mass of the arm is constant so GRAVITY_COMP_MAX_POWER will take it into account?
-        double distanceFromPivot = 9.94; //TBD
+        double distanceFromPivot = 9.94;
         double elevatorPos = robot.elevator.getPosition(); //Slider distance in the diagram
         double elbowAngle = elbow.getPosition(); //L1 in the diagram or base joint angle in degrees
-        double drivingTorque = armMass * (elevatorPos/distanceFromPivot) * Math.cos(Math.toRadians(elbowAngle));
 
-        return RobotParams.ElbowParams.GRAVITY_COMP_MAX_POWER * drivingTorque;
+        return RobotParams.ElbowParams.GRAVITY_COMP_MAX_POWER * (elevatorPos/distanceFromPivot) * Math.cos(Math.toRadians(elbowAngle));
 
     }   //getElbowPowerComp
 

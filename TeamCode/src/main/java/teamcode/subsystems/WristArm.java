@@ -8,8 +8,8 @@ import trclib.motor.TrcServo;
 
 public class WristArm {
     private final TrcMotor armServo;
-    private final TrcServo wristRotator;
-    private final TrcServo wristVertical;
+    private final TrcServo wristRotatorServo;
+    private final TrcServo wristVerticalServo;
 
     public WristArm(){
         FtcMotorActuator.Params armParams = new FtcMotorActuator.Params()
@@ -26,24 +26,20 @@ public class WristArm {
         armServo.setSoftwarePidEnabled(RobotParams.ArmParams.SOFTWARE_PID_ENABLED);
         armServo.setPositionPidParameters(
                 RobotParams.ArmParams.PID_COEFFS,
-                RobotParams.ArmParams.POS_PID_TOLERANCE);
+                RobotParams.ArmParams.PID_TOLERANCE);
         armServo.setPositionPidPowerComp(this::armGetPowerComp);
-        armServo.setStallProtection(RobotParams.ArmParams.STALL_MIN_POWER,
-                RobotParams.ArmParams.STALL_TOLERANCE,
-                RobotParams.ArmParams.STALL_TIMEOUT,
-                RobotParams.ArmParams.STALL_RESET_TIMEOUT);
 
         FtcServoActuator.Params WristRotatorParams = new FtcServoActuator.Params()
                 .setPrimaryServo(
                         RobotParams.WristParamsRotational.PRIMARY_SERVO_ROTATOR,
                         RobotParams.WristParamsRotational.PRIMARY_SERVO_ROTATOR_INVERTED);
-        wristRotator = new FtcServoActuator(WristRotatorParams).getServo();
+        wristRotatorServo = new FtcServoActuator(WristRotatorParams).getServo();
 
         FtcServoActuator.Params WristVerticalParams = new FtcServoActuator.Params()
                 .setPrimaryServo(
                         RobotParams.WristParamsVertical.PRIMARY_SERVO_VERTICAL,
                         RobotParams.WristParamsVertical.PRIMARY_SERVO_VERTICAL_INVERTED);
-        wristVertical = new FtcServoActuator(WristVerticalParams).getServo();
+        wristVerticalServo = new FtcServoActuator(WristVerticalParams).getServo();
     }
 
     public TrcMotor getArmServo()
@@ -51,14 +47,14 @@ public class WristArm {
         return armServo;
     }
 
-    public TrcServo getWristRotational()
+    public TrcServo getWristRotationalServo()
     {
-        return wristRotator;
+        return wristRotatorServo;
     }
 
-    public TrcServo getWristVertical()
+    public TrcServo getWristVerticalServo()
     {
-        return wristVertical;
+        return wristVerticalServo;
     }
 
     private double armGetPowerComp(double currPower)

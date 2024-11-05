@@ -411,7 +411,7 @@ public class RobotParams
         public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
         public static final boolean FOLLOWER_MOTOR_INVERTED                 = false;
 
-        public static final double INCHES_PER_COUNT                         = 0.61373558; //Need to to measure sliders length divide by encoder counts
+        public static final double INCHES_PER_COUNT                         = 1; //Need to to measure sliders length divide by encoder counts
         public static final double POS_OFFSET                               = 0;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
@@ -491,25 +491,20 @@ public class RobotParams
         public static final double DEGREES_PER_COUNT                        = 360;
         public static final double POS_OFFSET                               = 0; //Need to be Updated
         public static final double POWER_LIMIT                              = 1.0;
-        public static final double ZERO_CAL_POWER                           = -0.25;
 
         public static final String EXTERNAL_ENCODER_NAME                    = SUBSYSTEM_NAME + ".encoder";
         public static final boolean EXTERNAL_ENCODER_INVERTED               = false;
 
         public static final double MIN_POS                                  = POS_OFFSET; //Need to be Updated
         public static final double MAX_POS                                  = 10; //Need to be Updated
-        public static final double[] POS_PRESETS                            = {MIN_POS, MAX_POS}; //Need to be Updated
+        public static final double[] POS_PRESETS                            = {20, 100}; //Need to be Updated
         public static final double POS_PRESET_TOLERANCE                     = 1;
 
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
                 new TrcPidController.PidCoefficients(1.0,0,0,0,0); //Need to tune
-        public static final double POS_PID_TOLERANCE                        = 0.3;
+        public static final double PID_TOLERANCE                        = 0.3;
         public static final double MAX_GRAVITY_COMP_POWER                   = 0.0; //Need to be Updated
-        public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
-        public static final double STALL_TOLERANCE                          = 0.1;
-        public static final double STALL_TIMEOUT                            = 0.1;
-        public static final double STALL_RESET_TIMEOUT                      = 0.0;
 
         public static final double SAMPLE_PICKUP_POS                        = 0; //Need to be Updated
         public static final double SAMPLE_DROP_POS                          = 0; //Need to be Updated

@@ -29,15 +29,12 @@ import ftclib.driverio.FtcDashboard;
 import ftclib.driverio.FtcMatchInfo;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.sensor.FtcRobotBattery;
-import teamcode.subsystems.Arm;
+import teamcode.subsystems.WristArm;
 import teamcode.subsystems.Claw;
 import teamcode.subsystems.Elbow;
 import teamcode.subsystems.Elevator;
 import teamcode.subsystems.LEDIndicator;
 import teamcode.subsystems.RobotBase;
-import teamcode.subsystems.Turret;
-import teamcode.subsystems.WristRotational;
-import teamcode.subsystems.WristVertical;
 import teamcode.vision.Vision;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcServo;
@@ -73,10 +70,10 @@ public class Robot
     // Subsystems.
     public TrcMotor arm;
     public Claw claw;
+    public WristArm wristArm;
     public TrcServoGrabber clawServo;
     public TrcMotor elbow;
     public TrcMotor elevator;
-    public TrcMotor turret;
     public TrcServo wristVertical;
     public TrcServo wristRotational;
     //Autotasks.
@@ -143,11 +140,7 @@ public class Robot
                 }
 
                 if (RobotParams.Preferences.useArm){
-                    arm = new Arm().getArm();
-                }
-
-                if (RobotParams.Preferences.useTurret){
-                    turret = new Turret().getTurretParams();
+                    arm = new WristArm().getArmServo();
                 }
 
                 if (RobotParams.Preferences.useElbow){
@@ -155,13 +148,18 @@ public class Robot
                 }
 
                 if (RobotParams.Preferences.useWristVertical){
-                    wristVertical = new WristVertical().getWristVertical();
+                    wristVertical = new WristArm().getWristVerticalServo();
                 }
 
                 if (RobotParams.Preferences.useWristRotational){
-                    wristRotational = new WristRotational().getWristRotational();
+                    wristRotational = new WristArm().getWristRotationalServo();
+                }
+
+                if(RobotParams.Preferences.useArm && RobotParams.Preferences.useWristVertical && RobotParams.Preferences.useWristRotational){
+                    wristArm = new WristArm();
                 }
                 zeroCalibrate();
+                //elbow.setPosition(60);
             }
         }
 
@@ -342,16 +340,19 @@ public class Robot
                 {
                     if (RobotParams.ClawParams.USE_REV_V3_COLOR_SENSOR)
                     {
-//                        dashboard.displayPrintf(
-//                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, autoActive=%s,sensorDistence=%.3f, sensorColor=%.3f",
-//                                clawServo.getPosition(), clawServo.hasObject(),
-//                                clawServo.isAutoAssistActive(), claw.getSensorDataColorHSV());
+                        dashboard.displayPrintf(
+                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, autoActive=%s,sensorDistence=%.3f, sensorColor=%.3f",
+                                clawServo.getPosition(), clawServo.hasObject(),
+                                clawServo.isAutoActive(), claw.getSensorDataColorHSV());
                     }
                 }
 
                 if (arm != null)
                 {
-                    dashboard.displayPrintf(lineNum++, "Arm: pos=%.3f", arm.getPosition());
+                    dashboard.displayPrintf(
+                            lineNum++, "Elevator: power=%.3f, pos=%.3f/%.3f, limitSw=%s/%s",
+                            arm.getPower(), arm.getPosition(), arm.getPidTarget(),
+                            arm.isLowerLimitSwitchActive(), arm.isUpperLimitSwitchActive());
                 }
 
                 if (elbow != null)
@@ -360,11 +361,6 @@ public class Robot
                             lineNum++, "Elbow: power=%.3f, pos=%.3f/%.3f, limitSw=%s/%s",
                             elbow.getPower(), elbow.getPosition(), elbow.getPidTarget(),
                             elbow.isLowerLimitSwitchActive(), elbow.isUpperLimitSwitchActive());
-                }
-
-                if (turret != null)
-                {
-                    dashboard.displayPrintf(lineNum++, "Turret: pos=%.3f", turret.getPosition());
                 }
 
                 if (wristVertical != null)
@@ -386,19 +382,14 @@ public class Robot
     public void cancelAll()
     {
         globalTracer.traceInfo(moduleName, "Cancel all operations.");
-
-        if (robotDrive != null)
-        {
-            // Cancel all auto-assist driving.
-            if(elevator != null) elevator.cancel();
-            if(clawServo != null) clawServo.cancel();
-            if(elbow != null) elbow.cancel();
-            if(arm != null) arm.cancel();
-            if(turret != null) turret.cancel();
-            if(wristVertical != null) wristVertical.cancel();
-            if(wristRotational != null) wristRotational.cancel();
-            if(robotDrive != null) robotDrive.cancel();
-        }
+        // Cancel all auto-assist driving.
+        if(elevator != null) elevator.cancel();
+        if(clawServo != null) clawServo.cancel();
+        if(elbow != null) elbow.cancel();
+        if(arm != null) arm.cancel();
+        if(wristVertical != null) wristVertical.cancel();
+        if(wristRotational != null) wristRotational.cancel();
+        if(robotDrive != null) robotDrive.cancel();
     }   //cancelAll
 
     /**
