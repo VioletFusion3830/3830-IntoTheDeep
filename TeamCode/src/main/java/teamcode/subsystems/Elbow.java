@@ -20,7 +20,7 @@ public class Elbow
                         RobotParams.ElbowParams.PRIMARY_MOTOR_TYPE,
                         RobotParams.ElbowParams.PRIMARY_MOTOR_INVERTED)
                 .setPositionScaleAndOffset(
-                        RobotParams.ElbowParams.DEG_SCALE,
+                        RobotParams.ElbowParams.DEG_PER_COUNT,
                         RobotParams.ElbowParams.POS_OFFSET,
                         RobotParams.ElbowParams.ZERO_OFFSET)
                 .setPositionPresets(RobotParams.ElbowParams.POS_PRESET_TOLERANCE,
@@ -43,7 +43,7 @@ public class Elbow
 
     private double getElbowPowerComp(double currPower)
     {
-        double armMass = 0; //TBD
+        double armMass = 0; //I am thinking i dont need this constant because the mass of the arm is constant so GRAVITY_COMP_MAX_POWER will take it into account?
         double distanceFromPivot = 9.94; //TBD
         double elevatorPos = robot.elevator.getPosition(); //Slider distance in the diagram
         double elbowAngle = elbow.getPosition(); //L1 in the diagram or base joint angle in degrees

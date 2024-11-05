@@ -10,6 +10,10 @@ public class FtcDashboard
     {
         public static TrcPidController.PidCoefficients tunePidCoeff = new TrcPidController.PidCoefficients(.10, 0.0, 0.01, 0,0);
     }
+    public static class TunePID_Secondary
+    {
+        public static TrcPidController.PidCoefficients tunePidCoeff = new TrcPidController.PidCoefficients(.10, 0.0, 0.01, 0,0);
+    }
 
     @Config
     public static class PPTuneParams

@@ -45,9 +45,7 @@ public class Elevator {
         double elbowAngle = robot.elbow.getPosition();
         double distanceToBottom = Math.abs(elevatorPos - RobotParams.ElevatorParams.MIN_POS);
 
-        double powerComp = distanceToBottom > RobotParams.ElevatorParams.POS_PID_TOLERANCE ? RobotParams.ElevatorParams.MAX_GRAVITY_COMP_POWER*Math.sin(Math.toRadians(elbowAngle)) : 0.0;
-
-        return powerComp;
+        return distanceToBottom > RobotParams.ElevatorParams.POS_PID_TOLERANCE ? RobotParams.ElevatorParams.MAX_GRAVITY_COMP_POWER*Math.sin(Math.toRadians(elbowAngle)) : 0.0;
     }
 } //Class Elevator
 
