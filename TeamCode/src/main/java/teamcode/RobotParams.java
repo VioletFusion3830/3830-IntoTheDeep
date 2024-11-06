@@ -525,6 +525,8 @@ public class RobotParams
         public static final double SAMPLE_DROP_POS                          = 0; //Need to be Updated
         public static final double SPECIMEN_PICKUP                          = 0; //Need to be Updated
         public static final double SPECIMEN_DROP                            = 0; //Need to be Updated
+        public static final double[] SAMPLE_POSPRESETS                       = {SAMPLE_PICKUP_POS, SAMPLE_DROP_POS};
+        public static final double[] SPECIMEN_POSPRESETS                     = {SPECIMEN_PICKUP, SPECIMEN_DROP};
         public static final double PICKUP_TIME                              = 0.5; //Need to be Updated
         public static final double DROP_TIME                                = 0.5; //Need to be Updated
     }   //class WristParamsVertical
@@ -538,6 +540,7 @@ public class RobotParams
         public static final double MIDDLE_P0S                         = 0.5;
         public static final double MAX_P0S                            = 1.0;
         public static final double MIN_P0S                            = 0.0;
+        public static final double[] POS_PRESETS                            = {MIN_P0S, MIDDLE_P0S, MAX_P0S};
     }   //class WristParamsRotational
 
 }   //class RobotParams

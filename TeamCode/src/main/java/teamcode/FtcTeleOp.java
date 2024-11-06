@@ -53,6 +53,7 @@ public class FtcTeleOp extends FtcOpMode
     private boolean relocalizing = false;
     private double elbowPrevPower = 0.0;
     private double elevatorPrevPower = 0.0;
+
     private TrcPose2D robotFieldPose = null;
 
     //
@@ -207,7 +208,7 @@ public class FtcTeleOp extends FtcOpMode
             if (RobotParams.Preferences.useSubsystems)
             {
                 if(robot.elbow != null){ //mapped to operator left stick
-                    double elbowPower = operatorGamepad.getLeftStickY(true) * RobotParams.ElbowParams.POWER_LIMIT;
+                    double elbowPower = operatorGamepad.getRightStickY(true) * RobotParams.ElbowParams.POWER_LIMIT;
                     if(elbowPower != elbowPrevPower){
                         //robot.elevator.setPower(elbowPower);
                         robot.elbow.setPidPower(null, elbowPower,
@@ -217,7 +218,7 @@ public class FtcTeleOp extends FtcOpMode
                 }
 
                 if(robot.elevator != null){ //mapped to operator right stick
-                    double elevatorPower = operatorGamepad.getRightStickY(true) * RobotParams.ElevatorParams.POWER_LIMIT;
+                    double elevatorPower = operatorGamepad.getLeftStickY(true) * RobotParams.ElevatorParams.POWER_LIMIT;
                     if(elevatorPower != elevatorPrevPower){
 //                        robot.elevator.setPower(elevatorPower);
                         robot.elevator.setPidPower(null, elevatorPower,
@@ -226,9 +227,7 @@ public class FtcTeleOp extends FtcOpMode
                     elevatorPrevPower = elevatorPower;
                 }
 
-                if(robot.wristArm != null){ //mapped to
 
-                }
             }
             // Display subsystem status.
             if (RobotParams.Preferences.doStatusUpdate)
@@ -405,16 +404,19 @@ public class FtcTeleOp extends FtcOpMode
             case X: //
 
                 break;
-            case Y: //
-
+            case Y: //cycle vertical wristArm positions.. Button assignments needs to be updated
+                robot.wristArm.cycleVerticalPosition(); //cycles through sample positions (instead of specimen positions)
                 break;
 
-            case LeftBumper:
+            case LeftBumper: //cycle down rotator wristArm positions
                 robot.globalTracer.traceInfo(moduleName, ">>>>> OperatorAltFunc=" + pressed);
                 operatorAltFunc = pressed;
+                robot.wristArm.cycleRotatorPosition(false);
                 break;
 
-            case RightBumper:
+            case RightBumper: //cycle up wristArm positions
+                robot.wristArm.cycleRotatorPosition(true);
+                break;
             case DpadUp:
             case DpadDown:
             case DpadLeft:

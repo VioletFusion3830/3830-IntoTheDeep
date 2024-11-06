@@ -10,6 +10,7 @@ public class WristArm {
     private final TrcMotor armServo;
     private final TrcServo wristRotatorServo;
     private final TrcServo wristVerticalServo;
+    private int wristRotatorPosition = 0;
 
     public WristArm(){
         FtcMotorActuator.Params armParams = new FtcMotorActuator.Params()
@@ -61,6 +62,50 @@ public class WristArm {
     {
         return RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER * Math.cos(Math.toRadians(armServo.getPosition()));
     }   //armGetPowerComp
+
+    /**
+     * TO-DO: Check the following four methods for accuracy and optimization.
+     * @param positiveCycle if true, cycle up through position presets, otherwise cycle down
+     */
+    public void cycleRotatorPosition(boolean positiveCycle)
+    {
+        int posCount = RobotParams.WristParamsRotational.POS_PRESETS.length;
+        if (positiveCycle){
+            wristRotatorPosition =
+                    wristRotatorPosition < posCount - 1 ? wristRotatorPosition + 1 : 0;
+        } else{
+            wristRotatorPosition =
+                    wristRotatorPosition > 0 ? wristRotatorPosition - 1 : posCount - 1;
+        }
+
+        setRotatorPosition(wristRotatorPosition);
+    }
+
+    /**
+     * @param position the index of the position in POS_PRESETS thatthe wrist rotator should be set to
+     */
+    public void setRotatorPosition(int position){
+        wristRotatorServo.setPosition(RobotParams.WristParamsRotational.POS_PRESETS[position]);
+    }
+
+    public void cycleVerticalPosition(){ //cycles through position presets for samples
+        if (wristVerticalServo.getPosition() == RobotParams.WristParamsVertical.SAMPLE_POSPRESETS[0]){
+            setVerticalPosition(1, false);
+        } else {
+            setVerticalPosition(0, false);
+        }
+    }
+
+    /**
+     * @param isSpecimen if true, only specimen position presets will be cycled through, otherwise sample position presets.
+     */
+    public void setVerticalPosition(int position, boolean isSpecimen){
+        if (isSpecimen){
+            wristVerticalServo.setPosition(RobotParams.WristParamsVertical.SPECIMEN_POSPRESETS[position]);
+        } else {
+            wristVerticalServo.setPosition(RobotParams.WristParamsVertical.SAMPLE_POSPRESETS[position]);
+        }
+    }
 
 //    public void rotateWrist
 
