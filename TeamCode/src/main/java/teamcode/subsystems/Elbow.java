@@ -10,6 +10,7 @@ public class Elbow
 {
     private final Robot robot;
     public final TrcMotor elbow;
+    private boolean elbowPosition;
 
     public Elbow(Robot robot)
     {
@@ -50,5 +51,7 @@ public class Elbow
         return RobotParams.ElbowParams.GRAVITY_COMP_MAX_POWER * (elevatorPos/distanceFromPivot) * Math.cos(Math.toRadians(elbowAngle));
 
     }   //getElbowPowerComp
+
+
 
 }   //class Elbow

@@ -62,6 +62,6 @@ public class WristArm {
         return RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER * Math.cos(Math.toRadians(armServo.getPosition()));
     }   //armGetPowerComp
 
-
+//    public void rotateWrist
 
 }

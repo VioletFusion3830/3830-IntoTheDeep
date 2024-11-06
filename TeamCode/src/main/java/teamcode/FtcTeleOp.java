@@ -51,6 +51,8 @@ public class FtcTeleOp extends FtcOpMode
     private boolean driverAltFunc = false;
     private boolean operatorAltFunc = false;
     private boolean relocalizing = false;
+    private double elbowPrevPower = 0.0;
+    private double elevatorPrevPower = 0.0;
     private TrcPose2D robotFieldPose = null;
 
     //
@@ -204,6 +206,29 @@ public class FtcTeleOp extends FtcOpMode
             //
             if (RobotParams.Preferences.useSubsystems)
             {
+                if(robot.elbow != null){ //mapped to operator left stick
+                    double elbowPower = operatorGamepad.getLeftStickY(true) * RobotParams.ElbowParams.POWER_LIMIT;
+                    if(elbowPower != elbowPrevPower){
+                        //robot.elevator.setPower(elbowPower);
+                        robot.elbow.setPidPower(null, elbowPower,
+                                RobotParams.ElbowParams.MIN_POS, RobotParams.ElbowParams.MAX_POS, true);
+                    }
+                    elbowPrevPower = elbowPower;
+                }
+
+                if(robot.elevator != null){ //mapped to operator right stick
+                    double elevatorPower = operatorGamepad.getRightStickY(true) * RobotParams.ElevatorParams.POWER_LIMIT;
+                    if(elevatorPower != elevatorPrevPower){
+//                        robot.elevator.setPower(elevatorPower);
+                        robot.elevator.setPidPower(null, elevatorPower,
+                                RobotParams.ElevatorParams.MIN_POS, RobotParams.ElevatorParams.MAX_POS, true);
+                    }
+                    elevatorPrevPower = elevatorPower;
+                }
+
+                if(robot.wristArm != null){ //mapped to
+
+                }
             }
             // Display subsystem status.
             if (RobotParams.Preferences.doStatusUpdate)
@@ -225,10 +250,10 @@ public class FtcTeleOp extends FtcOpMode
             robot.globalTracer.traceInfo(moduleName, "driveOrientation=" + orientation);
             robot.robotDrive.driveBase.setDriveOrientation(
                 orientation, orientation == TrcDriveBase.DriveOrientation.FIELD);
-            if (robot.blinkin != null)
-            {
-                robot.blinkin.setDriveOrientation(orientation);
-            }
+//            if (robot.blinking != null)
+//            {
+//                robot.blinking.setDriveOrientation(orientation);
+//            }
         }
     }   //setDriveOrientation
 
@@ -371,10 +396,17 @@ public class FtcTeleOp extends FtcOpMode
 
         switch (button)
         {
-            case A:
-            case B:
-            case X:
-            case Y:
+            case A: //
+
+                break;
+            case B: //
+
+                break;
+            case X: //
+
+                break;
+            case Y: //
+
                 break;
 
             case LeftBumper:
