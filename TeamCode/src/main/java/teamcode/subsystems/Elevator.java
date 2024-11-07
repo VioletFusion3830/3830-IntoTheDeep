@@ -8,6 +8,7 @@ import teamcode.Robot;
 public class Elevator {
     private final TrcMotor elevator;
     private final Robot robot;
+    private int elevatorPosition;
 
     public Elevator(Robot robot) {
         this.robot = robot;
@@ -46,6 +47,16 @@ public class Elevator {
         double distanceToBottom = Math.abs(elevatorPos - RobotParams.ElevatorParams.MIN_POS);
 
         return distanceToBottom > RobotParams.ElevatorParams.POS_PID_TOLERANCE ? RobotParams.ElevatorParams.MAX_GRAVITY_COMP_POWER*Math.sin(Math.toRadians(elbowAngle)) : 0.0;
+    }
+
+    public void cyclePosition(boolean positiveCycle){
+        int posCount = RobotParams.ElevatorParams.POS_PRESETS.length;
+        if(positiveCycle){
+            elevatorPosition = elevatorPosition < posCount - 1 ? elevatorPosition + 1 : 0;
+        } else {
+            elevatorPosition = elevatorPosition == 0 ? posCount - 1 : elevatorPosition - 1;
+        }
+        elevator.setPresetPosition(elevatorPosition);
     }
 } //Class Elevator
 

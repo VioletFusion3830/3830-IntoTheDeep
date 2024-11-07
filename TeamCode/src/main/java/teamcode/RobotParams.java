@@ -331,11 +331,11 @@ public class RobotParams
             // Odometry Wheels
             odWheelXScale = odWheelYScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;
             xOdWheelSensorNames = new String[] {"xOdWheelSensor"};
-            xOdWheelIndices = new int[] {0};
+            xOdWheelIndices = new int[] {1};
             xOdWheelXOffsets = new double[] {0.0};
             xOdWheelYOffsets = new double[] {-168.0 * TrcUtil.INCHES_PER_MM};
             yOdWheelSensorNames = new String[] {"yLeftOdWheelSensor", "yRightOdWheelSensor"};
-            yOdWheelIndices = new int[] {1, 2};
+            yOdWheelIndices = new int[] {0, 3};
             yOdWheelXOffsets = new double[] {-144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
             yOdWheelYOffsets = new double[] {144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
             // Absolute Odometry
@@ -443,6 +443,7 @@ public class RobotParams
         public static final double OPEN_TIME                    = 0.2;
         public static final double CLOSE_POS                    = 0; //Need to update
         public static final double CLOSE_TIME                   = 0.2;
+        public static final double[] POS_PRESETS                 = {OPEN_POS, CLOSE_POS};
 
         public static final boolean USE_REV_V3_COLOR_SENSOR     = true;
         public static final String REV_V3_COLOR_SENSOR_NAME     = SUBSYSTEM_NAME + ".sensor";
@@ -467,7 +468,7 @@ public class RobotParams
 
         public static final double MIN_POS                      = POS_OFFSET;
         public static final double MAX_POS                      = 130; //Need to be Updated
-        public static final double[] posPresets                 = {MIN_POS,110}; //Need to be Updated
+        public static final double[] POS_PRESETS                 = {MIN_POS,110}; //Need to be Updated
         public static final double POS_PRESET_TOLERANCE         = 5.0;
 
         public static final boolean SOFTWARE_PID_ENABLED        = true;

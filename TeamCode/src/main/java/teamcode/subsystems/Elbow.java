@@ -10,7 +10,7 @@ public class Elbow
 {
     private final Robot robot;
     public final TrcMotor elbow;
-    private boolean elbowPosition;
+    private int elbowPosition;
 
     public Elbow(Robot robot)
     {
@@ -25,7 +25,7 @@ public class Elbow
                         RobotParams.ElbowParams.POS_OFFSET,
                         RobotParams.ElbowParams.ZERO_OFFSET)
                 .setPositionPresets(RobotParams.ElbowParams.POS_PRESET_TOLERANCE,
-                        RobotParams.ElbowParams.posPresets);
+                        RobotParams.ElbowParams.POS_PRESETS);
         elbow = new FtcMotorActuator(elbowParams).getMotor();
         elbow.setSoftwarePidEnabled(RobotParams.ElbowParams.SOFTWARE_PID_ENABLED);
         elbow.setPositionPidParameters(RobotParams.ElbowParams.PID_COEFFS,
@@ -52,6 +52,14 @@ public class Elbow
 
     }   //getElbowPowerComp
 
-
+    public void cyclePosition(boolean positiveCycle){
+        int posCount = RobotParams.ElbowParams.POS_PRESETS.length;
+        if(positiveCycle){
+            elbowPosition = elbowPosition < posCount - 1 ? elbowPosition + 1 : 0;
+        } else {
+            elbowPosition = elbowPosition == 0 ? posCount - 1 : elbowPosition - 1;
+        }
+        elbow.setPresetPosition(elbowPosition);
+    }
 
 }   //class Elbow

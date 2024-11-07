@@ -58,6 +58,12 @@ public class WristArm {
         return wristVerticalServo;
     }
 
+    public void setWristArmPosition(double armPos,double wristRotationalPos, double wristVerticalPos)
+    {
+        armServo.setPosition(armPos);
+
+    }
+
     private double armGetPowerComp(double currPower)
     {
         return RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER * Math.cos(Math.toRadians(armServo.getPosition()));

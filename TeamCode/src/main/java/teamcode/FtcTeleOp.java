@@ -310,7 +310,9 @@ public class FtcTeleOp extends FtcOpMode
                 }
                 break;
 
-            case B:
+            case B: //open/close claw
+                robot.claw.cycleClawPosition();
+                break;
             case X:
             case Y:
                 break;
@@ -395,27 +397,37 @@ public class FtcTeleOp extends FtcOpMode
 
         switch (button)
         {
-            case A: //
+            case A:
 
                 break;
-            case B: //
-
+            case B: //cycle elevator positions
+                if(robot.elevator != null){
+                    robot.elevator.cyclePosition(true);
+                }
                 break;
-            case X: //
-
+            case X: //cycle Elbow positions
+                if (robot.elbow != null){
+                    robot.elbow.cyclePosition(true);
+                }
                 break;
             case Y: //cycle vertical wristArm positions.. Button assignments needs to be updated
-                robot.wristArm.cycleVerticalPosition(); //cycles through sample positions (instead of specimen positions)
+                if(robot.wristArm != null){
+                    robot.wristArm.cycleVerticalPosition(); //cycles through sample positions (instead of specimen positions)
+                }
                 break;
 
             case LeftBumper: //cycle down rotator wristArm positions
                 robot.globalTracer.traceInfo(moduleName, ">>>>> OperatorAltFunc=" + pressed);
                 operatorAltFunc = pressed;
-                robot.wristArm.cycleRotatorPosition(false);
+                if (robot.wristArm != null){
+                    robot.wristArm.cycleRotatorPosition(false);
+                }
                 break;
 
             case RightBumper: //cycle up wristArm positions
-                robot.wristArm.cycleRotatorPosition(true);
+                if (robot.wristArm != null){
+                    robot.wristArm.cycleRotatorPosition(true);
+                }
                 break;
             case DpadUp:
             case DpadDown:

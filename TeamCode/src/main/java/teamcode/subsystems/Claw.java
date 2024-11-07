@@ -15,6 +15,7 @@ import trclib.subsystem.TrcServoGrabber;
 public class Claw {
     private final TrcServoGrabber clawServo; //one servo for open/close
     private final RevColorSensorV3 revColorSensorV3;
+    private boolean isOpen = true;
 
     private final ColorRange yellowSampleHue = new ColorRange(60,90);
     private final ColorRange blueSampleHue = new ColorRange(180,240);
@@ -143,6 +144,11 @@ public class Claw {
         }
     }
 
+    public void cycleClawPosition(){
+        if (isOpen) {clawServo.close();} else {clawServo.open();}
+
+        isOpen = !isOpen;
+    }
     // Helper class to manage color ranges.
     private static class ColorRange
     {
