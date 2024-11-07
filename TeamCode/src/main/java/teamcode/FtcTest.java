@@ -562,18 +562,14 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                else if (testChoices.test == Test.VISION_TEST && pressed)
+                else if (testChoices.test == Test.VISION_TEST)
                 {
-                    fpsMeterEnabled = !fpsMeterEnabled;
-                    robot.vision.setFpsMeterEnabled(fpsMeterEnabled);
-                    robot.globalTracer.traceInfo(moduleName, "fpsMeterEnabled = %s", fpsMeterEnabled);
-                }
-                else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elbow !=null) {
-                    if (pressed) {
-                        robot.elbow.setPositionPidParameters(FtcDashboard.TunePID_Secondary.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
-                        robot.elbow.presetPositionDown(moduleName, RobotParams.ElbowParams.POWER_LIMIT);
+                    if (pressed)
+                    {
+                        fpsMeterEnabled = !fpsMeterEnabled;
+                        robot.vision.setFpsMeterEnabled(fpsMeterEnabled);
+                        robot.globalTracer.traceInfo(moduleName, "fpsMeterEnabled = %s", fpsMeterEnabled);
                     }
-                    // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;
                 }
                 break;
@@ -724,7 +720,7 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-
+                break;
 
             case DpadLeft:
                 if (testChoices.test == Test.SUBSYSTEMS_TEST)
@@ -813,6 +809,7 @@ public class FtcTest extends FtcTeleOp
                 // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                 passToTeleOp = false;
                 }
+                break;
             case B:
             case X:
             case Y:
@@ -824,6 +821,7 @@ public class FtcTest extends FtcTeleOp
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;
                 }
+                break;
             case LeftBumper:
             case RightBumper:
             case DpadUp:

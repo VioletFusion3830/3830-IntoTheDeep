@@ -343,7 +343,7 @@ public class Robot
                         dashboard.displayPrintf(
                                 lineNum++, "Grabber: pos=%.3f, hasObject=%s, autoAssistActive=%s,sensorDistence=%.3f, sensorColor=%.3f",
                                 clawServo.getPosition(), clawServo.hasObject(),
-                                clawServo.isAutoAssistActive(), claw.getSensorDataColorHSV());
+                                clawServo.isAutoActive(), claw.getSensorDataColorHSV());
                     }
                 }
 
