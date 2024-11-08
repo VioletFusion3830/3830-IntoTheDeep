@@ -499,7 +499,7 @@ public class RobotParams
 
         public static final double ARM_DEGREE_SCALE                         = 360;
         public static final double POS_OFFSET                               = 0; //Need to be Updated
-        public static final double ZERO_OFFSET                              = 0; //Update needed
+        public static final double ZERO_OFFSET                              = 0.216; //Update needed
         public static final double POWER_LIMIT                              = 1.0;
 
         public static final String EXTERNAL_ENCODER_NAME                    = SUBSYSTEM_NAME + ".encoder";

@@ -158,9 +158,12 @@ public class Robot
                 if(RobotParams.Preferences.useArm && RobotParams.Preferences.useWristVertical && RobotParams.Preferences.useWristRotational){
                     wristArm = new WristArm();
                 }
-                zeroCalibrate();
-                //elevator.setPosition(100);
-                //elbow.setPosition(60);
+//                if(runMode == TrcRobot.RunMode.AUTO_MODE)
+//                {
+                    zeroCalibrate();
+                    //elevator.setPosition(100);
+                    //elbow.setPosition(60);
+//                }
             }
         }
 
