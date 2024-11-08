@@ -503,7 +503,7 @@ public class RobotParams
         public static final double POWER_LIMIT                              = 1.0;
 
         public static final String EXTERNAL_ENCODER_NAME                    = SUBSYSTEM_NAME + ".encoder";
-        public static final boolean EXTERNAL_ENCODER_INVERTED               = false;
+        public static final boolean EXTERNAL_ENCODER_INVERTED               = true;
 
         public static final double MIN_POS                                  = POS_OFFSET; //Need to be Updated
         public static final double MAX_POS                                  = 10; //Need to be Updated

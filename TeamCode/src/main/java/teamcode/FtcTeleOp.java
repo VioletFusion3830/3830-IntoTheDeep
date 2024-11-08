@@ -56,8 +56,7 @@ public class FtcTeleOp extends FtcOpMode
     private boolean clawOpen = false;
     private boolean slowDrive = false;
     private boolean sampleMode = true;
-    private boolean isSamplePickupPos = true;
-    private boolean isspecimenPickupPos = false;
+    private boolean isSamplePickupPos = true, isspecimenPickupPos = false, isWristRotatorMiddle = true;
     private Double elevatorLimit = null, elavatorPos = null, elbowPos = null;
 
     private TrcPose2D robotFieldPose = null;
@@ -294,8 +293,7 @@ public class FtcTeleOp extends FtcOpMode
     {
         robot.dashboard.displayPrintf(8, "Driver: %s=%s", button, pressed? "Pressed": "Released");
 
-        switch (button)
-        {
+        switch (button) {
             case A:
                 // Toggle between field or robot oriented driving, only applicable for holonomic drive base.
 //                if (driverAltFunc)
@@ -318,19 +316,15 @@ public class FtcTeleOp extends FtcOpMode
 //                }
 //                else
 //                {
-                    if (pressed && robot.robotDrive != null && robot.robotDrive.driveBase.supportsHolonomicDrive())
-                    {
-                        if (robot.robotDrive.driveBase.getDriveOrientation() != TrcDriveBase.DriveOrientation.FIELD)
-                        {
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> Enabling FIELD mode.");
-                            setDriveOrientation(TrcDriveBase.DriveOrientation.FIELD);
-                        }
-                        else
-                        {
-                            robot.globalTracer.traceInfo(moduleName, ">>>>> Enabling ROBOT mode.");
-                            setDriveOrientation(TrcDriveBase.DriveOrientation.ROBOT);
-                        }
+                if (pressed && robot.robotDrive != null && robot.robotDrive.driveBase.supportsHolonomicDrive()) {
+                    if (robot.robotDrive.driveBase.getDriveOrientation() != TrcDriveBase.DriveOrientation.FIELD) {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Enabling FIELD mode.");
+                        setDriveOrientation(TrcDriveBase.DriveOrientation.FIELD);
+                    } else {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Enabling ROBOT mode.");
+                        setDriveOrientation(TrcDriveBase.DriveOrientation.ROBOT);
                     }
+                }
 //                }
                 break;
 
@@ -339,24 +333,25 @@ public class FtcTeleOp extends FtcOpMode
                 driverAltFunc = pressed;
                 break;
             case X:
-                if(pressed) {
+                if (pressed) {
                     robot.arm.setPower(1);
                 }
                 break;
             case Y:
-                if(pressed && robot.wristRotational != null){
+                if (pressed && robot.wristRotational != null) {
                     robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
+                    isWristRotatorMiddle = false;
                 }
                 break;
 
             case LeftBumper:
                 // Toggle claw open/close.
-                if (pressed && robot.claw != null && !clawOpen)
-                {
-                    robot.claw.getClawServo().open();
+                if (pressed && robot.claw != null) {
+                    if (!clawOpen)
+                        robot.claw.getClawServo().open();
                     clawOpen = true;
                 }
-                else if (robot.claw != null && clawOpen)
+                else
                 {
                     robot.claw.getClawServo().close();
                     clawOpen = false;
@@ -364,8 +359,18 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case RightBumper:
-                if(robot.wristRotational != null){
-                    robot.wristRotational.presetPositionUp(null);
+                if(robot.wristRotational != null)
+                {
+                    if(!isWristRotatorMiddle)
+                    {
+                        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
+                        isWristRotatorMiddle = true;
+                    }
+                    else
+                    {
+                        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
+                        isWristRotatorMiddle = false;
+                    }
                 }
                 break;
 
