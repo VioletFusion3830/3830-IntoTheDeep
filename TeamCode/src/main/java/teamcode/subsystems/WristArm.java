@@ -2,16 +2,18 @@ package teamcode.subsystems;
 
 import ftclib.motor.FtcMotorActuator;
 import ftclib.motor.FtcServoActuator;
+import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcServo;
 
 public class WristArm {
     private final TrcMotor armServo;
-    private final TrcServo wristRotatorServo;
+    private final Robot robot;
     private final TrcServo wristVerticalServo;
 
-    public WristArm(){
+    public WristArm(Robot robot){
+        this.robot = robot;
         FtcMotorActuator.Params armParams = new FtcMotorActuator.Params()
                 .setPrimaryMotor(RobotParams.ArmParams.PRIMARY_SERVO_NAME,
                         RobotParams.ArmParams.PRIMARY_SERVO_TYPE,
@@ -29,12 +31,6 @@ public class WristArm {
                 RobotParams.ArmParams.PID_TOLERANCE);
         armServo.setPositionPidPowerComp(this::armGetPowerComp);
 
-        FtcServoActuator.Params WristRotatorParams = new FtcServoActuator.Params()
-                .setPrimaryServo(
-                        RobotParams.WristParamsRotational.PRIMARY_SERVO_ROTATOR,
-                        RobotParams.WristParamsRotational.PRIMARY_SERVO_ROTATOR_INVERTED);
-        wristRotatorServo = new FtcServoActuator(WristRotatorParams).getServo();
-
         FtcServoActuator.Params WristVerticalParams = new FtcServoActuator.Params()
                 .setPrimaryServo(
                         RobotParams.WristParamsVertical.PRIMARY_SERVO_VERTICAL,
@@ -47,53 +43,41 @@ public class WristArm {
         return armServo;
     }
 
-    public TrcServo getWristRotationalServo()
-    {
-        return wristRotatorServo;
-    }
-
     public TrcServo getWristVerticalServo()
     {
         return wristVerticalServo;
     }
 
-    public void setWristArmPosition(double armPos,double wristRotationalPos, double wristVerticalPos)
-    {
-        armServo.setPosition(armPos);
-        wristRotatorServo.setPosition(wristRotationalPos);
-        wristVerticalServo.setPosition(wristVerticalPos);
-
-    }
-
-    public void setWristVerticalArmPosition(double armPos, double wristVerticalPos)
+    public void setWristArmPosition(double armPos, double wristVerticalPos)
     {
         armServo.setPosition(armPos);
         wristVerticalServo.setPosition(wristVerticalPos);
     }
 
-    public void setWristVerticalArmSamplePickup()
+    public void setWristArmSamplePickup()
     {
-        setWristVerticalArmPosition(RobotParams.ArmParams.SAMPLE_PICKUP_POS, RobotParams.WristParamsVertical.SAMPLE_PICKUP_POS);
+        setWristArmPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS, RobotParams.WristParamsVertical.SAMPLE_PICKUP_POS);
     }
 
-    public void setWristVerticalArmSpecimenPickup()
+    public void setWristArmSpecimenPickup()
     {
-        setWristVerticalArmPosition(RobotParams.ArmParams.SPECIMEN_PICKUP_POS, RobotParams.WristParamsVertical.SPECIMEN_PICKUP_POS);
+        setWristArmPosition(RobotParams.ArmParams.PICKUP_SPECIMEN_POS, RobotParams.WristParamsVertical.SPECIMEN_PICKUP_POS);
     }
 
-    public void setWristVerticalArmSampleDrop()
+    public void setWristArmSampleDrop()
     {
-        setWristVerticalArmPosition(RobotParams.ArmParams.SAMPLE_DROP_POS, RobotParams.WristParamsVertical.SAMPLE_DROP_POS);
+        setWristArmPosition(RobotParams.ArmParams.DROP_SAMPLE_POS, RobotParams.WristParamsVertical.SAMPLE_DROP_POS);
     }
 
-    public void setWristVerticalArmSpecimenDrop()
+    public void setWristArmSpecimenDrop()
     {
-        setWristVerticalArmPosition(RobotParams.ArmParams.SPECIMEN_DROP_P0S, RobotParams.WristParamsVertical.SPECIMEN_DROP_POS);
+        setWristArmPosition(RobotParams.ArmParams.DROP_SPECIMEN_POS, RobotParams.WristParamsVertical.SPECIMEN_DROP_POS);
     }
 
     private double armGetPowerComp(double currPower)
     {
-        return RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER * Math.cos(Math.toRadians(armServo.getPosition()));
+        double elbowAngle = robot.elbow.getPosition();
+        return RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER * Math.cos(Math.toRadians(armServo.getPosition()+elbowAngle));
     }   //armGetPowerComp
 
 }

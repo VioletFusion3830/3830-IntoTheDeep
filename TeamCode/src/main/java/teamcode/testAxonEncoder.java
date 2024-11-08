@@ -9,35 +9,49 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import trclib.robotcore.TrcRobot;
+
 @TeleOp(name="Basic: Omni Linear OpMode", group="Linear OpMode")
 public class testAxonEncoder extends LinearOpMode {
 
-    CRServo servo;
+    protected Robot robot;
 
     @Override
     public void runOpMode() {
 
-        AnalogInput analogInput = hardwareMap.get(AnalogInput.class,"arm.encoder");
-        servo = hardwareMap.get(CRServo.class, "arm.primary");
+
+        robot = new Robot(TrcRobot.getRunMode());
 
         waitForStart();
 
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-            double position = analogInput.getVoltage() / analogInput.getMaxVoltage();
+
             if(gamepad1.a)
             {
-                servo.setPower(-.3);
+                robot.wristArm.setWristArmSamplePickup();
+                robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS);
+                robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
             }
-            else
+            if(gamepad1.b)
             {
-                servo.setPower(0);
+                robot.wristArm.setWristArmSpecimenPickup();
+                robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS);
+                robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS);
+            }
+            if(gamepad1.x)
+            {
+                robot.wristArm.setWristArmSampleDrop();
+                robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SAMPLE_POS);
+                robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
+            }
+            if(gamepad1.y)
+            {
+                robot.wristArm.setWristArmSpecimenDrop();
+                robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SAMPLE_POS);
+                robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SAMPLE_POS);
             }
 
-
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("position", position);
-            telemetry.update();
         }
     }}

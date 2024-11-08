@@ -347,19 +347,18 @@ public class FtcTeleOp extends FtcOpMode
             case LeftBumper:
                 // Toggle claw open/close.
                 if (pressed && robot.claw != null) {
-                    if (!clawOpen)
+                    if (!clawOpen) {
                         robot.claw.getClawServo().open();
-                    clawOpen = true;
-                }
-                else
-                {
-                    robot.claw.getClawServo().close();
-                    clawOpen = false;
+                        clawOpen = true;
+                    } else {
+                        robot.claw.getClawServo().close();
+                        clawOpen = false;
+                    }
                 }
                 break;
 
             case RightBumper:
-                if(robot.wristRotational != null)
+                if(pressed && robot.wristRotational != null)
                 {
                     if(!isWristRotatorMiddle)
                     {
@@ -368,7 +367,7 @@ public class FtcTeleOp extends FtcOpMode
                     }
                     else
                     {
-                        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
+                        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MAX_P0S);
                         isWristRotatorMiddle = false;
                     }
                 }
@@ -452,12 +451,12 @@ public class FtcTeleOp extends FtcOpMode
                     {
                         if (!isSamplePickupPos)
                         {
-                            robot.wristArm.setWristVerticalArmSampleDrop();
+                            robot.wristArm.setWristArmSpecimenDrop();
                             isSamplePickupPos = true;
                         }
                         else
                         {
-                            robot.wristArm.setWristVerticalArmSamplePickup();
+                            //robot.wristArm.setWristVerticalArmSamplePickup();
                             isSamplePickupPos = false;
                         }
                     }
@@ -465,12 +464,12 @@ public class FtcTeleOp extends FtcOpMode
                     {
                         if (!isspecimenPickupPos)
                         {
-                            robot.wristArm.setWristVerticalArmSpecimenDrop();
+                            //robot.wristArm.setWristVerticalArmSpecimenDrop();
                             isspecimenPickupPos = true;
                         }
                         else
                         {
-                            robot.wristArm.setWristVerticalArmSpecimenPickup();
+                            //robot.wristArm.setWristVerticalArmSpecimenPickup();
                             isspecimenPickupPos = false;
                         }
                     }

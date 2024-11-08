@@ -537,10 +537,10 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
+                else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.arm !=null) {
                     if (pressed) {
-                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
-                        robot.elevator.presetPositionDown(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
+                        robot.arm.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ArmParams.PID_TOLERANCE);
+                        robot.arm.presetPositionDown(moduleName, RobotParams.ArmParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;
@@ -620,8 +620,8 @@ public class FtcTest extends FtcTeleOp
                 }
                 else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
                     if (pressed) {
-                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
-                        robot.elevator.presetPositionUp(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
+                        robot.arm.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ArmParams.PID_TOLERANCE);
+                        robot.arm.presetPositionUp(moduleName, RobotParams.ArmParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;

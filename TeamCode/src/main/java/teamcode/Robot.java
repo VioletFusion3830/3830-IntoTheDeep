@@ -35,6 +35,7 @@ import teamcode.subsystems.Elbow;
 import teamcode.subsystems.Elevator;
 import teamcode.subsystems.LEDIndicator;
 import teamcode.subsystems.RobotBase;
+import teamcode.subsystems.WristRotational;
 import teamcode.vision.Vision;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcServo;
@@ -74,8 +75,8 @@ public class Robot
     public TrcServoGrabber clawServo;
     public TrcMotor elbow;
     public TrcMotor elevator;
-    public TrcServo wristVertical;
     public TrcServo wristRotational;
+    public TrcServo wristVertical;
     //Autotasks.
 
     public enum GamePieceType
@@ -130,33 +131,32 @@ public class Robot
             //
             if (RobotParams.Preferences.useSubsystems)
             {
-                if (RobotParams.Preferences.useElevator){
+                if (RobotParams.Preferences.useElevator)
+                {
                     elevator = new Elevator(this).getElevatorParams();
                 }
 
-                if (RobotParams.Preferences.useClaw){
+                if (RobotParams.Preferences.useClaw)
+                {
                     claw = new Claw();
                     clawServo = new Claw().getClawServo();
                 }
 
-                if (RobotParams.Preferences.useArm){
-                    arm = new WristArm().getArmServo();
-                }
-
-                if (RobotParams.Preferences.useElbow){
+                if (RobotParams.Preferences.useElbow)
+                {
                     elbow = new Elbow(this).getElbow();
                 }
 
-                if (RobotParams.Preferences.useWristVertical){
-                    wristVertical = new WristArm().getWristVerticalServo();
+                if (RobotParams.Preferences.useWristRotational)
+                {
+                    wristRotational = new WristRotational().getWristRotationalServo();
                 }
 
-                if (RobotParams.Preferences.useWristRotational){
-                    wristRotational = new WristArm().getWristRotationalServo();
-                }
-
-                if(RobotParams.Preferences.useArm && RobotParams.Preferences.useWristVertical && RobotParams.Preferences.useWristRotational){
-                    wristArm = new WristArm();
+                if (RobotParams.Preferences.useWristArm)
+                {
+                    wristArm = new WristArm(this);
+                    arm = wristArm.getArmServo();
+                    wristVertical = wristArm.getWristVerticalServo();
                 }
 //                if(runMode == TrcRobot.RunMode.AUTO_MODE)
 //                {

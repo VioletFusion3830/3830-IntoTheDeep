@@ -8,7 +8,7 @@ public class FtcDashboard
     @Config
     public static class TunePID
     {
-        public static TrcPidController.PidCoefficients tunePidCoeff = new TrcPidController.PidCoefficients(0.4, 0.1, 0.004, 0,5);
+        public static TrcPidController.PidCoefficients tunePidCoeff = new TrcPidController.PidCoefficients(0.0, 0, 0, 0,0);
     }
     @Config
     public static class TunePID_Secondary
