@@ -159,6 +159,7 @@ public class Robot
                     wristArm = new WristArm();
                 }
                 zeroCalibrate();
+                //elevator.setPosition(100);
                 //elbow.setPosition(60);
             }
         }
@@ -350,7 +351,7 @@ public class Robot
                 if (arm != null)
                 {
                     dashboard.displayPrintf(
-                            lineNum++, "Elevator: power=%.3f, pos=%.3f/%.3f, limitSw=%s/%s",
+                            lineNum++, "Arm: power=%.3f, pos=%.3f/%.3f, limitSw=%s/%s",
                             arm.getPower(), arm.getPosition(), arm.getPidTarget(),
                             arm.isLowerLimitSwitchActive(), arm.isUpperLimitSwitchActive());
                 }

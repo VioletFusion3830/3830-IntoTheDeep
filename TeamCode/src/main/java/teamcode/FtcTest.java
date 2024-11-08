@@ -539,7 +539,7 @@ public class FtcTest extends FtcTeleOp
                 }
                 else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
                     if (pressed) {
-                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
+                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
                         robot.elevator.presetPositionDown(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
@@ -570,6 +570,14 @@ public class FtcTest extends FtcTeleOp
                         robot.vision.setFpsMeterEnabled(fpsMeterEnabled);
                         robot.globalTracer.traceInfo(moduleName, "fpsMeterEnabled = %s", fpsMeterEnabled);
                     }
+                    passToTeleOp = false;
+                }
+                else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elbow !=null) {
+                    if (pressed) {
+                        robot.elbow.setPositionPidParameters(FtcDashboard.TunePID_Secondary.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
+                        robot.elbow.presetPositionDown(moduleName, RobotParams.ElbowParams.POWER_LIMIT);
+                    }
+                    // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;
                 }
                 break;

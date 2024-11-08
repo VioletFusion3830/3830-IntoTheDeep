@@ -165,13 +165,13 @@ public class RobotParams
         public static final boolean useBlinkinLED               = false;
         public static final boolean useGobildaLED               = false;
         // Vision
-        public static final boolean useVision                   = true;
-        public static final boolean useWebCam                   = true; // false to use Android phone camera.
+        public static final boolean useVision                   = false;
+        public static final boolean useWebCam                   = false; // false to use Android phone camera.
         public static final boolean useBuiltinCamBack           = false; // For Android Phone as Robot Controller.
-        public static final boolean tuneColorBlobVision         = true;
-        public static final boolean useLimelightVision          = true;
-        public static final boolean useCameraStreamProcessor    = true;
-        public static final boolean useAprilTagVision           = true;
+        public static final boolean tuneColorBlobVision         = false;
+        public static final boolean useLimelightVision          = false;
+        public static final boolean useCameraStreamProcessor    = false;
+        public static final boolean useAprilTagVision           = false;
         public static final boolean useColorBlobVision          = false;
         public static final boolean showVisionView              = !inCompetition;
         public static final boolean showVisionStat              = false;
@@ -180,10 +180,10 @@ public class RobotParams
         public static final boolean usePinpointOdometry         = false;
         public static final boolean useSparkfunOTOS             = false;
         // Subsystems
-        public static final boolean useSubsystems               = false;
-        public static final boolean useElevator                 = false;
-        public static final boolean useElbow                    = false;
-        public static final boolean useArm                      = false;
+        public static final boolean useSubsystems               = true;
+        public static final boolean useElevator                 = true;
+        public static final boolean useElbow                    = true;
+        public static final boolean useArm                      = true;
         public static final boolean useClaw                     = false;
         public static final boolean useWristVertical            = false;
         public static final boolean useWristRotational          = false;
@@ -389,7 +389,7 @@ public class RobotParams
             ppdFollowingDistance = 6.0;
             velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / profiledMaxVelocity, 0.0);
             // Vision
-            webCam1 = new FrontCamParams();
+            webCam1 = null; //new FrontCamParams()
             webCam2 = null; //new BackCamParams()
             limelight = null; //new LimelightParams()
             // Miscellaneous
@@ -408,29 +408,29 @@ public class RobotParams
         public static final String FOLLOWER_MOTOR_NAME                      = SUBSYSTEM_NAME + ".follower";
         public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
         public static final MotorType FOLLOWER_MOTOR_TYPE                   = MotorType.DcMotor;
-        public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
-        public static final boolean FOLLOWER_MOTOR_INVERTED                 = false;
+        public static final boolean PRIMARY_MOTOR_INVERTED                  = true;
+        public static final boolean FOLLOWER_MOTOR_INVERTED                 = true;
 
-        public static final double INCHES_PER_COUNT                         = 1; //Need to to measure sliders length divide by encoder counts
+        public static final double INCHES_PER_COUNT                         = 0.015810277;
         public static final double POS_OFFSET                               = 0;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
 
         public static final double MIN_POS                                  = POS_OFFSET;
-        public static final double MAX_POS                                  = 48; //Need to be Updated
-        public static final double PICKUP_SAMPLE_POS                        = 0; //Need to be Updated
-        public static final double DROP_SAMPLE_POS                          = 0; //Need to be Updated
-        public static final double PICKUP_SPECIMEN_POS                      = 0; //Need to be Updated
-        public static final double DROP_SPECIMEN_POS                        = 0; //Need to be Updated
+        public static final double MAX_POS                                  = 42;
+        public static final double PICKUP_SAMPLE_POS                        = 0;
+        public static final double DROP_SAMPLE_POS                          = 40;
+        public static final double PICKUP_SPECIMEN_POS                      = 0;
+        public static final double DROP_SPECIMEN_POS                        = 8;
         public static final double MAX_SAFE_ADJUSTMENT          = 0; //TBD
-        public static final double[] POS_PRESETS                            = {15, 30}; //Need to be Updated
+        public static final double[] POS_PRESETS                            = {MIN_POS,DROP_SPECIMEN_POS,DROP_SAMPLE_POS};
         public static final double POS_PRESET_TOLERANCE                     = 1.0;
 
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
-                new TrcPidController.PidCoefficients(1.0,0,0,0,0); //Need to tune
+                new TrcPidController.PidCoefficients(0,0,0,0,0); //Need to tune
         public static final double POS_PID_TOLERANCE                        = 0.3;
-        public static final double MAX_GRAVITY_COMP_POWER                   = 0.0; //Need to be Updated
+        public static final double MAX_GRAVITY_COMP_POWER                   = 0.1; //Need to be Updated
         public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE                          = 0.1;
         public static final double STALL_TIMEOUT                            = 0.1;
@@ -449,7 +449,7 @@ public class RobotParams
         public static final double CLOSE_POS                    = 0; //Need to update
         public static final double CLOSE_TIME                   = 0.2;
 
-        public static final boolean USE_REV_V3_COLOR_SENSOR     = true;
+        public static final boolean USE_REV_V3_COLOR_SENSOR     = false;
         public static final String REV_V3_COLOR_SENSOR_NAME     = SUBSYSTEM_NAME + ".sensor";
         public static final double SENSOR_TRIGGER_THRESHOLD     = 2.0; //cm
         public static final boolean ANALOG_TRIGGER_INVERTED     = false;
@@ -462,28 +462,28 @@ public class RobotParams
 
         public static final String PRIMARY_MOTOR_NAME           = SUBSYSTEM_NAME + ".primary";
         public static final MotorType PRIMARY_MOTOR_TYPE        = MotorType.DcMotor;
-        public static final boolean PRIMARY_MOTOR_INVERTED      = true;
+        public static final boolean PRIMARY_MOTOR_INVERTED      = false;
 
-        public static final double DEG_PER_COUNT                = 1; //Need to to measure elbow angle divide by encoder counts
+        public static final double DEG_PER_COUNT                = 0.10434783; //Need to to measure elbow angle divide by encoder counts
         public static final double POS_OFFSET                   = 0;
         public static final double ZERO_OFFSET                  = 0.0;
         public static final double POWER_LIMIT                  = 1.0;
         public static final double ZERO_CAL_POWER               = -0.25;
 
         public static final double MIN_POS                      = POS_OFFSET;
-        public static final double MAX_POS                      = 130; //Need to be Updated
+        public static final double MAX_POS                      = 90; //Need to be Updated
         public static final double PICKUP_SAMPLE_POS            = 0; //Need to be Updated
-        public static final double DROP_SAMPLE_POS              = 0; //Need to be Updated
-        public static final double PICKUP_SPECIMEN_POS          = 0; //Need to be Updated
-        public static final double DROP_SPECIMEN_POS            = 0; //Need to be Updated
-        public static final double[] POS_PRESETS                = {30,100}; //Need to be Updated
+        public static final double DROP_SAMPLE_POS              = 90; //Need to be Updated
+        public static final double PICKUP_SPECIMEN_POS          = 38; //Need to be Updated
+        public static final double DROP_SPECIMEN_POS            = 60; //Need to be Updated
+        public static final double[] POS_PRESETS                = {MIN_POS,DROP_SPECIMEN_POS, DROP_SAMPLE_POS}; //Need to be Updated
         public static final double POS_PRESET_TOLERANCE         = 5.0;
 
         public static final boolean SOFTWARE_PID_ENABLED        = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS =
-                new TrcPidController.PidCoefficients(0.018, 0.1, 0.001, 0.0, 2.0); //Need to tune
-        public static final double PID_TOLERANCE                = 0.3;
-        public static final double GRAVITY_COMP_MAX_POWER       = 0; //Need to be Updated
+                new TrcPidController.PidCoefficients(0.045, 0.2, 0.005, 0.0, 5.0); //Need to tune
+        public static final double PID_TOLERANCE                = 0.5;
+        public static final double GRAVITY_COMP_MAX_POWER       = 0.3;//Need to be Updated
         public static final double STALL_MIN_POWER              = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE              = 0.1;
         public static final double STALL_TIMEOUT                = 0.1;
@@ -497,7 +497,7 @@ public class RobotParams
         public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = false;
 
-        public static final double DEGREES_PER_COUNT                        = 360;
+        public static final double DEGREES_PER_COUNT                        = 1;
         public static final double POS_OFFSET                               = 0; //Need to be Updated
         public static final double POWER_LIMIT                              = 1.0;
 

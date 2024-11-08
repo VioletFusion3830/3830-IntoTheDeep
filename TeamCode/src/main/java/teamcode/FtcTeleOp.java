@@ -220,23 +220,20 @@ public class FtcTeleOp extends FtcOpMode
             // Other subsystems.
             //
             if (RobotParams.Preferences.useSubsystems) {
-
-                elbowPos = robot.elbow.getPosition();
-                elavatorPos = robot.elevator != null? robot.elevator.getPosition(): null;
-                elevatorLimit = RobotParams.ElevatorParams.MAX_POS - Math.max(Math.cos(Math.toRadians(elbowPos)) * RobotParams.ElevatorParams.MAX_SAFE_ADJUSTMENT, 0);
-                //need to change angle to start
-                if(elbowPos < 60 && elavatorPos != null && elavatorPos > elevatorLimit)
-                {
-                    robot.elevator.setPosition(elevatorLimit);
-                }
-
-                if (robot.elbow != null) {
+                if(robot.elbow != null && robot.elevator != null) {
+                    elbowPos = robot.elbow.getPosition();
+                    elavatorPos = robot.elevator != null ? robot.elevator.getPosition() : null;
+//                    elevatorLimit = RobotParams.ElevatorParams.MAX_POS - Math.max(Math.cos(Math.toRadians(elbowPos)) * RobotParams.ElevatorParams.MAX_SAFE_ADJUSTMENT, 0);
+//                    //need to change angle to start
+//                    if (elbowPos < 60 && elavatorPos != null && elavatorPos > elevatorLimit) {
+//                        robot.elevator.setPosition(elevatorLimit);
+//                    }
                     double elbowPower = operatorGamepad.getRightStickY(true) * RobotParams.ElbowParams.POWER_LIMIT;
                     if (elbowPower != elbowPrevPower) {
                         if (operatorAltFunc) {
-                            robot.elevator.setPower(elbowPower);
+                            robot.elbow.setPower(elbowPower);
                         } else {
-                            robot.elbow.setPidPower(elbowPower, RobotParams.ElbowParams.MIN_POS, RobotParams.ElbowParams.MAX_POS, true);
+                                robot.elbow.setPidPower(elbowPower, RobotParams.ElbowParams.MIN_POS, RobotParams.ElbowParams.MAX_POS, true);
                         }
                     }
                     elbowPrevPower = elbowPower;
@@ -342,6 +339,9 @@ public class FtcTeleOp extends FtcOpMode
                 driverAltFunc = pressed;
                 break;
             case X:
+                if(pressed) {
+                    robot.arm.setPower(1);
+                }
                 break;
             case Y:
                 if(pressed && robot.wristRotational != null){

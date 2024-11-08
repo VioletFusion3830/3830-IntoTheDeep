@@ -50,7 +50,6 @@ import ftclib.vision.FtcVisionAprilTag;
 import ftclib.vision.FtcVisionEocvColorBlob;
 import teamcode.Robot;
 import teamcode.RobotParams;
-import teamcode.subsystems.BlinkinLEDs;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.timer.TrcTimer;
@@ -154,8 +153,8 @@ public class Vision
             }
 
             tracer.traceInfo(moduleName, "Starting RawEocvColorBlobVision...");
-            rawColorBlobPipeline = new FtcRawEocvColorBlobPipeline(
-                    "rawColorBlobPipeline", colorConversion, redSampleColorThresholds, sampleFilterContourParams, true);
+//            rawColorBlobPipeline = new FtcRawEocvColorBlobPipeline(
+//                    "rawColorBlobPipeline", colorConversion, redSampleColorThresholds, sampleFilterContourParams, true);
             // By default, display original Mat.
             rawColorBlobPipeline.setVideoOutput(0);
             rawColorBlobPipeline.setAnnotateEnabled(true);
@@ -201,26 +200,26 @@ public class Vision
             {
                 tracer.traceInfo(moduleName, "Starting SampleVision...");
 
-                redSampleVision = new FtcVisionEocvColorBlob(
-                        BlinkinLEDs.RED_SAMPLE, colorConversion, redSampleColorThresholds, sampleFilterContourParams,
-                        true, robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
-                redSampleProcessor = redSampleVision.getVisionProcessor();
-                visionProcessorsList.add(redSampleProcessor);
-                redSampleProcessor.setAnnotationAttributes(Color.GREEN,8f,Color.RED,20f);
+//                redSampleVision = new FtcVisionEocvColorBlob(
+//                        BlinkinLEDs.RED_SAMPLE, colorConversion, redSampleColorThresholds, sampleFilterContourParams,
+//                        true, robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
+//                redSampleProcessor = redSampleVision.getVisionProcessor();
+//                visionProcessorsList.add(redSampleProcessor);
+//                redSampleProcessor.setAnnotationAttributes(Color.GREEN,8f,Color.RED,20f);
 
-                blueSampleVision = new FtcVisionEocvColorBlob(
-                        BlinkinLEDs.BLUE_SAMPLE, colorConversion, blueSampleColorThresholds, sampleFilterContourParams,
-                        true, robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
-                blueSampleProcessor = blueSampleVision.getVisionProcessor();
-                visionProcessorsList.add(blueSampleProcessor);
-                blueSampleProcessor.setAnnotationAttributes(Color.GREEN,8f,Color.RED,20f);
+//                blueSampleVision = new FtcVisionEocvColorBlob(
+//                        BlinkinLEDs.BLUE_SAMPLE, colorConversion, blueSampleColorThresholds, sampleFilterContourParams,
+//                        true, robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
+//                blueSampleProcessor = blueSampleVision.getVisionProcessor();
+//                visionProcessorsList.add(blueSampleProcessor);
+//                blueSampleProcessor.setAnnotationAttributes(Color.GREEN,8f,Color.RED,20f);
 
-                yellowSampleVision = new FtcVisionEocvColorBlob(
-                        BlinkinLEDs.YELLOW_SAMPLE, colorConversion, yellowSampleColorThresholds, sampleFilterContourParams,
-                        true, robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
-                yellowSampleProcessor = yellowSampleVision.getVisionProcessor();
-                visionProcessorsList.add(yellowSampleProcessor);
-                yellowSampleProcessor.setAnnotationAttributes(Color.GREEN,8f,Color.RED,20f);
+//                yellowSampleVision = new FtcVisionEocvColorBlob(
+//                        BlinkinLEDs.YELLOW_SAMPLE, colorConversion, yellowSampleColorThresholds, sampleFilterContourParams,
+//                        true, robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
+//                yellowSampleProcessor = yellowSampleVision.getVisionProcessor();
+//                visionProcessorsList.add(yellowSampleProcessor);
+//                yellowSampleProcessor.setAnnotationAttributes(Color.GREEN,8f,Color.RED,20f);
             }
 
             if (!visionProcessorsList.isEmpty())
@@ -462,10 +461,10 @@ public class Vision
             }
         }
 
-        if (objectName != null && robot.blinkin != null)
-        {
-            robot.blinkin.setDetectedPattern(objectName);
-        }
+//        if (objectName != null && robot.blinkin != null)
+//        {
+//            robot.blinkin.setDetectedPattern(objectName);
+//        }
 
         if (lineNum != -1)
         {
@@ -563,17 +562,17 @@ public class Vision
                     aprilTagInfo.detectedObj.getRotatedRectVertices());
         }
 
-        if (aprilTagInfo != null && robot.blinkin != null)
-        {
-            robot.blinkin.setDetectedPattern(BlinkinLEDs.APRIL_TAG);
-        }
+//        if (aprilTagInfo != null && robot.blinkin != null)
+//        {
+//            robot.blinkin.setDetectedPattern(BlinkinLEDs.APRIL_TAG);
+//        }
 
-        if (lineNum != -1)
-        {
-            robot.dashboard.displayPrintf(
-                    lineNum, "%s: %s", BlinkinLEDs.APRIL_TAG, aprilTagInfo != null? aprilTagInfo : "Not found.");
-            tracer.traceInfo(BlinkinLEDs.APRIL_TAG, "aprilTagInfo=" + aprilTagInfo);
-        }
+//        if (lineNum != -1)
+//        {
+//            robot.dashboard.displayPrintf(
+//                    lineNum, "%s: %s", BlinkinLEDs.APRIL_TAG, aprilTagInfo != null? aprilTagInfo : "Not found.");
+//            tracer.traceInfo(BlinkinLEDs.APRIL_TAG, "aprilTagInfo=" + aprilTagInfo);
+//        }
 
         return aprilTagInfo;
     }   //getDetectedAprilTag
@@ -738,19 +737,19 @@ public class Vision
             case RedSample:
                 sampleInfo = redSampleVision != null? redSampleVision.getBestDetectedTargetInfo(
                         null, this::compareDistance, 0.0, 0.0): null;
-                sampleName = BlinkinLEDs.RED_SAMPLE;
+//                sampleName = BlinkinLEDs.RED_SAMPLE;
                 break;
 
             case BlueSample:
                 sampleInfo = blueSampleVision != null? blueSampleVision.getBestDetectedTargetInfo(
                         null, this::compareDistance, 0.0, 0.0): null;
-                sampleName = BlinkinLEDs.BLUE_SAMPLE;
+//                sampleName = BlinkinLEDs.BLUE_SAMPLE;
                 break;
 
             case YellowSample:
                 sampleInfo = yellowSampleVision != null? yellowSampleVision.getBestDetectedTargetInfo(
                         null, this::compareDistance, 0.0, 0.0): null;
-                sampleName = BlinkinLEDs.YELLOW_SAMPLE;
+//                sampleName = BlinkinLEDs.YELLOW_SAMPLE;
                 break;
 
             case RedAllianceSamples:
@@ -804,10 +803,10 @@ public class Vision
                     sampleInfo.detectedObj.label, sampleInfo.detectedObj.getRotatedRectVertices());
         }
 
-        if (sampleInfo != null && robot.blinkin != null)
-        {
-            robot.blinkin.setDetectedPattern(sampleName);
-        }
+//        if (sampleInfo != null && robot.blinkin != null)
+//        {
+//            robot.blinkin.setDetectedPattern(sampleName);
+//        }
 
         if (lineNum != -1)
         {
