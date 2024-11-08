@@ -16,8 +16,8 @@ public class WristArm {
                 .setPrimaryMotor(RobotParams.ArmParams.PRIMARY_SERVO_NAME,
                         RobotParams.ArmParams.PRIMARY_SERVO_TYPE,
                         RobotParams.ArmParams.PRIMARY_SERVO_INVERTED)
-                .setPositionScaleAndOffset(RobotParams.ArmParams.DEGREES_PER_COUNT,
-                        RobotParams.ArmParams.POS_OFFSET)
+                .setPositionScaleAndOffset(RobotParams.ArmParams.ARM_DEGREE_SCALE,
+                        RobotParams.ArmParams.POS_OFFSET,RobotParams.ArmParams.ZERO_OFFSET)
                 .setExternalEncoder(RobotParams.ArmParams.EXTERNAL_ENCODER_NAME,
                         RobotParams.ArmParams.EXTERNAL_ENCODER_INVERTED)
                 .setPositionPresets(RobotParams.ArmParams.POS_PRESET_TOLERANCE,

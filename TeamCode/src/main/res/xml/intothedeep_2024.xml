@@ -14,7 +14,7 @@
             <RevColorSensorV3 name="grabber.sensor" port="0" bus="1" />
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
         </LynxModule>
-        <LynxModule name="Expansion Hub 3" port="2">
+        <LynxModule name="Expansion Hub 2" port="2">
             <goBILDA5202SeriesMotor name="elevator.primary" port="0"/>
             <goBILDA5202SeriesMotor name="elbow.primary" port="1"/>
             <goBILDA5202SeriesMotor name="elevator.follower" port="2" />

@@ -176,7 +176,7 @@ public class RobotParams
         public static final boolean showVisionView              = !inCompetition;
         public static final boolean showVisionStat              = false;
         // Drive Base
-        public static final boolean useDriveBase                = false;
+        public static final boolean useDriveBase                = true;
         public static final boolean usePinpointOdometry         = false;
         public static final boolean useSparkfunOTOS             = false;
         // Subsystems
@@ -326,15 +326,15 @@ public class RobotParams
             // Drive Motors
             driveMotorType = MotorType.DcMotor;
             driveMotorNames = new String[] {"lfDriveMotor", "rfDriveMotor","lbDriveMotor", "rbDriveMotor"};
-            driveMotorInverted = new boolean[] {false, false, false, false};
+            driveMotorInverted = new boolean[] {true, false, true, false};
             odometryType = TrcDriveBase.OdometryType.OdometryWheels;
             // Odometry Wheels
             odWheelXScale = odWheelYScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;
-            xOdWheelSensorNames = new String[] {"xOdWheelSensor"};
+            xOdWheelSensorNames = null;
             xOdWheelIndices = new int[] {1};
             xOdWheelXOffsets = new double[] {0.0};
             xOdWheelYOffsets = new double[] {-168.0 * TrcUtil.INCHES_PER_MM};
-            yOdWheelSensorNames = new String[] {"yLeftOdWheelSensor", "yRightOdWheelSensor"};
+            yOdWheelSensorNames = null;
             yOdWheelIndices = new int[] {0, 3};
             yOdWheelXOffsets = new double[] {-144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
             yOdWheelYOffsets = new double[] {144.0 * TrcUtil.INCHES_PER_MM, -12.0 * TrcUtil.INCHES_PER_MM};
@@ -428,7 +428,7 @@ public class RobotParams
 
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
-                new TrcPidController.PidCoefficients(0,0,0,0,0); //Need to tune
+                new TrcPidController.PidCoefficients(0.4,0.1, 0.004, 0,5); //Need to tune
         public static final double POS_PID_TOLERANCE                        = 0.3;
         public static final double MAX_GRAVITY_COMP_POWER                   = 0.1; //Need to be Updated
         public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
@@ -497,8 +497,9 @@ public class RobotParams
         public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = false;
 
-        public static final double DEGREES_PER_COUNT                        = 1;
+        public static final double ARM_DEGREE_SCALE                         = 360;
         public static final double POS_OFFSET                               = 0; //Need to be Updated
+        public static final double ZERO_OFFSET                              = 0; //Update needed
         public static final double POWER_LIMIT                              = 1.0;
 
         public static final String EXTERNAL_ENCODER_NAME                    = SUBSYSTEM_NAME + ".encoder";
@@ -509,7 +510,7 @@ public class RobotParams
         public static final double[] POS_PRESETS                            = {50, 250}; //Need to be Updated
         public static final double POS_PRESET_TOLERANCE                     = 1;
 
-        public static final boolean SOFTWARE_PID_ENABLED                        = true;
+        public static final boolean SOFTWARE_PID_ENABLED                    = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
                 new TrcPidController.PidCoefficients(1.0,0,0,0,0); //Need to tune
         public static final double PID_TOLERANCE                            = 0.3;
