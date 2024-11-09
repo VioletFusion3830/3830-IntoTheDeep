@@ -431,52 +431,44 @@ public class FtcTeleOp extends FtcOpMode
         switch (button)
         {
             case A:
-                if(pressed)
-                {
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> SampleMode=" + sampleMode);
-                    sampleMode = !sampleMode;
-                }
                 break;
             case B:
                 break;
             case X:
+                if(robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                {
+                    //Set all subsystems to specimen pickup pos
+                    robot.wristArm.setWristArmSpecimenPickup();
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS);
+                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS);
+                }
                 break;
             case Y:
-                break;
-
-            case LeftBumper:
-                if (pressed && robot.wristArm != null)
+                if(robot.elbow != null && robot.elevator != null && robot.wristArm != null)
                 {
-                    if(sampleMode)
-                    {
-                        if (!isSamplePickupPos)
-                        {
-                            robot.wristArm.setWristArmSpecimenDrop();
-                            isSamplePickupPos = true;
-                        }
-                        else
-                        {
-                            //robot.wristArm.setWristVerticalArmSamplePickup();
-                            isSamplePickupPos = false;
-                        }
-                    }
-                    else
-                    {
-                        if (!isspecimenPickupPos)
-                        {
-                            //robot.wristArm.setWristVerticalArmSpecimenDrop();
-                            isspecimenPickupPos = true;
-                        }
-                        else
-                        {
-                            //robot.wristArm.setWristVerticalArmSpecimenPickup();
-                            isspecimenPickupPos = false;
-                        }
-                    }
+                    //Set all subsystems to specimen drop pos
+                    robot.wristArm.setWristArmSpecimenDrop();
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SPECIMEN_POS);
+                    robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SPECIMEN_POS);
                 }
                 break;
 
+            case LeftBumper:
+                if(robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                {
+                    //Set all subsystems sample pickup pos
+                    robot.wristArm.setWristArmSamplePickup();
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS);
+                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
+                }
             case RightBumper:
+                if(robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                {
+                    //Set all subsystems to high basket pos
+                    robot.wristArm.setWristArmSampleDrop();
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SAMPLE_POS);
+                    robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SAMPLE_POS);
+                }
             case DpadUp:
             case DpadDown:
             case DpadLeft:

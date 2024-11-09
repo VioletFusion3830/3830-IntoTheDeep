@@ -44,13 +44,13 @@ public class testAxonEncoder extends LinearOpMode {
             {
                 robot.wristArm.setWristArmSampleDrop();
                 robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SAMPLE_POS);
-                robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
+                robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SAMPLE_POS);
             }
             if(gamepad1.y)
             {
                 robot.wristArm.setWristArmSpecimenDrop();
-                robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SAMPLE_POS);
-                robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SAMPLE_POS);
+                robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SPECIMEN_POS);
+                robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SPECIMEN_POS);
             }
 
         }
