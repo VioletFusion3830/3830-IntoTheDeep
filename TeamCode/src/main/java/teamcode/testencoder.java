@@ -13,12 +13,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class testencoder extends LinearOpMode {
 
     CRServo servo;
+    DcMotor motor;
 
     @Override
     public void runOpMode() {
 
         AnalogInput analogInput = hardwareMap.get(AnalogInput.class,"arm.encoder");
         servo = hardwareMap.get(CRServo.class, "arm.primary");
+        motor = hardwareMap.get(DcMotor.class,"elevator.primary");
 
         waitForStart();
 
@@ -29,11 +31,14 @@ public class testencoder extends LinearOpMode {
             if(gamepad1.a)
             {
                 servo.setPower(-.3);
+                motor.setPower(.1);
             }
             else
             {
                 servo.setPower(0);
+                motor.setPower(0);
             }
+
 
 
             // Show the elapsed game time and wheel power.

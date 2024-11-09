@@ -158,7 +158,7 @@ public class Robot
                     arm = wristArm.getArmServo();
                     wristVertical = wristArm.getWristVerticalServo();
                 }
-//                if(runMode == TrcRobot.RunMode.AUTO_MODE)
+//                if(runMode != TrcRobot.RunMode.TELEOP_MODE)
 //                {
                     zeroCalibrate();
                     //elevator.setPosition(100);

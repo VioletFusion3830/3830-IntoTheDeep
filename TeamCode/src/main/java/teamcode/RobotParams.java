@@ -182,7 +182,7 @@ public class RobotParams
         // Subsystems
         public static final boolean useSubsystems               = true;
         public static final boolean useElevator                 = true;
-        public static final boolean useElbow                    = true;
+        public static final boolean useElbow                    = false;
         public static final boolean useClaw                     = true;
         public static final boolean useWristRotational          = true;
         public static final boolean useWristArm                 = true;
@@ -422,7 +422,7 @@ public class RobotParams
         public static final double PICKUP_SPECIMEN_POS                      = 0;
         public static final double DROP_SPECIMEN_POS                        = 8;
         public static final double MAX_SAFE_ADJUSTMENT                      = 0; //TBD
-        public static final double[] POS_PRESETS                            = {8,34,40};
+        public static final double[] POS_PRESETS                            = {8,34,40}; //8,34,40
         public static final double POS_PRESET_TOLERANCE                     = 1.0;
 
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
@@ -463,7 +463,7 @@ public class RobotParams
         public static final TrcPidController.PidCoefficients PID_COEFFS =
                 new TrcPidController.PidCoefficients(0.045, 0.2, 0.005, 0.0, 5.0); //Need to tune
         public static final double PID_TOLERANCE                = 0.5;
-        public static final double GRAVITY_COMP_MAX_POWER       = 0.3;//Need to be Updated
+        public static final double GRAVITY_COMP_MAX_POWER       = 0.4;//Need to be Updated
         public static final double STALL_MIN_POWER              = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE              = 0.1;
         public static final double STALL_TIMEOUT                = 0.1;
@@ -477,22 +477,22 @@ public class RobotParams
         public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = true;
 
-        public static final double ARM_DEGREE_SCALE                         = 360.0 * 40.0 / 48.0;
-        public static final double POS_OFFSET                               = -29;
-        public static final double ZERO_OFFSET                              = 0.45;
+        public static final double ARM_DEGREE_SCALE                         = 1;
+        public static final double POS_OFFSET                               = 0;
+        public static final double ZERO_OFFSET                              = 0;
         public static final double POWER_LIMIT                              = 1.0;
 
         public static final String EXTERNAL_ENCODER_NAME                    = SUBSYSTEM_NAME + ".encoder";
         public static final boolean EXTERNAL_ENCODER_INVERTED               = false;
 
-        public static final double MIN_POS                                  = POS_OFFSET;
-        public static final double MAX_POS                                  = 116;
+        public static final double MIN_POS                                  = .250;
+        public static final double MAX_POS                                  = .800;
         public static final double PICKUP_SAMPLE_POS                        = -4;
         public static final double SAMPLE_READY_POS                         = 5;
         public static final double DROP_SAMPLE_POS                          = 0; //TBD
         public static final double PICKUP_SPECIMEN_POS                      = 0; //TBD
         public static final double DROP_SPECIMEN_POS                        = 0; //TBD
-        public static final double[] POS_PRESETS                            = {5, 100};
+        public static final double[] POS_PRESETS                            = {.4, .6,.8};
         public static final double POS_PRESET_TOLERANCE                     = 1;
 
         public static final boolean SOFTWARE_PID_ENABLED                    = true;

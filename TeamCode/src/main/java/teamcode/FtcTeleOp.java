@@ -53,10 +53,10 @@ public class FtcTeleOp extends FtcOpMode
     private boolean relocalizing = false;
     private double elbowPrevPower = 0.0;
     private double elevatorPrevPower = 0.0;
-    private boolean clawOpen = false;
+    private boolean clawOpen = true;
     private boolean slowDrive = false;
     private boolean sampleMode = true;
-    private boolean isSamplePickupPos = true, isspecimenPickupPos = false, isWristRotatorMiddle = true;
+    private boolean isSamplePickupPos = true, isspecimenPickupPos = false, isWristRotatorMiddle = false;
     private Double elevatorLimit = null, elavatorPos = null, elbowPos = null;
 
     private TrcPose2D robotFieldPose = null;
@@ -435,7 +435,7 @@ public class FtcTeleOp extends FtcOpMode
             case B:
                 break;
             case X:
-                if(robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
                 {
                     //Set all subsystems to specimen pickup pos
                     robot.wristArm.setWristArmSpecimenPickup();
@@ -444,7 +444,7 @@ public class FtcTeleOp extends FtcOpMode
                 }
                 break;
             case Y:
-                if(robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
                 {
                     //Set all subsystems to specimen drop pos
                     robot.wristArm.setWristArmSpecimenDrop();
@@ -454,7 +454,7 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case LeftBumper:
-                if(robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
                 {
                     //Set all subsystems sample pickup pos
                     robot.wristArm.setWristArmSamplePickup();
@@ -462,7 +462,7 @@ public class FtcTeleOp extends FtcOpMode
                     robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
                 }
             case RightBumper:
-                if(robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
                 {
                     //Set all subsystems to high basket pos
                     robot.wristArm.setWristArmSampleDrop();
@@ -473,8 +473,11 @@ public class FtcTeleOp extends FtcOpMode
             case DpadDown:
             case DpadLeft:
             case DpadRight:
-                robot.globalTracer.traceInfo(moduleName, ">>>>> OperatorAltFunc=" + pressed);
-                operatorAltFunc = pressed;
+                if(pressed)
+                {
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> OperatorAltFunc=" + pressed);
+                    operatorAltFunc = pressed;
+                }
                 break;
 
             case Back:
