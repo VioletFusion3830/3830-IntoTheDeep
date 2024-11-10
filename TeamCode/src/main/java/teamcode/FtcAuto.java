@@ -80,7 +80,8 @@ public class FtcAuto extends FtcOpMode
         NO_PARK
     }   //enum ParkOption
 
-
+    public boolean hasRunTemp = false;
+    public int numIterations = 0;
     /**
      * This class stores the autonomous menu choices.
      */
@@ -149,6 +150,10 @@ public class FtcAuto extends FtcOpMode
                 Locale.US, "%s%02d_Auto", Robot.matchInfo.matchType, Robot.matchInfo.matchNumber);
             TrcDbgTrace.openTraceLog(RobotParams.Robot.LOG_FOLDER_PATH, filePrefix);
         }
+
+        robot.dashboard.displayPrintf(5,"elbow" + robot.elbow.getPosition());
+
+
         //
         // Create and run choice menus.
         //
@@ -193,7 +198,6 @@ public class FtcAuto extends FtcOpMode
         }
         Robot.sampleType = autoChoices.alliance == Alliance.RED_ALLIANCE?
                 Vision.SampleType.RedAllianceSamples: Vision.SampleType.BlueAllianceSamples;
-        robot.zeroCalibrate();
     }   //robotInit
 
     //
@@ -207,6 +211,12 @@ public class FtcAuto extends FtcOpMode
     @Override
     public void initPeriodic()
     {
+//        if(!hasRunTemp){
+            robot.elbow.setPosition(60,true,.0);
+            robot.dashboard.displayPrintf(7,"elbow" + robot.elbow.getPower()+ "," + robot.elbow.getPidTarget() + "/" + robot.elbow.getPosition());
+//        }
+//        hasRunTemp = true;
+//        numIterations++;
     }   //initPeriodic
 
     /**
@@ -242,6 +252,12 @@ public class FtcAuto extends FtcOpMode
             robot.battery.setEnabled(true);
         }
 
+        robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
+        robot.arm.setPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS);
+        robot.wristVertical.setPosition(RobotParams.WristParamsVertical.SAMPLE_PICKUP_POS);
+        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
+
+        robot.clawServo.open();
         if (autoChoices.autoStrategy == AutoStrategy.PID_DRIVE && autoCommand != null)
         {
             ((CmdPidDrive) autoCommand).start(

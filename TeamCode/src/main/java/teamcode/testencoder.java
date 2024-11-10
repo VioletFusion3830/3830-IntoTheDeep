@@ -30,13 +30,11 @@ public class testencoder extends LinearOpMode {
             double position = analogInput.getVoltage() / analogInput.getMaxVoltage();
             if(gamepad1.a)
             {
-                servo.setPower(-.3);
-                motor.setPower(.1);
+                servo.setPower(.5);
             }
             else
             {
                 servo.setPower(0);
-                motor.setPower(0);
             }
 
 

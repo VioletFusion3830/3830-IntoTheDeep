@@ -56,7 +56,7 @@ public class WristArm {
 
     public void setWristArmSamplePickup()
     {
-        setWristArmPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS, RobotParams.WristParamsVertical.SAMPLE_PICKUP_POS);
+        setWristArmPosition(.422, RobotParams.WristParamsVertical.SAMPLE_PICKUP_POS);
     }
 
     public void setWristArmSpecimenPickup()
@@ -66,7 +66,7 @@ public class WristArm {
 
     public void setWristArmSampleDrop()
     {
-        setWristArmPosition(RobotParams.ArmParams.DROP_SAMPLE_POS, RobotParams.WristParamsVertical.SAMPLE_DROP_POS);
+        setWristArmPosition(.32, RobotParams.WristParamsVertical.SAMPLE_DROP_POS);
     }
 
     public void setWristArmSpecimenDrop()
@@ -77,7 +77,7 @@ public class WristArm {
     private double armGetPowerComp(double currPower)
     {
         double elbowAngle = robot.elbow.getPosition();
-        return RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER * Math.cos(Math.toRadians(armServo.getPosition()+elbowAngle));
+        return RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER * Math.cos(armServo.getPosition()+(elbowAngle/360));
     }   //armGetPowerComp
 
 }

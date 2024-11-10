@@ -25,6 +25,7 @@ package teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import java.util.Locale;
+import java.util.Set;
 
 import ftclib.drivebase.FtcSwerveDrive;
 import ftclib.driverio.FtcGamepad;
@@ -97,8 +98,13 @@ public class FtcTeleOp extends FtcOpMode
         operatorGamepad = new FtcGamepad("OperatorGamepad", gamepad2);
         operatorGamepad.setButtonEventHandler(this::operatorButtonEvent);
         driverGamepad.setLeftStickInverted(false, true);
-        operatorGamepad.setRightStickInverted(false, true);
+        operatorGamepad.setRightStickInverted(false, false);
+        operatorGamepad.setLeftStickInverted(false,true);
         setDriveOrientation(RobotParams.Robot.DRIVE_ORIENTATION);
+
+//        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+
+
     }   //robotInit
 
     //
@@ -316,26 +322,28 @@ public class FtcTeleOp extends FtcOpMode
 //                }
 //                else
 //                {
-                if (pressed && robot.robotDrive != null && robot.robotDrive.driveBase.supportsHolonomicDrive()) {
-                    if (robot.robotDrive.driveBase.getDriveOrientation() != TrcDriveBase.DriveOrientation.FIELD) {
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Enabling FIELD mode.");
-                        setDriveOrientation(TrcDriveBase.DriveOrientation.FIELD);
-                    } else {
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Enabling ROBOT mode.");
-                        setDriveOrientation(TrcDriveBase.DriveOrientation.ROBOT);
-                    }
-                }
+//                if (pressed && robot.robotDrive != null && robot.robotDrive.driveBase.supportsHolonomicDrive()) {
+//                    if (robot.robotDrive.driveBase.getDriveOrientation() != TrcDriveBase.DriveOrientation.FIELD) {
+//                        robot.globalTracer.traceInfo(moduleName, ">>>>> Enabling FIELD mode.");
+//                        setDriveOrientation(TrcDriveBase.DriveOrientation.FIELD);
+//                    } else {
+//                        robot.globalTracer.traceInfo(moduleName, ">>>>> Enabling ROBOT mode.");
+//                        setDriveOrientation(TrcDriveBase.DriveOrientation.ROBOT);
+//                    }
+//                }
 //                }
                 break;
 
             case B:
-                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
-                driverAltFunc = pressed;
+                if (pressed)
+                {
+                    robot.arm.setPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS);
+                }
+//                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
+//                driverAltFunc = pressed;
                 break;
             case X:
-                if (pressed) {
-                    robot.arm.setPower(1);
-                }
+
                 break;
             case Y:
                 if (pressed && robot.wristRotational != null) {
@@ -433,14 +441,15 @@ public class FtcTeleOp extends FtcOpMode
             case A:
                 break;
             case B:
+                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                {
+                    robot.wristArm.setWristArmSampleDrop();
+                }
                 break;
             case X:
                 if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
                 {
-                    //Set all subsystems to specimen pickup pos
-                    robot.wristArm.setWristArmSpecimenPickup();
-                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS);
-                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS);
+                    robot.wristArm.setWristArmSamplePickup();
                 }
                 break;
             case Y:
@@ -448,7 +457,7 @@ public class FtcTeleOp extends FtcOpMode
                 {
                     //Set all subsystems to specimen drop pos
                     robot.wristArm.setWristArmSpecimenDrop();
-                    robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SPECIMEN_POS);
+//                    robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SPECIMEN_POS);
                     robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SPECIMEN_POS);
                 }
                 break;
@@ -457,17 +466,16 @@ public class FtcTeleOp extends FtcOpMode
                 if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
                 {
                     //Set all subsystems sample pickup pos
-                    robot.wristArm.setWristArmSamplePickup();
-                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS);
-                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
+//                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS);
+//                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
                 }
             case RightBumper:
                 if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
                 {
                     //Set all subsystems to high basket pos
                     robot.wristArm.setWristArmSampleDrop();
-                    robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SAMPLE_POS);
-                    robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SAMPLE_POS);
+                    //robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SAMPLE_POS);
+//                    robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SAMPLE_POS);
                 }
             case DpadUp:
             case DpadDown:

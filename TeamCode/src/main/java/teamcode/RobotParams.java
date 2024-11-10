@@ -122,9 +122,9 @@ public class RobotParams
         // Robot Drive Parameters.
         public static final DriveMode DRIVE_MODE                = DriveMode.ArcadeMode;
         public static final DriveOrientation DRIVE_ORIENTATION  = DriveOrientation.ROBOT;
-        public static final double DRIVE_SLOW_SCALE             = 0.3;
+        public static final double DRIVE_SLOW_SCALE             = 0.5;
         public static final double DRIVE_NORMAL_SCALE           = 1.0;
-        public static final double TURN_SLOW_SCALE              = 0.3;
+        public static final double TURN_SLOW_SCALE              = 0.5;
         public static final double TURN_NORMAL_SCALE            = 0.6;
     }   //class Robot
 
@@ -182,7 +182,7 @@ public class RobotParams
         // Subsystems
         public static final boolean useSubsystems               = true;
         public static final boolean useElevator                 = true;
-        public static final boolean useElbow                    = false;
+        public static final boolean useElbow                    = true;
         public static final boolean useClaw                     = true;
         public static final boolean useWristRotational          = true;
         public static final boolean useWristArm                 = true;
@@ -418,9 +418,9 @@ public class RobotParams
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 42;
         public static final double PICKUP_SAMPLE_POS                        = 0;
-        public static final double DROP_SAMPLE_POS                          = 40;
+        public static final double DROP_SAMPLE_POS                          = 33;
         public static final double PICKUP_SPECIMEN_POS                      = 0;
-        public static final double DROP_SPECIMEN_POS                        = 8;
+        public static final double DROP_SPECIMEN_POS                        = 7;
         public static final double MAX_SAFE_ADJUSTMENT                      = 0; //TBD
         public static final double[] POS_PRESETS                            = {8,34,40}; //8,34,40
         public static final double POS_PRESET_TOLERANCE                     = 1.0;
@@ -454,14 +454,14 @@ public class RobotParams
         public static final double MAX_POS                      = 90;
         public static final double PICKUP_SAMPLE_POS            = 0;
         public static final double DROP_SAMPLE_POS              = 90;
-        public static final double PICKUP_SPECIMEN_POS          = 38;
-        public static final double DROP_SPECIMEN_POS            = 60;
-        public static final double[] POS_PRESETS                = {0,38,60,90}; //Need to be Updated
+        public static final double PICKUP_SPECIMEN_POS          = 0;
+        public static final double DROP_SPECIMEN_POS            = 53;
+        public static final double[] POS_PRESETS                = {5,60,90}; //Need to be Updated
         public static final double POS_PRESET_TOLERANCE         = 5.0;
 
         public static final boolean SOFTWARE_PID_ENABLED        = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS =
-                new TrcPidController.PidCoefficients(0.045, 0.2, 0.005, 0.0, 5.0); //Need to tune
+                new TrcPidController.PidCoefficients(0.25, 0.2, 0, 0.0, 3.0); //Need to tune
         public static final double PID_TOLERANCE                = 0.5;
         public static final double GRAVITY_COMP_MAX_POWER       = 0.4;//Need to be Updated
         public static final double STALL_MIN_POWER              = Math.abs(ZERO_CAL_POWER);
@@ -487,19 +487,19 @@ public class RobotParams
 
         public static final double MIN_POS                                  = .250;
         public static final double MAX_POS                                  = .800;
-        public static final double PICKUP_SAMPLE_POS                        = -4;
-        public static final double SAMPLE_READY_POS                         = 5;
-        public static final double DROP_SAMPLE_POS                          = 0; //TBD
-        public static final double PICKUP_SPECIMEN_POS                      = 0; //TBD
-        public static final double DROP_SPECIMEN_POS                        = 0; //TBD
-        public static final double[] POS_PRESETS                            = {.4, .6,.8};
+        public static final double PICKUP_SAMPLE_POS                        = .411;
+        public static final double SAMPLE_READY_POS                         = .352;
+        public static final double DROP_SAMPLE_POS                          = .352;
+        public static final double PICKUP_SPECIMEN_POS                      = .660;
+        public static final double DROP_SPECIMEN_POS                        = .620; //TBD
+        public static final double[] POS_PRESETS                            = {.5,.8};
         public static final double POS_PRESET_TOLERANCE                     = 1;
 
         public static final boolean SOFTWARE_PID_ENABLED                    = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
-                new TrcPidController.PidCoefficients(1.0,0,0,0,0); //Need to tune
-        public static final double PID_TOLERANCE                            = 0.3;
-        public static final double MAX_GRAVITY_COMP_POWER                   = 0.14; //Need to be Updated
+                new TrcPidController.PidCoefficients(1,0.5,0,0,.2); //Need to tune
+        public static final double PID_TOLERANCE                            = 0.02;
+        public static final double MAX_GRAVITY_COMP_POWER                   = 0.1; //Need to be Updated
     }
 
     public static class WristParamsVertical
@@ -509,10 +509,10 @@ public class RobotParams
 
         public static final boolean PRIMARY_SERVO_VERTICAL_INVERTED         = false;
 
-        public static final double SAMPLE_PICKUP_POS                        = 0; //Position of arm when pickup of for sub
-        public static final double SAMPLE_DROP_POS                          = 0; //Position for arm to be over basket
-        public static final double SPECIMEN_PICKUP_POS                      = 0; //Pos to pickup specimen of wall
-        public static final double SPECIMEN_DROP_POS                        = 0; //Pos to put specimen on high rung
+        public static final double SAMPLE_PICKUP_POS                        = 0.166;
+        public static final double SAMPLE_DROP_POS                          = 0.500;
+        public static final double SPECIMEN_PICKUP_POS                      = 0.334;
+        public static final double SPECIMEN_DROP_POS                        = 0.234;
     }   //class WristParamsVertical
 
     public static final class ClawParams
@@ -522,9 +522,9 @@ public class RobotParams
         public static final String PRIMARY_SERVO_NAME           = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_INVERTED      = false;
 
-        public static final double OPEN_POS                     = 0.1;
+        public static final double OPEN_POS                     = 0.486;
         public static final double OPEN_TIME                    = 0.2;
-        public static final double CLOSE_POS                    = 0.6;
+        public static final double CLOSE_POS                    = 1;
         public static final double CLOSE_TIME                   = 0.2;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR     = false;

@@ -158,11 +158,9 @@ public class Robot
                     arm = wristArm.getArmServo();
                     wristVertical = wristArm.getWristVerticalServo();
                 }
-//                if(runMode != TrcRobot.RunMode.TELEOP_MODE)
+//                if(runMode == TrcRobot.RunMode.AUTO_MODE)
 //                {
                     zeroCalibrate();
-                    //elevator.setPosition(100);
-                    //elbow.setPosition(60);
 //                }
             }
         }
@@ -403,15 +401,15 @@ public class Robot
      */
     public void zeroCalibrate(String owner)
     {
-        if(elevator != null)
-        {
+//        if(elevator != null)
+//        {
             elevator.zeroCalibrate(owner, RobotParams.ElevatorParams.ZERO_CAL_POWER);
-        }
+//        }
 
-        if(elbow != null)
-        {
+//        if(elbow != null)
+//        {
             elbow.zeroCalibrate(owner, RobotParams.ElbowParams.ZERO_CAL_POWER);
-        }
+//        }
     }   //zeroCalibrate
 
     /**

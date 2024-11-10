@@ -4,6 +4,7 @@ import trclib.motor.TrcMotor;
 import ftclib.motor.FtcMotorActuator;
 import teamcode.RobotParams;
 import teamcode.Robot;
+import trclib.robotcore.TrcDbgTrace;
 
 public class Elevator {
     private final TrcMotor elevator;
@@ -24,6 +25,7 @@ public class Elevator {
                 .setPositionPresets(RobotParams.ElevatorParams.POS_PRESET_TOLERANCE,
                         RobotParams.ElevatorParams.POS_PRESETS);
         elevator = new FtcMotorActuator(elevatorParams).getMotor();
+        //elevator.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG, true, false, null);
         elevator.setSoftwarePidEnabled(RobotParams.ElevatorParams.SOFTWARE_PID_ENABLED);
         elevator.setPositionPidParameters(
                 RobotParams.ElevatorParams.PID_COEFFS,
