@@ -18,8 +18,8 @@ public class Claw {
     private boolean isOpen = true;
 
     private final ColorRange yellowSampleHue = new ColorRange(60,90);
-    private final ColorRange blueSampleHue = new ColorRange(180,240);
-    private final ColorRange redSampleHue = new ColorRange(330,30);
+    private final ColorRange blueSampleHue = new ColorRange(200,240);
+    private final ColorRange redSampleHue = new ColorRange(5,30);
 
     public enum SamplePickupType
     {
@@ -71,19 +71,7 @@ public class Claw {
         clawServo.autoGrab(owner, delay, event, timeout, this::isSampleColorCorrect, sampleType);
     }
 
-    public float getSensorDataColorHSV()
-    {
-        if (revColorSensorV3 != null)
-        {
-            return getSensorDataColor();
-        }
-        else
-        {
-            return 0.00000f;
-        }
-    }
-
-    private double getSensorDataDistance()
+    public double getSensorDataDistance()
     {
         if (revColorSensorV3 != null)
         {
@@ -96,9 +84,9 @@ public class Claw {
     }
 
     //Will only work if rev color sensor is never null when called
-    private float getSensorDataColor()
+    public double getSensorDataColor()
     {
-            float[] hsvValues = {0.0f,0.0f,0.0f};
+        float[] hsvValues = {0.0f,0.0f,0.0f};
         NormalizedRGBA normalizedColors = revColorSensorV3.getNormalizedColors();
             Color.RGBToHSV((int) (normalizedColors.red * 255),
                     (int) (normalizedColors.green * 255),
@@ -110,7 +98,7 @@ public class Claw {
     private void isSampleColorCorrect(Object context)
     {
         SamplePickupType sampleType = (SamplePickupType) context;
-        float sampleHue = getSensorDataColor();
+        double sampleHue = getSensorDataColor();
         boolean sampleColorCorrect = false;
 
         switch (sampleType)
@@ -161,7 +149,7 @@ public class Claw {
             this.maxHue = maxHue;
         }
 
-        public boolean isHueInRange(float hue)
+        public boolean isHueInRange(double hue)
         {
             if (minHue <= maxHue)
             {

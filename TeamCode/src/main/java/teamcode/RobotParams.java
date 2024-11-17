@@ -522,15 +522,15 @@ public class RobotParams
         public static final String PRIMARY_SERVO_NAME           = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_INVERTED      = false;
 
-        public static final double OPEN_POS                     = 0.486;
+        public static final double OPEN_POS                     = 0.775; //486
         public static final double OPEN_TIME                    = 0.2;
         public static final double CLOSE_POS                    = 1;
         public static final double CLOSE_TIME                   = 0.2;
 
-        public static final boolean USE_REV_V3_COLOR_SENSOR     = false;
+        public static final boolean USE_REV_V3_COLOR_SENSOR     = true;
         public static final String REV_V3_COLOR_SENSOR_NAME     = SUBSYSTEM_NAME + ".sensor";
-        public static final double SENSOR_TRIGGER_THRESHOLD     = 2.0; //cm
-        public static final boolean ANALOG_TRIGGER_INVERTED     = false;
+        public static final double SENSOR_TRIGGER_THRESHOLD     = 2.3; //cm
+        public static final boolean ANALOG_TRIGGER_INVERTED     = true;
 
     }   //class Grabber
 

@@ -30,6 +30,7 @@ import java.util.Set;
 import ftclib.drivebase.FtcSwerveDrive;
 import ftclib.driverio.FtcGamepad;
 import ftclib.robotcore.FtcOpMode;
+import teamcode.subsystems.Claw;
 import trclib.drivebase.TrcDriveBase;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
@@ -382,8 +383,19 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case DpadUp:
+                if(robot.claw != null)
+                {
+                    robot.claw.autoAssistPickup(null,0,null,10, Claw.SamplePickupType.blueAllianceSamples);
+                    clawOpen = false;
+                }
             case DpadDown:
+                if(robot.claw != null)
+                {
+                    robot.claw.autoAssistPickup(null,0,null,10, Claw.SamplePickupType.redAllianceSamples);
+                    clawOpen = false;
+                }
             case DpadLeft:
+                robot.clawServo.autoGrab(null,0,null,10);
             case DpadRight:
                 break;
             case Back:

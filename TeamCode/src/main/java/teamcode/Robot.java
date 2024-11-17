@@ -160,7 +160,7 @@ public class Robot
                 }
 //                if(runMode == TrcRobot.RunMode.AUTO_MODE)
 //                {
-                    zeroCalibrate();
+//                    zeroCalibrate();
 //                }
             }
         }
@@ -343,9 +343,9 @@ public class Robot
                     if (RobotParams.ClawParams.USE_REV_V3_COLOR_SENSOR)
                     {
                         dashboard.displayPrintf(
-                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, autoAssistActive=%s,sensorDistence=%.3f, sensorColor=%.3f",
-                                clawServo.getPosition(), clawServo.hasObject(),
-                                clawServo.isAutoActive(), claw.getSensorDataColorHSV());
+                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, sensorDistence=%.3f, autoAssistActive=%s, sensorColor=%.3f",
+                                clawServo.getPosition(), clawServo.hasObject(), claw.getSensorDataDistance(),
+                                clawServo.isAutoActive(), claw.getSensorDataColor());
                     }
                 }
 
