@@ -347,7 +347,7 @@ public class FtcTeleOp extends FtcOpMode
                 {
                     if (pressed)
                     {
-                        robot.claw.autoAssistPickup(null, 0, null, 120, Claw.SamplePickupType.blueAllianceSamples);
+                        robot.claw.autoAssistPickup(null, 0, null, 120, robot.SamplePickupType);
                     }
                     else
                     {
@@ -375,11 +375,11 @@ public class FtcTeleOp extends FtcOpMode
             case DpadUp:
                 if(pressed && Robot.sampleType != Vision.SampleType.RedAllianceSamples)
                 {
-                    Robot.sampleType = Vision.SampleType.RedAllianceSamples;
+                    Robot.SamplePickupType = Claw.SamplePickupType.RedAllianceSamples;
                 }
                 else
                 {
-                    Robot.sampleType = Vision.SampleType.BlueAllianceSamples;
+                    Robot.SamplePickupType = Claw.SamplePickupType.BlueAllianceSamples;
                 }
                 break;
             case DpadDown:

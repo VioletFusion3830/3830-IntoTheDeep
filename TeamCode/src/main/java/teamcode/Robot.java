@@ -60,6 +60,7 @@ public class Robot
     private static TrcPose2D endOfAutoRobotPose = null;
     private static double nextStatusUpdateTime = 0.0;
     public static Vision.SampleType sampleType = Vision.SampleType.AnySample;
+    public static Claw.SamplePickupType SamplePickupType = Claw.SamplePickupType.AnySample;
     // Robot Drive.
     public FtcRobotDrive.RobotInfo robotInfo;
     public FtcRobotDrive robotDrive;

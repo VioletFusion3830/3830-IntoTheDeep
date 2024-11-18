@@ -25,12 +25,12 @@ public class Claw {
 
     public enum SamplePickupType
     {
-        redAllianceSamples,
-        blueAllianceSamples,
-        redSample,
-        blueSample,
-        yellowSample,
-        anySample
+        RedAllianceSamples,
+        BlueAllianceSamples,
+        RedSample,
+        BlueSample,
+        YellowSample,
+        AnySample
     }
 
     public Claw(Robot robot)
@@ -61,6 +61,7 @@ public class Claw {
                     RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD);
         }
         clawServo = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
+        clawServo.tracer.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG);
         clawServo.open();
     }
 
@@ -106,29 +107,30 @@ public class Claw {
 
         switch (sampleType)
         {
-            case redSample:
+            case RedSample:
                 sampleColorCorrect = redSampleHue.isHueInRange(sampleHue);
                 break;
-            case blueSample:
+            case BlueSample:
                 sampleColorCorrect = blueSampleHue.isHueInRange(sampleHue);
                 break;
-            case yellowSample:
+            case YellowSample:
                 sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue);
                 break;
-            case redAllianceSamples:
+            case RedAllianceSamples:
                 sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
                 break;
-            case blueAllianceSamples:
+            case BlueAllianceSamples:
                 sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue);
                 robot.globalTracer.traceInfo(null, "Blue Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
                 break;
-            case anySample:
+            case AnySample:
                 sampleColorCorrect = true;
                 break;
         }
         if (sampleColorCorrect)
         {
             clawServo.close();
+            clawServo.cancel();
         }
     }
 
