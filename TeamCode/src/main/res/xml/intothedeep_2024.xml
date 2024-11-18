@@ -10,8 +10,8 @@
             <Servo name="grabber.primary" port="0" />
             <ContinuousRotationServo name="arm.primary" port="2" />
             <AnalogInput name="arm.encoder" port="0" />
-<!--            <RevColorSensorV3 name="grabber.sensor" port="0" bus="1" />-->
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
+            <RevColorSensorV3 name="grabber.sensor" port="0" bus="1" />
         </LynxModule>
         <LynxModule name="Expansion Hub 2" port="2">
             <goBILDA5202SeriesMotor name="elevator.primary" port="0"/>

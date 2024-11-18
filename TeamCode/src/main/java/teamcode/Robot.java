@@ -41,7 +41,6 @@ import trclib.motor.TrcMotor;
 import trclib.motor.TrcServo;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
-import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
 import trclib.sensor.TrcDigitalInput;
 import trclib.subsystem.TrcServoGrabber;
@@ -159,12 +158,10 @@ public class Robot
                     arm = wristArm.getArmServo();
                     wristVertical = wristArm.getWristVerticalServo();
                 }
-                // Create and initialize auto tasks.
-
-                if(RobotParams.Preferences.inCompetition)
-                {
-                    zeroCalibrate(null, null);
-                }
+//                if(runMode == TrcRobot.RunMode.AUTO_MODE)
+//                {
+//                    zeroCalibrate();
+//                }
             }
         }
 
@@ -346,9 +343,9 @@ public class Robot
                     if (RobotParams.ClawParams.USE_REV_V3_COLOR_SENSOR)
                     {
                         dashboard.displayPrintf(
-                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, autoAssistActive=%s,sensorDistence=%.3f, sensorColor=%.3f",
-                                clawServo.getPosition(), clawServo.hasObject(),
-                                clawServo.isAutoActive(), claw.getSensorDataColorHSV());
+                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, sensorDistence=%.3f, autoAssistActive=%s, sensorColor=%.3f",
+                                clawServo.getPosition(), clawServo.hasObject(), claw.getSensorDataDistance(),
+                                clawServo.isAutoActive(), claw.getSensorDataColor());
                     }
                 }
 
@@ -402,25 +399,25 @@ public class Robot
      *
      * @param owner specifies the owner ID to check if the caller has ownership of the motor.
      */
-    public void zeroCalibrate(String owner, TrcEvent elevatorEvent, TrcEvent elbowEvent)
+    public void zeroCalibrate(String owner)
     {
-        if(elevator != null)
-        {
-        elevator.zeroCalibrate(owner, RobotParams.ElevatorParams.ZERO_CAL_POWER, elevatorEvent);
-        }
+//        if(elevator != null)
+//        {
+            elevator.zeroCalibrate(owner, RobotParams.ElevatorParams.ZERO_CAL_POWER);
+//        }
 
-        if(elbow != null)
-        {
-        elbow.zeroCalibrate(owner, RobotParams.ElbowParams.ZERO_CAL_POWER, elbowEvent);
-        }
+//        if(elbow != null)
+//        {
+            elbow.zeroCalibrate(owner, RobotParams.ElbowParams.ZERO_CAL_POWER);
+//        }
     }   //zeroCalibrate
 
     /**
      * This method zero calibrates all subsystems.
      */
-    public void zeroCalibrate(TrcEvent elevatorEvent, TrcEvent elbowEvent)
+    public void zeroCalibrate()
     {
-        zeroCalibrate(null, elevatorEvent, elbowEvent);
+        zeroCalibrate(null);
     }   //zeroCalibrate
 
     /**
