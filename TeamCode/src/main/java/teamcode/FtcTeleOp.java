@@ -25,12 +25,10 @@ package teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import java.util.Locale;
-import java.util.Set;
-
-import ftclib.drivebase.FtcSwerveDrive;
 import ftclib.driverio.FtcGamepad;
 import ftclib.robotcore.FtcOpMode;
 import teamcode.subsystems.Claw;
+import teamcode.vision.Vision;
 import trclib.drivebase.TrcDriveBase;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
@@ -53,12 +51,8 @@ public class FtcTeleOp extends FtcOpMode
     private boolean driverAltFunc = false;
     private boolean operatorAltFunc = false;
     private boolean relocalizing = false;
-    private double elbowPrevPower = 0.0;
-    private double elevatorPrevPower = 0.0;
-    private boolean clawOpen = true;
-    private boolean slowDrive = false;
-    private boolean sampleMode = true;
-    private boolean isSamplePickupPos = true, isspecimenPickupPos = false, isWristRotatorMiddle = false;
+    private double elbowPrevPower = 0.0, elevatorPrevPower = 0.0, PrevslowDriveScale = 0.0;
+    private boolean isWristRotatorMiddle = false;
     private Double elevatorLimit = null, elavatorPos = null, elbowPos = null;
 
     private TrcPose2D robotFieldPose = null;
@@ -206,21 +200,18 @@ public class FtcTeleOp extends FtcOpMode
                             inputs[0], inputs[1], inputs[2], robot.robotDrive.driveBase.getDriveOrientation());
                 }
 
-                boolean slowDriveTriggered = driverGamepad.getLeftTrigger() >= .3;
+                double slowDriveScale = driverGamepad.getLeftTrigger();
                 // Press and hold for slow drive.
-                if (!slowDrive && slowDriveTriggered)
+                if (slowDriveScale != PrevslowDriveScale)
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> DrivePower slow.");
-                    drivePowerScale = RobotParams.Robot.DRIVE_SLOW_SCALE;
-                    turnPowerScale = RobotParams.Robot.TURN_SLOW_SCALE;
+                    drivePowerScale = slowDriveScale * RobotParams.Robot.DRIVE_SLOW_SCALE;
+                    turnPowerScale = slowDriveScale * RobotParams.Robot.TURN_SLOW_SCALE;
                 }
-                else if (slowDrive && !slowDriveTriggered)
-                {
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> DrivePower normal.");
-                    drivePowerScale = RobotParams.Robot.DRIVE_NORMAL_SCALE;
-                    turnPowerScale = RobotParams.Robot.TURN_NORMAL_SCALE;
-                }
-                slowDrive = slowDriveTriggered;
+//                    robot.globalTracer.traceInfo(moduleName, ">>>>> DrivePower normal.");
+//                    drivePowerScale = RobotParams.Robot.DRIVE_NORMAL_SCALE;
+//                    turnPowerScale = RobotParams.Robot.TURN_NORMAL_SCALE;
+                PrevslowDriveScale = slowDriveScale;
             }
             //
             // Other subsystems.
@@ -336,32 +327,31 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case B:
-                if (pressed)
-                {
-                    robot.arm.setPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS);
-                }
 //                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
 //                driverAltFunc = pressed;
                 break;
             case X:
-
-                break;
-            case Y:
-                if (pressed && robot.wristRotational != null) {
-                    robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
-                    isWristRotatorMiddle = false;
-                }
-                break;
-
-            case LeftBumper:
                 // Toggle claw open/close.
                 if (pressed && robot.claw != null) {
-                    if (!clawOpen) {
+                    if (robot.clawServo.isClosed()) {
                         robot.claw.getClawServo().open();
-                        clawOpen = true;
                     } else {
                         robot.claw.getClawServo().close();
-                        clawOpen = false;
+                    }
+                }
+                break;
+            case Y:
+                break;
+            case LeftBumper:
+                if(robot.claw != null)
+                {
+                    if (pressed)
+                    {
+                        robot.claw.autoAssistPickup(null, 0, null, 120, Claw.SamplePickupType.blueAllianceSamples);
+                    }
+                    else
+                    {
+                        robot.clawServo.cancel();
                     }
                 }
                 break;
@@ -383,19 +373,17 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case DpadUp:
-                if(robot.claw != null)
+                if(pressed && Robot.sampleType != Vision.SampleType.RedAllianceSamples)
                 {
-                    robot.claw.autoAssistPickup(null,0,null,10, Claw.SamplePickupType.blueAllianceSamples);
-                    clawOpen = false;
+                    Robot.sampleType = Vision.SampleType.RedAllianceSamples;
                 }
+                else
+                {
+                    Robot.sampleType = Vision.SampleType.BlueAllianceSamples;
+                }
+                break;
             case DpadDown:
-                if(robot.claw != null)
-                {
-                    robot.claw.autoAssistPickup(null,0,null,10, Claw.SamplePickupType.redAllianceSamples);
-                    clawOpen = false;
-                }
             case DpadLeft:
-                robot.clawServo.autoGrab(null,0,null,10);
             case DpadRight:
                 break;
             case Back:
@@ -404,14 +392,9 @@ public class FtcTeleOp extends FtcOpMode
                     robot.globalTracer.traceInfo(moduleName, ">>>>> ZeroCalibrate pressed.");
                     robot.cancelAll();
                     robot.zeroCalibrate();
-                    if (robot.robotDrive != null && robot.robotDrive instanceof FtcSwerveDrive)
-                    {
-                        // Drive base is a Swerve Drive, align all steering wheels forward.
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Set SteerAngle to zero.");
-                        ((FtcSwerveDrive) robot.robotDrive).setSteerAngle(0.0, false, false);
-                    }
                 }
                 break;
+
             case Start:
                 if (robot.vision != null && robot.vision.aprilTagVision != null && robot.robotDrive != null)
                 {

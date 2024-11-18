@@ -122,9 +122,9 @@ public class RobotParams
         // Robot Drive Parameters.
         public static final DriveMode DRIVE_MODE                = DriveMode.ArcadeMode;
         public static final DriveOrientation DRIVE_ORIENTATION  = DriveOrientation.ROBOT;
-        public static final double DRIVE_SLOW_SCALE             = 0.5;
+        public static final double DRIVE_SLOW_SCALE             = 1.0; //0.5
         public static final double DRIVE_NORMAL_SCALE           = 1.0;
-        public static final double TURN_SLOW_SCALE              = 0.5;
+        public static final double TURN_SLOW_SCALE              = 0.6; //0.5
         public static final double TURN_NORMAL_SCALE            = 0.6;
     }   //class Robot
 
@@ -326,7 +326,7 @@ public class RobotParams
             driveMotorType = MotorType.DcMotor;
             driveMotorNames = new String[] {"lfDriveMotor", "rfDriveMotor","lbDriveMotor", "rbDriveMotor"};
             driveMotorInverted = new boolean[] {true, false, true, false};
-            odometryType = TrcDriveBase.OdometryType.OdometryWheels;
+            odometryType = TrcDriveBase.OdometryType.MotorOdometry;
             // Odometry Wheels
             odWheelXScale = odWheelYScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;
             xOdWheelSensorNames = null;
@@ -347,6 +347,8 @@ public class RobotParams
                             .setEncoderResolution(ODWHEEL_CPR / Math.PI * ODWHEEL_DIAMETER)
                             .setEncodersInverted(false, false); //???
                     absoluteOdometry = new FtcPinpointOdometry("pinpointOdo", ppOdoConfig);
+                    headingWrapRangeLow = -180.0;
+                    headingWrapRangeHigh = 180.0;
                 }
                 else if (RobotParams.Preferences.useSparkfunOTOS)
                 {

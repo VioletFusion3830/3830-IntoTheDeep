@@ -6,16 +6,18 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+import teamcode.Robot;
 import teamcode.RobotParams;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.subsystem.FtcServoGrabber;
+import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
 import trclib.subsystem.TrcServoGrabber;
 
 public class Claw {
     private final TrcServoGrabber clawServo; //one servo for open/close
     private final RevColorSensorV3 revColorSensorV3;
-    private boolean isOpen = true;
+    private final Robot robot;
 
     private final ColorRange yellowSampleHue = new ColorRange(60,90);
     private final ColorRange blueSampleHue = new ColorRange(200,240);
@@ -31,8 +33,9 @@ public class Claw {
         anySample
     }
 
-    public Claw()
+    public Claw(Robot robot)
     {
+        this.robot = robot;
         if (RobotParams.ClawParams.USE_REV_V3_COLOR_SENSOR)
         {
             revColorSensorV3 = FtcOpMode.getInstance().hardwareMap.get(
@@ -117,6 +120,7 @@ public class Claw {
                 break;
             case blueAllianceSamples:
                 sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue);
+                robot.globalTracer.traceInfo(null, "Blue Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
                 break;
             case anySample:
                 sampleColorCorrect = true;
@@ -126,17 +130,8 @@ public class Claw {
         {
             clawServo.close();
         }
-        else
-        {
-            //Need to add code to fix error when sample is not the correct color
-        }
     }
 
-    public void cycleClawPosition(){
-        if (isOpen) {clawServo.close();} else {clawServo.open();}
-
-        isOpen = !isOpen;
-    }
     // Helper class to manage color ranges.
     private static class ColorRange
     {

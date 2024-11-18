@@ -138,8 +138,8 @@ public class Robot
 
                 if (RobotParams.Preferences.useClaw)
                 {
-                    claw = new Claw();
-                    clawServo = new Claw().getClawServo();
+                    claw = new Claw(this);
+                    clawServo = new Claw(this).getClawServo();
                 }
 
                 if (RobotParams.Preferences.useElbow)
@@ -343,9 +343,9 @@ public class Robot
                     if (RobotParams.ClawParams.USE_REV_V3_COLOR_SENSOR)
                     {
                         dashboard.displayPrintf(
-                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, sensorDistence=%.3f, autoAssistActive=%s, sensorColor=%.3f",
+                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, sensorDistence=%.3f, autoAssistActive=%s, sensorColor=%.3f, SampleType=%s",
                                 clawServo.getPosition(), clawServo.hasObject(), claw.getSensorDataDistance(),
-                                clawServo.isAutoActive(), claw.getSensorDataColor());
+                                clawServo.isAutoActive(), claw.getSensorDataColor(),sampleType);
                     }
                 }
 
