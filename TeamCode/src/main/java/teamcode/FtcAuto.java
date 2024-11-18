@@ -43,6 +43,7 @@ import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
+import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
 import trclib.timer.TrcTimer;
 
@@ -80,8 +81,7 @@ public class FtcAuto extends FtcOpMode
         NO_PARK
     }   //enum ParkOption
 
-    public boolean hasRunTemp = false;
-    public int numIterations = 0;
+    public boolean subsystemsInited = false;
     /**
      * This class stores the autonomous menu choices.
      */
@@ -124,6 +124,8 @@ public class FtcAuto extends FtcOpMode
     public static final AutoChoices autoChoices = new AutoChoices();
     private Robot robot;
     private TrcRobot.RobotCommand autoCommand;
+    TrcEvent elevatorEvent = new TrcEvent("elevatorEvent");
+    TrcEvent elbowEvent = new TrcEvent("elbowEvent");
 
     //
     // Implements FtcOpMode abstract method.
@@ -211,12 +213,17 @@ public class FtcAuto extends FtcOpMode
     @Override
     public void initPeriodic()
     {
-//        if(!hasRunTemp){
-            robot.elbow.setPosition(60,true,.0);
-            robot.dashboard.displayPrintf(7,"elbow" + robot.elbow.getPower()+ "," + robot.elbow.getPidTarget() + "/" + robot.elbow.getPosition());
-//        }
-//        hasRunTemp = true;
-//        numIterations++;
+        robot.zeroCalibrate(null, elevatorEvent, elbowEvent);
+        if (!subsystemsInited && elevatorEvent.isSignaled() && elbowEvent.isSignaled())
+        {
+            // init your subsystems.
+            subsystemsInited = true;
+            robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
+            robot.arm.setPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS);
+            robot.wristVertical.setPosition(RobotParams.WristParamsVertical.SAMPLE_PICKUP_POS);
+            robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
+        }
+
     }   //initPeriodic
 
     /**
@@ -251,11 +258,6 @@ public class FtcAuto extends FtcOpMode
         {
             robot.battery.setEnabled(true);
         }
-
-        robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
-        robot.arm.setPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS);
-        robot.wristVertical.setPosition(RobotParams.WristParamsVertical.SAMPLE_PICKUP_POS);
-        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
 
         robot.clawServo.open();
         if (autoChoices.autoStrategy == AutoStrategy.PID_DRIVE && autoCommand != null)

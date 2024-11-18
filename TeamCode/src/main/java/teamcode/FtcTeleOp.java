@@ -391,7 +391,7 @@ public class FtcTeleOp extends FtcOpMode
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> ZeroCalibrate pressed.");
                     robot.cancelAll();
-                    robot.zeroCalibrate();
+                    robot.zeroCalibrate(moduleName,null,null);
                     if (robot.robotDrive != null && robot.robotDrive instanceof FtcSwerveDrive)
                     {
                         // Drive base is a Swerve Drive, align all steering wheels forward.
@@ -494,7 +494,7 @@ public class FtcTeleOp extends FtcOpMode
                     // Zero calibrate all subsystems (arm, elevator and turret).
                     robot.globalTracer.traceInfo(moduleName, ">>>>> ZeroCalibrate pressed.");
                     robot.cancelAll();
-                    robot.zeroCalibrate(moduleName);
+                    robot.zeroCalibrate(moduleName,null,null);
                 }
                 break;
 
