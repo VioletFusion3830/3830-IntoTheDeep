@@ -41,6 +41,7 @@ import trclib.motor.TrcMotor;
 import trclib.motor.TrcServo;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
+import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
 import trclib.sensor.TrcDigitalInput;
 import trclib.subsystem.TrcServoGrabber;
@@ -399,25 +400,25 @@ public class Robot
      *
      * @param owner specifies the owner ID to check if the caller has ownership of the motor.
      */
-    public void zeroCalibrate(String owner)
+    public void zeroCalibrate(String owner, TrcEvent elevatorEvent, TrcEvent elbowEvent)
     {
-//        if(elevator != null)
-//        {
-            elevator.zeroCalibrate(owner, RobotParams.ElevatorParams.ZERO_CAL_POWER);
-//        }
+        if(elevator != null)
+        {
+            elevator.zeroCalibrate(owner, RobotParams.ElevatorParams.ZERO_CAL_POWER, elevatorEvent);
+        }
 
 //        if(elbow != null)
 //        {
-            elbow.zeroCalibrate(owner, RobotParams.ElbowParams.ZERO_CAL_POWER);
+        elbow.zeroCalibrate(owner, RobotParams.ElbowParams.ZERO_CAL_POWER, elbowEvent);
 //        }
     }   //zeroCalibrate
 
     /**
      * This method zero calibrates all subsystems.
      */
-    public void zeroCalibrate()
+    public void zeroCalibrate(TrcEvent elevatorEvent, TrcEvent elbowEvent)
     {
-        zeroCalibrate(null);
+        zeroCalibrate(null, elevatorEvent, elbowEvent);
     }   //zeroCalibrate
 
     /**
