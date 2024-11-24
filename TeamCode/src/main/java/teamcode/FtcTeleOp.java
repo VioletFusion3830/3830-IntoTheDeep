@@ -347,10 +347,6 @@ public class FtcTeleOp extends FtcOpMode
 
                 break;
             case Y:
-                if (pressed && robot.wristRotational != null) {
-                    robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
-                    isWristRotatorMiddle = false;
-                }
                 break;
 
             case LeftBumper:

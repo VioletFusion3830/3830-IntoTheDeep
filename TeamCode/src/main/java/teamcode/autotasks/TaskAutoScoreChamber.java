@@ -1,6 +1,13 @@
 package teamcode.autotasks;
 
+import androidx.annotation.NonNull;
+
+import java.util.Locale;
+
+import teamcode.FtcAuto;
 import teamcode.Robot;
+import teamcode.RobotParams;
+import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcOwnershipMgr;
@@ -26,13 +33,39 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
     private static class TaskParams
     {
-        TaskParams()
+        final FtcAuto.Alliance alliance;
+        final TrcPose2D scorePose;
+        final double elbowAngle;
+        final double elevatorPos;
+        final double wristArmPos;
+        final boolean noDrive;
+
+        TaskParams(
+            FtcAuto.Alliance alliance, TrcPose2D scorePose, double elbowAngle,
+            double elevatorPos, double wristArmPos, boolean noDrive)
         {
+            this.alliance = alliance;
+            this.scorePose = scorePose;
+            this.elbowAngle = elbowAngle;
+            this.elevatorPos = elevatorPos;
+            this.wristArmPos = wristArmPos;
+            this.noDrive = noDrive;
         }   //TaskParams
+
+        @NonNull
+        public String toString()
+        {
+            return String.format(
+                    Locale.US, "alliance=%s,scorePose=%s,elbowPos=%.1f, elevatorPos=%.1f,wristPos=%.3f,noDrive=%s",
+                    alliance, scorePose, elbowAngle, elevatorPos, wristArmPos, noDrive);
+        }   //toString
+
     }   //class TaskParams
 
     private final String ownerName;
     private final Robot robot;
+    private final TrcEvent event;
+    private final TrcEvent event2;
 
     private String currOwner = null;
 
@@ -47,6 +80,8 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
         super(moduleName, ownerName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.ownerName = ownerName;
         this.robot = robot;
+        this.event = new TrcEvent(moduleName + ".event");
+        this.event2 = new TrcEvent(moduleName + ".event2");
     }   //TaskAuto
 
     /**
@@ -54,8 +89,36 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoScoreChamber(TrcEvent completionEvent)
+    public void autoScoreChamber(Robot.ScoreHeight scoreHeight, boolean noDrive, TrcEvent completionEvent)
     {
+        TrcPose2D robotPose = robot.robotDrive.driveBase.getFieldPosition();
+        FtcAuto.Alliance alliance = robotPose.y < 0.0? FtcAuto.Alliance.RED_ALLIANCE: FtcAuto.Alliance.BLUE_ALLIANCE;
+        boolean nearNetZone = alliance == FtcAuto.Alliance.RED_ALLIANCE ^ robotPose.x > 0.0;
+        TrcPose2D scorePose = nearNetZone?
+                RobotParams.Game.RED_NET_CHAMBER_SCORE_POSE.clone():
+                RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
+        double elbowAngle, elevatorPos, wristArmPos;
+
+        if (robotPose.x >= -RobotParams.Game.CHAMBER_MAX_SCORE_POS_X &&
+                robotPose.x <= RobotParams.Game.CHAMBER_MAX_SCORE_POS_X)
+        {
+            // If robot current position is within the chamber zone, use its X position.
+            scorePose.x = robotPose.x;
+        }
+
+        if (scoreHeight == Robot.ScoreHeight.LOW)
+        {
+            elbowAngle = RobotParams.ElbowParams.LOW_CHAMBER_SCORE_POS;
+            elevatorPos = Extender.Params.LOW_CHAMBER_SCORE_POS;
+            wristArmPos = Wrist.Params.LOW_CHAMBER_SCORE_POS;
+        }
+        else
+        {
+            elbowAngle = Elbow.Params.HIGH_CHAMBER_SCORE_POS;
+            extenderPos = Extender.Params.HIGH_CHAMBER_SCORE_POS;
+            wristPos = Wrist.Params.HIGH_CHAMBER_SCORE_POS;
+        }
+
         tracer.traceInfo(moduleName, "event=" + completionEvent);
         startAutoTask(State.GO_TO_SCORE_POSITION, new TaskParams(), completionEvent);
     }   //autoAssist

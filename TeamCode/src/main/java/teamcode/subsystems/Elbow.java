@@ -22,8 +22,7 @@ public class Elbow
                         RobotParams.ElbowParams.PRIMARY_MOTOR_INVERTED)
                 .setPositionScaleAndOffset(
                         RobotParams.ElbowParams.DEG_PER_COUNT,
-                        RobotParams.ElbowParams.POS_OFFSET,
-                        RobotParams.ElbowParams.ZERO_OFFSET)
+                        RobotParams.ElbowParams.POS_OFFSET)
                 .setPositionPresets(RobotParams.ElbowParams.POS_PRESET_TOLERANCE,
                         RobotParams.ElbowParams.POS_PRESETS);
         elbow = new FtcMotorActuator(elbowParams).getMotor();

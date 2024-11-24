@@ -49,86 +49,6 @@ import trclib.vision.TrcHomographyMapper;
 public class RobotParams
 {
     /**
-     * This class contains Gobilda motor parameters.
-     */
-    public static class Gobilda
-    {
-        // https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-19-2-1-ratio-24mm-length-8mm-rex-shaft-312-rpm-3-3-5v-encoder/
-        public static final double MOTOR_5203_312_ENC_PPR       = (((1.0 + 46.0/17.0)*(1.0 + 46.0/11.0))*28.0);
-        public static final double MOTOR_5203_312_MAX_RPM       = 312.0;
-        public static final double MOTOR_5203_312_MAX_VEL_PPS   =
-            MOTOR_5203_312_ENC_PPR * MOTOR_5203_312_MAX_RPM / 60.0;     // 2795.9872 pps
-        //https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-13-7-1-ratio-24mm-length-8mm-rex-shaft-435-rpm-3-3-5v-encoder/
-        public static final double MOTOR_5203_435_ENC_PPR       = (((1.0 + 46.0/17.0)*(1.0 + 46.0/17.0))*28.0);
-        public static final double MOTOR_5203_435_MAX_RPM       = 435.0;
-        public static final double MOTOR_5203_435_MAX_VEL_PPS   =
-            MOTOR_5203_435_ENC_PPR * MOTOR_5203_435_MAX_RPM / 60.0;     // 2787.9135 pps
-    }   //class Gobilda
-
-    /**
-     * This class contains field dimension constants. Generally, these should not be changed.
-     */
-    public static class Field
-    {
-        public static final double FULL_FIELD_INCHES            = 141.24;
-        public static final double HALF_FIELD_INCHES            = FULL_FIELD_INCHES/2.0;
-        public static final double FULL_TILE_INCHES             = FULL_FIELD_INCHES/6.0;
-    }   //class Field
-
-    /**
-     * This class contains season specific game element information.
-     */
-    public static class Game
-    {
-        // DO NOT CHANGE the AprilTag location numbers. They are from the AprilTag metadata.
-        // All AprilTags are at the height of 5.75-inch from the tile floor.
-        public static final double APRILTAG_AUDIENCE_WALL_X         = -70.25;
-        public static final double APRILTAG_BACK_WALL_X             = 70.25;
-        public static final double APRILTAG_BLUE_ALLIANCE_WALL_Y    = 70.25;
-        public static final double APRILTAG_RED_ALLIANCE_WALL_Y     = -70.25;
-        public static final double APRILTAG_WALL_OFFSET_Y           = 46.83;
-        public static final TrcPose2D[] APRILTAG_POSES              = new TrcPose2D[] {
-                new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, APRILTAG_WALL_OFFSET_Y, -90.0), // TagId 11
-                new TrcPose2D(0.0, APRILTAG_BLUE_ALLIANCE_WALL_Y, 0.0),                 // TagId 12
-                new TrcPose2D(APRILTAG_BACK_WALL_X, APRILTAG_WALL_OFFSET_Y, 90.0),      // TagId 13
-                new TrcPose2D(APRILTAG_BACK_WALL_X, -APRILTAG_WALL_OFFSET_Y, 90.0),     // TagId 14
-                new TrcPose2D(0.0, APRILTAG_RED_ALLIANCE_WALL_Y, 180.0),                // TagId 15
-                new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, -APRILTAG_WALL_OFFSET_Y, -90.0) // TagId 16
-        };
-
-        // Blue alliance positions will be derived using adjustPoseByAlliance.
-        // Robot start locations in inches.
-        public static final double STARTPOS_X                       = Robot.ROBOT_WIDTH/2.0;
-        public static final double STARTPOS_Y                       =
-                Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0;
-        public static final TrcPose2D STARTPOSE_RED_NET_ZONE        = new TrcPose2D(-STARTPOS_X, -STARTPOS_Y, 0.0);
-        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE= new TrcPose2D(STARTPOS_X, -STARTPOS_Y, 0.0);
-    }   //class Game
-
-
-    /**
-     * This class contains miscellaneous robot info.
-     */
-    public static class Robot
-    {
-        public static final String TEAM_FOLDER_PATH             =
-            Environment.getExternalStorageDirectory().getPath() + "/FIRST/ftcTeam";
-        public static final String LOG_FOLDER_PATH              = TEAM_FOLDER_PATH + "/tracelogs";
-        public static final String STEER_ZERO_CAL_FILE          = TEAM_FOLDER_PATH + "/SteerZeroCalibration.txt";
-        public static final double DASHBOARD_UPDATE_INTERVAL    = 0.1;      // in msec
-        public static final String ROBOT_CODEBASE               = "Robot2025";
-        public static final double ROBOT_LENGTH                 = 17.0;
-        public static final double ROBOT_WIDTH                  = 17.0;
-        // Robot Drive Parameters.
-        public static final DriveMode DRIVE_MODE                = DriveMode.ArcadeMode;
-        public static final DriveOrientation DRIVE_ORIENTATION  = DriveOrientation.ROBOT;
-        public static final double DRIVE_SLOW_SCALE             = 0.5;
-        public static final double DRIVE_NORMAL_SCALE           = 1.0;
-        public static final double TURN_SLOW_SCALE              = 0.5;
-        public static final double TURN_NORMAL_SCALE            = 0.6;
-    }   //class Robot
-
-    /**
      * When the season starts, the competition robot may not be ready for programmers. It's crucial to save time by
      * developing code on robots of previous seasons. By adding previous robots to the list of RobotType, one can
      * easily switch the code to handle different robots.
@@ -144,6 +64,19 @@ public class RobotParams
         // Generic Swerve Drive Base Robot
         SwerveRobot
     }   //enum RobotType
+
+    public static class VisionOnlyParams extends FtcRobotDrive.RobotInfo
+    {
+        public VisionOnlyParams()
+        {
+            robotName = "VisionOnly";
+            // Front Camera
+            webCam1 = new FrontCamParams();
+            // Back Camera
+            webCam2 = new BackCamParams();
+            limelight = new LimelightParams();
+        }   //VisionOnlyParams
+    }   //class VisionOnlyParams
 
     /**
      * This class contains robot preferences. It enables/disables various robot features. This is especially useful
@@ -177,7 +110,7 @@ public class RobotParams
         public static final boolean showVisionStat              = false;
         // Drive Base
         public static final boolean useDriveBase                = true;
-        public static final boolean usePinpointOdometry         = false;
+        public static final boolean usePinpointOdometry         = true;
         public static final boolean useSparkfunOTOS             = false;
         // Subsystems
         public static final boolean useSubsystems               = true;
@@ -188,9 +121,70 @@ public class RobotParams
         public static final boolean useWristArm                 = true;
     }   //class Preferences
 
+    /**
+     * This class contains field dimension constants. Generally, these should not be changed.
+     */
+    public static class Field
+    {
+        public static final double FULL_FIELD_INCHES            = 141.24;
+        public static final double HALF_FIELD_INCHES            = FULL_FIELD_INCHES/2.0;
+        public static final double FULL_TILE_INCHES             = FULL_FIELD_INCHES/6.0;
+    }   //class Field
+
+    /**
+     * This class contains season specific game element information.
+     */
+    public static class Game
+    {
+        // DO NOT CHANGE the AprilTag location numbers. They are from the AprilTag metadata.
+        // All AprilTags are at the height of 5.75-inch from the tile floor.
+        public static final double APRILTAG_AUDIENCE_WALL_X                 = -70.25;
+        public static final double APRILTAG_BACK_WALL_X                     = 70.25;
+        public static final double APRILTAG_BLUE_ALLIANCE_WALL_Y            = 70.25;
+        public static final double APRILTAG_RED_ALLIANCE_WALL_Y             = -70.25;
+        public static final double APRILTAG_WALL_OFFSET_Y                   = 46.83;
+        public static final TrcPose2D[] APRILTAG_POSES                      = new TrcPose2D[] {
+                new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, APRILTAG_WALL_OFFSET_Y, -90.0), // TagId 11
+                new TrcPose2D(0.0, APRILTAG_BLUE_ALLIANCE_WALL_Y, 0.0),                 // TagId 12
+                new TrcPose2D(APRILTAG_BACK_WALL_X, APRILTAG_WALL_OFFSET_Y, 90.0),      // TagId 13
+                new TrcPose2D(APRILTAG_BACK_WALL_X, -APRILTAG_WALL_OFFSET_Y, 90.0),     // TagId 14
+                new TrcPose2D(0.0, APRILTAG_RED_ALLIANCE_WALL_Y, 180.0),                // TagId 15
+                new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, -APRILTAG_WALL_OFFSET_Y, -90.0) // TagId 16
+        };
+
+        // Blue alliance positions will be derived using adjustPoseByAlliance.
+        // Robot start locations in inches.
+        public static final double STARTPOS_X                               = Robot.ROBOT_WIDTH/2.0;
+        public static final double STARTPOS_Y                               = Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0;
+        public static final TrcPose2D STARTPOSE_RED_NET_ZONE                = new TrcPose2D(-STARTPOS_X, -STARTPOS_Y, 0.0);
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE        = new TrcPose2D(STARTPOS_X, -STARTPOS_Y, 0.0);
+    }   //class Game
+
     //
     // Robot Parameters.
     //
+
+    /**
+            * This class contains miscellaneous robot info.
+     */
+    public static class Robot
+    {
+        public static final String TEAM_FOLDER_PATH                         =
+                Environment.getExternalStorageDirectory().getPath() + "/FIRST/ftcTeam";
+        public static final String LOG_FOLDER_PATH                          = TEAM_FOLDER_PATH + "/tracelogs";
+        public static final String STEER_ZERO_CAL_FILE                      = TEAM_FOLDER_PATH + "/SteerZeroCalibration.txt";
+        public static final double DASHBOARD_UPDATE_INTERVAL                = 0.1; // in msec
+        public static final String ROBOT_CODEBASE                           = "Robot2025";
+        public static final double ROBOT_LENGTH                             = 17.0;
+        public static final double ROBOT_WIDTH                              = 17.0;
+        // Robot Drive Parameters.
+        public static final DriveMode DRIVE_MODE                = DriveMode.ArcadeMode;
+        public static final DriveOrientation DRIVE_ORIENTATION  = DriveOrientation.ROBOT;
+        public static final double DRIVE_SLOW_SCALE                         = 0.5;
+        public static final double DRIVE_NORMAL_SCALE                       = 1.0;
+        public static final double TURN_SLOW_SCALE                          = 0.5;
+        public static final double TURN_NORMAL_SCALE                        = 0.6;
+    }   //class Robot
 
     /**
      * This class contains the parameters of the front camera.
@@ -288,19 +282,6 @@ public class RobotParams
         }   //LimelightParams
     }   //class LimelightParams
 
-    public static class VisionOnlyParams extends FtcRobotDrive.RobotInfo
-    {
-        public VisionOnlyParams()
-        {
-            robotName = "VisionOnly";
-            // Front Camera
-            webCam1 = new FrontCamParams();
-            // Back Camera
-            webCam2 = new BackCamParams();
-            limelight = new LimelightParams();
-        }   //VisionOnlyParams
-    }   //class VisionOnlyParams
-
     /**
      * This class contains the Mecanum Robot Parameters.
      */
@@ -326,7 +307,7 @@ public class RobotParams
             driveMotorType = MotorType.DcMotor;
             driveMotorNames = new String[] {"lfDriveMotor", "rfDriveMotor","lbDriveMotor", "rbDriveMotor"};
             driveMotorInverted = new boolean[] {true, false, true, false};
-            odometryType = TrcDriveBase.OdometryType.OdometryWheels;
+            odometryType = TrcDriveBase.OdometryType.AbsoluteOdometry;
             // Odometry Wheels
             odWheelXScale = odWheelYScale = Math.PI * ODWHEEL_DIAMETER / ODWHEEL_CPR;
             xOdWheelSensorNames = null;
@@ -401,7 +382,7 @@ public class RobotParams
     //
     public static final class ElevatorParams
     {
-        public static final String SUBSYSTEM_NAME                          = "elevator";
+        public static final String SUBSYSTEM_NAME                           = "elevator";
 
         public static final String PRIMARY_MOTOR_NAME                       = SUBSYSTEM_NAME + ".primary";
         public static final String FOLLOWER_MOTOR_NAME                      = SUBSYSTEM_NAME + ".follower";
@@ -410,26 +391,28 @@ public class RobotParams
         public static final boolean PRIMARY_MOTOR_INVERTED                  = true;
         public static final boolean FOLLOWER_MOTOR_INVERTED                 = true;
 
-        public static final double INCHES_PER_COUNT                         = 0.015810277;
-        public static final double POS_OFFSET                               = 0;
+        public static final double INCHES_PER_COUNT                         = 0; //Need to measure elevator height divide by encoder counts
+        public static final double POS_OFFSET                               = 0; //Pos offset need to be determined from ground
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
+        public static final double MAX_SAFE_ADJUSTMENT                      = 0; //Need to be determined to stay in working area
 
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 42;
         public static final double PICKUP_SAMPLE_POS                        = 0;
-        public static final double DROP_SAMPLE_POS                          = 33;
         public static final double PICKUP_SPECIMEN_POS                      = 0;
-        public static final double DROP_SPECIMEN_POS                        = 7;
-        public static final double MAX_SAFE_ADJUSTMENT                      = 0; //TBD
-        public static final double[] POS_PRESETS                            = {8,34,40}; //8,34,40
+        public static final double LOW_BASKET_SCORE_POS                     = 20;
+        public static final double HIGH_BASKET_SCORE_POS                    = 38;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 0;
+        public static final double[] POS_PRESETS                            = {8,34,40};
         public static final double POS_PRESET_TOLERANCE                     = 1.0;
 
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
                 new TrcPidController.PidCoefficients(0.4,0.1, 0.004, 0,5); //Need to tune
         public static final double POS_PID_TOLERANCE                        = 0.3;
-        public static final double MAX_GRAVITY_COMP_POWER                   = 0.1; //Need to be Updated
+
+        public static final double MAX_GRAVITY_COMP_POWER                   = 0.1;
         public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE                          = 0.1;
         public static final double STALL_TIMEOUT                            = 0.1;
@@ -438,36 +421,36 @@ public class RobotParams
 
     public static class ElbowParams
     {
-        public static final String SUBSYSTEM_NAME               = "elbow";
+        public static final String SUBSYSTEM_NAME                           = "elbow";
 
-        public static final String PRIMARY_MOTOR_NAME           = SUBSYSTEM_NAME + ".primary";
-        public static final MotorType PRIMARY_MOTOR_TYPE        = MotorType.DcMotor;
-        public static final boolean PRIMARY_MOTOR_INVERTED      = false;
+        public static final String PRIMARY_MOTOR_NAME                       = SUBSYSTEM_NAME + ".primary";
+        public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
+        public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
 
-        public static final double DEG_PER_COUNT                = 0.10434783; //Need to to measure elbow angle divide by encoder counts
-        public static final double POS_OFFSET                   = 0;
-        public static final double ZERO_OFFSET                  = 0.0;
-        public static final double POWER_LIMIT                  = 1.0;
-        public static final double ZERO_CAL_POWER               = -0.25;
+        public static final double DEG_PER_COUNT                            = 0.10434783; //Need to to measure elbow angle divide by encoder counts
+        public static final double POS_OFFSET                               = 0;
+        public static final double POWER_LIMIT                              = 1.0;
+        public static final double ZERO_CAL_POWER                           = -0.25;
 
-        public static final double MIN_POS                      = POS_OFFSET;
-        public static final double MAX_POS                      = 90;
-        public static final double PICKUP_SAMPLE_POS            = 0;
-        public static final double DROP_SAMPLE_POS              = 90;
-        public static final double PICKUP_SPECIMEN_POS          = 0;
-        public static final double DROP_SPECIMEN_POS            = 53;
-        public static final double[] POS_PRESETS                = {5,60,90}; //Need to be Updated
-        public static final double POS_PRESET_TOLERANCE         = 5.0;
+        public static final double MIN_POS                                  = POS_OFFSET;
+        public static final double MAX_POS                                  = 90;
+        public static final double PICKUP_SAMPLE_POS                        = 0;
+        public static final double PICKUP_SPECIMEN_POS                      = 35;
+        public static final double BASKET_SCORE_POS                         = 90;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 90;
+        public static final double[] POS_PRESETS                            = {20,90}; //Need to be Updated
+        public static final double POS_PRESET_TOLERANCE                     = 5.0;
 
-        public static final boolean SOFTWARE_PID_ENABLED        = true;
-        public static final TrcPidController.PidCoefficients PID_COEFFS =
+        public static final boolean SOFTWARE_PID_ENABLED                    = true;
+        public static final TrcPidController.PidCoefficients PID_COEFFS     =
                 new TrcPidController.PidCoefficients(0.25, 0.2, 0, 0.0, 3.0); //Need to tune
-        public static final double PID_TOLERANCE                = 0.5;
-        public static final double GRAVITY_COMP_MAX_POWER       = 0.4;//Need to be Updated
-        public static final double STALL_MIN_POWER              = Math.abs(ZERO_CAL_POWER);
-        public static final double STALL_TOLERANCE              = 0.1;
-        public static final double STALL_TIMEOUT                = 0.1;
-        public static final double STALL_RESET_TIMEOUT          = 0.0;
+        public static final double PID_TOLERANCE                            = 0.5;
+
+        public static final double GRAVITY_COMP_MAX_POWER                   = 0.4;
+        public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
+        public static final double STALL_TOLERANCE                          = 0.1;
+        public static final double STALL_TIMEOUT                            = 0.1;
+        public static final double STALL_RESET_TIMEOUT                      = 0.0;
     }   //class ElbowParams
 
     public static final class ArmParams
@@ -477,22 +460,21 @@ public class RobotParams
         public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = true;
 
-        public static final double ARM_DEGREE_SCALE                         = 1;
-        public static final double POS_OFFSET                               = 0;
-        public static final double ZERO_OFFSET                              = 0;
+        public static final double ARM_DEGREE_SCALE                         = (360 * 2)/3;
+        public static final double POS_OFFSET                               = 0; //Need to be determined
+        public static final double ZERO_OFFSET                              = 0; //Need to be determined
         public static final double POWER_LIMIT                              = 1.0;
 
         public static final String EXTERNAL_ENCODER_NAME                    = SUBSYSTEM_NAME + ".encoder";
         public static final boolean EXTERNAL_ENCODER_INVERTED               = false;
 
-        public static final double MIN_POS                                  = .250;
-        public static final double MAX_POS                                  = .800;
-        public static final double PICKUP_SAMPLE_POS                        = .411;
-        public static final double SAMPLE_READY_POS                         = .352;
-        public static final double DROP_SAMPLE_POS                          = .352;
-        public static final double PICKUP_SPECIMEN_POS                      = .660;
-        public static final double DROP_SPECIMEN_POS                        = .620; //TBD
-        public static final double[] POS_PRESETS                            = {.5,.8};
+        public static final double MIN_POS                                  = 0; //Need to be determined
+        public static final double MAX_POS                                  = 0; //Need to be determined
+        public static final double PICKUP_SAMPLE_POS                        = -5;
+        public static final double PICKUP_SPECIMEN_POS                      = 20;
+        public static final double BASKET_SCORE_POS                         = 70;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 75;
+        public static final double[] POS_PRESETS                            = {0,75};
         public static final double POS_PRESET_TOLERANCE                     = 1;
 
         public static final boolean SOFTWARE_PID_ENABLED                    = true;
@@ -506,31 +488,30 @@ public class RobotParams
     {
         public static final String SUBSYSTEM_NAME                             = "wristVertical";
         public static final String PRIMARY_SERVO_VERTICAL                   = SUBSYSTEM_NAME + ".primary";
-
         public static final boolean PRIMARY_SERVO_VERTICAL_INVERTED         = false;
 
-        public static final double SAMPLE_PICKUP_POS                        = 0.166;
-        public static final double SAMPLE_DROP_POS                          = 0.500;
-        public static final double SPECIMEN_PICKUP_POS                      = 0.334;
-        public static final double SPECIMEN_DROP_POS                        = 0.234;
+        public static final double PICKUP_SAMPLE_POS                        = 0.166;
+        public static final double PICKUP_SPECIMEN_POS                      = 0.334;
+        public static final double BASKET_SCORE_POS                         = 0.500;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.234;
     }   //class WristParamsVertical
 
     public static final class ClawParams
     {
-        public static final String SUBSYSTEM_NAME               = "grabber";
+        public static final String SUBSYSTEM_NAME                           = "grabber";
 
-        public static final String PRIMARY_SERVO_NAME           = SUBSYSTEM_NAME + ".primary";
-        public static final boolean PRIMARY_SERVO_INVERTED      = false;
+        public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".primary";
+        public static final boolean PRIMARY_SERVO_INVERTED                  = false;
 
-        public static final double OPEN_POS                     = 0.775; //486
-        public static final double OPEN_TIME                    = 0.2;
-        public static final double CLOSE_POS                    = 1;
-        public static final double CLOSE_TIME                   = 0.2;
+        public static final double OPEN_POS                                 = 0.775; //486
+        public static final double OPEN_TIME                                = 0.2;
+        public static final double CLOSE_POS                                = 1;
+        public static final double CLOSE_TIME                               = 0.2;
 
-        public static final boolean USE_REV_V3_COLOR_SENSOR     = true;
-        public static final String REV_V3_COLOR_SENSOR_NAME     = SUBSYSTEM_NAME + ".sensor";
-        public static final double SENSOR_TRIGGER_THRESHOLD     = 2.3; //cm
-        public static final boolean ANALOG_TRIGGER_INVERTED     = true;
+        public static final boolean USE_REV_V3_COLOR_SENSOR                 = true;
+        public static final String REV_V3_COLOR_SENSOR_NAME                 = SUBSYSTEM_NAME + ".sensor";
+        public static final double SENSOR_TRIGGER_THRESHOLD                 = 2.3; //cm
+        public static final boolean ANALOG_TRIGGER_INVERTED                 = true;
 
     }   //class Grabber
 

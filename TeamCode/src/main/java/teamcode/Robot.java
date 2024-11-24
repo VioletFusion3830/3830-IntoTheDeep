@@ -86,6 +86,12 @@ public class Robot
         SAMPLE
     }   //enum GamePieceType
 
+    public enum ScoreHeight
+    {
+        LOW,
+        HIGH
+    }   //enum ScoreHeight
+
     /**
      * Constructor: Create an instance of the object.
      *
