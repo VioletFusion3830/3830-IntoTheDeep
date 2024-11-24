@@ -453,12 +453,12 @@ public class Vision
 
         if (limelightVision != null)
         {
-            limelightInfo = limelightVision.getBestDetectedTargetInfo(resultType, label, null);
-            if (limelightInfo != null)
-            {
-                objectName = limelightInfo.detectedObj.label;
-                tracer.traceInfo("Limelight", resultType + ": info=" + limelightInfo);
-            }
+//            limelightInfo = limelightVision.getBestDetectedTargetInfo(resultType, label, null);
+//            if (limelightInfo != null)
+//            {
+//                objectName = limelightInfo.detectedObj.label;
+//                tracer.traceInfo("Limelight", resultType + ": info=" + limelightInfo);
+//            }
         }
 
 //        if (objectName != null && robot.blinkin != null)
