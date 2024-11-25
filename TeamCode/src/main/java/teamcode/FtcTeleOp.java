@@ -227,23 +227,29 @@ public class FtcTeleOp extends FtcOpMode
             //
             if (RobotParams.Preferences.useSubsystems) {
                 if(robot.elbow != null && robot.elevator != null) {
+                    double elbowPower = operatorGamepad.getRightStickY(true) * RobotParams.ElbowParams.POWER_LIMIT;
                     elbowPos = robot.elbow.getPosition();
-                    elavatorPos = robot.elevator != null ? robot.elevator.getPosition() : null;
+//                    if(robot.elevator != null && elbowPos < RobotParams.ElbowParams.RESTRICTED_POS_THRESHOLD) {
+//                        elevatorLimit = RobotParams.ElevatorParams.MAX_POS - Math.max(Math.cos(Math.toRadians(elbowPos)) * RobotParams.ElevatorParams.MAX_SAFE_ADJUSTMENT, 0);
+//                        if (elavatorPos != null && elavatorPos > elevatorLimit) {
+//                            robot.elevator.setPosition(elevatorLimit);
+                        }
+//                    }
+//                    elavatorPos = robot.elevator != null ? robot.elevator.getPosition() : null;
 //                    elevatorLimit = RobotParams.ElevatorParams.MAX_POS - Math.max(Math.cos(Math.toRadians(elbowPos)) * RobotParams.ElevatorParams.MAX_SAFE_ADJUSTMENT, 0);
 //                    //need to change angle to start
 //                    if (elbowPos < 60 && elavatorPos != null && elavatorPos > elevatorLimit) {
 //                        robot.elevator.setPosition(elevatorLimit);
 //                    }
-                    double elbowPower = operatorGamepad.getRightStickY(true) * RobotParams.ElbowParams.POWER_LIMIT;
-                    if (elbowPower != elbowPrevPower) {
-                        if (operatorAltFunc) {
-                            robot.elbow.setPower(elbowPower);
-                        } else {
-                                robot.elbow.setPidPower(elbowPower, RobotParams.ElbowParams.MIN_POS, RobotParams.ElbowParams.MAX_POS, true);
-                        }
-                    }
-                    elbowPrevPower = elbowPower;
-                }
+//                    if (elbowPower != elbowPrevPower) {
+//                        if (operatorAltFunc) {
+//                            robot.elbow.setPower(elbowPower);
+//                        } else {
+//                                robot.elbow.setPidPower(elbowPower, RobotParams.ElbowParams.MIN_POS, RobotParams.ElbowParams.MAX_POS, true);
+//                        }
+//                    }
+//                    elbowPrevPower = elbowPower;
+//                }
 
                 if (robot.elevator != null) {
                     double elevatorPower = operatorGamepad.getLeftStickY(true) * RobotParams.ElevatorParams.POWER_LIMIT;
@@ -447,44 +453,43 @@ public class FtcTeleOp extends FtcOpMode
         switch (button)
         {
             case A:
+                if(pressed)
+                {
+                    robot.elbow.setPosition(RobotParams.ElbowParams.BASKET_SCORE_POS);
+                    robot.wristArm.setWristArmBasketScorePos();
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS);
+                    //robot.scoreBasketTask.atuoScoreBasket(null);
+                }
                 break;
             case B:
-                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                if(pressed)
                 {
-                    robot.wristArm.setWristArmSampleDrop();
+                    robot.elbow.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS);
+                    robot.wristArm.setWristArmHighChamberScorePos();
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS);
+                    //robot.scoreChamberTask.autoScoreChamber(Robot.ScoreHeight.HIGH,false,null);
                 }
                 break;
             case X:
-                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                if(pressed)
                 {
-                    robot.wristArm.setWristArmSamplePickup();
+                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS);
+                    robot.wristArm.setWristArmPickupSpecimenPos();
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS);
+                    //robot.pickupSpecimenTask.autoPickupSpecimen(null);
                 }
-                break;
             case Y:
-                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                //Testing only will be removed
+                if(pressed)
                 {
-                    //Set all subsystems to specimen drop pos
-                    robot.wristArm.setWristArmSpecimenDrop();
-//                    robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SPECIMEN_POS);
-                    robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SPECIMEN_POS);
+                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
+                    robot.wristArm.setWristArmPickupSamplePos();
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS);
+                    //robot.pickupSampleTask.autoPickupSample(null);
                 }
                 break;
-
             case LeftBumper:
-                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
-                {
-                    //Set all subsystems sample pickup pos
-//                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS);
-//                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
-                }
             case RightBumper:
-                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
-                {
-                    //Set all subsystems to high basket pos
-                    robot.wristArm.setWristArmSampleDrop();
-                    //robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SAMPLE_POS);
-//                    robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SAMPLE_POS);
-                }
             case DpadUp:
             case DpadDown:
             case DpadLeft:

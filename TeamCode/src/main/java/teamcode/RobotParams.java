@@ -33,6 +33,7 @@ import ftclib.drivebase.FtcSwerveDrive;
 import ftclib.motor.FtcMotorActuator.MotorType;
 import ftclib.sensor.FtcSparkFunOtos;
 import ftclib.sensor.FtcPinpointOdometry;
+import ftclib.sensor.FtcUltrasonicSensor;
 import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcDriveBase;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
@@ -156,8 +157,33 @@ public class RobotParams
         // Robot start locations in inches.
         public static final double STARTPOS_X                               = Robot.ROBOT_WIDTH/2.0;
         public static final double STARTPOS_Y                               = Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0;
-        public static final TrcPose2D STARTPOSE_RED_NET_ZONE                = new TrcPose2D(-STARTPOS_X, -STARTPOS_Y, 0.0);
-        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE        = new TrcPose2D(STARTPOS_X, -STARTPOS_Y, 0.0);
+        // Red Net Zone start pose face the net zone touching the alliance wall with the robot's in front of net zone.
+        public static final TrcPose2D STARTPOSE_RED_NET_ZONE                = new TrcPose2D(-(Field.HALF_FIELD_INCHES-(Field.FULL_TILE_INCHES+Robot.ROBOT_LENGTH/2.0)), -Robot.ROBOT_WIDTH/2.0, -90);
+        // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE        = new TrcPose2D(Robot.ROBOT_WIDTH/2.0+1, -(Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0), 0.0);
+
+        // Score poses (Net zone side).
+        public static final TrcPose2D RED_BASKET_SCORE_POSE         =
+                new TrcPose2D(0, 0, 0.0);
+        public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE    =
+                new TrcPose2D(0, 0, 0.0);
+        // Score pose (Observation zone side).
+        public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
+                new TrcPose2D(0, 0, 0.0);
+        // Pickup pose (Net zone side).
+        public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
+                new TrcPose2D(0,0, 0.0);
+        // Pickup pose (Observation zone side).
+        public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
+                new TrcPose2D(0,0, 0.0);
+        // Park pose (Net zone side).
+        public static final TrcPose2D RED_ASCENT_ZONE_PARK_POSE     =
+                new TrcPose2D(0,0, 0.0);
+        // Park pose (Observation zone side).
+        public static final TrcPose2D RED_OBSERVATION_ZONE_PARK_POSE=
+                new TrcPose2D(0, 0, 0.0);
+
+
     }   //class Game
 
     //
@@ -328,6 +354,8 @@ public class RobotParams
                             .setEncoderResolution(ODWHEEL_CPR / Math.PI * ODWHEEL_DIAMETER)
                             .setEncodersInverted(false, false); //???
                     absoluteOdometry = new FtcPinpointOdometry("pinpointOdo", ppOdoConfig);
+                    headingWrapRangeLow = -180.0;
+                    headingWrapRangeHigh = 180.0;
                 }
                 else if (RobotParams.Preferences.useSparkfunOTOS)
                 {
@@ -427,10 +455,11 @@ public class RobotParams
         public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
         public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
 
-        public static final double DEG_PER_COUNT                            = 0.10434783; //Need to to measure elbow angle divide by encoder counts
+        public static final double DEG_PER_COUNT                            = 0; //Need to to measure elbow angle divide by encoder counts
         public static final double POS_OFFSET                               = 0;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
+        public static final double RESTRICTED_POS_THRESHOLD                 = 0; //Angle in degrees
 
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 90;
@@ -460,7 +489,7 @@ public class RobotParams
         public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = true;
 
-        public static final double ARM_DEGREE_SCALE                         = (360 * 2)/3;
+        public static final double ARM_DEGREE_SCALE                         = 240;
         public static final double POS_OFFSET                               = 0; //Need to be determined
         public static final double ZERO_OFFSET                              = 0; //Need to be determined
         public static final double POWER_LIMIT                              = 1.0;

@@ -29,6 +29,10 @@ import ftclib.driverio.FtcDashboard;
 import ftclib.driverio.FtcMatchInfo;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.sensor.FtcRobotBattery;
+import teamcode.autotasks.TaskAutoPickupSample;
+import teamcode.autotasks.TaskAutoPickupSpecimen;
+import teamcode.autotasks.TaskAutoScoreBasket;
+import teamcode.autotasks.TaskAutoScoreChamber;
 import teamcode.subsystems.WristArm;
 import teamcode.subsystems.Claw;
 import teamcode.subsystems.Elbow;
@@ -79,6 +83,10 @@ public class Robot
     public TrcServo wristRotational;
     public TrcServo wristVertical;
     //Autotasks.
+    public TaskAutoPickupSample pickupSampleTask;
+    public TaskAutoPickupSpecimen pickupSpecimenTask;
+    public TaskAutoScoreBasket scoreBasketTask;
+    public TaskAutoScoreChamber scoreChamberTask;
 
     public enum GamePieceType
     {
@@ -165,10 +173,14 @@ public class Robot
                     arm = wristArm.getArmServo();
                     wristVertical = wristArm.getWristVerticalServo();
                 }
-//                if(runMode == TrcRobot.RunMode.AUTO_MODE)
-//                {
-//                    zeroCalibrate();
-//                }
+                if(!RobotParams.Preferences.inCompetition)
+                {
+                    zeroCalibrate(null, null);
+                }
+                pickupSampleTask = new TaskAutoPickupSample("AutoPickupSampleTask", this);
+                pickupSpecimenTask = new TaskAutoPickupSpecimen("AutoPickupSpecimenTask", this);
+                scoreBasketTask = new TaskAutoScoreBasket("AutoScoreBasketTask", this);
+                scoreChamberTask = new TaskAutoScoreChamber("AutoScoreChamberTask", this);
             }
         }
 
@@ -399,6 +411,11 @@ public class Robot
         if(wristVertical != null) wristVertical.cancel();
         if(wristRotational != null) wristRotational.cancel();
         if(robotDrive != null) robotDrive.cancel();
+        //Cancel all auto tasks.
+        if(pickupSampleTask != null) pickupSampleTask.cancel();
+        if(pickupSpecimenTask != null) pickupSpecimenTask.cancel();
+        if(scoreBasketTask != null) scoreBasketTask.cancel();
+        if(scoreChamberTask != null) scoreChamberTask.cancel();
     }   //cancelAll
 
     /**

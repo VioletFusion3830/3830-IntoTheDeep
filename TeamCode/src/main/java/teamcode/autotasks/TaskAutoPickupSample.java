@@ -50,7 +50,7 @@ public class TaskAutoPickupSample extends TrcAutoTask<TaskAutoPickupSample.State
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoAssist(TrcEvent completionEvent)
+    public void autoPickupSample(TrcEvent completionEvent)
     {
         tracer.traceInfo(moduleName, "event=" + completionEvent);
         startAutoTask(State.START, new TaskParams(), completionEvent);
