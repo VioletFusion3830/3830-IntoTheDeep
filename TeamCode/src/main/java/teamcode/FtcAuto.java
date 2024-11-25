@@ -38,6 +38,7 @@ import ftclib.robotcore.FtcOpMode;
 import teamcode.autocommands.CmdAuto;
 import teamcode.autocommands.CmdAutoNetZone;
 import teamcode.autocommands.CmdAutoObservationZone;
+import teamcode.subsystems.Claw;
 import teamcode.vision.Vision;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
@@ -196,10 +197,8 @@ public class FtcAuto extends FtcOpMode
                 autoCommand = null;
                 break;
         }
-        Robot.sampleType = autoChoices.alliance == Alliance.RED_ALLIANCE?
-                Vision.SampleType.RedAllianceSamples: Vision.SampleType.BlueAllianceSamples;
-//        Robot.SamplePickupType = autoChoices.alliance == Alliance.RED_ALLIANCE?
-                //robot.claw.SamplePickupType.RedAllianceSamples: robot.claw.SamplePickupType.BlueAllianceSamples;
+        FtcTeleOp.SamplePickupType = autoChoices.alliance == Alliance.RED_ALLIANCE?
+                Claw.SamplePickupType.RedAllianceSamples: Claw.SamplePickupType.BlueAllianceSamples;
     }   //robotInit
 
     //
@@ -253,11 +252,6 @@ public class FtcAuto extends FtcOpMode
         {
             robot.battery.setEnabled(true);
         }
-
-        robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
-        robot.arm.setPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS);
-        robot.wristVertical.setPosition(RobotParams.WristParamsVertical.SAMPLE_PICKUP_POS);
-        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
 
         robot.clawServo.open();
         if (autoChoices.autoStrategy == AutoStrategy.PID_DRIVE && autoCommand != null)

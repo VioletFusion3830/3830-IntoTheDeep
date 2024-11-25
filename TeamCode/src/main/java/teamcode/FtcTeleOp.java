@@ -52,8 +52,9 @@ public class FtcTeleOp extends FtcOpMode
     private boolean operatorAltFunc = false;
     private boolean relocalizing = false;
     private double elbowPrevPower = 0.0, elevatorPrevPower = 0.0, PrevslowDriveScale = 0.0;
-    private boolean isWristRotatorMiddle = false;
+    private boolean isWristRotatorMiddle = false, isPickTypeRed = false;
     private Double elevatorLimit = null, elavatorPos = null, elbowPos = null;
+    public static Claw.SamplePickupType SamplePickupType = Claw.SamplePickupType.AnySample;
 
     private TrcPose2D robotFieldPose = null;
 
@@ -347,7 +348,7 @@ public class FtcTeleOp extends FtcOpMode
                 {
                     if (pressed)
                     {
-                        robot.claw.autoAssistPickup(null, 0, null, 120, robot.SamplePickupType);
+                        robot.claw.autoAssistPickup(null, 0, null, 120, SamplePickupType);
                     }
                     else
                     {
@@ -373,15 +374,21 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case DpadUp:
-                if(pressed && Robot.sampleType != Vision.SampleType.RedAllianceSamples)
+                if(pressed)
                 {
-                    Robot.SamplePickupType = Claw.SamplePickupType.RedAllianceSamples;
-                }
-                else
-                {
-                    Robot.SamplePickupType = Claw.SamplePickupType.BlueAllianceSamples;
+                    if (!isPickTypeRed)
+                    {
+                        SamplePickupType = Claw.SamplePickupType.RedAllianceSamples;
+                        isPickTypeRed = true;
+                    }
+                    else
+                    {
+                        SamplePickupType = Claw.SamplePickupType.BlueAllianceSamples;
+                        isPickTypeRed = false;
+                    }
                 }
                 break;
+
             case DpadDown:
             case DpadLeft:
             case DpadRight:

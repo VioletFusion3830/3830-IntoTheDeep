@@ -59,8 +59,6 @@ public class Robot
     public static FtcMatchInfo matchInfo = null;
     private static TrcPose2D endOfAutoRobotPose = null;
     private static double nextStatusUpdateTime = 0.0;
-    public static Vision.SampleType sampleType = Vision.SampleType.AnySample;
-    public static Claw.SamplePickupType SamplePickupType = Claw.SamplePickupType.AnySample;
     // Robot Drive.
     public FtcRobotDrive.RobotInfo robotInfo;
     public FtcRobotDrive robotDrive;
@@ -346,7 +344,7 @@ public class Robot
                         dashboard.displayPrintf(
                                 lineNum++, "Grabber: pos=%.3f, hasObject=%s, sensorDistence=%.3f, autoAssistActive=%s, sensorColor=%.3f, SampleType=%s",
                                 clawServo.getPosition(), clawServo.hasObject(), claw.getSensorDataDistance(),
-                                clawServo.isAutoActive(), claw.getSensorDataColor(),sampleType);
+                                clawServo.isAutoActive(), claw.getSensorDataColor(), FtcTeleOp.SamplePickupType);
                     }
                 }
 

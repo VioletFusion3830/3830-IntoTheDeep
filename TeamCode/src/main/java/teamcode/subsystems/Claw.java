@@ -101,36 +101,38 @@ public class Claw {
 
     private void isSampleColorCorrect(Object context)
     {
-        SamplePickupType sampleType = (SamplePickupType) context;
-        double sampleHue = getSensorDataColor();
-        boolean sampleColorCorrect = false;
+        if(!clawServo.isClosed() && clawServo.sensorTriggered()) {
+            SamplePickupType sampleType = (SamplePickupType) context;
+            double sampleHue = getSensorDataColor();
+            boolean sampleColorCorrect = false;
 
-        switch (sampleType)
-        {
-            case RedSample:
-                sampleColorCorrect = redSampleHue.isHueInRange(sampleHue);
-                break;
-            case BlueSample:
-                sampleColorCorrect = blueSampleHue.isHueInRange(sampleHue);
-                break;
-            case YellowSample:
-                sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue);
-                break;
-            case RedAllianceSamples:
-                sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
-                break;
-            case BlueAllianceSamples:
-                sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue);
-                robot.globalTracer.traceInfo(null, "Blue Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
-                break;
-            case AnySample:
-                sampleColorCorrect = true;
-                break;
-        }
-        if (sampleColorCorrect)
-        {
-            clawServo.close();
-            clawServo.cancel();
+            switch (sampleType) {
+                case RedSample:
+                    sampleColorCorrect = redSampleHue.isHueInRange(sampleHue);
+                    break;
+                case BlueSample:
+                    sampleColorCorrect = blueSampleHue.isHueInRange(sampleHue);
+                    break;
+                case YellowSample:
+                    sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue);
+                    break;
+                case RedAllianceSamples:
+                    sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
+                    robot.globalTracer.traceInfo(null, "Red Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
+                    break;
+                case BlueAllianceSamples:
+                    sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue);
+                    robot.globalTracer.traceInfo(null, "Blue Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
+                    break;
+                case AnySample:
+                    sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
+                    ;
+                    break;
+            }
+            if (sampleColorCorrect) {
+                clawServo.close();
+                clawServo.cancel();
+            }
         }
     }
 
