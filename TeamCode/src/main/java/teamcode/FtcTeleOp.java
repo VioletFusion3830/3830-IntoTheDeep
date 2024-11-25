@@ -60,7 +60,7 @@ public class FtcTeleOp extends FtcOpMode
     private boolean sampleMode = true;
     private boolean isSamplePickupPos = true, isspecimenPickupPos = false, isWristRotatorMiddle = false;
     private Double elevatorLimit = null, elavatorPos = null, elbowPos = null;
-//    public static Claw.SamplePickupType  = Claw.SamplePickupType.anySample;
+    public static Claw.SamplePickupType  samplePickupType = Claw.SamplePickupType.anySample;
 
     private TrcPose2D robotFieldPose = null;
     //

@@ -81,6 +81,9 @@ public class Robot
     public TrcMotor elevator;
     public TrcServo wristRotational;
     public TrcServo wristVertical;
+    // Events.
+    TrcEvent elevatorEvent;
+    TrcEvent elbowEvent;
     //Autotasks.
     public TaskAutoPickupSample pickupSampleTask;
     public TaskAutoPickupSpecimen pickupSpecimenTask;
@@ -172,10 +175,10 @@ public class Robot
                     arm = wristArm.getArmServo();
                     wristVertical = wristArm.getWristVerticalServo();
                 }
-//                if(!RobotParams.Preferences.inCompetition)
-//                {
-                zeroCalibrate(null, null);
-//                }
+                elevatorEvent = new TrcEvent("elevatorEvent");
+                elbowEvent = new TrcEvent("elbowEvent");
+                zeroCalibrate(null,elevatorEvent, elbowEvent);
+                // Create autotasks.
                 pickupSampleTask = new TaskAutoPickupSample("AutoPickupSampleTask", this);
                 pickupSpecimenTask = new TaskAutoPickupSpecimen("AutoPickupSpecimenTask", this);
                 scoreBasketTask = new TaskAutoScoreBasket("AutoScoreBasketTask", this);
@@ -429,18 +432,18 @@ public class Robot
             elevator.zeroCalibrate(owner, RobotParams.ElevatorParams.ZERO_CAL_POWER, elevatorEvent);
         }
 
-//        if(elbow != null)
-//        {
+        if(elbow != null)
+        {
         elbow.zeroCalibrate(owner, RobotParams.ElbowParams.ZERO_CAL_POWER, elbowEvent);
-//        }
+        }
     }   //zeroCalibrate
 
     /**
      * This method zero calibrates all subsystems.
      */
-    public void zeroCalibrate(TrcEvent elevatorEvent, TrcEvent elbowEvent)
+    public void zeroCalibrate()
     {
-        zeroCalibrate(null, elevatorEvent, elbowEvent);
+        zeroCalibrate(null, null, null);
     }   //zeroCalibrate
 
     /**

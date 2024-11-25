@@ -125,8 +125,6 @@ public class FtcAuto extends FtcOpMode
     public static final AutoChoices autoChoices = new AutoChoices();
     private Robot robot;
     private TrcRobot.RobotCommand autoCommand;
-    TrcEvent elevatorEvent = new TrcEvent("elevatorEvent");
-    TrcEvent elbowEvent = new TrcEvent("elbowEvent");
 
     //
     // Implements FtcOpMode abstract method.
@@ -199,8 +197,8 @@ public class FtcAuto extends FtcOpMode
                 autoCommand = null;
                 break;
         }
-//        Claw.SamplePickupType. = autoChoices.alliance == Alliance.RED_ALLIANCE?
-//                Claw.SamplePickupType.redAllianceSamples: Claw.SamplePickupType.blueAllianceSamples;
+        FtcTeleOp.samplePickupType = autoChoices.alliance == Alliance.RED_ALLIANCE?
+                Claw.SamplePickupType.redAllianceSamples: Claw.SamplePickupType.blueAllianceSamples;
     }   //robotInit
 
     //
@@ -214,17 +212,19 @@ public class FtcAuto extends FtcOpMode
     @Override
     public void initPeriodic()
     {
-        robot.zeroCalibrate(null, elevatorEvent, elbowEvent);
-        if (!subsystemsInited && elevatorEvent.isSignaled() && elbowEvent.isSignaled())
+        if (robot.elevatorEvent.isSignaled() && robot.elbowEvent.isSignaled())
         {
-            // init your subsystems.
-            subsystemsInited = true;
-            robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
-            robot.arm.setPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS);
-            robot.wristVertical.setPosition(RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS);
-            robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
+            robot.elevatorEvent.clear();
+            robot.elbowEvent.clear();
+            if(robot.elbow != null && robot.elevator != null && robot.wristVertical != null && robot.wristRotational != null)
+            {
+                subsystemsInited = true;
+                robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
+                robot.arm.setPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS);
+                robot.wristVertical.setPosition(RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS);
+                robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
+            }
         }
-
     }   //initPeriodic
 
     /**

@@ -126,7 +126,6 @@ public class Claw {
                     break;
                 case anySample:
                     sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
-                    ;
                     break;
             }
             if (sampleColorCorrect) {
