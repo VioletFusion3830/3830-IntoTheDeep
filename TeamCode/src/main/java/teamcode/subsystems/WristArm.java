@@ -54,30 +54,40 @@ public class WristArm {
         wristVerticalServo.setPosition(wristVerticalPos);
     }
 
-    public void setWristArmSamplePickup()
+    public void setWristArmPickupSamplePos()
     {
-        setWristArmPosition(.422, RobotParams.WristParamsVertical.SAMPLE_PICKUP_POS);
+        setWristArmPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS, RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS);
     }
 
-    public void setWristArmSpecimenPickup()
+    public void setWristArmPickupSpecimenPos()
     {
-        setWristArmPosition(RobotParams.ArmParams.PICKUP_SPECIMEN_POS, RobotParams.WristParamsVertical.SPECIMEN_PICKUP_POS);
+        setWristArmPosition(RobotParams.ArmParams.PICKUP_SPECIMEN_POS, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS);
     }
 
-    public void setWristArmSampleDrop()
+    public void setWristArmBasketScorePos()
     {
-        setWristArmPosition(.32, RobotParams.WristParamsVertical.SAMPLE_DROP_POS);
+        setWristArmPosition(RobotParams.ArmParams.BASKET_SCORE_POS, RobotParams.WristParamsVertical.BASKET_SCORE_POS);
     }
 
-    public void setWristArmSpecimenDrop()
+    public void setWristArmHighChamberScorePos()
     {
-        setWristArmPosition(RobotParams.ArmParams.DROP_SPECIMEN_POS, RobotParams.WristParamsVertical.SPECIMEN_DROP_POS);
+        setWristArmPosition(RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS);
     }
 
     private double armGetPowerComp(double currPower)
     {
         double elbowAngle = robot.elbow.getPosition();
-        return RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER * Math.cos(armServo.getPosition()+(elbowAngle/360));
+        double armAngle = armServo.getPosition();
+        double angle;
+        if (elbowAngle + armAngle > 90)
+        {
+            angle = 0;
+        }
+        else
+        {
+            armAngle = elbowAngle + armAngle;
+        }
+        return RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER * Math.cos(armAngle);
     }   //armGetPowerComp
 
 }

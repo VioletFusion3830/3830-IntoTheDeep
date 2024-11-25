@@ -25,10 +25,12 @@ package teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import java.util.Locale;
+import java.util.Set;
+
+import ftclib.drivebase.FtcSwerveDrive;
 import ftclib.driverio.FtcGamepad;
 import ftclib.robotcore.FtcOpMode;
 import teamcode.subsystems.Claw;
-import teamcode.vision.Vision;
 import trclib.drivebase.TrcDriveBase;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
@@ -51,10 +53,13 @@ public class FtcTeleOp extends FtcOpMode
     private boolean driverAltFunc = false;
     private boolean operatorAltFunc = false;
     private boolean relocalizing = false;
-    private double elbowPrevPower = 0.0, elevatorPrevPower = 0.0, PrevslowDriveScale = 0.0;
-    private boolean isWristRotatorMiddle = false, isPickTypeRed = false;
+    private double elbowPrevPower = 0.0;
+    private double elevatorPrevPower = 0.0;
+    private boolean clawOpen = true;
+    private boolean slowDrive = false;
+    private boolean sampleMode = true;
+    private boolean isSamplePickupPos = true, isspecimenPickupPos = false, isWristRotatorMiddle = false;
     private Double elevatorLimit = null, elavatorPos = null, elbowPos = null;
-    public static Claw.SamplePickupType SamplePickupType = Claw.SamplePickupType.AnySample;
 
     private TrcPose2D robotFieldPose = null;
 
@@ -201,41 +206,50 @@ public class FtcTeleOp extends FtcOpMode
                             inputs[0], inputs[1], inputs[2], robot.robotDrive.driveBase.getDriveOrientation());
                 }
 
-                double slowDriveScale = driverGamepad.getLeftTrigger();
+                boolean slowDriveTriggered = driverGamepad.getLeftTrigger() >= .3;
                 // Press and hold for slow drive.
-                if (slowDriveScale != PrevslowDriveScale)
+                if (!slowDrive && slowDriveTriggered)
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> DrivePower slow.");
-                    drivePowerScale = slowDriveScale * RobotParams.Robot.DRIVE_SLOW_SCALE;
-                    turnPowerScale = slowDriveScale * RobotParams.Robot.TURN_SLOW_SCALE;
+                    drivePowerScale = RobotParams.Robot.DRIVE_SLOW_SCALE;
+                    turnPowerScale = RobotParams.Robot.TURN_SLOW_SCALE;
                 }
-//                    robot.globalTracer.traceInfo(moduleName, ">>>>> DrivePower normal.");
-//                    drivePowerScale = RobotParams.Robot.DRIVE_NORMAL_SCALE;
-//                    turnPowerScale = RobotParams.Robot.TURN_NORMAL_SCALE;
-                PrevslowDriveScale = slowDriveScale;
+                else if (slowDrive && !slowDriveTriggered)
+                {
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> DrivePower normal.");
+                    drivePowerScale = RobotParams.Robot.DRIVE_NORMAL_SCALE;
+                    turnPowerScale = RobotParams.Robot.TURN_NORMAL_SCALE;
+                }
+                slowDrive = slowDriveTriggered;
             }
             //
             // Other subsystems.
             //
             if (RobotParams.Preferences.useSubsystems) {
                 if(robot.elbow != null && robot.elevator != null) {
+                    double elbowPower = operatorGamepad.getRightStickY(true) * RobotParams.ElbowParams.POWER_LIMIT;
                     elbowPos = robot.elbow.getPosition();
-                    elavatorPos = robot.elevator != null ? robot.elevator.getPosition() : null;
+//                    if(robot.elevator != null && elbowPos < RobotParams.ElbowParams.RESTRICTED_POS_THRESHOLD) {
+//                        elevatorLimit = RobotParams.ElevatorParams.MAX_POS - Math.max(Math.cos(Math.toRadians(elbowPos)) * RobotParams.ElevatorParams.MAX_SAFE_ADJUSTMENT, 0);
+//                        if (elavatorPos != null && elavatorPos > elevatorLimit) {
+//                            robot.elevator.setPosition(elevatorLimit);
+                        }
+//                    }
+//                    elavatorPos = robot.elevator != null ? robot.elevator.getPosition() : null;
 //                    elevatorLimit = RobotParams.ElevatorParams.MAX_POS - Math.max(Math.cos(Math.toRadians(elbowPos)) * RobotParams.ElevatorParams.MAX_SAFE_ADJUSTMENT, 0);
 //                    //need to change angle to start
 //                    if (elbowPos < 60 && elavatorPos != null && elavatorPos > elevatorLimit) {
 //                        robot.elevator.setPosition(elevatorLimit);
 //                    }
-                    double elbowPower = operatorGamepad.getRightStickY(true) * RobotParams.ElbowParams.POWER_LIMIT;
-                    if (elbowPower != elbowPrevPower) {
-                        if (operatorAltFunc) {
-                            robot.elbow.setPower(elbowPower);
-                        } else {
-                                robot.elbow.setPidPower(elbowPower, RobotParams.ElbowParams.MIN_POS, RobotParams.ElbowParams.MAX_POS, true);
-                        }
-                    }
-                    elbowPrevPower = elbowPower;
-                }
+//                    if (elbowPower != elbowPrevPower) {
+//                        if (operatorAltFunc) {
+//                            robot.elbow.setPower(elbowPower);
+//                        } else {
+//                                robot.elbow.setPidPower(elbowPower, RobotParams.ElbowParams.MIN_POS, RobotParams.ElbowParams.MAX_POS, true);
+//                        }
+//                    }
+//                    elbowPrevPower = elbowPower;
+//                }
 
                 if (robot.elevator != null) {
                     double elevatorPower = operatorGamepad.getLeftStickY(true) * RobotParams.ElevatorParams.POWER_LIMIT;
@@ -328,31 +342,28 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case B:
+                if (pressed)
+                {
+                    robot.arm.setPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS);
+                }
 //                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
 //                driverAltFunc = pressed;
                 break;
             case X:
-                // Toggle claw open/close.
-                if (pressed && robot.claw != null) {
-                    if (robot.clawServo.isClosed()) {
-                        robot.claw.getClawServo().open();
-                    } else {
-                        robot.claw.getClawServo().close();
-                    }
-                }
+
                 break;
             case Y:
                 break;
+
             case LeftBumper:
-                if(robot.claw != null)
-                {
-                    if (pressed)
-                    {
-                        robot.claw.autoAssistPickup(null, 0, null, 120, SamplePickupType);
-                    }
-                    else
-                    {
-                        robot.clawServo.cancel();
+                // Toggle claw open/close.
+                if (pressed && robot.claw != null) {
+                    if (!clawOpen) {
+                        robot.claw.getClawServo().open();
+                        clawOpen = true;
+                    } else {
+                        robot.claw.getClawServo().close();
+                        clawOpen = false;
                     }
                 }
                 break;
@@ -374,23 +385,19 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case DpadUp:
-                if(pressed)
+                if(robot.claw != null)
                 {
-                    if (!isPickTypeRed)
-                    {
-                        SamplePickupType = Claw.SamplePickupType.RedAllianceSamples;
-                        isPickTypeRed = true;
-                    }
-                    else
-                    {
-                        SamplePickupType = Claw.SamplePickupType.BlueAllianceSamples;
-                        isPickTypeRed = false;
-                    }
+                    robot.claw.autoAssistPickup(null,0,null,10, Claw.SamplePickupType.blueAllianceSamples);
+                    clawOpen = false;
                 }
-                break;
-
             case DpadDown:
+                if(robot.claw != null)
+                {
+                    robot.claw.autoAssistPickup(null,0,null,10, Claw.SamplePickupType.redAllianceSamples);
+                    clawOpen = false;
+                }
             case DpadLeft:
+                robot.clawServo.autoGrab(null,0,null,10);
             case DpadRight:
                 break;
             case Back:
@@ -398,10 +405,15 @@ public class FtcTeleOp extends FtcOpMode
                 {
                     robot.globalTracer.traceInfo(moduleName, ">>>>> ZeroCalibrate pressed.");
                     robot.cancelAll();
-                    robot.zeroCalibrate();
+                    robot.zeroCalibrate(moduleName,null,null);
+                    if (robot.robotDrive != null && robot.robotDrive instanceof FtcSwerveDrive)
+                    {
+                        // Drive base is a Swerve Drive, align all steering wheels forward.
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Set SteerAngle to zero.");
+                        ((FtcSwerveDrive) robot.robotDrive).setSteerAngle(0.0, false, false);
+                    }
                 }
                 break;
-
             case Start:
                 if (robot.vision != null && robot.vision.aprilTagVision != null && robot.robotDrive != null)
                 {
@@ -441,44 +453,43 @@ public class FtcTeleOp extends FtcOpMode
         switch (button)
         {
             case A:
+                if(pressed)
+                {
+                    robot.elbow.setPosition(RobotParams.ElbowParams.BASKET_SCORE_POS);
+                    robot.wristArm.setWristArmBasketScorePos();
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS);
+                    //robot.scoreBasketTask.atuoScoreBasket(null);
+                }
                 break;
             case B:
-                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                if(pressed)
                 {
-                    robot.wristArm.setWristArmSampleDrop();
+                    robot.elbow.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS);
+                    robot.wristArm.setWristArmHighChamberScorePos();
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS);
+                    //robot.scoreChamberTask.autoScoreChamber(Robot.ScoreHeight.HIGH,false,null);
                 }
                 break;
             case X:
-                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                if(pressed)
                 {
-                    robot.wristArm.setWristArmSamplePickup();
+                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS);
+                    robot.wristArm.setWristArmPickupSpecimenPos();
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS);
+                    //robot.pickupSpecimenTask.autoPickupSpecimen(null);
                 }
-                break;
             case Y:
-                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
+                //Testing only will be removed
+                if(pressed)
                 {
-                    //Set all subsystems to specimen drop pos
-                    robot.wristArm.setWristArmSpecimenDrop();
-//                    robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SPECIMEN_POS);
-                    robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SPECIMEN_POS);
+                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
+                    robot.wristArm.setWristArmPickupSamplePos();
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS);
+                    //robot.pickupSampleTask.autoPickupSample(null);
                 }
                 break;
-
             case LeftBumper:
-                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
-                {
-                    //Set all subsystems sample pickup pos
-//                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS);
-//                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
-                }
             case RightBumper:
-                if(pressed && robot.elbow != null && robot.elevator != null && robot.wristArm != null)
-                {
-                    //Set all subsystems to high basket pos
-                    robot.wristArm.setWristArmSampleDrop();
-                    //robot.elevator.setPosition(RobotParams.ElevatorParams.DROP_SAMPLE_POS);
-//                    robot.elbow.setPosition(RobotParams.ElbowParams.DROP_SAMPLE_POS);
-                }
             case DpadUp:
             case DpadDown:
             case DpadLeft:
@@ -496,7 +507,7 @@ public class FtcTeleOp extends FtcOpMode
                     // Zero calibrate all subsystems (arm, elevator and turret).
                     robot.globalTracer.traceInfo(moduleName, ">>>>> ZeroCalibrate pressed.");
                     robot.cancelAll();
-                    robot.zeroCalibrate(moduleName);
+                    robot.zeroCalibrate(moduleName,null,null);
                 }
                 break;
 

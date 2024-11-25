@@ -29,6 +29,10 @@ import ftclib.driverio.FtcDashboard;
 import ftclib.driverio.FtcMatchInfo;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.sensor.FtcRobotBattery;
+import teamcode.autotasks.TaskAutoPickupSample;
+import teamcode.autotasks.TaskAutoPickupSpecimen;
+import teamcode.autotasks.TaskAutoScoreBasket;
+import teamcode.autotasks.TaskAutoScoreChamber;
 import teamcode.subsystems.WristArm;
 import teamcode.subsystems.Claw;
 import teamcode.subsystems.Elbow;
@@ -41,6 +45,7 @@ import trclib.motor.TrcMotor;
 import trclib.motor.TrcServo;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
+import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
 import trclib.sensor.TrcDigitalInput;
 import trclib.subsystem.TrcServoGrabber;
@@ -77,12 +82,22 @@ public class Robot
     public TrcServo wristRotational;
     public TrcServo wristVertical;
     //Autotasks.
+    public TaskAutoPickupSample pickupSampleTask;
+    public TaskAutoPickupSpecimen pickupSpecimenTask;
+    public TaskAutoScoreBasket scoreBasketTask;
+    public TaskAutoScoreChamber scoreChamberTask;
 
     public enum GamePieceType
     {
         SPECIMEN,
         SAMPLE
     }   //enum GamePieceType
+
+    public enum ScoreHeight
+    {
+        LOW,
+        HIGH
+    }   //enum ScoreHeight
 
     /**
      * Constructor: Create an instance of the object.
@@ -157,10 +172,14 @@ public class Robot
                     arm = wristArm.getArmServo();
                     wristVertical = wristArm.getWristVerticalServo();
                 }
-//                if(runMode == TrcRobot.RunMode.AUTO_MODE)
-//                {
-//                    zeroCalibrate();
-//                }
+                if(!RobotParams.Preferences.inCompetition)
+                {
+                    zeroCalibrate(null, null);
+                }
+                pickupSampleTask = new TaskAutoPickupSample("AutoPickupSampleTask", this);
+                pickupSpecimenTask = new TaskAutoPickupSpecimen("AutoPickupSpecimenTask", this);
+                scoreBasketTask = new TaskAutoScoreBasket("AutoScoreBasketTask", this);
+                scoreChamberTask = new TaskAutoScoreChamber("AutoScoreChamberTask", this);
             }
         }
 
@@ -391,6 +410,11 @@ public class Robot
         if(wristVertical != null) wristVertical.cancel();
         if(wristRotational != null) wristRotational.cancel();
         if(robotDrive != null) robotDrive.cancel();
+        //Cancel all auto tasks.
+        if(pickupSampleTask != null) pickupSampleTask.cancel();
+        if(pickupSpecimenTask != null) pickupSpecimenTask.cancel();
+        if(scoreBasketTask != null) scoreBasketTask.cancel();
+        if(scoreChamberTask != null) scoreChamberTask.cancel();
     }   //cancelAll
 
     /**
@@ -398,25 +422,25 @@ public class Robot
      *
      * @param owner specifies the owner ID to check if the caller has ownership of the motor.
      */
-    public void zeroCalibrate(String owner)
+    public void zeroCalibrate(String owner, TrcEvent elevatorEvent, TrcEvent elbowEvent)
     {
-//        if(elevator != null)
-//        {
-            elevator.zeroCalibrate(owner, RobotParams.ElevatorParams.ZERO_CAL_POWER);
-//        }
+        if(elevator != null)
+        {
+            elevator.zeroCalibrate(owner, RobotParams.ElevatorParams.ZERO_CAL_POWER, elevatorEvent);
+        }
 
 //        if(elbow != null)
 //        {
-            elbow.zeroCalibrate(owner, RobotParams.ElbowParams.ZERO_CAL_POWER);
+        elbow.zeroCalibrate(owner, RobotParams.ElbowParams.ZERO_CAL_POWER, elbowEvent);
 //        }
     }   //zeroCalibrate
 
     /**
      * This method zero calibrates all subsystems.
      */
-    public void zeroCalibrate()
+    public void zeroCalibrate(TrcEvent elevatorEvent, TrcEvent elbowEvent)
     {
-        zeroCalibrate(null);
+        zeroCalibrate(null, elevatorEvent, elbowEvent);
     }   //zeroCalibrate
 
     /**
