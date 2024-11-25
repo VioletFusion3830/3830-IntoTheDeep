@@ -25,12 +25,12 @@ public class Claw {
 
     public enum SamplePickupType
     {
-        RedAllianceSamples,
-        BlueAllianceSamples,
-        RedSample,
-        BlueSample,
-        YellowSample,
-        AnySample
+        redAllianceSamples,
+        blueAllianceSamples,
+        redSample,
+        blueSample,
+        yellowSample,
+        anySample
     }
 
     public Claw(Robot robot)
@@ -107,24 +107,24 @@ public class Claw {
             boolean sampleColorCorrect = false;
 
             switch (sampleType) {
-                case RedSample:
+                case redSample:
                     sampleColorCorrect = redSampleHue.isHueInRange(sampleHue);
                     break;
-                case BlueSample:
+                case blueSample:
                     sampleColorCorrect = blueSampleHue.isHueInRange(sampleHue);
                     break;
-                case YellowSample:
+                case yellowSample:
                     sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue);
                     break;
-                case RedAllianceSamples:
+                case redAllianceSamples:
                     sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
                     robot.globalTracer.traceInfo(null, "Red Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
                     break;
-                case BlueAllianceSamples:
+                case blueAllianceSamples:
                     sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue);
                     robot.globalTracer.traceInfo(null, "Blue Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
                     break;
-                case AnySample:
+                case anySample:
                     sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
                     ;
                     break;

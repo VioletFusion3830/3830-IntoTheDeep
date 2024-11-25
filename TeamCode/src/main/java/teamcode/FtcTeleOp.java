@@ -60,9 +60,9 @@ public class FtcTeleOp extends FtcOpMode
     private boolean sampleMode = true;
     private boolean isSamplePickupPos = true, isspecimenPickupPos = false, isWristRotatorMiddle = false;
     private Double elevatorLimit = null, elavatorPos = null, elbowPos = null;
+//    public static Claw.SamplePickupType  = Claw.SamplePickupType.anySample;
 
     private TrcPose2D robotFieldPose = null;
-
     //
     // Implements FtcOpMode abstract method.
     //
@@ -378,7 +378,7 @@ public class FtcTeleOp extends FtcOpMode
                     }
                     else
                     {
-                        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MAX_P0S);
+                        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
                         isWristRotatorMiddle = false;
                     }
                 }
@@ -390,14 +390,17 @@ public class FtcTeleOp extends FtcOpMode
                     robot.claw.autoAssistPickup(null,0,null,10, Claw.SamplePickupType.blueAllianceSamples);
                     clawOpen = false;
                 }
+                break;
             case DpadDown:
                 if(robot.claw != null)
                 {
                     robot.claw.autoAssistPickup(null,0,null,10, Claw.SamplePickupType.redAllianceSamples);
                     clawOpen = false;
                 }
+                break;
             case DpadLeft:
                 robot.clawServo.autoGrab(null,0,null,10);
+                break;
             case DpadRight:
                 break;
             case Back:

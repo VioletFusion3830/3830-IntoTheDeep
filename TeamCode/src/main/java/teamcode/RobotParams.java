@@ -550,10 +550,9 @@ public class RobotParams
         public static final String PRIMARY_SERVO_ROTATOR                    = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_ROTATOR_INVERTED          = false;
 
-        public static final double MIDDLE_P0S                               = 0.5;
-        public static final double MAX_P0S                                  = 1.0;
-        public static final double MIN_P0S                                  = 0.0;
-        public static final double[] POS_PRESETS                            = {MIDDLE_P0S, MAX_P0S};
+        public static final double MIDDLE_P0S                               = 0.0;
+        public static final double MIN_P0S                                  = 0.672;
+        public static final double[] POS_PRESETS                            = {MIDDLE_P0S, MIN_P0S};
     }   //class WristParamsRotational
 
 }   //class RobotParams

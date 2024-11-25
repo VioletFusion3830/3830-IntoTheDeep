@@ -199,8 +199,8 @@ public class FtcAuto extends FtcOpMode
                 autoCommand = null;
                 break;
         }
-        FtcTeleOp.SamplePickupType = autoChoices.alliance == Alliance.RED_ALLIANCE?
-                Claw.SamplePickupType.RedAllianceSamples: Claw.SamplePickupType.BlueAllianceSamples;
+//        Claw.SamplePickupType. = autoChoices.alliance == Alliance.RED_ALLIANCE?
+//                Claw.SamplePickupType.redAllianceSamples: Claw.SamplePickupType.blueAllianceSamples;
     }   //robotInit
 
     //
@@ -221,7 +221,7 @@ public class FtcAuto extends FtcOpMode
             subsystemsInited = true;
             robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
             robot.arm.setPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS);
-            robot.wristVertical.setPosition(RobotParams.WristParamsVertical.SAMPLE_PICKUP_POS);
+            robot.wristVertical.setPosition(RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS);
             robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
         }
 

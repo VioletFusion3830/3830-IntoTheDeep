@@ -99,28 +99,28 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                 RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
         double elbowAngle, elevatorPos, wristArmPos;
 
-        if (robotPose.x >= -RobotParams.Game.CHAMBER_MAX_SCORE_POS_X &&
-                robotPose.x <= RobotParams.Game.CHAMBER_MAX_SCORE_POS_X)
-        {
-            // If robot current position is within the chamber zone, use its X position.
-            scorePose.x = robotPose.x;
-        }
-
-        if (scoreHeight == Robot.ScoreHeight.LOW)
-        {
-            elbowAngle = RobotParams.ElbowParams.LOW_CHAMBER_SCORE_POS;
-            elevatorPos = Extender.Params.LOW_CHAMBER_SCORE_POS;
-            wristArmPos = Wrist.Params.LOW_CHAMBER_SCORE_POS;
-        }
-        else
-        {
-            elbowAngle = Elbow.Params.HIGH_CHAMBER_SCORE_POS;
-            extenderPos = Extender.Params.HIGH_CHAMBER_SCORE_POS;
-            wristPos = Wrist.Params.HIGH_CHAMBER_SCORE_POS;
-        }
+//        if (robotPose.x >= -RobotParams.Game.CHAMBER_MAX_SCORE_POS_X &&
+//                robotPose.x <= RobotParams.Game.CHAMBER_MAX_SCORE_POS_X)
+//        {
+//            // If robot current position is within the chamber zone, use its X position.
+//            scorePose.x = robotPose.x;
+//        }
+//
+//        if (scoreHeight == Robot.ScoreHeight.LOW)
+//        {
+//            elbowAngle = RobotParams.ElbowParams.LOW_CHAMBER_SCORE_POS;
+//            elevatorPos = Extender.Params.LOW_CHAMBER_SCORE_POS;
+//            wristArmPos = Wrist.Params.LOW_CHAMBER_SCORE_POS;
+//        }
+//        else
+//        {
+//            elbowAngle = Elbow.Params.HIGH_CHAMBER_SCORE_POS;
+//            extenderPos = Extender.Params.HIGH_CHAMBER_SCORE_POS;
+//            wristPos = Wrist.Params.HIGH_CHAMBER_SCORE_POS;
+//        }
 
         tracer.traceInfo(moduleName, "event=" + completionEvent);
-        startAutoTask(State.GO_TO_SCORE_POSITION, new TaskParams(), completionEvent);
+//        startAutoTask(State.GO_TO_SCORE_POSITION, new TaskParams(), completionEvent);
     }   //autoAssist
 
     /**
