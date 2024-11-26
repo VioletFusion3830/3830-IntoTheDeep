@@ -1,5 +1,6 @@
 package teamcode.subsystems;
 
+import teamcode.FtcDashboard;
 import trclib.motor.TrcMotor;
 import ftclib.motor.FtcMotorActuator;
 import teamcode.RobotParams;

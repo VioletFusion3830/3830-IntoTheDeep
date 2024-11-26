@@ -537,10 +537,10 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
+                if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elbow !=null) {
                     if (pressed) {
-                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
-                        robot.elevator.presetPositionDown(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
+                        robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
+                        robot.elbow.presetPositionDown(moduleName, RobotParams.ElbowParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;
@@ -602,10 +602,10 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
+                if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elbow !=null) {
                     if (pressed) {
-                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
-                        robot.elevator.presetPositionUp(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
+                        robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
+                        robot.elbow.presetPositionUp(moduleName, RobotParams.ElbowParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;

@@ -3,6 +3,7 @@ package teamcode.subsystems;
 import com.qualcomm.robotcore.util.Range;
 
 import ftclib.motor.FtcMotorActuator;
+import teamcode.FtcDashboard;
 import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.motor.TrcMotor;
@@ -49,7 +50,7 @@ public class Elbow
         double elbowAngle = elbow.getPosition();
         double baseValue = 0;
 
-        return RobotParams.ElbowParams.GRAVITY_COMP_MAX_POWER * Math.cos(Math.toRadians(elbowAngle)) * (baseValue+(elevatorPos/RobotParams.ElevatorParams.MAX_POS));
+        return /*RobotParams.ElbowParams.GRAVITY_COMP_MAX_POWER*/FtcDashboard.TunePID.GarvityComp * Math.cos(Math.toRadians(elbowAngle)) * (baseValue+(elevatorPos/RobotParams.ElevatorParams.MAX_POS));
     }   //getElbowPowerComp
 
 }   //class Elbow
