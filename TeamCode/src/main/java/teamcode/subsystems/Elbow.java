@@ -1,5 +1,7 @@
 package teamcode.subsystems;
 
+import com.qualcomm.robotcore.util.Range;
+
 import ftclib.motor.FtcMotorActuator;
 import teamcode.Robot;
 import teamcode.RobotParams;
@@ -43,22 +45,11 @@ public class Elbow
 
     private double getElbowPowerComp(double currPower)
     {
-        double distanceFromPivot = 9.94;
-        double elevatorPos = robot.elevator.getPosition(); //Slider distance in the diagram
-        double elbowAngle = elbow.getPosition(); //L1 in the diagram or base joint angle in degrees
+        double elevatorPos = robot.elevator.getPosition();
+        double elbowAngle = elbow.getPosition();
+        double baseValue = 0;
 
-        return RobotParams.ElbowParams.GRAVITY_COMP_MAX_POWER * (elevatorPos/distanceFromPivot) * Math.cos(Math.toRadians(elbowAngle));
-
+        return RobotParams.ElbowParams.GRAVITY_COMP_MAX_POWER * Math.cos(Math.toRadians(elbowAngle)) * (baseValue+(elevatorPos/RobotParams.ElevatorParams.MAX_POS));
     }   //getElbowPowerComp
-
-    public void cyclePosition(boolean positiveCycle){
-        int posCount = RobotParams.ElbowParams.POS_PRESETS.length;
-        if(positiveCycle){
-            elbowPosition = elbowPosition < posCount - 1 ? elbowPosition + 1 : 0;
-        } else {
-            elbowPosition = elbowPosition == 0 ? posCount - 1 : elbowPosition - 1;
-        }
-        elbow.setPresetPosition(elbowPosition);
-    }
 
 }   //class Elbow

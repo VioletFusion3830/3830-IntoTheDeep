@@ -82,8 +82,8 @@ public class Robot
     public TrcServo wristRotational;
     public TrcServo wristVertical;
     // Events.
-    TrcEvent elevatorEvent;
-    TrcEvent elbowEvent;
+    public TrcEvent elevatorEvent;
+    public TrcEvent elbowEvent;
     //Autotasks.
     public TaskAutoPickupSample pickupSampleTask;
     public TaskAutoPickupSpecimen pickupSpecimenTask;

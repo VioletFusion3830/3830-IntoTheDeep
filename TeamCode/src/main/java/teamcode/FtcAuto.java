@@ -82,7 +82,6 @@ public class FtcAuto extends FtcOpMode
         NO_PARK
     }   //enum ParkOption
 
-    public boolean subsystemsInited = false;
     /**
      * This class stores the autonomous menu choices.
      */
@@ -218,7 +217,6 @@ public class FtcAuto extends FtcOpMode
             robot.elbowEvent.clear();
             if(robot.elbow != null && robot.elevator != null && robot.wristVertical != null && robot.wristRotational != null)
             {
-                subsystemsInited = true;
                 robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
                 robot.arm.setPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS);
                 robot.wristVertical.setPosition(RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS);

@@ -201,8 +201,8 @@ public class RobotParams
         public static final String STEER_ZERO_CAL_FILE                      = TEAM_FOLDER_PATH + "/SteerZeroCalibration.txt";
         public static final double DASHBOARD_UPDATE_INTERVAL                = 0.1; // in msec
         public static final String ROBOT_CODEBASE                           = "Robot2025";
-        public static final double ROBOT_LENGTH                             = 17.0;
-        public static final double ROBOT_WIDTH                              = 17.0;
+        public static final double ROBOT_LENGTH                             = 15.125;
+        public static final double ROBOT_WIDTH                              = 16.25;
         // Robot Drive Parameters.
         public static final DriveMode DRIVE_MODE                = DriveMode.ArcadeMode;
         public static final DriveOrientation DRIVE_ORIENTATION  = DriveOrientation.ROBOT;
@@ -350,7 +350,7 @@ public class RobotParams
                 if (RobotParams.Preferences.usePinpointOdometry)
                 {
                     FtcPinpointOdometry.Config ppOdoConfig = new FtcPinpointOdometry.Config()
-                            .setPodOffsets(0.0, 0.0)    // ???
+                            .setPodOffsets(180, -24)
                             .setEncoderResolution(ODWHEEL_CPR / Math.PI * ODWHEEL_DIAMETER)
                             .setEncodersInverted(false, false); //???
                     absoluteOdometry = new FtcPinpointOdometry("pinpointOdo", ppOdoConfig);
