@@ -350,7 +350,7 @@ public class RobotParams
                 if (RobotParams.Preferences.usePinpointOdometry)
                 {
                     FtcPinpointOdometry.Config ppOdoConfig = new FtcPinpointOdometry.Config()
-                            .setPodOffsets(180, -24)
+                            .setPodOffsets(-24, -180)
                             .setEncoderResolution(ODWHEEL_CPR / Math.PI * ODWHEEL_DIAMETER)
                             .setEncodersInverted(false, false); //???
                     absoluteOdometry = new FtcPinpointOdometry("pinpointOdo", ppOdoConfig);
@@ -490,27 +490,27 @@ public class RobotParams
         public static final boolean PRIMARY_SERVO_INVERTED                  = true;
 
         public static final double ARM_DEGREE_SCALE                         = 240;
-        public static final double POS_OFFSET                               = 0; //Need to be determined
-        public static final double ZERO_OFFSET                              = 0; //Need to be determined
+        public static final double POS_OFFSET                               = -97;
+        public static final double ZERO_OFFSET                              = 0.3;
         public static final double POWER_LIMIT                              = 1.0;
 
         public static final String EXTERNAL_ENCODER_NAME                    = SUBSYSTEM_NAME + ".encoder";
         public static final boolean EXTERNAL_ENCODER_INVERTED               = false;
 
-        public static final double MIN_POS                                  = 0; //Need to be determined
-        public static final double MAX_POS                                  = 0; //Need to be determined
+        public static final double MIN_POS                                  = -90;
+        public static final double MAX_POS                                  = 90;
         public static final double PICKUP_SAMPLE_POS                        = -5;
         public static final double PICKUP_SPECIMEN_POS                      = 20;
         public static final double BASKET_SCORE_POS                         = 70;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 75;
-        public static final double[] POS_PRESETS                            = {0,75};
-        public static final double POS_PRESET_TOLERANCE                     = 1;
+        public static final double[] POS_PRESETS                            = {-30,0,75};
+        public static final double POS_PRESET_TOLERANCE                     = 5;
 
         public static final boolean SOFTWARE_PID_ENABLED                    = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
-                new TrcPidController.PidCoefficients(1,0.5,0,0,.2); //Need to tune
-        public static final double PID_TOLERANCE                            = 0.02;
-        public static final double MAX_GRAVITY_COMP_POWER                   = 0.1; //Need to be Updated
+                new TrcPidController.PidCoefficients(.1,0.1,0,0,5); //Need to tune
+        public static final double PID_TOLERANCE                            = 0.1;
+        public static final double MAX_GRAVITY_COMP_POWER                   = 0.1;
     }
 
     public static class WristParamsVertical

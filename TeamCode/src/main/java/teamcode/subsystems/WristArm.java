@@ -2,6 +2,7 @@ package teamcode.subsystems;
 
 import ftclib.motor.FtcMotorActuator;
 import ftclib.motor.FtcServoActuator;
+import teamcode.FtcDashboard;
 import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.motor.TrcMotor;
@@ -79,13 +80,18 @@ public class WristArm {
         double elbowAngle = robot.elbow.getPosition();
         double armAngle = armServo.getPosition() >= 0 ? armServo.getPosition() : -armServo.getPosition();
         double PowerRequired = Math.cos(Math.toRadians(elbowAngle + armAngle));
-        if (elbowAngle + armAngle > 90)
-        {
-            return (-PowerRequired)*RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER;
-        }
-        else
-        {
-            return PowerRequired *RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER;
+        if (elbowAngle + armAngle > 90) {
+            if(armServo.getPosition() >= 0)
+            {
+
+                return PowerRequired * RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER+.02;
+            }
+            else
+            {
+                return (-PowerRequired) * RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER;
+            }
+        } else {
+                return PowerRequired * RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER;
         }
     }   //armGetPowerComp
 
