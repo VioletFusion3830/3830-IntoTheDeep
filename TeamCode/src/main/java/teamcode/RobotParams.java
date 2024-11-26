@@ -350,9 +350,9 @@ public class RobotParams
                 if (RobotParams.Preferences.usePinpointOdometry)
                 {
                     FtcPinpointOdometry.Config ppOdoConfig = new FtcPinpointOdometry.Config()
-                            .setPodOffsets(-24, -180)
+                            .setPodOffsets(180, -24)
                             .setEncoderResolution(ODWHEEL_CPR / Math.PI * ODWHEEL_DIAMETER)
-                            .setEncodersInverted(false, false); //???
+                            .setEncodersInverted(false, true); //???
                     absoluteOdometry = new FtcPinpointOdometry("pinpointOdo", ppOdoConfig);
                     headingWrapRangeLow = -180.0;
                     headingWrapRangeHigh = 180.0;
@@ -455,7 +455,7 @@ public class RobotParams
         public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
         public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
 
-        public static final double DEG_PER_COUNT                            = 0.10375; //Need to to measure elbow angle divide by encoder counts
+        public static final double DEG_PER_COUNT                            = 0.11292517007;
         public static final double POS_OFFSET                               = 7;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
