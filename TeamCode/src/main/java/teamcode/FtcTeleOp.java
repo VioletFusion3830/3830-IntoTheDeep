@@ -25,7 +25,6 @@ package teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import java.util.Locale;
-import java.util.Set;
 
 import ftclib.drivebase.FtcSwerveDrive;
 import ftclib.driverio.FtcGamepad;
@@ -55,12 +54,11 @@ public class FtcTeleOp extends FtcOpMode
     private boolean relocalizing = false;
     private double elbowPrevPower = 0.0;
     private double elevatorPrevPower = 0.0;
-    private boolean clawOpen = true;
+    private boolean isSampleTypeRedAlliance = false;
     private boolean slowDrive = false;
-    private boolean sampleMode = true;
     private boolean isSamplePickupPos = true, isspecimenPickupPos = false, isWristRotatorMiddle = false;
     private Double elevatorLimit = null, elavatorPos = null, elbowPos = null;
-    public static Claw.SamplePickupType  samplePickupType = Claw.SamplePickupType.anySample;
+    public static Claw.SamplePickupType SamplePickupType = Claw.SamplePickupType.anySample;
 
     private TrcPose2D robotFieldPose = null;
     //
@@ -350,21 +348,26 @@ public class FtcTeleOp extends FtcOpMode
 //                driverAltFunc = pressed;
                 break;
             case X:
-
+                // Toggle claw open/close.
+                if (pressed && robot.claw != null) {
+                    if (robot.clawServo.isClosed()) {
+                        robot.claw.getClawServo().open();
+                    } else {
+                        robot.claw.getClawServo().close();
+                    }
+                }
                 break;
             case Y:
                 break;
 
             case LeftBumper:
-                // Toggle claw open/close.
-                if (pressed && robot.claw != null) {
-                    if (!clawOpen) {
-                        robot.claw.getClawServo().open();
-                        clawOpen = true;
-                    } else {
-                        robot.claw.getClawServo().close();
-                        clawOpen = false;
-                    }
+                if(pressed && robot.wristRotational != null)
+                {
+                    robot.claw.autoAssistPickup(null,0,null,120, SamplePickupType);
+                }
+                else
+                {
+                    robot.clawServo.cancel();
                 }
                 break;
 
@@ -385,22 +388,21 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case DpadUp:
-                if(robot.claw != null)
+                if(pressed)
                 {
-                    robot.claw.autoAssistPickup(null,0,null,10, Claw.SamplePickupType.blueAllianceSamples);
-                    clawOpen = false;
+                    if(!isSampleTypeRedAlliance)
+                    {
+                        SamplePickupType = Claw.SamplePickupType.redAllianceSamples;
+                        isSampleTypeRedAlliance = true;
+                    }
+                    else
+                    {
+                        SamplePickupType = Claw.SamplePickupType.blueAllianceSamples;
+                        isSampleTypeRedAlliance = false;
+                    }
                 }
-                break;
             case DpadDown:
-                if(robot.claw != null)
-                {
-                    robot.claw.autoAssistPickup(null,0,null,10, Claw.SamplePickupType.redAllianceSamples);
-                    clawOpen = false;
-                }
-                break;
             case DpadLeft:
-                robot.clawServo.autoGrab(null,0,null,10);
-                break;
             case DpadRight:
                 break;
             case Back:

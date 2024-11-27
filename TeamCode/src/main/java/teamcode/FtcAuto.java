@@ -22,8 +22,6 @@
 
 package teamcode;
 
-import android.media.MediaRouter;
-
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -35,16 +33,13 @@ import ftclib.driverio.FtcMatchInfo;
 import ftclib.driverio.FtcMenu;
 import ftclib.driverio.FtcValueMenu;
 import ftclib.robotcore.FtcOpMode;
-import teamcode.autocommands.CmdAuto;
 import teamcode.autocommands.CmdAutoNetZone;
 import teamcode.autocommands.CmdAutoObservationZone;
 import teamcode.subsystems.Claw;
-import teamcode.vision.Vision;
 import trclib.command.CmdPidDrive;
 import trclib.command.CmdTimedDrive;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
-import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
 import trclib.timer.TrcTimer;
 
@@ -196,7 +191,7 @@ public class FtcAuto extends FtcOpMode
                 autoCommand = null;
                 break;
         }
-        FtcTeleOp.samplePickupType = autoChoices.alliance == Alliance.RED_ALLIANCE?
+        FtcTeleOp.SamplePickupType = autoChoices.alliance == Alliance.RED_ALLIANCE?
                 Claw.SamplePickupType.redAllianceSamples: Claw.SamplePickupType.blueAllianceSamples;
     }   //robotInit
 

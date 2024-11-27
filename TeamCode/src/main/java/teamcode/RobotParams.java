@@ -314,7 +314,8 @@ public class RobotParams
     public static class MecanumParams extends FtcRobotDrive.RobotInfo
     {
         // Optii Odometry Wheel
-        private static final double ODWHEEL_DIAMETER = 35.0 * TrcUtil.INCHES_PER_MM;
+        private static final double ODWHEEL_DIAMETER_MM = 35.0;
+        private static final double ODWHEEL_DIAMETER = ODWHEEL_DIAMETER_MM*TrcUtil.INCHES_PER_MM;
         private static final double ODWHEEL_CPR = 4096.0;
 
         public MecanumParams()
@@ -350,9 +351,9 @@ public class RobotParams
                 if (RobotParams.Preferences.usePinpointOdometry)
                 {
                     FtcPinpointOdometry.Config ppOdoConfig = new FtcPinpointOdometry.Config()
-                            .setPodOffsets(180, -24)
-                            .setEncoderResolution(ODWHEEL_CPR / Math.PI * ODWHEEL_DIAMETER)
-                            .setEncodersInverted(false, true); //???
+                            .setPodOffsets(180, -24) //180,-24
+                            .setEncoderResolution(ODWHEEL_CPR / (Math.PI * ODWHEEL_DIAMETER_MM))
+                            .setEncodersInverted(false, false); //???
                     absoluteOdometry = new FtcPinpointOdometry("pinpointOdo", ppOdoConfig);
                     headingWrapRangeLow = -180.0;
                     headingWrapRangeHigh = 180.0;
