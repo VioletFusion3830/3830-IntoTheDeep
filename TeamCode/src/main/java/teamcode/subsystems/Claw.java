@@ -131,6 +131,10 @@ public class Claw {
             clawServo.close();
             clawServo.cancel();
         }
+        else
+        {
+            clawServo.armTriggerCallback(this::isSampleColorCorrect, sampleType);
+        }
     }
 
     // Helper class to manage color ranges.

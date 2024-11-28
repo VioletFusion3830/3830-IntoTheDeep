@@ -429,9 +429,9 @@ public class RobotParams
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 58;
         public static final double PICKUP_SAMPLE_POS                        = 12.3;
-        public static final double PICKUP_SPECIMEN_POS                      = 12.3;
+        public static final double PICKUP_SPECIMEN_POS                      = 26;
         public static final double LOW_BASKET_SCORE_POS                     = 32;
-        public static final double HIGH_BASKET_SCORE_POS                    = 50;
+        public static final double HIGH_BASKET_SCORE_POS                    = 45;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 12.3;
         public static final double[] POS_PRESETS                            = {13,30,45};
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
@@ -456,7 +456,7 @@ public class RobotParams
         public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
         public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
 
-        public static final double DEG_PER_COUNT                            = 0.11292517007;
+        public static final double DEG_PER_COUNT                            = .0555;
         public static final double POS_OFFSET                               = 7;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
@@ -464,10 +464,10 @@ public class RobotParams
 
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 90;
-        public static final double PICKUP_SAMPLE_POS                        = 7.8;
-        public static final double PICKUP_SPECIMEN_POS                      = 35;
-        public static final double BASKET_SCORE_POS                         = 90;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 90;
+        public static final double PICKUP_SAMPLE_POS                        = 9;
+        public static final double PICKUP_SPECIMEN_POS                      = 9;
+        public static final double BASKET_SCORE_POS                         = 92;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 97;
         public static final double[] POS_PRESETS                            = {20,90}; //Need to be Updated
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
 
@@ -476,7 +476,8 @@ public class RobotParams
                 new TrcPidController.PidCoefficients(0.25, 0.2, 0, 0.0, 3.0); //Need to tune
         public static final double PID_TOLERANCE                            = 0.3;
 
-        public static final double GRAVITY_COMP_MAX_POWER                   = 0.0;
+        public static final double ELBOW_GRAVITY_COMP_MAX_POWER             = 0.37;
+        public static final double ELEVATOR_GRAVITY_COMP_MAX_POWER          = 0.27;
         public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE                          = 0.1;
         public static final double STALL_TIMEOUT                            = 0.1;
@@ -500,10 +501,11 @@ public class RobotParams
 
         public static final double MIN_POS                                  = -90;
         public static final double MAX_POS                                  = 90;
-        public static final double PICKUP_SAMPLE_POS                        = -5;
-        public static final double PICKUP_SPECIMEN_POS                      = 20;
-        public static final double BASKET_SCORE_POS                         = 70;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 75;
+        public static final double PICKUP_SAMPLE_POS                        = -20; //-48
+        public static final double PICKUP_SAMPLE_READY_POS                  = -8;
+        public static final double PICKUP_SPECIMEN_POS                      = 7; //TBD
+        public static final double BASKET_SCORE_POS                         = 22;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 20;
         public static final double[] POS_PRESETS                            = {-30,0,75};
         public static final double POS_PRESET_TOLERANCE                     = 5;
 
@@ -520,10 +522,10 @@ public class RobotParams
         public static final String PRIMARY_SERVO_VERTICAL                   = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_VERTICAL_INVERTED         = false;
 
-        public static final double PICKUP_SAMPLE_POS                        = 0.166;
-        public static final double PICKUP_SPECIMEN_POS                      = 0.334;
-        public static final double BASKET_SCORE_POS                         = 0.500;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.234;
+        public static final double PICKUP_SAMPLE_POS                        = 0.775; //558
+        public static final double PICKUP_SPECIMEN_POS                      = 0.468;
+        public static final double BASKET_SCORE_POS                         = 0.347;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.373;
     }   //class WristParamsVertical
 
     public static final class ClawParams

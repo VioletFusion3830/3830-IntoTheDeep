@@ -191,13 +191,13 @@ public class FtcTest extends FtcTeleOp
                 }
                 break;
 
-            case PID_DRIVE:
             case TUNE_X_PID:
             case TUNE_Y_PID:
             case TUNE_TURN_PID:
                 if (robot.robotDrive != null &&
                         (testChoices.test != Test.TUNE_X_PID || robot.robotDrive.driveBase.supportsHolonomicDrive()))
                 {
+                    // Distance targets are in feet, so convert them into inches.
                     testCommand = new CmdPidDrive(robot.robotDrive.driveBase, robot.robotDrive.pidDrive);
                 }
                 break;
@@ -287,7 +287,7 @@ public class FtcTest extends FtcTeleOp
             case TUNE_X_PID:
             case TUNE_Y_PID:
             case TUNE_TURN_PID:
-                if (testCommand != null)
+                if (robot.robotDrive != null)
                 {
                     robot.robotDrive.pidDrive.setTraceLevel(TrcDbgTrace.MsgLevel.INFO, logEvents, debugPid, false);
                 }
@@ -537,10 +537,10 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.arm !=null) {
+                if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elbow !=null) {
                     if (pressed) {
-                        robot.arm.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ArmParams.PID_TOLERANCE);
-                        robot.arm.presetPositionDown(moduleName, RobotParams.ArmParams.POWER_LIMIT);
+                        robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
+                        robot.elbow.presetPositionDown(moduleName, RobotParams.ElbowParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;
@@ -602,10 +602,10 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.arm !=null) {
+                if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elbow !=null) {
                     if (pressed) {
-                        robot.arm.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ArmParams.PID_TOLERANCE);
-                        robot.arm.presetPositionUp(moduleName, RobotParams.ArmParams.POWER_LIMIT);
+                        robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
+                        robot.elbow.presetPositionUp(moduleName, RobotParams.ElbowParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;
@@ -646,13 +646,13 @@ public class FtcTest extends FtcTeleOp
                         if(!pathForward) value = -value;
                         switch (testChoices.test) {
                             case TUNE_X_PID:
-                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.TunePID.tunePidCoeff, new TrcPose2D(value*12,0,0));
+                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(value*12,0,0));
                                 break;
                             case TUNE_Y_PID:
-                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.TunePID.tunePidCoeff, new TrcPose2D(0,value*12,0));
+                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(0,value*12,0));
                                 break;
                             case TUNE_TURN_PID:
-                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.TunePID.tunePidCoeff, new TrcPose2D(0,0,value));
+                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(0,0,value));
                                 break;
                         }
                     }

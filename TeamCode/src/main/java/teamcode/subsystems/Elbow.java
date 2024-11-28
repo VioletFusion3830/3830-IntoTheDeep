@@ -48,9 +48,17 @@ public class Elbow
     {
         double elevatorPos = robot.elevator.getPosition();
         double elbowAngle = elbow.getPosition();
-        double baseValue = 0;
+        if(elbowAngle <= 90)
+        {
+            return (RobotParams.ElbowParams.ELBOW_GRAVITY_COMP_MAX_POWER* Math.cos(Math.toRadians(elbowAngle))
+                    + (RobotParams.ElbowParams.ELEVATOR_GRAVITY_COMP_MAX_POWER*(elevatorPos/RobotParams.ElevatorParams.MAX_POS)));
+        }
+        else
+        {
+            return (RobotParams.ElbowParams.ELBOW_GRAVITY_COMP_MAX_POWER* Math.cos(Math.toRadians(elbowAngle))
+                    + (RobotParams.ElbowParams.ELEVATOR_GRAVITY_COMP_MAX_POWER*-(elevatorPos/RobotParams.ElevatorParams.MAX_POS)));
+        }
 
-        return /*RobotParams.ElbowParams.GRAVITY_COMP_MAX_POWER*/FtcDashboard.TunePID.GarvityComp * Math.cos(Math.toRadians(elbowAngle)) * (baseValue+(elevatorPos/RobotParams.ElevatorParams.MAX_POS));
     }   //getElbowPowerComp
 
 }   //class Elbow
