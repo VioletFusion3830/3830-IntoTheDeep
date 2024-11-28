@@ -47,18 +47,9 @@ public class Elbow
     private double getElbowPowerComp(double currPower)
     {
         double elevatorPos = robot.elevator.getPosition();
-        double elbowAngle = elbow.getPosition();
-        if(elbowAngle <= 90)
-        {
-            return (RobotParams.ElbowParams.ELBOW_GRAVITY_COMP_MAX_POWER* Math.cos(Math.toRadians(elbowAngle))
-                    + (RobotParams.ElbowParams.ELEVATOR_GRAVITY_COMP_MAX_POWER*(elevatorPos/RobotParams.ElevatorParams.MAX_POS)));
-        }
-        else
-        {
-            return (RobotParams.ElbowParams.ELBOW_GRAVITY_COMP_MAX_POWER* Math.cos(Math.toRadians(elbowAngle))
-                    + (RobotParams.ElbowParams.ELEVATOR_GRAVITY_COMP_MAX_POWER*-(elevatorPos/RobotParams.ElevatorParams.MAX_POS)));
-        }
+        double elbowAngleRad = Math.toRadians(elbow.getPosition());
 
+        return RobotParams.ElbowParams.MAX_GRAVITY_COMP_AT_MIN_SLIDER_LENGTH * Math.cos(elbowAngleRad) * (elevatorPos/RobotParams.ElbowParams.MIN_POS);
     }   //getElbowPowerComp
 
 }   //class Elbow

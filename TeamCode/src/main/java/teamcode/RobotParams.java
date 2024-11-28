@@ -383,13 +383,13 @@ public class RobotParams
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
             turnPidTolerance = 1.0;
-            xDrivePidCoeffs = new PidCoefficients(0.95, 0.0, 0.001, 0.0, 0.0);
+            xDrivePidCoeffs = new PidCoefficients(0.05, 0.0, 0.0, 0.0, 0.0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
-            yDrivePidCoeffs = new PidCoefficients(0.06, 0.0, 0.002, 0.0, 0.0);
+            yDrivePidCoeffs = new PidCoefficients(0.06, 0.0, 0.0, 0.0, 0.0);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.02, 0.0, 0.002, 0.0, 0.0);
+            turnPidCoeffs = new PidCoefficients(0.02, 0.0, 0.0, 0.0, 0.0);
             turnPidPowerLimit = 0.5;
             turnMaxPidRampRate = null;
             // PID Stall Detection
@@ -468,16 +468,15 @@ public class RobotParams
         public static final double PICKUP_SPECIMEN_POS                      = 9;
         public static final double BASKET_SCORE_POS                         = 92;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 97;
-        public static final double[] POS_PRESETS                            = {20,90}; //Need to be Updated
+        public static final double[] POS_PRESETS                            = {9,30,60,90}; //Need to be Updated
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
 
         public static final boolean SOFTWARE_PID_ENABLED                    = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
-                new TrcPidController.PidCoefficients(0.25, 0.2, 0, 0.0, 3.0); //Need to tune
+                new TrcPidController.PidCoefficients(0.05, 0.2, 0.004, 0.0, 5); //Need to tune
         public static final double PID_TOLERANCE                            = 0.3;
 
-        public static final double ELBOW_GRAVITY_COMP_MAX_POWER             = 0.37;
-        public static final double ELEVATOR_GRAVITY_COMP_MAX_POWER          = 0.27;
+        public static final double MAX_GRAVITY_COMP_AT_MIN_SLIDER_LENGTH    = 0.04;
         public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE                          = 0.1;
         public static final double STALL_TIMEOUT                            = 0.1;
