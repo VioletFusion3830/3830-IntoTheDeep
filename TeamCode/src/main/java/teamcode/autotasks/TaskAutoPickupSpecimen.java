@@ -85,15 +85,6 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
         startAutoTask(State.GO_TO_SCORE_POSITION, taskParams, completionEvent);
     }   //autoAssist
 
-    /**
-     * This method cancels an in progress auto-assist operation if any.
-     */
-    public void autoAssistCancel()
-    {
-        tracer.traceInfo(moduleName, "Canceling auto-assist.");
-        stopAutoTask(false);
-    }   //autoAssistCancel
-
     //
     // Implement TrcAutoTask abstract methods.
     //
@@ -109,7 +100,13 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
     protected boolean acquireSubsystemsOwnership()
     {
         boolean success = ownerName == null ||
-                (robot.robotDrive.driveBase.acquireExclusiveAccess(ownerName));
+                (robot.robotDrive.driveBase.acquireExclusiveAccess(ownerName) &&
+                        robot.elbow.acquireExclusiveAccess(ownerName) &&
+                        robot.wristVertical.acquireExclusiveAccess(ownerName) &&
+                        robot.arm.acquireExclusiveAccess(ownerName) &&
+                        robot.elevator.acquireExclusiveAccess(ownerName) &&
+                        robot.clawServo.acquireExclusiveAccess(ownerName) &&
+                        robot.wristRotational.acquireExclusiveAccess(ownerName));
 
         if (success)
         {
@@ -122,7 +119,13 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
             tracer.traceWarn(
                     moduleName,
                     "Failed to acquire subsystem ownership (currOwner=" + currOwner +
-                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) + ").");
+                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) +
+                            ", elbow=" + ownershipMgr.getOwner(robot.elbow) +
+                            ", wristVertical=" + ownershipMgr.getOwner(robot.wristVertical) +
+                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
+                            ", elevator=" + ownershipMgr.getOwner(robot.elevator) +
+                            ", clawServo=" + ownershipMgr.getOwner(robot.clawServo) +
+                            ", wristRotational=" + ownershipMgr.getOwner(robot.wristRotational) + ").");
             releaseSubsystemsOwnership();
         }
 
@@ -142,8 +145,20 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
             tracer.traceInfo(
                     moduleName,
                     "Releasing subsystem ownership (currOwner=" + currOwner +
-                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) + ").");
+                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) +
+                            ", elbow=" + ownershipMgr.getOwner(robot.elbow) +
+                            ", wristVertical=" + ownershipMgr.getOwner(robot.wristVertical) +
+                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
+                            ", elevator=" + ownershipMgr.getOwner(robot.elevator) +
+                            ", clawServo=" + ownershipMgr.getOwner(robot.clawServo) +
+                            ", wristRotational=" + ownershipMgr.getOwner(robot.wristRotational) + ").");
             robot.robotDrive.driveBase.releaseExclusiveAccess(currOwner);
+            robot.elbow.releaseExclusiveAccess(currOwner);
+            robot.wristVertical.releaseExclusiveAccess(currOwner);
+            robot.arm.releaseExclusiveAccess(currOwner);
+            robot.elevator.releaseExclusiveAccess(currOwner);
+            robot.clawServo.releaseExclusiveAccess(currOwner);
+            robot.wristRotational.releaseExclusiveAccess(currOwner);
             currOwner = null;
         }
     }   //releaseSubsystemsOwnership
@@ -156,6 +171,12 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
         robot.robotDrive.cancel(currOwner);
+        robot.elbow.cancel();
+        robot.wristVertical.cancel();
+        robot.arm.cancel();
+        robot.elevator.cancel();
+        robot.clawServo.cancel();
+        robot.wristRotational.cancel();
     }   //stopSubsystems
 
     /**
@@ -195,7 +216,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                 robot.elevator.setPosition(0, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event);
                 sm.addEvent(event);
                 sm.addEvent(event2);
-                sm.waitForEvents(State.GRAB_SPECIMEN);
+                sm.waitForEvents(State.GRAB_SPECIMEN, true);
                 break;
 
             case GRAB_SPECIMEN:
