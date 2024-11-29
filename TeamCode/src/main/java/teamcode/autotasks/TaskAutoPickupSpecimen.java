@@ -1,6 +1,12 @@
 package teamcode.autotasks;
 
+import androidx.annotation.NonNull;
+
+import teamcode.FtcAuto;
+import teamcode.FtcTeleOp;
 import teamcode.Robot;
+import teamcode.RobotParams;
+import teamcode.subsystems.Claw;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcOwnershipMgr;
@@ -16,19 +22,33 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
 
     public enum State
     {
-        START,
+        GO_TO_SCORE_POSITION,
+        SET_ELEVATOR_ARM,
+        GRAB_SPECIMEN,
+        RETRACT_ELEVATOR_ARM,
         DONE
     }   //enum State
 
     private static class TaskParams
     {
-        TaskParams()
+        final FtcAuto.Alliance alliance;
+        TaskParams(FtcAuto.Alliance alliance)
         {
+            this.alliance = alliance;
         }   //TaskParams
+
+        @NonNull
+        public String toString()
+        {
+            return "alliance=" + alliance;
+        }   //toString
     }   //class TaskParams
 
     private final String ownerName;
     private final Robot robot;
+    private final TrcEvent event;
+    private final TrcEvent event2;
+    private final TrcEvent event3;
 
     private String currOwner = null;
 
@@ -43,6 +63,9 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
         super(moduleName, ownerName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.ownerName = ownerName;
         this.robot = robot;
+        this.event = new TrcEvent(moduleName + ".event");
+        this.event2 = new TrcEvent(moduleName + ".event2");
+        this.event3 = new TrcEvent(moduleName + ".event2");
     }   //TaskAuto
 
     /**
@@ -50,10 +73,18 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoPickupSpecimen(TrcEvent completionEvent)
+    public void autoPickupSpecimen(FtcAuto.Alliance alliance, TrcEvent completionEvent)
     {
-        tracer.traceInfo(moduleName, "event=" + completionEvent);
-        startAutoTask(State.START, new TaskParams(), completionEvent);
+        if (alliance == null)
+        {
+            // Caller is TeleOp, let's determine the alliance color by robot's location.
+            alliance = robot.robotDrive.driveBase.getFieldPosition().y < 0.0?
+                    FtcAuto.Alliance.RED_ALLIANCE: FtcAuto.Alliance.BLUE_ALLIANCE;
+        }
+
+        TaskParams taskParams = new TaskParams(alliance);
+        tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
+        startAutoTask(State.GO_TO_SCORE_POSITION, taskParams, completionEvent);
     }   //autoAssist
 
     /**
@@ -147,7 +178,30 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
 
         switch (state)
         {
-            case START:
+            case GO_TO_SCORE_POSITION:
+                robot.robotDrive.purePursuitDrive.start(currOwner, event2, 0.0,
+                        robot.robotDrive.driveBase.getFieldPosition(), false, robot.robotInfo.profiledMaxVelocity,
+                        robot.robotInfo.profiledMaxAcceleration, robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance));
+                robot.elbow.setPosition(0,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event);
+                robot.wristArm.setWristArmPickupSamplePos();
+                robot.clawServo.open();
+                sm.waitForSingleEvent(event, State.SET_ELEVATOR_ARM);
+                break;
+
+            case SET_ELEVATOR_ARM:
+                robot.elevator.setPosition(0, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event);
+                robot.claw.autoAssistPickup(currOwner,0,event3,0, FtcTeleOp.samplePickupType);
+                sm.addEvent(event2);
+                sm.addEvent(event3);
+                sm.waitForEvents(State.RETRACT_ELEVATOR_ARM);
+                break;
+
+            case GRAB_SPECIMEN:
+                //wait for autoGarbTigger
+                break;
+
+            case RETRACT_ELEVATOR_ARM:
+                robot.elevator.setPosition();
                 break;
 
             default:
