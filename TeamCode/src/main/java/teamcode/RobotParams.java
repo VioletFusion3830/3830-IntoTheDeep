@@ -314,7 +314,8 @@ public class RobotParams
     public static class MecanumParams extends FtcRobotDrive.RobotInfo
     {
         // Optii Odometry Wheel
-        private static final double ODWHEEL_DIAMETER = 35.0 * TrcUtil.INCHES_PER_MM;
+        private static final double ODWHEEL_DIAMETER_MM = 35.0;
+        private static final double ODWHEEL_DIAMETER = ODWHEEL_DIAMETER_MM*TrcUtil.INCHES_PER_MM;
         private static final double ODWHEEL_CPR = 4096.0;
 
         public MecanumParams()
@@ -350,8 +351,8 @@ public class RobotParams
                 if (RobotParams.Preferences.usePinpointOdometry)
                 {
                     FtcPinpointOdometry.Config ppOdoConfig = new FtcPinpointOdometry.Config()
-                            .setPodOffsets(-24, -180)
-                            .setEncoderResolution(ODWHEEL_CPR / Math.PI * ODWHEEL_DIAMETER)
+                            .setPodOffsets(180, -24) //180,-24
+                            .setEncoderResolution(ODWHEEL_CPR / (Math.PI * ODWHEEL_DIAMETER_MM))
                             .setEncodersInverted(false, false); //???
                     absoluteOdometry = new FtcPinpointOdometry("pinpointOdo", ppOdoConfig);
                     headingWrapRangeLow = -180.0;
@@ -373,22 +374,22 @@ public class RobotParams
             xDrivePosScale = 0.01924724265461924299065420560748;        // in/count
             yDrivePosScale = 0.02166184604662450653409090909091;        // in/count
             // Robot Drive Characteristics
-            robotMaxVelocity = 23.0;        // inches/sec
-            robotMaxAcceleration  = 500.0;  // inches/sec2
-            robotMaxTurnRate = 100.0;       // degrees/sec
-            profiledMaxVelocity = robotMaxVelocity;
-            profiledMaxAcceleration = robotMaxAcceleration;
+            robotMaxVelocity = 60;        // inches/sec
+            robotMaxAcceleration  = 250;  // inches/sec2
+            robotMaxTurnRate = 90;       // degrees/sec
+            profiledMaxVelocity = robotMaxVelocity*8;
+            profiledMaxAcceleration = robotMaxAcceleration*8;
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
             turnPidTolerance = 1.0;
-            xDrivePidCoeffs = new PidCoefficients(0.95, 0.0, 0.001, 0.0, 0.0);
+            xDrivePidCoeffs = new PidCoefficients(0.05, 0.0, 0.0, 0.0, 0.0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
-            yDrivePidCoeffs = new PidCoefficients(0.06, 0.0, 0.002, 0.0, 0.0);
+            yDrivePidCoeffs = new PidCoefficients(0.06, 0.0, 0.0, 0.0, 0.0);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.02, 0.0, 0.002, 0.0, 0.0);
+            turnPidCoeffs = new PidCoefficients(0.02, 0.0, 0.0, 0.0, 0.0);
             turnPidPowerLimit = 0.5;
             turnMaxPidRampRate = null;
             // PID Stall Detection
@@ -428,9 +429,9 @@ public class RobotParams
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 58;
         public static final double PICKUP_SAMPLE_POS                        = 12.3;
-        public static final double PICKUP_SPECIMEN_POS                      = 12.3;
+        public static final double PICKUP_SPECIMEN_POS                      = 26;
         public static final double LOW_BASKET_SCORE_POS                     = 32;
-        public static final double HIGH_BASKET_SCORE_POS                    = 50;
+        public static final double HIGH_BASKET_SCORE_POS                    = 45;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 12.3;
         public static final double[] POS_PRESETS                            = {13,30,45};
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
@@ -455,7 +456,7 @@ public class RobotParams
         public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
         public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
 
-        public static final double DEG_PER_COUNT                            = 0.10375; //Need to to measure elbow angle divide by encoder counts
+        public static final double DEG_PER_COUNT                            = .0555;
         public static final double POS_OFFSET                               = 7;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
@@ -463,19 +464,19 @@ public class RobotParams
 
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 90;
-        public static final double PICKUP_SAMPLE_POS                        = 7.8;
-        public static final double PICKUP_SPECIMEN_POS                      = 35;
-        public static final double BASKET_SCORE_POS                         = 90;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 90;
-        public static final double[] POS_PRESETS                            = {20,90}; //Need to be Updated
+        public static final double PICKUP_SAMPLE_POS                        = 9;
+        public static final double PICKUP_SPECIMEN_POS                      = 9;
+        public static final double BASKET_SCORE_POS                         = 92;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 97;
+        public static final double[] POS_PRESETS                            = {9,30,60,90}; //Need to be Updated
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
 
         public static final boolean SOFTWARE_PID_ENABLED                    = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
-                new TrcPidController.PidCoefficients(0.25, 0.2, 0, 0.0, 3.0); //Need to tune
+                new TrcPidController.PidCoefficients(0.05, 0.2, 0.004, 0.0, 5); //Need to tune
         public static final double PID_TOLERANCE                            = 0.3;
 
-        public static final double GRAVITY_COMP_MAX_POWER                   = 0.0;
+        public static final double MAX_GRAVITY_COMP_AT_MIN_SLIDER_LENGTH    = 0.04;
         public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE                          = 0.1;
         public static final double STALL_TIMEOUT                            = 0.1;
@@ -499,10 +500,11 @@ public class RobotParams
 
         public static final double MIN_POS                                  = -90;
         public static final double MAX_POS                                  = 90;
-        public static final double PICKUP_SAMPLE_POS                        = -5;
-        public static final double PICKUP_SPECIMEN_POS                      = 20;
-        public static final double BASKET_SCORE_POS                         = 70;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 75;
+        public static final double PICKUP_SAMPLE_POS                        = -20; //-48
+        public static final double PICKUP_SAMPLE_READY_POS                  = -8;
+        public static final double PICKUP_SPECIMEN_POS                      = 7; //TBD
+        public static final double BASKET_SCORE_POS                         = 22;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 20;
         public static final double[] POS_PRESETS                            = {-30,0,75};
         public static final double POS_PRESET_TOLERANCE                     = 5;
 
@@ -519,10 +521,10 @@ public class RobotParams
         public static final String PRIMARY_SERVO_VERTICAL                   = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_VERTICAL_INVERTED         = false;
 
-        public static final double PICKUP_SAMPLE_POS                        = 0.166;
-        public static final double PICKUP_SPECIMEN_POS                      = 0.334;
-        public static final double BASKET_SCORE_POS                         = 0.500;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.234;
+        public static final double PICKUP_SAMPLE_POS                        = 0.775; //558
+        public static final double PICKUP_SPECIMEN_POS                      = 0.468;
+        public static final double BASKET_SCORE_POS                         = 0.347;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.373;
     }   //class WristParamsVertical
 
     public static final class ClawParams

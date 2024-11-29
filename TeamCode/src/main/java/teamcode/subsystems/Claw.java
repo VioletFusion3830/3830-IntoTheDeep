@@ -21,7 +21,7 @@ public class Claw {
 
     private final ColorRange yellowSampleHue = new ColorRange(60,90);
     private final ColorRange blueSampleHue = new ColorRange(200,240);
-    private final ColorRange redSampleHue = new ColorRange(5,30);
+    private final ColorRange redSampleHue = new ColorRange(5,40);
 
     public enum SamplePickupType
     {
@@ -99,39 +99,41 @@ public class Claw {
             return hsvValues[0];
     }
 
-    private void isSampleColorCorrect(Object context)
-    {
-        if(!clawServo.isClosed() && clawServo.sensorTriggered()) {
-            SamplePickupType sampleType = (SamplePickupType) context;
-            double sampleHue = getSensorDataColor();
-            boolean sampleColorCorrect = false;
+    private void isSampleColorCorrect(Object context) {
+        SamplePickupType sampleType = (SamplePickupType) context;
+        double sampleHue = getSensorDataColor();
+        boolean sampleColorCorrect = false;
+        robot.globalTracer.traceInfo(null, "Sample Hue: " + sampleHue + ", sampleType: " + sampleType);
 
-            switch (sampleType) {
-                case redSample:
-                    sampleColorCorrect = redSampleHue.isHueInRange(sampleHue);
-                    break;
-                case blueSample:
-                    sampleColorCorrect = blueSampleHue.isHueInRange(sampleHue);
-                    break;
-                case yellowSample:
-                    sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue);
-                    break;
-                case redAllianceSamples:
-                    sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
-                    robot.globalTracer.traceInfo(null, "Red Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
-                    break;
-                case blueAllianceSamples:
-                    sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue);
-                    robot.globalTracer.traceInfo(null, "Blue Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
-                    break;
-                case anySample:
-                    sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
-                    break;
-            }
-            if (sampleColorCorrect) {
-                clawServo.close();
-                clawServo.cancel();
-            }
+        switch (sampleType) {
+            case redSample:
+                sampleColorCorrect = redSampleHue.isHueInRange(sampleHue);
+                break;
+            case blueSample:
+                sampleColorCorrect = blueSampleHue.isHueInRange(sampleHue);
+                break;
+            case yellowSample:
+                sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue);
+                break;
+            case redAllianceSamples:
+                sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
+                robot.globalTracer.traceInfo(null, "Red Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
+                break;
+            case blueAllianceSamples:
+                sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue);
+                robot.globalTracer.traceInfo(null, "Blue Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
+                break;
+            case anySample:
+                sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
+                break;
+        }
+        if (sampleColorCorrect) {
+            clawServo.close();
+            clawServo.cancel();
+        }
+        else
+        {
+            clawServo.armTriggerCallback(this::isSampleColorCorrect, sampleType);
         }
     }
 

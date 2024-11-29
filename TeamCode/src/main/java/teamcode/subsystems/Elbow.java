@@ -47,10 +47,9 @@ public class Elbow
     private double getElbowPowerComp(double currPower)
     {
         double elevatorPos = robot.elevator.getPosition();
-        double elbowAngle = elbow.getPosition();
-        double baseValue = 0;
+        double elbowAngleRad = Math.toRadians(elbow.getPosition());
 
-        return /*RobotParams.ElbowParams.GRAVITY_COMP_MAX_POWER*/FtcDashboard.TunePID.GarvityComp * Math.cos(Math.toRadians(elbowAngle)) * (baseValue+(elevatorPos/RobotParams.ElevatorParams.MAX_POS));
+        return RobotParams.ElbowParams.MAX_GRAVITY_COMP_AT_MIN_SLIDER_LENGTH * Math.cos(elbowAngleRad) * (elevatorPos/RobotParams.ElbowParams.MIN_POS);
     }   //getElbowPowerComp
 
 }   //class Elbow

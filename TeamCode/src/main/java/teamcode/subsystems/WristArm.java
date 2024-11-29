@@ -77,22 +77,9 @@ public class WristArm {
 
     private double armGetPowerComp(double currPower)
     {
-        double elbowAngle = robot.elbow.getPosition();
-        double armAngle = armServo.getPosition() >= 0 ? armServo.getPosition() : -armServo.getPosition();
-        double PowerRequired = Math.cos(Math.toRadians(elbowAngle + armAngle));
-        if (elbowAngle + armAngle > 90) {
-            if(armServo.getPosition() >= 0)
-            {
+        double armEffectiveAngleInRad = Math.toRadians(robot.elbow.getPosition() + armServo.getPosition());
 
-                return PowerRequired * RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER+.02;
-            }
-            else
-            {
-                return (-PowerRequired) * RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER;
-            }
-        } else {
-                return PowerRequired * RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER;
-        }
+        return Math.cos(armEffectiveAngleInRad) * FtcDashboard.TunePID.GarvityComp/*RobotParams.ArmParams.MAX_GRAVITY_COMP_POWER*/;
     }   //armGetPowerComp
 
 }
