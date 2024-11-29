@@ -48,7 +48,6 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
     private final Robot robot;
     private final TrcEvent event;
     private final TrcEvent event2;
-    private final TrcEvent event3;
 
     private String currOwner = null;
 
@@ -65,7 +64,6 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
         this.robot = robot;
         this.event = new TrcEvent(moduleName + ".event");
         this.event2 = new TrcEvent(moduleName + ".event2");
-        this.event3 = new TrcEvent(moduleName + ".event2");
     }   //TaskAuto
 
     /**
@@ -179,29 +177,36 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
         switch (state)
         {
             case GO_TO_SCORE_POSITION:
+                //Path to pickup location
                 robot.robotDrive.purePursuitDrive.start(currOwner, event2, 0.0,
                         robot.robotDrive.driveBase.getFieldPosition(), false, robot.robotInfo.profiledMaxVelocity,
                         robot.robotInfo.profiledMaxAcceleration, robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance));
+                //Set Elbow to pickup angle
                 robot.elbow.setPosition(0,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event);
-                robot.wristArm.setWristArmPickupSamplePos();
+                //Position wrist and arm subsystems for pickup
+                robot.wristArm.setWristArmPickupSamplePos(null);
                 robot.clawServo.open();
+                robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
                 sm.waitForSingleEvent(event, State.SET_ELEVATOR_ARM);
                 break;
 
             case SET_ELEVATOR_ARM:
+                //Extend elevator to pickup position
                 robot.elevator.setPosition(0, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event);
-                robot.claw.autoAssistPickup(currOwner,0,event3,0, FtcTeleOp.samplePickupType);
+                sm.addEvent(event);
                 sm.addEvent(event2);
-                sm.addEvent(event3);
-                sm.waitForEvents(State.RETRACT_ELEVATOR_ARM);
+                sm.waitForEvents(State.GRAB_SPECIMEN);
                 break;
 
             case GRAB_SPECIMEN:
-                //wait for autoGarbTigger
+                robot.clawServo.close(event);
+                sm.waitForSingleEvent(event, State.RETRACT_ELEVATOR_ARM);
                 break;
 
             case RETRACT_ELEVATOR_ARM:
-                robot.elevator.setPosition();
+                //retract elevator "fire and forget"
+                robot.elevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS);
+                sm.setState(State.DONE);
                 break;
 
             default:

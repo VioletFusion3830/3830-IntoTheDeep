@@ -153,6 +153,12 @@ public class RobotParams
                 new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, -APRILTAG_WALL_OFFSET_Y, -90.0) // TagId 16
         };
 
+        public static final double AUTO_PERIOD                      = 30.0; // 30 seconds auto period
+        public static final double TELEOP_PERIOD                    = 120.0;// 2 minutes teleop period
+        public static final double SCORE_BASKET_CYCLE_TIME          = 6.0;  // in seconds
+        public static final double CHAMBER_LENGTH                   = 26.0;
+        public static final double CHAMBER_MAX_SCORE_POS_X          = (CHAMBER_LENGTH / 2.0);
+
         // Blue alliance positions will be derived using adjustPoseByAlliance.
         // Robot start locations in inches.
         public static final double STARTPOS_X                               = Robot.ROBOT_WIDTH/2.0;
@@ -160,16 +166,16 @@ public class RobotParams
         // Red Net Zone start pose face the net zone touching the alliance wall with the robot's in front of net zone.
         public static final TrcPose2D STARTPOSE_RED_NET_ZONE                = new TrcPose2D(-(Field.HALF_FIELD_INCHES-(Field.FULL_TILE_INCHES+Robot.ROBOT_LENGTH/2.0)), -Robot.ROBOT_WIDTH/2.0, -90);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
-        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE        = new TrcPose2D(Robot.ROBOT_WIDTH/2.0+1, -(Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0), 0.0);
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE        = new TrcPose2D(Robot.ROBOT_WIDTH/2.0+1, -(Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0), 180);
 
         // Score poses (Net zone side).
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
                 new TrcPose2D(0, 0, 0.0);
         public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE    =
-                new TrcPose2D(0, 0, 0.0);
+                new TrcPose2D(-7, Field.FULL_TILE_INCHES, 180);
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D(0, 0, 0.0);
+                new TrcPose2D(7, Field.FULL_TILE_INCHES, 180);
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
                 new TrcPose2D(0,0, 0.0);
@@ -551,8 +557,9 @@ public class RobotParams
         public static final String SUBSYSTEM_NAME                           = "wristRotator";
         public static final String PRIMARY_SERVO_ROTATOR                    = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_ROTATOR_INVERTED          = false;
-
+        //Need to be program servo and re get positions
         public static final double MIDDLE_P0S                               = 0.0;
+        public static final double MIDDLE_POS2                              = 0.0;
         public static final double MIN_P0S                                  = 0.672;
         public static final double[] POS_PRESETS                            = {MIDDLE_P0S, MIN_P0S};
     }   //class WristParamsRotational

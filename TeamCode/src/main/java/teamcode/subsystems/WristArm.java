@@ -7,6 +7,7 @@ import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcServo;
+import trclib.robotcore.TrcEvent;
 
 public class WristArm {
     private final TrcMotor armServo;
@@ -49,30 +50,30 @@ public class WristArm {
         return wristVerticalServo;
     }
 
-    public void setWristArmPosition(double armPos, double wristVerticalPos)
+    public void setWristArmPosition(double armPos, double wristVerticalPos,TrcEvent event)
     {
-        armServo.setPosition(armPos);
+        armServo.setPosition(0,armPos,true,RobotParams.ArmParams.POWER_LIMIT,event);
         wristVerticalServo.setPosition(wristVerticalPos);
     }
 
-    public void setWristArmPickupSamplePos()
+    public void setWristArmPickupSamplePos(TrcEvent event)
     {
-        setWristArmPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS, RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS);
+        setWristArmPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS, RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS,event);
     }
 
-    public void setWristArmPickupSpecimenPos()
+    public void setWristArmPickupSpecimenPos(TrcEvent event)
     {
-        setWristArmPosition(RobotParams.ArmParams.PICKUP_SPECIMEN_POS, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS);
+        setWristArmPosition(RobotParams.ArmParams.PICKUP_SPECIMEN_POS, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS, event);
     }
 
-    public void setWristArmBasketScorePos()
+    public void setWristArmBasketScorePos(TrcEvent event)
     {
-        setWristArmPosition(RobotParams.ArmParams.BASKET_SCORE_POS, RobotParams.WristParamsVertical.BASKET_SCORE_POS);
+        setWristArmPosition(RobotParams.ArmParams.BASKET_SCORE_POS, RobotParams.WristParamsVertical.BASKET_SCORE_POS, event);
     }
 
-    public void setWristArmHighChamberScorePos()
+    public void setWristArmHighChamberScorePos(TrcEvent event)
     {
-        setWristArmPosition(RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS);
+        setWristArmPosition(RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, event);
     }
 
     private double armGetPowerComp(double currPower)
