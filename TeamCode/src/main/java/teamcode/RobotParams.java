@@ -353,7 +353,7 @@ public class RobotParams
                     FtcPinpointOdometry.Config ppOdoConfig = new FtcPinpointOdometry.Config()
                             .setPodOffsets(180, -24) //180,-24
                             .setEncoderResolution(ODWHEEL_CPR / (Math.PI * ODWHEEL_DIAMETER_MM))
-                            .setEncodersInverted(false, false); //???
+                            .setEncodersInverted(false, true); //???
                     absoluteOdometry = new FtcPinpointOdometry("pinpointOdo", ppOdoConfig);
                     headingWrapRangeLow = -180.0;
                     headingWrapRangeHigh = 180.0;
@@ -376,21 +376,21 @@ public class RobotParams
             // Robot Drive Characteristics
             robotMaxVelocity = 60;        // inches/sec
             robotMaxAcceleration  = 250;  // inches/sec2
-            robotMaxTurnRate = 90;       // degrees/sec
-            profiledMaxVelocity = robotMaxVelocity*8;
-            profiledMaxAcceleration = robotMaxAcceleration*8;
+            robotMaxTurnRate = 100;       // degrees/sec
+            profiledMaxVelocity = 50;
+            profiledMaxAcceleration = 210;
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
             turnPidTolerance = 1.0;
-            xDrivePidCoeffs = new PidCoefficients(0.05, 0.0, 0.0, 0.0, 0.0);
+            xDrivePidCoeffs = new PidCoefficients(0.049, 0.0, 0.0, 0.0, 0.0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
-            yDrivePidCoeffs = new PidCoefficients(0.06, 0.0, 0.0, 0.0, 0.0);
+            yDrivePidCoeffs = new PidCoefficients(0.08, 0.0, 0.008, 0.0, 0.0);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.02, 0.0, 0.0, 0.0, 0.0);
-            turnPidPowerLimit = 0.5;
+            turnPidCoeffs = new PidCoefficients(0.042, 0.0, 0.0018, 0.0, 0.0);
+            turnPidPowerLimit = 0.6;
             turnMaxPidRampRate = null;
             // PID Stall Detection
             pidStallDetectionEnabled = true;

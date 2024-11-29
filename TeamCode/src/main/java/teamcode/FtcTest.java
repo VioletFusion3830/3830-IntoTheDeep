@@ -59,7 +59,7 @@ public class FtcTest extends FtcTeleOp
 {
     private static final String moduleName = FtcTest.class.getSimpleName();
     private static final boolean logEvents = true;
-    private static final boolean debugPid = true;
+    private static final boolean debugPid = false;
 
     private enum Test
     {
@@ -302,9 +302,9 @@ public class FtcTest extends FtcTeleOp
                     // Doing a 48x48-inch square box with robot heading always pointing to the center of the box.
                     //
                     // Set the current position as the absolute field origin so the path can be an absolute path.
-                    TrcPose2D startPose = new TrcPose2D(0.0, 0.0, 0.0);
+                    TrcPose2D startPose = new TrcPose2D(0.0, 0.0, 0);
                     robot.robotDrive.driveBase.setFieldPosition(startPose);
-                    robot.robotDrive.purePursuitDrive.start(startPose, false, new TrcPose2D(0.0, 48.0, 90.0));
+                    robot.robotDrive.purePursuitDrive.start(startPose, false,robot.robotInfo.profiledMaxVelocity,robot.robotInfo.profiledMaxAcceleration,new TrcPose2D(30, 40, 90));
                 }
                 break;
         }
@@ -442,7 +442,7 @@ public class FtcTest extends FtcTeleOp
                 case TUNE_TURN_PID:
                     if (robot.robotDrive != null && testChoices.tunePidCoeffs != null)
                     {
-                        robot.dashboard.displayPrintf(7, "TunePid=%s", testChoices.tunePidCoeffs);
+                        robot.dashboard.displayPrintf(7, "TunePid=%s,RobotPose=%s ", testChoices.tunePidCoeffs, robot.robotDrive.driveBase.getFieldPosition());
                     }
                     //
                     // Intentionally falling through.
@@ -465,13 +465,13 @@ public class FtcTest extends FtcTeleOp
                             turnPidCtrl = robot.robotDrive.pidDrive.getTurnPidCtrl();
                         }
 
-                        robot.dashboard.displayPrintf(
-                                lineNum++, "RobotPose=%s,rawEnc=lf:%.0f,rf:%.0f,lb:%.0f,rb:%.0f",
-                                robot.robotDrive.driveBase.getFieldPosition(),
-                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_FRONT].getPosition(),
-                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_FRONT].getPosition(),
-                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_BACK].getPosition(),
-                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_BACK].getPosition());
+//                        robot.dashboard.displayPrintf(
+//                                lineNum++, "RobotPose=%s,rawEnc=lf:%.0f,rf:%.0f,lb:%.0f,rb:%.0f",
+//                                robot.robotDrive.driveBase.getFieldPosition(),
+//                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_FRONT].getPosition(),
+//                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_FRONT].getPosition(),
+//                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_BACK].getPosition(),
+//                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_BACK].getPosition());
                         if (xPidCtrl != null)
                         {
                             xPidCtrl.displayPidInfo(lineNum);

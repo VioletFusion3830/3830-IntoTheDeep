@@ -20,9 +20,9 @@ public class FtcDashboard
     @Config
     public static class PPTuneParams
     {
-        public static double tuneDistance = 8;
+        public static double tuneDistance = 4;
         public static double tuneAngleDistance = 90;
-        public static double powerLimit = 0.7;
+        public static double powerLimit = 1;
 
         public static TrcPidController.PidCoefficients PidCoeff = new TrcPidController.PidCoefficients(0, 0, 0.0, 0,0);
     }
