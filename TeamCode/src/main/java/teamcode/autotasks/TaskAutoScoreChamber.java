@@ -226,7 +226,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                 robot.elbow.setPosition(0,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event2);
                 robot.elevator.setPosition(0,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event3);
                 //Position wrist and arm subsystems for deposit
-                robot.wristArm.setWristArmPosition(0,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, null);
+                robot.wristArm.setWristArmPosition(0,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, 1);
                 robot.clawServo.open();
                 robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_POS2);
                 //Wait for completion
@@ -238,7 +238,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
             case SET_ARM_POSITION:
                 //Set arm to score position
-                robot.wristArm.setWristArmHighChamberScorePos(event1);
+                robot.wristArm.setWristArmHighChamberScorePos(1);
                 sm.waitForSingleEvent(event1, State.LOWER_ELEVATOR);
                 break;
 

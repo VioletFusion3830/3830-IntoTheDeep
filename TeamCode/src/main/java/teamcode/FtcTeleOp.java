@@ -460,26 +460,28 @@ public class FtcTeleOp extends FtcOpMode
             case A:
                 if(pressed)
                 {
-                    robot.elbow.setPosition(RobotParams.ElbowParams.BASKET_SCORE_POS);
-                    robot.wristArm.setWristArmBasketScorePos();
-                    robot.elevator.setPosition(RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS);
+//                    robot.elbow.setPosition(RobotParams.ElbowParams.BASKET_SCORE_POS);
+//                    robot.wristArm.setWristArmBasketScorePos(null);
+//                    robot.elevator.setPosition(RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS);
                     //robot.scoreBasketTask.atuoScoreBasket(null);
+                    robot.elbow.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS);
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS);
                 }
                 break;
             case B:
-                if(pressed)
+                if(pressed && robot.wristArm != null)
                 {
                     robot.elbow.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS);
-                    robot.wristArm.setWristArmHighChamberScorePos();
+                    robot.wristArm.setWristArmHighChamberScorePos(1);
                     robot.elevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS);
                     //robot.scoreChamberTask.autoScoreChamber(Robot.ScoreHeight.HIGH,false,null);
                 }
                 break;
             case X:
-                if(pressed)
+                if(pressed && robot.wristArm != null)
                 {
                     robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS);
-                    robot.wristArm.setWristArmPickupSpecimenPos();
+                    robot.wristArm.setWristArmPickupSpecimenPos(0);
                     robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS);
                     //robot.pickupSpecimenTask.autoPickupSpecimen(null);
                 }
@@ -487,17 +489,36 @@ public class FtcTeleOp extends FtcOpMode
                 //Testing only will be removed
                 if(pressed)
                 {
-                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
-                    robot.wristArm.setWristArmPickupSamplePos();
-                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS);
+//                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
+//                    robot.wristArm.setWristArmPickupSamplePos(null);
+//                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS);
                     //robot.pickupSampleTask.autoPickupSample(null);
                 }
                 break;
             case LeftBumper:
+                if(pressed)
+                {
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.MIN_POS_ELBOW_UP);
+                    robot.elbow.setPosition(105);
+//                    robot.arm.setPosition(RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS+10);
+//                    robot.elbow.setPosition(105);
+                }
+                break;
             case RightBumper:
+                if (pressed)
+                {
+                    robot.autoHang.autoClimbLevel2(null);
+                }
+                break;
             case DpadUp:
+                if (pressed)
+                {
+                    robot.autoHang.autoClimbLevel1(null);
+                }
+                break;
             case DpadDown:
             case DpadLeft:
+                break;
             case DpadRight:
                 if(pressed)
                 {

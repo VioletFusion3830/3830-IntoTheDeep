@@ -205,7 +205,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                 //Set Elbow to pickup angle
                 robot.elbow.setPosition(0,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event);
                 //Position wrist and arm subsystems for pickup
-                robot.wristArm.setWristArmPickupSamplePos(null);
+                robot.wristArm.setWristArmPickupSamplePos(1);
                 robot.clawServo.open();
                 robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
                 sm.waitForSingleEvent(event, State.SET_ELEVATOR_ARM);

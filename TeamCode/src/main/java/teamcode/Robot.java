@@ -29,6 +29,7 @@ import ftclib.driverio.FtcDashboard;
 import ftclib.driverio.FtcMatchInfo;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.sensor.FtcRobotBattery;
+import teamcode.autotasks.TaskAutoHang;
 import teamcode.autotasks.TaskAutoPickupSample;
 import teamcode.autotasks.TaskAutoPickupSpecimen;
 import teamcode.autotasks.TaskAutoScoreBasket;
@@ -73,7 +74,7 @@ public class Robot
     public LEDIndicator ledIndicator;
     public FtcRobotBattery battery;
     // Subsystems.
-    public TrcMotor arm;
+    public TrcServo arm;
     public Claw claw;
     public WristArm wristArm;
     public TrcServoGrabber clawServo;
@@ -89,6 +90,7 @@ public class Robot
     public TaskAutoPickupSpecimen pickupSpecimenTask;
     public TaskAutoScoreBasket scoreBasketTask;
     public TaskAutoScoreChamber scoreChamberTask;
+    public TaskAutoHang autoHang;
 
     public enum GamePieceType
     {
@@ -183,6 +185,7 @@ public class Robot
                 pickupSpecimenTask = new TaskAutoPickupSpecimen("AutoPickupSpecimenTask", this);
                 scoreBasketTask = new TaskAutoScoreBasket("AutoScoreBasketTask", this);
                 scoreChamberTask = new TaskAutoScoreChamber("AutoScoreChamberTask", this);
+                autoHang = new TaskAutoHang("AutoHangTask", this);
             }
         }
 
@@ -373,9 +376,8 @@ public class Robot
                 if (arm != null)
                 {
                     dashboard.displayPrintf(
-                            lineNum++, "Arm: power=%.3f, pos=%.3f/%.3f, limitSw=%s/%s",
-                            arm.getPower(), arm.getPosition(), arm.getPidTarget(),
-                            arm.isLowerLimitSwitchActive(), arm.isUpperLimitSwitchActive());
+                            lineNum++, "Arm: power=%.3f, pos=%.3f",
+                            arm.getPower(), arm.getPosition());
                 }
 
                 if (elbow != null)
@@ -388,12 +390,16 @@ public class Robot
 
                 if (wristVertical != null)
                 {
-
+                    dashboard.displayPrintf(
+                            lineNum++, "Wrist Vertical: power=%.3f, pos=%.3f",
+                            wristVertical.getPower(), wristVertical.getPosition());
                 }
 
                 if (wristRotational != null)
                 {
-
+                    dashboard.displayPrintf(
+                            lineNum++, "WristRotational: power=%.3f, pos=%.3f",
+                            wristRotational.getPower(), wristRotational.getPosition());
                 }
             }
         }
@@ -418,6 +424,7 @@ public class Robot
         if(pickupSpecimenTask != null) pickupSpecimenTask.cancel();
         if(scoreBasketTask != null) scoreBasketTask.cancel();
         if(scoreChamberTask != null) scoreChamberTask.cancel();
+        if(autoHang != null) autoHang.cancel();
     }   //cancelAll
 
     /**

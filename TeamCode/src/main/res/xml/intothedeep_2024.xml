@@ -8,7 +8,7 @@
             <goBILDA5202SeriesMotor name="lbDriveMotor" port="2" />
             <goBILDA5202SeriesMotor name="rbDriveMotor" port="3" />
             <Servo name="grabber.primary" port="0" />
-            <ContinuousRotationServo name="arm.primary" port="2" />
+            <Servo name="arm.primary" port="2" />
             <AnalogInput name="arm.encoder" port="0" />
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
             <RevColorSensorV3 name="grabber.sensor" port="0" bus="1" />
