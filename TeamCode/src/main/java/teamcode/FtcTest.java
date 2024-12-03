@@ -448,6 +448,32 @@ public class FtcTest extends FtcTeleOp
                     // Intentionally falling through.
                     //
                 case PURE_PURSUIT_DRIVE:
+                    double currTime = TrcTimer.getCurrentTime();
+                    TrcPose2D velPose = robot.robotDrive.driveBase.getFieldVelocity();
+                    double velocity = TrcUtil.magnitude(velPose.x, velPose.y);
+                    double acceleration = 0.0;
+
+                    if (prevTime != 0.0)
+                    {
+                        acceleration = (velocity - prevVelocity)/(currTime - prevTime);
+                    }
+
+                    if (velocity > maxDriveVelocity)
+                    {
+                        maxDriveVelocity = velocity;
+                    }
+
+                    if (acceleration > maxDriveAcceleration)
+                    {
+                        maxDriveAcceleration = acceleration;
+                    }
+
+                    prevTime = currTime;
+                    prevVelocity = velocity;
+
+                    robot.dashboard.displayPrintf(lineNum++, "Drive Vel: (%.1f/%.1f)", velocity, maxDriveVelocity);
+                    robot.dashboard.displayPrintf(
+                            lineNum++, "Drive Accel: (%.1f/%.1f)", acceleration, maxDriveAcceleration);
                 case PID_DRIVE:
                     if (robot.robotDrive != null)
                     {

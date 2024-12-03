@@ -383,13 +383,13 @@ public class RobotParams
             robotMaxVelocity = 60;        // inches/sec
             robotMaxAcceleration  = 250;  // inches/sec2
             robotMaxTurnRate = 100;       // degrees/sec
-            profiledMaxVelocity = 50;
-            profiledMaxAcceleration = 210;
+            profiledMaxVelocity = 60;
+            profiledMaxAcceleration = 250;
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
             turnPidTolerance = 1.0;
-            xDrivePidCoeffs = new PidCoefficients(0.049, 0.0, 0.0, 0.0, 0.0);
+            xDrivePidCoeffs = new PidCoefficients(0.17, 0.0, 0.015, 0.0, 0.0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
             yDrivePidCoeffs = new PidCoefficients(0.08, 0.0, 0.008, 0.0, 0.0);

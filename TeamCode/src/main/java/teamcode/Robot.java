@@ -360,9 +360,9 @@ public class Robot
                 if (elevator != null)
                 {
                     dashboard.displayPrintf(
-                            lineNum++, "Elevator: power=%.3f, pos=%.3f/%.3f, limitSw=%s/%s",
+                            lineNum++, "Elevator: power=%.3f, pos=%.3f/%.3f, limitSw=%s/%s, CurrentDraw=%.3f",
                             elevator.getPower(), elevator.getPosition(), elevator.getPidTarget(),
-                            elevator.isLowerLimitSwitchActive(), elevator.isUpperLimitSwitchActive());
+                            elevator.isLowerLimitSwitchActive(), elevator.isUpperLimitSwitchActive(),elevator.getMotorCurrent());
                 }
 
                 if (claw != null)
