@@ -181,7 +181,7 @@ public class RobotParams
                 new TrcPose2D(0,0, 0.0);
         // Pickup pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
-                new TrcPose2D(Field.HALF_FIELD_INCHES-(Field.FULL_TILE_INCHES+Field.FULL_TILE_INCHES/2),Field.HALF_FIELD_INCHES/2, 180);
+                new TrcPose2D(Field.HALF_FIELD_INCHES-(Field.FULL_TILE_INCHES+Field.FULL_TILE_INCHES/2),23, 180);
         // Park pose (Net zone side).
         public static final TrcPose2D RED_ASCENT_ZONE_PARK_POSE     =
                 new TrcPose2D(0,0, 0.0);
