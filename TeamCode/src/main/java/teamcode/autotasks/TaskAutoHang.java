@@ -20,6 +20,7 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
     {
         LEVEL1_ASCENT,
         LEVEL2_START,
+        CLIP,
         LEVEL2_ASCENT,
         LEVEL3_START,
         DONE
@@ -183,36 +184,40 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
         switch (state)
         {
             case LEVEL1_ASCENT:
-                robot.elbow.setPosition(0,RobotParams.ElbowParams.LEVEL1_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT);
-                robot.elevator.setPosition(0,RobotParams.ElevatorParams.LEVEL1_ASCENT_POS,true,RobotParams.ElevatorParams.POWER_LIMIT);
+                robot.elbow.setPosition(currOwner,0,RobotParams.ElevatorParams.LEVEL1_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,4);
+                robot.elevator.setPosition(currOwner,1,RobotParams.ElevatorParams.LEVEL1_ASCENT_POS,true,RobotParams.ElevatorParams.POWER_LIMIT, event2,4);
                 sm.addEvent(event);
                 sm.addEvent(event2);
-                robot.globalTracer.traceInfo(null,"LEVEL2_START: ElbowPos=%.3f/%.3f, ElevatorPos=%.3f/%.3f, EventElbow=%s, EventElevator=%s",
-                        robot.elbow.getPosition(), robot.elbow.getPidTarget(), robot.elevator.getPosition(),robot.elevator.getPidTarget(), event,event2);
                 sm.waitForEvents(State.DONE,true);
                 break;
 
             case LEVEL2_START:
-                robot.elbow.setPosition(0,RobotParams.ElbowParams.LEVEL2_ASCENT_START_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event);
-                robot.elevator.setPosition(0,RobotParams.ElevatorParams.LEVEL2_ASCENT_START_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event2);
+                robot.elevator.setPosition(currOwner,0.5,RobotParams.ElevatorParams.LEVEL2_ASCENT_START_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event,3);
+                robot.elbow.setPosition(currOwner,0,95,true,RobotParams.ElevatorParams.POWER_LIMIT,null,3);
                 sm.addEvent(event);
-                sm.addEvent(event2);
-                robot.globalTracer.traceInfo(null,"LEVEL2_START: ElbowPos=%.3f/%.3f, ElevatorPos=%.3f/%.3f, EventElbow=%s,, EventElevator=%s",
-                        robot.elbow.getPidTarget(), robot.elbow.getPosition(), robot.elevator.getPidTarget(),robot.elevator.getPosition(), event,event2);
-                sm.waitForEvents(State.LEVEL2_ASCENT,true);
+                sm.waitForEvents(State.CLIP);
+                break;
+
+            case CLIP:
+                robot.elbow.setPosition(currOwner,0,RobotParams.ElbowParams.LEVEL2_ASCENT_START_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,20);
+                sm.addEvent(event);
+                sm.waitForEvents(State.LEVEL2_ASCENT);
                 break;
 
             case LEVEL2_ASCENT:
-                robot.globalTracer.traceInfo(null,"LEVEL2_ASCENT:" + robot.elbow.getPosition() +"/"+ robot.elevator.getPosition() + "Events" + event+"/"+event2);
                 robot.elevator.setPidStallDetectionEnabled(false);
                 robot.elevator.setStallProtection(0.0, 0.0, 0.0, 0.0);
                 robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
                 robot.elevator.setPositionPidParameters(FtcDashboard.TunePID_Secondary.tunePidCoeff, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
-                robot.elbow.setPosition(0,RobotParams.ElbowParams.LEVEL2_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event);
-                robot.elevator.setPosition(0,RobotParams.ElevatorParams.LEVEL2_ASCENT_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event2);
+                robot.elbow.setPosition(currOwner,0,RobotParams.ElbowParams.LEVEL2_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,4);
+                robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.LEVEL2_ASCENT_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event2,4);
                 sm.addEvent(event);
                 sm.addEvent(event2);
-                sm.waitForEvents(State.LEVEL2_ASCENT,true);
+                sm.waitForEvents(State.DONE,true);
+                break;
+
+            case LEVEL3_START:
+                sm.setState(State.DONE);
                 break;
 
             default:

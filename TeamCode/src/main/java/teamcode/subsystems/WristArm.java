@@ -41,12 +41,12 @@ public class WristArm {
 
     public void setWristArmPickupSamplePos(double timeout)
     {
-        setWristArmPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS, RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS,timeout);
+        //setWristArmPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS, RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS,timeout);
     }
 
     public void setWristArmPickupSpecimenPos(double timeout)
     {
-        setWristArmPosition(RobotParams.ArmParams.PICKUP_SPECIMEN_POS, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS, timeout);
+        setWristArmPosition(RobotParams.ArmParams.PICKUP_SPECIMEN_POS,RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS, timeout);
     }
 
     public void setWristArmBasketScorePos(double timeout)

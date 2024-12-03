@@ -6,6 +6,14 @@ import trclib.robotcore.TrcPidController;
 public class FtcDashboard
 {
     @Config
+    public static class ServoTune
+    {
+        public static double ServoA = 0.5;
+        public static double ServoB = 0.5;
+        public static double ServoC = 0.5;
+    }
+
+    @Config
     public static class TunePID
     {
         public static TrcPidController.PidCoefficients tunePidCoeff = new TrcPidController.PidCoefficients(0, 0, 0.0, 0,0);

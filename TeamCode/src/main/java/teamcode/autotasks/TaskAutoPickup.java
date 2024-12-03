@@ -22,7 +22,10 @@
 
 package teamcode.autotasks;
 
+import teamcode.FtcDashboard;
+import teamcode.FtcTeleOp;
 import teamcode.Robot;
+import teamcode.RobotParams;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcOwnershipMgr;
@@ -32,9 +35,9 @@ import trclib.robotcore.TrcTaskMgr;
 /**
  * This class implements auto-assist task.
  */
-public class TaskAuto extends TrcAutoTask<TaskAuto.State>
+public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
 {
-    private static final String moduleName = TaskAuto.class.getSimpleName();
+    private static final String moduleName = TaskAutoPickup.class.getSimpleName();
 
     public enum State
     {
@@ -54,6 +57,7 @@ public class TaskAuto extends TrcAutoTask<TaskAuto.State>
     private final String ownerName;
     private final Robot robot;
     private TrcEvent event;
+    private TrcEvent event2;
 
     private String currOwner = null;
 
@@ -63,12 +67,13 @@ public class TaskAuto extends TrcAutoTask<TaskAuto.State>
      * @param ownerName specifies the owner name to take subsystem ownership, can be null if no ownership required.
      * @param robot specifies the robot object that contains all the necessary subsystems.
      */
-    public TaskAuto(String ownerName, Robot robot)
+    public TaskAutoPickup(String ownerName, Robot robot)
     {
         super(moduleName, ownerName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.ownerName = ownerName;
         this.robot = robot;
         event = new TrcEvent(moduleName);
+        event2 = new TrcEvent(moduleName);
     }   //TaskAuto
 
     /**
@@ -76,7 +81,7 @@ public class TaskAuto extends TrcAutoTask<TaskAuto.State>
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoAssist(TrcEvent completionEvent)
+    public void autoPickup(TrcEvent completionEvent)
     {
         tracer.traceInfo(moduleName, "event=" + completionEvent);
         startAutoTask(State.SET_ARM_POS, new TaskParams(), completionEvent);
@@ -97,7 +102,9 @@ public class TaskAuto extends TrcAutoTask<TaskAuto.State>
     protected boolean acquireSubsystemsOwnership()
     {
         boolean success = ownerName == null ||
-                          (robot.robotDrive.driveBase.acquireExclusiveAccess(ownerName));
+                (robot.arm.acquireExclusiveAccess(ownerName) &&
+                 robot.clawServo.acquireExclusiveAccess(currOwner) &&
+                 robot.wristVertical.acquireExclusiveAccess(currOwner));
 
         if (success)
         {
@@ -108,9 +115,11 @@ public class TaskAuto extends TrcAutoTask<TaskAuto.State>
         {
             TrcOwnershipMgr ownershipMgr = TrcOwnershipMgr.getInstance();
             tracer.traceWarn(
-                moduleName,
-                "Failed to acquire subsystem ownership (currOwner=" + currOwner +
-                ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) + ").");
+                    moduleName,
+                    "Failed to acquire subsystem ownership (currOwner=" + currOwner+
+                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
+                            ", clawServo=" + ownershipMgr.getOwner(robot.clawServo)+
+                            ", vWrist=" + ownershipMgr.getOwner(robot.wristVertical)+").");
             releaseSubsystemsOwnership();
         }
 
@@ -128,10 +137,15 @@ public class TaskAuto extends TrcAutoTask<TaskAuto.State>
         {
             TrcOwnershipMgr ownershipMgr = TrcOwnershipMgr.getInstance();
             tracer.traceInfo(
-                moduleName,
-                "Releasing subsystem ownership (currOwner=" + currOwner +
-                ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) + ").");
-            robot.robotDrive.driveBase.releaseExclusiveAccess(currOwner);
+                    moduleName,
+                    "Releasing subsystem ownership (currOwner=" + currOwner +
+                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
+                            ", clawServo=" + ownershipMgr.getOwner(robot.clawServo)+
+                            ", vWrist=" + ownershipMgr.getOwner(robot.wristVertical)+").");
+
+            robot.arm.releaseExclusiveAccess(currOwner);
+            robot.clawServo.releaseExclusiveAccess(currOwner);
+            robot.wristVertical.releaseExclusiveAccess(currOwner);
             currOwner = null;
         }
     }   //releaseSubsystemsOwnership
@@ -143,7 +157,9 @@ public class TaskAuto extends TrcAutoTask<TaskAuto.State>
     protected void stopSubsystems()
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
-        robot.robotDrive.cancel(currOwner);
+        robot.arm.cancel();
+        robot.clawServo.cancel();
+        robot.wristVertical.cancel();
     }   //stopSubsystems
 
     /**
@@ -158,19 +174,31 @@ public class TaskAuto extends TrcAutoTask<TaskAuto.State>
      */
     @Override
     protected void runTaskState(
-        Object params, State state, TrcTaskMgr.TaskType taskType, TrcRobot.RunMode runMode, boolean slowPeriodicLoop)
+            Object params, State state, TrcTaskMgr.TaskType taskType, TrcRobot.RunMode runMode, boolean slowPeriodicLoop)
     {
         TaskParams taskParams = (TaskParams) params;
 
         switch (state)
         {
             case SET_ARM_POS:
+                FtcTeleOp.isClawGrabbing = true;
+                double armPos = RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START -
+                        (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/18));
+                double vWristPos = RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START -
+                        (RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/18));
+                robot.wristVertical.setPosition(currOwner,0,vWristPos+ FtcDashboard.ServoTune.ServoB,event2,.3);
+                robot.arm.setPosition(currOwner,0, armPos+ FtcDashboard.ServoTune.ServoA,event,0.3);
+                sm.waitForEvents(State.GRAB);
                 break;
 
             case GRAB:
+                robot.clawServo.close(currOwner,event);
+                sm.waitForEvents(State.RESET_ARM_POS,.3);
                 break;
 
             case RESET_ARM_POS:
+                FtcTeleOp.isClawGrabbing = false;
+                sm.setState(State.DONE);
                 break;
 
             default:
@@ -180,5 +208,5 @@ public class TaskAuto extends TrcAutoTask<TaskAuto.State>
                 break;
         }
     }   //runTaskState
- 
+
 }   //class TaskAuto
