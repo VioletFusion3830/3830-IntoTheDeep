@@ -303,8 +303,8 @@ public class FtcTest extends FtcTeleOp
                     //
                     // Set the current position as the absolute field origin so the path can be an absolute path.
                     TrcPose2D startPose = new TrcPose2D(0.0, 0.0, 0);
-                    robot.robotDrive.driveBase.setFieldPosition(startPose);
-                    robot.robotDrive.purePursuitDrive.start(startPose, false,robot.robotInfo.profiledMaxVelocity,robot.robotInfo.profiledMaxAcceleration,new TrcPose2D(30, 40, 90));
+                    robot.robotDrive.driveBase.setFieldPosition(RobotParams.Game.STARTPOSE_RED_OBSERVATION_ZONE);
+                    robot.robotDrive.purePursuitDrive.start(robot.robotDrive.driveBase.getFieldPosition(), false,robot.robotInfo.profiledMaxVelocity,robot.robotInfo.profiledMaxAcceleration,new TrcPose2D(8, -80, 180));
                 }
                 break;
         }
@@ -448,6 +448,32 @@ public class FtcTest extends FtcTeleOp
                     // Intentionally falling through.
                     //
                 case PURE_PURSUIT_DRIVE:
+                    double currTime = TrcTimer.getCurrentTime();
+                    TrcPose2D velPose = robot.robotDrive.driveBase.getFieldVelocity();
+                    double velocity = TrcUtil.magnitude(velPose.x, velPose.y);
+                    double acceleration = 0.0;
+
+                    if (prevTime != 0.0)
+                    {
+                        acceleration = (velocity - prevVelocity)/(currTime - prevTime);
+                    }
+
+                    if (velocity > maxDriveVelocity)
+                    {
+                        maxDriveVelocity = velocity;
+                    }
+
+                    if (acceleration > maxDriveAcceleration)
+                    {
+                        maxDriveAcceleration = acceleration;
+                    }
+
+                    prevTime = currTime;
+                    prevVelocity = velocity;
+
+                    robot.dashboard.displayPrintf(lineNum++, "Drive Vel: (%.1f/%.1f)", velocity, maxDriveVelocity);
+                    robot.dashboard.displayPrintf(
+                            lineNum++, "Drive Accel: (%.1f/%.1f)", acceleration, maxDriveAcceleration);
                 case PID_DRIVE:
                     if (robot.robotDrive != null)
                     {
