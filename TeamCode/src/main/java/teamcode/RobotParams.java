@@ -137,6 +137,7 @@ public class RobotParams
      */
     public static class Game
     {
+        public static final boolean fieldIsMirrored                 = false;
         // DO NOT CHANGE the AprilTag location numbers. They are from the AprilTag metadata.
         // All AprilTags are at the height of 5.75-inch from the tile floor.
         public static final double APRILTAG_AUDIENCE_WALL_X                 = -70.25;
@@ -157,7 +158,7 @@ public class RobotParams
         public static final double TELEOP_PERIOD                    = 120.0;// 2 minutes teleop period
         public static final double SCORE_BASKET_CYCLE_TIME          = 6.0;  // in seconds
         public static final double CHAMBER_LENGTH                   = 26.0;
-        public static final double CHAMBER_MAX_SCORE_POS_X          = (CHAMBER_LENGTH / 2.0);
+        public static final double CHAMBER_MAX_SCORE_POS_X          = (CHAMBER_LENGTH / 2.0)-3;
 
         // Blue alliance positions will be derived using adjustPoseByAlliance.
         // Robot start locations in inches.
@@ -172,10 +173,10 @@ public class RobotParams
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
                 new TrcPose2D(0, 0, 0.0);
         public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE    =
-                new TrcPose2D(-7, Field.FULL_TILE_INCHES, 180);
+                new TrcPose2D(-0.3 * Field.FULL_TILE_INCHES, -1.65 * Field.FULL_TILE_INCHES, 0.0);
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D(7, Field.FULL_TILE_INCHES, 180);
+                new TrcPose2D(0.1 * Field.FULL_TILE_INCHES, -1.65 * Field.FULL_TILE_INCHES, 0.0);
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
                 new TrcPose2D(0,0, 0.0);

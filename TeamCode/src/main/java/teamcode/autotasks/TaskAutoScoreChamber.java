@@ -99,7 +99,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
             scorePose.x = robotPose.x;
         }
 
-        TaskParams taskParams = new TaskParams(alliance, scorePose, noDrive);
+        TaskParams taskParams = new TaskParams(alliance, scorePose,noDrive);
         tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
         startAutoTask(State.GO_TO_SCORE_POSITION, taskParams, completionEvent);
     }   //autoAssist
@@ -218,9 +218,11 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
         {
             case GO_TO_SCORE_POSITION:
                 //Path to pickup location
-                robot.robotDrive.purePursuitDrive.start(currOwner, event1, 0.0,
-                        robot.robotDrive.driveBase.getFieldPosition(), false, robot.robotInfo.profiledMaxVelocity,
-                        robot.robotInfo.profiledMaxAcceleration, robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
+                robot.robotDrive.purePursuitDrive.start(
+                        currOwner, event1, 0.0,
+                        robot.robotDrive.driveBase.getFieldPosition(), false,
+                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                        robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
                 //Set Elbow and elevator to pickup positions
                 robot.elbow.setPosition(0,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event2);
                 robot.elevator.setPosition(0,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event3);
