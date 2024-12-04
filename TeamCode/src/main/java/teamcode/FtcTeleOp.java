@@ -528,9 +528,19 @@ public class FtcTeleOp extends FtcOpMode
         switch (button)
         {
             case A:
-                if (pressed)
+                if (robot.scoreChamberTask != null && pressed)
                 {
-                    robot.elevator.setPosition(RobotParams.ElevatorParams.MIN_POS_ELBOW_UP);
+                    if (!robot.scoreChamberTask.isActive())
+                    {
+                        robot.globalTracer.traceInfo(
+                                moduleName, ">>>>> Auto score chamber (scoreHeight=%s).");
+                        robot.scoreChamberTask.autoScoreChamber( driverAltFunc, null);
+                    }
+                    else
+                    {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel auto score chamber.");
+                        robot.scoreChamberTask.cancel();
+                    }
                 }
                 break;
             case B:
