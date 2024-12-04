@@ -2,6 +2,7 @@ package teamcode.autocommands;
 
 import teamcode.FtcAuto;
 import teamcode.Robot;
+import teamcode.RobotParams;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcStateMachine;
@@ -17,6 +18,8 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
     private enum State
     {
         START,
+        DO_DELAY,
+        SCORE_PRELOAD,
         DONE
     }   //enum State
 
@@ -66,6 +69,8 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
     {
         timer.cancel();
         sm.stop();
+        robot.scoreChamberTask.cancel();
+        robot.pickupSpecimenTask.cancel();
     }   //cancel
 
     /**
@@ -90,16 +95,30 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
             switch (state)
             {
                 case START:
+                    // Set robot location according to auto choices.
+                    robot.setRobotStartPosition(autoChoices);
+                    robot.globalTracer.traceInfo(null,"StartPose:"+ robot.robotDrive.driveBase.getFieldPosition());
+                    //
+                    // Intentionally fall to next state.
+                    //
+                case DO_DELAY:
+                    // Do delay if there is one.
                     if (autoChoices.delay > 0.0)
                     {
                         robot.globalTracer.traceInfo(moduleName, "***** Do delay " + autoChoices.delay + "s.");
                         timer.set(autoChoices.delay, event);
-                        sm.waitForSingleEvent(event, State.DONE);
+                        sm.waitForSingleEvent(event, State.SCORE_PRELOAD);
                     }
                     else
                     {
-                        sm.setState(State.DONE);
+                        sm.setState(State.SCORE_PRELOAD);
                     }
+                    break;
+
+                case SCORE_PRELOAD:
+                    // Score the preloaded specimen.
+                    robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance,false, event);
+                    sm.waitForSingleEvent(event, State.DONE);
                     break;
 
                 default:

@@ -83,10 +83,13 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoScoreChamber(boolean noDrive, TrcEvent completionEvent)
+    public void autoScoreChamber(FtcAuto.Alliance alliance,boolean noDrive, TrcEvent completionEvent)
     {
         TrcPose2D robotPose = robot.robotDrive.driveBase.getFieldPosition();
-        FtcAuto.Alliance alliance = robotPose.y < 0.0? FtcAuto.Alliance.RED_ALLIANCE: FtcAuto.Alliance.BLUE_ALLIANCE;
+        if(alliance == null)
+        {
+            alliance = robotPose.y < 0.0 ? FtcAuto.Alliance.RED_ALLIANCE : FtcAuto.Alliance.BLUE_ALLIANCE;
+        }
         boolean nearNetZone = alliance == FtcAuto.Alliance.RED_ALLIANCE ^ robotPose.x > 0.0;
         TrcPose2D scorePose = nearNetZone?
                 RobotParams.Game.RED_NET_CHAMBER_SCORE_POSE.clone():
@@ -220,7 +223,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                 //Path to pickup location
                 robot.robotDrive.purePursuitDrive.start(currOwner, event1, 0.0,
                         robot.robotDrive.driveBase.getFieldPosition(), false, robot.robotInfo.profiledMaxVelocity,
-                        robot.robotInfo.profiledMaxAcceleration, robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
+                        robot.robotInfo.profiledMaxAcceleration, robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE, taskParams.alliance,false));
                 //Set Elbow and elevator to pickup positions
                 robot.elbow.setPosition(0,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event2);
                 robot.elevator.setPosition(0,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event3);

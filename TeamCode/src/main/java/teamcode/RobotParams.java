@@ -166,7 +166,7 @@ public class RobotParams
         // Red Net Zone start pose face the net zone touching the alliance wall with the robot's in front of net zone.
         public static final TrcPose2D STARTPOSE_RED_NET_ZONE                = new TrcPose2D(-(Field.HALF_FIELD_INCHES-(Field.FULL_TILE_INCHES+Robot.ROBOT_LENGTH/2.0)), -Robot.ROBOT_WIDTH/2.0, -90);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
-        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE        = new TrcPose2D(Robot.ROBOT_WIDTH/2.0+1, -(Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0), 180);
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE        = new TrcPose2D(Robot.ROBOT_WIDTH/2.0, -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0+2)), 180);
 
         // Score poses (Net zone side).
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
@@ -175,13 +175,13 @@ public class RobotParams
                 new TrcPose2D(-7, Field.FULL_TILE_INCHES, 180);
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D(7, Field.FULL_TILE_INCHES, 180);
+                new TrcPose2D(7, -Field.FULL_TILE_INCHES-6, 180);
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
                 new TrcPose2D(0,0, 0.0);
         // Pickup pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
-                new TrcPose2D(Field.HALF_FIELD_INCHES-(Field.FULL_TILE_INCHES+Field.FULL_TILE_INCHES/2),23, 180);
+                new TrcPose2D(2.0 * Field.FULL_TILE_INCHES, -2.05 * Field.FULL_TILE_INCHES, 180.0);
         // Park pose (Net zone side).
         public static final TrcPose2D RED_ASCENT_ZONE_PARK_POSE     =
                 new TrcPose2D(0,0, 0.0);
@@ -211,11 +211,11 @@ public class RobotParams
         public static final double ROBOT_WIDTH                              = 16.25;
         // Robot Drive Parameters.
         public static final DriveMode DRIVE_MODE                = DriveMode.ArcadeMode;
-        public static final DriveOrientation DRIVE_ORIENTATION  = DriveOrientation.FIELD;
+        public static final DriveOrientation DRIVE_ORIENTATION  = DriveOrientation.ROBOT;
         public static final double DRIVE_SLOW_SCALE                         = 0.5;
         public static final double DRIVE_NORMAL_SCALE                       = 1.0;
         public static final double TURN_SLOW_SCALE                          = 0.5;
-        public static final double TURN_NORMAL_SCALE                        = 0.8;
+        public static final double TURN_NORMAL_SCALE                        = 0.6;
     }   //class Robot
 
     /**

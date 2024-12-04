@@ -212,10 +212,10 @@ public class FtcAuto extends FtcOpMode
             robot.elbowEvent.clear();
             if(robot.elbow != null && robot.elevator != null && robot.wristVertical != null && robot.wristRotational != null)
             {
-                robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
-//                robot.arm.setPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS);
-//                robot.wristVertical.setPosition(RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS);
-                robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
+                robot.elbow.setPosition(65);
+                robot.wristArm.setWristArmPosition(.050,RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START,2);
+                robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
+                robot.clawServo.close(null,5,null);
             }
         }
     }   //initPeriodic

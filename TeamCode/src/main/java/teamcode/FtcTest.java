@@ -303,8 +303,8 @@ public class FtcTest extends FtcTeleOp
                     //
                     // Set the current position as the absolute field origin so the path can be an absolute path.
                     TrcPose2D startPose = new TrcPose2D(0.0, 0.0, 0);
-                    robot.robotDrive.driveBase.setFieldPosition(startPose);
-                    robot.robotDrive.purePursuitDrive.start(startPose, false,robot.robotInfo.profiledMaxVelocity,robot.robotInfo.profiledMaxAcceleration,new TrcPose2D(30, 40, 90));
+                    robot.robotDrive.driveBase.setFieldPosition(RobotParams.Game.STARTPOSE_RED_OBSERVATION_ZONE);
+                    robot.robotDrive.purePursuitDrive.start(robot.robotDrive.driveBase.getFieldPosition(), false,robot.robotInfo.profiledMaxVelocity,robot.robotInfo.profiledMaxAcceleration,new TrcPose2D(8, -80, 180));
                 }
                 break;
         }

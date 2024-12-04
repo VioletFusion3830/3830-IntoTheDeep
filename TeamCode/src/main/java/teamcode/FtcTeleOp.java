@@ -22,6 +22,8 @@
 
 package teamcode;
 
+import static teamcode.FtcAuto.autoChoices;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -396,6 +398,8 @@ public class FtcTeleOp extends FtcOpMode
                 if(pressed && robot.wristRotational != null)
                 {
                     robot.wristRotational.setPosition(RobotParams.WristParamsRotational.DEGREES_45);
+                    isWristRotatorMiddle = false;
+
                 }
             case Y:
                 break;
@@ -544,13 +548,27 @@ public class FtcTeleOp extends FtcOpMode
                 if(pressed && robot.wristArm != null)
                 {
                     isSamplePickupMode = false;
-                    robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
-                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS);
-                    robot.wristArm.setWristArmPickupSpecimenPos(0);
-                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS);
-                    //robot.pickupSpecimenTask.autoPickupSpecimen(null);
+//                    robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
+//                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS);
+//                    robot.wristArm.setWristArmPickupSpecimenPos(0);
+//                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS);
+                    //robot.pickupSpecimenTask.autoPickupSpecimen(FtcAuto.Alliance.RED_ALLIANCE,null);
+                    robot.globalTracer.traceInfo(null,"Pos" + robot.robotDrive.driveBase.getFieldPosition());
+                    robot.robotDrive.purePursuitDrive.start(null,0.0,
+                            robot.robotDrive.driveBase.getFieldPosition(), false, robot.robotInfo.profiledMaxVelocity,
+                            robot.robotInfo.profiledMaxAcceleration, robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, FtcAuto.Alliance.RED_ALLIANCE));
                 }
             case Y:
+                if(pressed)
+                {
+                    robot.robotDrive.driveBase.setFieldPosition(
+                            robot.adjustPoseByAlliance(RobotParams.Game.STARTPOSE_RED_OBSERVATION_ZONE,FtcAuto.Alliance.RED_ALLIANCE,false));
+                    robot.globalTracer.traceInfo(null,"Pos" + robot.robotDrive.driveBase.getFieldPosition());
+                    robot.robotDrive.purePursuitDrive.start(null, null, 0.0,
+                            robot.robotDrive.driveBase.getFieldPosition(), false, robot.robotInfo.profiledMaxVelocity,
+                            robot.robotInfo.profiledMaxAcceleration, robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE, FtcAuto.Alliance.RED_ALLIANCE, false));
+                    robot.globalTracer.traceInfo(null,"Target" + RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE);
+                }
                 //Testing only will be removed
 //                if(pressed)
 //                {
