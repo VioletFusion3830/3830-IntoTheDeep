@@ -23,6 +23,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
     public enum State
     {
+        SET_SUBSYSTEMS,
         GO_TO_SCORE_POSITION,
         CLIP_SPECIMEN,
         SCORE_CHAMBER,
@@ -83,20 +84,22 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoScoreChamber(boolean noDrive, TrcEvent completionEvent)
+    public void autoScoreChamber(TrcPose2D scorePose, boolean noDrive, TrcEvent completionEvent)
     {
         TrcPose2D robotPose = robot.robotDrive.driveBase.getFieldPosition();
         FtcAuto.Alliance alliance = robotPose.y < 0.0? FtcAuto.Alliance.RED_ALLIANCE: FtcAuto.Alliance.BLUE_ALLIANCE;
         boolean nearNetZone = alliance == FtcAuto.Alliance.RED_ALLIANCE ^ robotPose.x > 0.0;
-        TrcPose2D scorePose = nearNetZone?
-                RobotParams.Game.RED_NET_CHAMBER_SCORE_POSE.clone():
-                RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
-
-        if (robotPose.x >= -RobotParams.Game.CHAMBER_MAX_SCORE_POS_X &&
-                robotPose.x <= RobotParams.Game.CHAMBER_MAX_SCORE_POS_X)
+        if(scorePose == null)
         {
-            // If robot current position is within the chamber zone, use its X position.
-            scorePose.x = robotPose.x;
+            scorePose = nearNetZone ?
+                    RobotParams.Game.RED_NET_CHAMBER_SCORE_POSE.clone() :
+                    RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
+
+            if (robotPose.x >= -RobotParams.Game.CHAMBER_MAX_SCORE_POS_X &&
+                    robotPose.x <= RobotParams.Game.CHAMBER_MAX_SCORE_POS_X) {
+                // If robot current position is within the chamber zone, use its X position.
+                scorePose.x = robotPose.x;
+            }
         }
 
         TaskParams taskParams = new TaskParams(alliance, scorePose,noDrive);
@@ -216,7 +219,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
         switch (state)
         {
-            case GO_TO_SCORE_POSITION:
+            case SET_SUBSYSTEMS:
                 if(!taskParams.noDrive){
                     //Path to pickup location
                     robot.robotDrive.purePursuitDrive.start(
@@ -225,9 +228,24 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
                             robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
                 }
+                if(robot.elevator.getPosition() > RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS)
+                {
+                    robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event3,3);
+                    sm.waitForSingleEvent(event2, State.GO_TO_SCORE_POSITION);
+                }
+                else
+                {
+                    sm.setState(State.GO_TO_SCORE_POSITION);
+                }
+                break;
+
+            case GO_TO_SCORE_POSITION:
                 //Set Elbow and elevator to pickup positions
                 robot.elbow.setPosition(currOwner,0,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event2,3);
-                robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event3,3);
+                if(robot.elevator.getPosition() > RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS)
+                {
+                    robot.elevator.setPosition(currOwner, 0, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, true, RobotParams.ElevatorParams.POWER_LIMIT, event3, 3);
+                }
                 //Position wrist and arm subsystems for deposit
                 robot.arm.setPosition(currOwner,0.2,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,null,3);
                 robot.wristVertical.setPosition(currOwner,0.2,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,2);

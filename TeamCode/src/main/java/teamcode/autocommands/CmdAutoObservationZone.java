@@ -23,7 +23,6 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
         SCORE_PRELOAD,
         MOVE_SAMPLES,
         PICKUP_SPECIMEN,
-        DRIVE_TO_CHAMBER_POS,
         SCORE_SPECIMEN,
         PARK,
         DONE
@@ -123,7 +122,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
 
                 case SCORE_PRELOAD:
                     // Score the preloaded specimen.
-                    robot.scoreChamberTask.autoScoreChamber(false, event);
+                    robot.scoreChamberTask.autoScoreChamber(null,false, event);
                     sm.waitForSingleEvent(event, State.MOVE_SAMPLES);
                     break;
 
@@ -145,7 +144,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     {
                         robot.pickupSpecimenTask.autoPickupSpecimen(autoChoices.alliance, event);
                         scoreSpecimenCount++;
-                        sm.waitForSingleEvent(event, State.DONE);
+                        sm.waitForSingleEvent(event, State.SCORE_SPECIMEN);
                     }
                     else
                     {
@@ -153,35 +152,26 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     }
                     break;
 
-                case DRIVE_TO_CHAMBER_POS:
+                case SCORE_SPECIMEN:
                     // Drive to the specimen scoring position.
                     TrcPose2D scorePose = RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
-                    scorePose.x += 2 * scoreSpecimenCount;
-                    robot.elevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS);
-                    robot.elbow.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS);
-                    robot.robotDrive.purePursuitDrive.start(
-                            event, 0.0, robot.robotDrive.driveBase.getFieldPosition(), false,
-                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
-                            robot.adjustPoseByAlliance(scorePose, autoChoices.alliance));
-                    sm.waitForSingleEvent(event, State.SCORE_SPECIMEN);
-                    break;
-
-                case SCORE_SPECIMEN:
+                    scorePose.x -= 1.5 * scoreSpecimenCount;
                     // Score the specimen.
-                    robot.scoreChamberTask.autoScoreChamber(true, event);
+                    robot.scoreChamberTask.autoScoreChamber(scorePose,false, event);
                     sm.waitForSingleEvent(event, State.PICKUP_SPECIMEN);
                     break;
 
                 case PARK:
                     // Park at the observation zone.
-                    robot.elevator.setPosition(103.0);
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS);
+
                     if (autoChoices.parkPos == FtcAuto.ParkOption.PARK)
                     {
                         robot.robotDrive.purePursuitDrive.start(
                                 event, 0.0, robot.robotDrive.driveBase.getFieldPosition(), false,
                                 robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
                                 robot.adjustPoseByAlliance(
-                                        RobotParams.Game.RED_OBSERVATION_ZONE_PARK_POSE, autoChoices.alliance));
+                                        RobotParams.Game.RED_OBSERVATION_ZONE_PARK_POSE, autoChoices.alliance, true));
                         sm.waitForSingleEvent(event, State.DONE);
                     }
                     else

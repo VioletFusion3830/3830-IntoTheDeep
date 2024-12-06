@@ -221,13 +221,13 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                 break;
 
             case GRAB_SPECIMEN:
-                robot.clawServo.close(event);
+                robot.clawServo.close(null,event);
                 sm.waitForSingleEvent(event, State.RETRACT_ELEVATOR_ARM);
                 break;
 
             case RETRACT_ELEVATOR_ARM:
                 //retract elevator "fire and forget"
-                robot.elevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS);
+                robot.elbow.setPosition(null,0.3,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,null,3);
                 sm.setState(State.DONE);
                 break;
 
