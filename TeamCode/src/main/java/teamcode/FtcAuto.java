@@ -215,7 +215,7 @@ public class FtcAuto extends FtcOpMode
                 robot.elbow.setPosition(65);
                 robot.wristArm.setWristArmPosition(.050,RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START,2);
                 robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
-                robot.clawServo.close(null,2,null);
+                robot.clawServo.close(null,4,null);
             }
         }
     }   //initPeriodic

@@ -388,6 +388,18 @@ public class Robot {
         if (autoPickup != null) autoPickup.cancel();
     }   //cancelAll
 
+    public double vWristElevatorScaling()
+    {
+        double scalePercentage = (elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/(RobotParams.ElevatorParams.HORIZONTAL_LIMIT-12);
+        return RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START - ((RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * scalePercentage));
+    }
+
+    public double armElevatorScaling()
+    {
+        double scalePercentage = (elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/(RobotParams.ElevatorParams.HORIZONTAL_LIMIT-12);
+        return RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START - (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * scalePercentage);
+    }
+
     /**
      * This method zero calibrates all subsystems.
      *

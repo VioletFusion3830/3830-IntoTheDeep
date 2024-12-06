@@ -129,6 +129,8 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
 
                 case MOVE_SAMPLES:
                     // Herd two samples to the observation zone to be converted to specimens.
+                    robot.elevator.setPosition(null,0,15,true,RobotParams.ElevatorParams.POWER_LIMIT,null,3);
+                    robot.elbow.setPosition(null,0.3,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElbowParams.POWER_LIMIT,null,3);
                     robot.robotDrive.purePursuitDrive.start(
                             event, 0.0, robot.robotDrive.driveBase.getFieldPosition(), false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
@@ -143,7 +145,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     {
                         robot.pickupSpecimenTask.autoPickupSpecimen(autoChoices.alliance, event);
                         scoreSpecimenCount++;
-                        sm.waitForSingleEvent(event, State.DRIVE_TO_CHAMBER_POS);
+                        sm.waitForSingleEvent(event, State.DONE);
                     }
                     else
                     {

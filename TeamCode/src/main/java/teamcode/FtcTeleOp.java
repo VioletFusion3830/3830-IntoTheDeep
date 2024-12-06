@@ -306,8 +306,8 @@ public class FtcTeleOp extends FtcOpMode
                 {
                     double armPos = RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START -
                             (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/18));
-                    double vWristPos = RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START -
-                            (RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/18));
+                    double vWristPos = /*RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START*/FtcDashboard.ServoTune.ServoA;// -
+//                            (RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/18));
                     if (armPos != armPrevPos)
                     {
                             robot.wristArm.setWristArmPosition(armPos,vWristPos,1);
@@ -411,28 +411,29 @@ public class FtcTeleOp extends FtcOpMode
                 // Toggle claw open/close.
                 if (pressed && robot.claw != null)
                 {
+                    robot.globalTracer.traceInfo(null,"IsClosed" +robot.clawServo.isClosed());
                     if (robot.clawServo.isClosed())
                     {
                         robot.claw.getClawServo().open();
                     }
-                    else {
-                        if (isSamplePickupMode) {
-                            isClawGrabbing = true;
-                            double armPos = RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START -
-                                    (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS) / 18));
-                            double vWristPos = RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START -
-                                    (RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS) / 18));
-                            double vWristScale = -0.01 * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS) / 18);
-                            robot.wristVertical.setPosition(vWristPos + vWristScale - 0.075);
-                            robot.arm.setPosition(armPos - 0.1);
-                            robot.clawServo.close(null, .18, null);
-                            runtime.reset();
-                        }
-                        else
-                        {
-                            robot.claw.getClawServo().close();
-                        }
+                    else
+                    {
+                        robot.claw.getClawServo().close();
                     }
+//                    else {
+//                        if (isSamplePickupMode) {
+//                            isClawGrabbing = true;
+//                            double vWristScale = -0.01 * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS) / 18);
+//                            robot.wristVertical.setPosition(robot.vWristElevatorScaling() + vWristScale - 0.075);
+//                            robot.arm.setPosition(robot.armElevatorScaling() - 0.1);
+//                            robot.clawServo.close(null, .18, null);
+//                            runtime.reset();
+//                        }
+//                        else
+//                        {
+//                            robot.claw.getClawServo().close();
+//                        }
+//                    }
                 }
                 break;
 

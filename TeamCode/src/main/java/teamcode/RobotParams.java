@@ -111,7 +111,7 @@ public class RobotParams
         public static final boolean showVisionView              = !inCompetition;
         public static final boolean showVisionStat              = false;
         // Drive Base
-        public static final boolean useDriveBase                = true;
+        public static final boolean useDriveBase                = false;
         public static final boolean usePinpointOdometry         = true;
         public static final boolean useSparkfunOTOS             = false;
         // Subsystems
@@ -177,13 +177,13 @@ public class RobotParams
                 new TrcPose2D(-0.3 * Field.FULL_TILE_INCHES, -1.65 * Field.FULL_TILE_INCHES, 0.0);
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D(Robot.ROBOT_WIDTH/2.0, -1.65 * Field.FULL_TILE_INCHES, 180);
+                new TrcPose2D(Robot.ROBOT_WIDTH/2.0, -39, 180);
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
         // Pickup pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
-                new TrcPose2D(Robot.ROBOT_WIDTH/2.0, -2.05 * Field.FULL_TILE_INCHES, 180.0);
+                new TrcPose2D(35.5, -44, 180.0);
         // Park pose (Net zone side).
         public static final TrcPose2D RED_ASCENT_ZONE_PARK_POSE     =
                 new TrcPose2D(-1.2*Field.FULL_TILE_INCHES, -0.65*Field.FULL_TILE_INCHES, 90.0);
@@ -192,15 +192,14 @@ public class RobotParams
                 new TrcPose2D(2.5*Field.FULL_TILE_INCHES, -2.5*Field.FULL_TILE_INCHES, 0.0);
         // Observation zone auto poses.
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH = {
-                new TrcPose2D(1.3, -1.5, 0.0),
-                new TrcPose2D(1.4, -0.7, 0.0),
-                new TrcPose2D(1.97, -0.7, 0.0),
-                new TrcPose2D(1.97, -1.9, 0.0),
-                new TrcPose2D(1.97,-0.7, 0.0),
-                new TrcPose2D(1.97 + 9.5/Field.FULL_TILE_INCHES, -0.7, 0.0),
-                new TrcPose2D(1.97 + 9.5/Field.FULL_TILE_INCHES, -1.9, 0.0),
-                new TrcPose2D(2.0, -1.87, 0.0),
-                new TrcPose2D(2.0, -2.05, 180.0)
+                new TrcPose2D(1.4, -1.6, 180),
+                new TrcPose2D(1.4, -0.7, 180),
+                new TrcPose2D(1.97, -0.7, 180),
+                new TrcPose2D(1.97, -2.27, 180),
+                new TrcPose2D(1.97,-0.7, 180),
+                new TrcPose2D(1.97 + .42, -0.7, 180),
+                new TrcPose2D(1.97 + .42, -2.235, 180),
+                new TrcPose2D(1.48, -1.853, 180),
         };
 
 
@@ -397,17 +396,17 @@ public class RobotParams
             robotMaxVelocity = 60;        // inches/sec //60
             robotMaxAcceleration  = 200;  // inches/sec2 //250
             robotMaxTurnRate = 100;       // degrees/sec
-            profiledMaxVelocity = 70;
-            profiledMaxAcceleration = 350;
+            profiledMaxVelocity = 60;
+            profiledMaxAcceleration = 250;
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
             turnPidTolerance = 1.0;
             xDrivePidCoeffs = new PidCoefficients(0.046, 0.0, 0.0, 0.0, 0.0);
-            xDrivePidPowerLimit = 1.0;
+            xDrivePidPowerLimit = 0.7;
             xDriveMaxPidRampRate = null;
             yDrivePidCoeffs = new PidCoefficients(0.08, 0.0, 0.008, 0.0, 0.0);
-            yDrivePidPowerLimit = 1.0;
+            yDrivePidPowerLimit = 0.7;
             yDriveMaxPidRampRate = null;
             turnPidCoeffs = new PidCoefficients(0.0282, 0.0, 0.0015, 0.0, 0.0);
             turnPidPowerLimit = 0.6;
@@ -453,7 +452,7 @@ public class RobotParams
         public static final double PICKUP_SPECIMEN_POS                      = 26.5;
         public static final double LOW_BASKET_SCORE_POS                     = 32;
         public static final double HIGH_BASKET_SCORE_POS                    = 48;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 22.5;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
         public static final double LEVEL1_ASCENT_POS                        = 45;
         public static final double LEVEL2_ASCENT_START_POS                  = 31;
         public static final double LEVEL2_ASCENT_POS                        = MIN_POS_ELBOW_UP;
@@ -491,7 +490,7 @@ public class RobotParams
         public static final double PICKUP_SAMPLE_POS                        = 10;
         public static final double PICKUP_SPECIMEN_POS                      = 10;
         public static final double BASKET_SCORE_POS                         = 96;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 97;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 100;
         public static final double LEVEL1_ASCENT_POS                        = 30;
         public static final double LEVEL2_ASCENT_START_POS                  = 115;
         public static final double LEVEL2_ASCENT_POS                        = 80;
@@ -525,7 +524,7 @@ public class RobotParams
 
         public static final double PICKUP_SPECIMEN_POS                      = 0.5;
         public static final double BASKET_SCORE_POS                         = 0.600; //TBD
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.6;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.65;
         public static final double PICKUP_SAMPLE_POS_BASE                   = 0.6; //need to be found for low
         public static final double SAMPLE_PICKUP_MODE_START                 = 0.460;
         public static final double SAMPLE_PICKUP_MODE_SCALE                 = 0.060; //0.418
@@ -540,7 +539,7 @@ public class RobotParams
         public static final double PICKUP_SAMPLE_POS_BASE                        = 0.760; //558
         public static final double PICKUP_SPECIMEN_POS                      = 0.5;
         public static final double BASKET_SCORE_POS                         = 0.25;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.24;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.17; //.165
         public static final double SAMPLE_PICKUP_MODE_START                 = 0.771;
         public static final double SAMPLE_PICKUP_MODE_SCALE                 = 0.030; //.745
     }   //class WristParamsVertical
@@ -557,7 +556,7 @@ public class RobotParams
         public static final double CLOSE_POS                                = 0.400;
         public static final double CLOSE_TIME                               = 0.2;
 
-        public static final boolean USE_REV_V3_COLOR_SENSOR                 = true;
+        public static final boolean USE_REV_V3_COLOR_SENSOR                 = false;
         public static final String REV_V3_COLOR_SENSOR_NAME                 = SUBSYSTEM_NAME + ".sensor";
         public static final double SENSOR_TRIGGER_THRESHOLD                 = 2.3; //cm
         public static final boolean ANALOG_TRIGGER_INVERTED                 = true;
@@ -570,8 +569,8 @@ public class RobotParams
         public static final String PRIMARY_SERVO_ROTATOR                    = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_ROTATOR_INVERTED          = false;
         //Need to be program servo and re get positions
-        public static final double MIDDLE_P0S                               = 0.137;
-        public static final double MIDDLE_POS2                              = 0.805;
+        public static final double MIDDLE_P0S                               = 0.2; //0.137
+        public static final double MIDDLE_POS2                              = 0.750;
         public static final double DEGREES_45_LEFT                          = 0.312;
         public static final double DEGREES_45_RIGHT                         = 0.680;
         public static final double MIN_P0S                                  = 0.460;

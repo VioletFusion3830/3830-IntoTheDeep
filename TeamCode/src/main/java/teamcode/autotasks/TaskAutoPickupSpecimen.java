@@ -203,12 +203,13 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                         robot.robotDrive.driveBase.getFieldPosition(), false, robot.robotInfo.profiledMaxVelocity,
                         robot.robotInfo.profiledMaxAcceleration, robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance));
                 //Set Elbow to pickup angle
-                robot.elbow.setPosition(0,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event);
+                robot.elbow.setPosition(currOwner,0,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,3);
                 //Position wrist and arm subsystems for pickup
-                robot.wristArm.setWristArmPickupSamplePos(1);
-                robot.clawServo.open();
-                robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
-                sm.waitForSingleEvent(event, State.SET_ELEVATOR_ARM);
+                robot.arm.setPosition(currOwner,0,RobotParams.ArmParams.PICKUP_SPECIMEN_POS,null,3);
+                robot.wristVertical.setPosition(currOwner,0,RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,null,3);
+                robot.clawServo.open(null,null);
+                robot.wristRotational.setPosition(currOwner,0,RobotParams.WristParamsRotational.MIDDLE_P0S,null,3);
+                sm.waitForSingleEvent(event, State.DONE);
                 break;
 
             case SET_ELEVATOR_ARM:
