@@ -302,9 +302,9 @@ public class FtcTest extends FtcTeleOp
                     // Doing a 48x48-inch square box with robot heading always pointing to the center of the box.
                     //
                     // Set the current position as the absolute field origin so the path can be an absolute path.
-                    TrcPose2D startPose = new TrcPose2D(0.0, 0.0, 0);
-                    robot.robotDrive.driveBase.setFieldPosition(RobotParams.Game.STARTPOSE_RED_OBSERVATION_ZONE);
-                    robot.robotDrive.purePursuitDrive.start(robot.robotDrive.driveBase.getFieldPosition(), false,robot.robotInfo.profiledMaxVelocity,robot.robotInfo.profiledMaxAcceleration,new TrcPose2D(8, -80, 180));
+                    TrcPose2D startPose = new TrcPose2D(0, 0, 180);
+                    robot.robotDrive.driveBase.setFieldPosition(startPose);
+                    robot.robotDrive.purePursuitDrive.start(startPose, false,robot.robotInfo.profiledMaxVelocity,robot.robotInfo.robotMaxAcceleration,new TrcPose2D(8,48,180));
                 }
                 break;
         }
@@ -471,9 +471,9 @@ public class FtcTest extends FtcTeleOp
                     prevTime = currTime;
                     prevVelocity = velocity;
 
-                    robot.dashboard.displayPrintf(lineNum++, "Drive Vel: (%.1f/%.1f)", velocity, maxDriveVelocity);
+                    robot.dashboard.displayPrintf(5, "Drive Vel: (%.1f/%.1f)", velocity, maxDriveVelocity);
                     robot.dashboard.displayPrintf(
-                            lineNum++, "Drive Accel: (%.1f/%.1f)", acceleration, maxDriveAcceleration);
+                            6, "Drive Accel: (%.1f/%.1f)", acceleration, maxDriveAcceleration);
                 case PID_DRIVE:
                     if (robot.robotDrive != null)
                     {

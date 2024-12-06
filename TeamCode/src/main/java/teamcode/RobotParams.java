@@ -34,6 +34,7 @@ import ftclib.motor.FtcMotorActuator.MotorType;
 import ftclib.sensor.FtcSparkFunOtos;
 import ftclib.sensor.FtcPinpointOdometry;
 import ftclib.sensor.FtcUltrasonicSensor;
+import ftclib.sensor.GoBildaPinpointDriver;
 import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcDriveBase;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
@@ -167,7 +168,7 @@ public class RobotParams
         // Red Net Zone start pose face the net zone touching the alliance wall with the robot's in front of net zone.
         public static final TrcPose2D STARTPOSE_RED_NET_ZONE                = new TrcPose2D(-(Field.HALF_FIELD_INCHES-(Field.FULL_TILE_INCHES+Robot.ROBOT_LENGTH/2.0)), -Robot.ROBOT_WIDTH/2.0, -90);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
-        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE        = new TrcPose2D(Robot.ROBOT_WIDTH/2.0+1, -(Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0), 180);
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE        = new TrcPose2D(Robot.ROBOT_WIDTH/2.0, -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
 
         // Score poses (Net zone side).
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
@@ -176,13 +177,13 @@ public class RobotParams
                 new TrcPose2D(-0.3 * Field.FULL_TILE_INCHES, -1.65 * Field.FULL_TILE_INCHES, 0.0);
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D(0.1 * Field.FULL_TILE_INCHES, -1.65 * Field.FULL_TILE_INCHES, 0.0);
+                new TrcPose2D(Robot.ROBOT_WIDTH/2.0, -1.65 * Field.FULL_TILE_INCHES, 180);
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
         // Pickup pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
-                new TrcPose2D(2.0 * Field.FULL_TILE_INCHES, -2.05 * Field.FULL_TILE_INCHES, 180.0);
+                new TrcPose2D(Robot.ROBOT_WIDTH/2.0, -2.05 * Field.FULL_TILE_INCHES, 180.0);
         // Park pose (Net zone side).
         public static final TrcPose2D RED_ASCENT_ZONE_PARK_POSE     =
                 new TrcPose2D(-1.2*Field.FULL_TILE_INCHES, -0.65*Field.FULL_TILE_INCHES, 90.0);
@@ -224,7 +225,7 @@ public class RobotParams
         public static final double ROBOT_WIDTH                              = 16.25;
         // Robot Drive Parameters.
         public static final DriveMode DRIVE_MODE                = DriveMode.ArcadeMode;
-        public static final DriveOrientation DRIVE_ORIENTATION  = DriveOrientation.FIELD;
+        public static final DriveOrientation DRIVE_ORIENTATION  = DriveOrientation.ROBOT;
         public static final double DRIVE_SLOW_SCALE                         = 0.5;
         public static final double DRIVE_NORMAL_SCALE                       = 1.0;
         public static final double TURN_SLOW_SCALE                          = 0.5;
@@ -333,9 +334,9 @@ public class RobotParams
     public static class MecanumParams extends FtcRobotDrive.RobotInfo
     {
         // Optii Odometry Wheel
-        private static final double ODWHEEL_DIAMETER_MM = 35.0;
+        private static final double ODWHEEL_DIAMETER_MM = 32.0;
         private static final double ODWHEEL_DIAMETER = ODWHEEL_DIAMETER_MM*TrcUtil.INCHES_PER_MM;
-        private static final double ODWHEEL_CPR = 4096.0;
+        private static final double ODWHEEL_CPR = 2000.0;
 
         public MecanumParams()
         {
@@ -370,9 +371,9 @@ public class RobotParams
                 if (RobotParams.Preferences.usePinpointOdometry)
                 {
                     FtcPinpointOdometry.Config ppOdoConfig = new FtcPinpointOdometry.Config()
-                            .setPodOffsets(180, -24) //180,-24
+                            .setPodOffsets(-180, -10) //180,-24
                             .setEncoderResolution(ODWHEEL_CPR / (Math.PI * ODWHEEL_DIAMETER_MM))
-                            .setEncodersInverted(false, true); //???
+                            .setEncodersInverted(true, true); //13.26291192
                     absoluteOdometry = new FtcPinpointOdometry("pinpointOdo", ppOdoConfig);
                     headingWrapRangeLow = -180.0;
                     headingWrapRangeHigh = 180.0;
@@ -393,22 +394,22 @@ public class RobotParams
             xDrivePosScale = 0.01924724265461924299065420560748;        // in/count
             yDrivePosScale = 0.02166184604662450653409090909091;        // in/count
             // Robot Drive Characteristics
-            robotMaxVelocity = 60;        // inches/sec
-            robotMaxAcceleration  = 250;  // inches/sec2
+            robotMaxVelocity = 60;        // inches/sec //60
+            robotMaxAcceleration  = 200;  // inches/sec2 //250
             robotMaxTurnRate = 100;       // degrees/sec
-            profiledMaxVelocity = 50;
-            profiledMaxAcceleration = 210;
+            profiledMaxVelocity = 70;
+            profiledMaxAcceleration = 350;
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
             turnPidTolerance = 1.0;
-            xDrivePidCoeffs = new PidCoefficients(0.049, 0.0, 0.0, 0.0, 0.0);
+            xDrivePidCoeffs = new PidCoefficients(0.046, 0.0, 0.0, 0.0, 0.0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
             yDrivePidCoeffs = new PidCoefficients(0.08, 0.0, 0.008, 0.0, 0.0);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.042, 0.0, 0.0018, 0.0, 0.0);
+            turnPidCoeffs = new PidCoefficients(0.0282, 0.0, 0.0015, 0.0, 0.0);
             turnPidPowerLimit = 0.6;
             turnMaxPidRampRate = null;
             // PID Stall Detection
@@ -436,8 +437,8 @@ public class RobotParams
         public static final String FOLLOWER_MOTOR_NAME                      = SUBSYSTEM_NAME + ".follower";
         public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
         public static final MotorType FOLLOWER_MOTOR_TYPE                   = MotorType.DcMotor;
-        public static final boolean PRIMARY_MOTOR_INVERTED                  = true;
-        public static final boolean FOLLOWER_MOTOR_INVERTED                 = true;
+        public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
+        public static final boolean FOLLOWER_MOTOR_INVERTED                 = false;
 
         public static final double INCHES_PER_COUNT                         = 0.016481481481;
         public static final double POS_OFFSET                               = 12;
@@ -451,7 +452,7 @@ public class RobotParams
         public static final double PICKUP_SAMPLE_POS                        = 12.5;
         public static final double PICKUP_SPECIMEN_POS                      = 26.5;
         public static final double LOW_BASKET_SCORE_POS                     = 32;
-        public static final double HIGH_BASKET_SCORE_POS                    = 45;
+        public static final double HIGH_BASKET_SCORE_POS                    = 48;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 22.5;
         public static final double LEVEL1_ASCENT_POS                        = 45;
         public static final double LEVEL2_ASCENT_START_POS                  = 31;
@@ -489,7 +490,7 @@ public class RobotParams
         public static final double MAX_POS                                  = 100;
         public static final double PICKUP_SAMPLE_POS                        = 10;
         public static final double PICKUP_SPECIMEN_POS                      = 10;
-        public static final double BASKET_SCORE_POS                         = 92;
+        public static final double BASKET_SCORE_POS                         = 96;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 97;
         public static final double LEVEL1_ASCENT_POS                        = 30;
         public static final double LEVEL2_ASCENT_START_POS                  = 115;
@@ -551,9 +552,9 @@ public class RobotParams
         public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_INVERTED                  = false;
 
-        public static final double OPEN_POS                                 = 0.775; //486
+        public static final double OPEN_POS                                 = 0.105; //486
         public static final double OPEN_TIME                                = 0.2;
-        public static final double CLOSE_POS                                = 1;
+        public static final double CLOSE_POS                                = 0.400;
         public static final double CLOSE_TIME                               = 0.2;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR                 = true;
@@ -569,10 +570,11 @@ public class RobotParams
         public static final String PRIMARY_SERVO_ROTATOR                    = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_ROTATOR_INVERTED          = false;
         //Need to be program servo and re get positions
-        public static final double MIDDLE_P0S                               = 0.57;
-        public static final double MIDDLE_POS2                              = 0.005;
-        public static final double DEGREES_45                               = 0.125;
-        public static final double MIN_P0S                                  = 0.308;
+        public static final double MIDDLE_P0S                               = 0.137;
+        public static final double MIDDLE_POS2                              = 0.805;
+        public static final double DEGREES_45_LEFT                          = 0.312;
+        public static final double DEGREES_45_RIGHT                         = 0.680;
+        public static final double MIN_P0S                                  = 0.460;
         public static final double[] POS_PRESETS                            = {MIDDLE_P0S, MIN_P0S};
     }   //class WristParamsRotational
 

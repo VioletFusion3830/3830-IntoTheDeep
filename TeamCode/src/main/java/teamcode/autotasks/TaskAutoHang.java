@@ -209,7 +209,7 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
                 robot.elevator.setStallProtection(0.0, 0.0, 0.0, 0.0);
                 //robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
                 robot.elevator.setPositionPidParameters(1,0,0,0,0, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
-                robot.elbow.setPosition(currOwner,0,RobotParams.ElbowParams.LEVEL2_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,4);
+                //robot.elbow.setPosition(currOwner,0,RobotParams.ElbowParams.LEVEL2_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,4);
                 robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.LEVEL2_ASCENT_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event2,4);
                 sm.addEvent(event);
                 sm.addEvent(event2);

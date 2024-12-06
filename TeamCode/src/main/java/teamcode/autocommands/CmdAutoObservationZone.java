@@ -3,8 +3,6 @@ package teamcode.autocommands;
 import teamcode.FtcAuto;
 import teamcode.Robot;
 import teamcode.RobotParams;
-import teamcode.subsystems.Elbow;
-import teamcode.subsystems.Extender;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;

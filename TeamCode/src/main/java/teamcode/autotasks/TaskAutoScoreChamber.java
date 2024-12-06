@@ -226,17 +226,18 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                             robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
                 }
                 //Set Elbow and elevator to pickup positions
-                robot.elbow.setPosition(0,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event2);
-                robot.elevator.setPosition(0,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event3);
-                //Position wrist and arm subsystems for deposit
-                robot.wristArm.setWristArmHighChamberScorePos(1);
-                robot.clawServo.open();
-                robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_POS2);
+//                robot.elbow.setPosition(currOwner,0,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event2,3);
+//                robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event3,3);
+//                //Position wrist and arm subsystems for deposit
+//                robot.wristArm.setWristArmHighChamberScorePos(1);
+//                robot.clawServo.open();
+//                robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_POS2);
                 //Wait for completion
                 sm.addEvent(event1);
                 sm.addEvent(event2);
                 sm.addEvent(event3);
-                sm.waitForEvents(State.CLIP_SPECIMEN,true);
+//                sm.waitForEvents(State.CLIP_SPECIMEN,true);
+                sm.setState(State.DONE);
                 break;
 
             case CLIP_SPECIMEN:

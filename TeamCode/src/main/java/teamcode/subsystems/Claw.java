@@ -62,7 +62,6 @@ public class Claw {
         }
         clawServo = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
         clawServo.tracer.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG);
-        clawServo.open();
     }
 
     public TrcServoGrabber getClawServo()
