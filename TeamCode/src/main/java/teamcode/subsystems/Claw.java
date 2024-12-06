@@ -61,7 +61,6 @@ public class Claw {
                     RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD);
         }
         clawServo = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
-        clawServo.tracer.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG);
     }
 
     public TrcServoGrabber getClawServo()

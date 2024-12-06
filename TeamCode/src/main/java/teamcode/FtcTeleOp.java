@@ -251,7 +251,7 @@ public class FtcTeleOp extends FtcOpMode
                     if (robot.elevator != null && elbowPos < RobotParams.ElbowParams.RESTRICTED_POS_THRESHOLD)
                     {
                         double elbowPosRadians = Math.toRadians(elbowPos);
-                        elevatorLimit = RobotParams.ElevatorParams.MAX_POS - Math.max(Math.cos(elbowPosRadians) * (isSamplePickupMode ? RobotParams.ElevatorParams.HORIZONTAL_LIMIT: 33), 0);
+                        elevatorLimit = RobotParams.ElevatorParams.MAX_POS - Math.max(Math.cos(elbowPosRadians) * (isSamplePickupMode ? RobotParams.ElevatorParams.HORIZONTAL_LIMIT: 29.5), 0);
                         if (robot.elevator.getPosition() > elevatorLimit)
                         {
                             robot.elevator.setPosition(elevatorLimit);
@@ -296,21 +296,15 @@ public class FtcTeleOp extends FtcOpMode
                 if(isClawGrabbing && runtime.seconds() > 0.33)
                 {
                     isClawGrabbing = false;
-                    double armPos = RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START -
-                            (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/18));
-                    double vWristPos = RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START -
-                            (RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/18));
-                    robot.wristArm.setWristArmPosition(armPos,vWristPos,1);
+                    robot.wristArm.setWristArmPosition(robot.armElevatorScaling(),robot.vWristElevatorScaling(),1);
                 }
                 if(isSamplePickupMode && !isClawGrabbing && robot.arm != null)
                 {
-                    double armPos = RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START -
-                            (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/18));
-                    double vWristPos = /*RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START*/FtcDashboard.ServoTune.ServoA;// -
-//                            (RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/18));
+                    double armPos = robot.armElevatorScaling();
+
                     if (armPos != armPrevPos)
                     {
-                            robot.wristArm.setWristArmPosition(armPos,vWristPos,1);
+                            robot.wristArm.setWristArmPosition(armPos,robot.vWristElevatorScaling(),1);
                     }
                     armPrevPos = armPos;
                 }
@@ -395,45 +389,31 @@ public class FtcTeleOp extends FtcOpMode
 //                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
 //                driverAltFunc = pressed;
             case X:
-                break;
             case Y:
                 break;
 
             case LeftBumper:
-//                if(pressed && robot.wristRotational != null)
-//                {
-//                    robot.claw.autoAssistPickup(null,0,null,120, SamplePickupType);
-//                }
-//                else
-//                {
-//                    robot.clawServo.cancel();
-//                }
                 // Toggle claw open/close.
                 if (pressed && robot.claw != null)
                 {
-                    robot.globalTracer.traceInfo(null,"IsClosed" +robot.clawServo.isClosed());
                     if (robot.clawServo.isClosed())
                     {
                         robot.claw.getClawServo().open();
                     }
-                    else
-                    {
-                        robot.claw.getClawServo().close();
+                    else {
+                        if (isSamplePickupMode) {
+                            isClawGrabbing = true;
+                            double scalePercentage = (robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/(RobotParams.ElevatorParams.HORIZONTAL_LIMIT-12);
+                            robot.wristVertical.setPosition(robot.vWristElevatorScaling()-0.08);
+                            robot.arm.setPosition(robot.armElevatorScaling() -0.1);
+                            robot.clawServo.close(null, .18, null);
+                            runtime.reset();
+                        }
+                        else
+                        {
+                            robot.clawServo.close();
+                        }
                     }
-//                    else {
-//                        if (isSamplePickupMode) {
-//                            isClawGrabbing = true;
-//                            double vWristScale = -0.01 * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS) / 18);
-//                            robot.wristVertical.setPosition(robot.vWristElevatorScaling() + vWristScale - 0.075);
-//                            robot.arm.setPosition(robot.armElevatorScaling() - 0.1);
-//                            robot.clawServo.close(null, .18, null);
-//                            runtime.reset();
-//                        }
-//                        else
-//                        {
-//                            robot.claw.getClawServo().close();
-//                        }
-//                    }
                 }
                 break;
 
@@ -511,20 +491,7 @@ public class FtcTeleOp extends FtcOpMode
         switch (button)
         {
             case A:
-//                if(pressed && robot.wristArm != null)
-//                {
-//                    robot.arm.setPosition(.65);
-//                    robot.elevator.setPosition(RobotParams.ElevatorParams.MIN_POS_ELBOW_UP);
-//                }
-
-                break;
             case B:
-//                if(pressed && robot.wristArm != null)
-//                {
-//                isSamplePickupMode = false;
-//                robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_POS2);
-//                robot.wristArm.setWristArmHighChamberScorePos(1);
-//                }
                 break;
             case X:
                 if(pressed && robot.wristRotational != null)
@@ -541,36 +508,7 @@ public class FtcTeleOp extends FtcOpMode
                         is45Left = false;
                     }
                 }
-//                if(pressed && robot.wristArm != null)
-//                {
-//                    isSamplePickupMode = false;
-//                    robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
-//                    robot.wristArm.setWristArmPickupSpecimenPos(0);
-//                }
             case Y:
-//                if(pressed)
-//                {
-//                    if (!robot.scoreChamberTask.isActive())
-//                    {
-//                        robot.robotDrive.driveBase.setFieldPosition(RobotParams.Game.STARTPOSE_RED_OBSERVATION_ZONE);
-//                        robot.globalTracer.traceInfo(
-//                                moduleName, ">>>>> Auto score chamber (scoreHeight=%s).");
-//                        robot.scoreChamberTask.autoScoreChamber( driverAltFunc, null);
-//                    }
-//                    else
-//                    {
-//                        robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel auto score chamber.");
-//                        robot.scoreChamberTask.cancel();
-//                    }
-//                }
-                //Testing only will be removed
-//                if(pressed)
-//                {
-//                    robot.elbow.setPosition(RobotParams.ElbowParams.PICKUP_SAMPLE_POS);
-//                    robot.wristArm.setWristArmPickupSamplePos(null);
-//                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS);
-                    //robot.pickupSampleTask.autoPickupSample(null);
-//                }
                 break;
             case LeftBumper:
                 if(pressed)
@@ -579,11 +517,7 @@ public class FtcTeleOp extends FtcOpMode
                     {
                         //used
                         isSamplePickupMode = true;
-                        double armPos = RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START -
-                                (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS) / 18));
-                        double vWristPos = RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START -
-                                (RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS) / 18));
-                        robot.wristArm.setWristArmPosition(armPos, vWristPos, 1);
+                        robot.wristArm.setWristArmPosition(robot.armElevatorScaling(), robot.vWristElevatorScaling(), 1);
                     }
                     else
                     {
@@ -612,44 +546,14 @@ public class FtcTeleOp extends FtcOpMode
                 }
                 break;
             case DpadUp:
-//                if (pressed)
-//                {
-//                    robot.elevator.setPosition(RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS);
-//                }
-//                break;
+                break;
             case DpadDown:
                 if (pressed)
                 {
                     robot.autoHang.autoClimbLevel2(null);
                 }
-//                if (pressed)
-//                {
-//                    robot.elevator.setPosition(RobotParams.ElevatorParams.MIN_POS_ELBOW_UP);
-//                }
-                break;
             case DpadLeft:
-                if (pressed)
-                {
-                    robot.elbow.setPosition(RobotParams.ElbowParams.BASKET_SCORE_POS);
-                }
-                break;
             case DpadRight:
-//                if(pressed)
-//                {
-//                    robot.globalTracer.traceInfo(moduleName, ">>>>> OperatorAltFunc=" + pressed);
-//                    operatorAltFunc = pressed;
-//                }
-                if(pressed)
-                {
-                    robot.elbow.setPosition(RobotParams.ElbowParams.MIN_POS);
-                    //used
-                    isSamplePickupMode = true;
-                    double armPos = RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START -
-                            (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS) / 18));
-                    double vWristPos = RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START -
-                            (RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS) / 18));
-                    robot.wristArm.setWristArmPosition(armPos, vWristPos, 1);
-                }
                 break;
 
             case Back:

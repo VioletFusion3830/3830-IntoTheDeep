@@ -443,13 +443,13 @@ public class RobotParams
         public static final double POS_OFFSET                               = 12;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
-        public static final double HORIZONTAL_LIMIT                         = 28;
+        public static final double HORIZONTAL_LIMIT                         = 26.8;
 
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MIN_POS_ELBOW_UP                         = 14.65;
         public static final double MAX_POS                                  = 58;
         public static final double PICKUP_SAMPLE_POS                        = 12.5;
-        public static final double PICKUP_SPECIMEN_POS                      = 26.5;
+        public static final double PICKUP_SPECIMEN_POS                      = 28;
         public static final double LOW_BASKET_SCORE_POS                     = 32;
         public static final double HIGH_BASKET_SCORE_POS                    = 48;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
@@ -526,7 +526,7 @@ public class RobotParams
         public static final double BASKET_SCORE_POS                         = 0.600; //TBD
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.65;
         public static final double PICKUP_SAMPLE_POS_BASE                   = 0.6; //need to be found for low
-        public static final double SAMPLE_PICKUP_MODE_START                 = 0.460;
+        public static final double SAMPLE_PICKUP_MODE_START                 = 0.488;
         public static final double SAMPLE_PICKUP_MODE_SCALE                 = 0.060; //0.418
     }
 
@@ -537,10 +537,10 @@ public class RobotParams
         public static final boolean PRIMARY_SERVO_VERTICAL_INVERTED         = false;
 
         public static final double PICKUP_SAMPLE_POS_BASE                        = 0.760; //558
-        public static final double PICKUP_SPECIMEN_POS                      = 0.5;
+        public static final double PICKUP_SPECIMEN_POS                      = 0.4;
         public static final double BASKET_SCORE_POS                         = 0.25;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.17; //.165
-        public static final double SAMPLE_PICKUP_MODE_START                 = 0.771;
+        public static final double SAMPLE_PICKUP_MODE_START                 = 0.7;
         public static final double SAMPLE_PICKUP_MODE_SCALE                 = 0.030; //.745
     }   //class WristParamsVertical
 
@@ -553,7 +553,7 @@ public class RobotParams
 
         public static final double OPEN_POS                                 = 0.105; //486
         public static final double OPEN_TIME                                = 0.2;
-        public static final double CLOSE_POS                                = 0.400;
+        public static final double CLOSE_POS                                = 1;
         public static final double CLOSE_TIME                               = 0.2;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR                 = false;
