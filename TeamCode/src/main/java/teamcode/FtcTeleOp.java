@@ -245,7 +245,7 @@ public class FtcTeleOp extends FtcOpMode
             {
                 if (robot.elbow != null && robot.elevator != null)
                 {
-                    double elbowPower = operatorGamepad.getLeftStickY(true) * RobotParams.ElbowParams.POWER_LIMIT;
+                    double elbowPower = operatorGamepad.getRightStickY(true) * RobotParams.ElbowParams.POWER_LIMIT;
                     double elbowPos = robot.elbow.getPosition();
 
                     if (robot.elevator != null && elbowPos < RobotParams.ElbowParams.RESTRICTED_POS_THRESHOLD)
@@ -277,7 +277,7 @@ public class FtcTeleOp extends FtcOpMode
 
                     if (robot.elevator != null)
                     {
-                        double elevatorPower = operatorGamepad.getRightStickY(true) * RobotParams.ElevatorParams.POWER_LIMIT;
+                        double elevatorPower = operatorGamepad.getLeftStickY(true) * RobotParams.ElevatorParams.POWER_LIMIT;
 
                         if (elevatorPower != elevatorPrevPower)
                         {
@@ -434,7 +434,13 @@ public class FtcTeleOp extends FtcOpMode
                         isSampleTypeRedAlliance = false;
                     }
                 }
+                break;
             case DpadDown:
+                if (pressed)
+                {
+                    isSamplePickupMode = false;
+                    robot.autoHang.autoClimbLevel2(null);
+                }
             case DpadLeft:
             case DpadRight:
                 break;
@@ -548,10 +554,6 @@ public class FtcTeleOp extends FtcOpMode
             case DpadUp:
                 break;
             case DpadDown:
-                if (pressed)
-                {
-                    robot.autoHang.autoClimbLevel2(null);
-                }
             case DpadLeft:
             case DpadRight:
                 break;

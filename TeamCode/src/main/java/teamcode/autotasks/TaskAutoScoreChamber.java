@@ -94,17 +94,17 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
             scorePose = nearNetZone ?
                     RobotParams.Game.RED_NET_CHAMBER_SCORE_POSE.clone() :
                     RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
-
-            if (robotPose.x >= -RobotParams.Game.CHAMBER_MAX_SCORE_POS_X &&
-                    robotPose.x <= RobotParams.Game.CHAMBER_MAX_SCORE_POS_X) {
-                // If robot current position is within the chamber zone, use its X position.
-                scorePose.x = robotPose.x;
-            }
+//
+//            if (robotPose.x >= -RobotParams.Game.CHAMBER_MAX_SCORE_POS_X &&
+//                    robotPose.x <= RobotParams.Game.CHAMBER_MAX_SCORE_POS_X) {
+//                // If robot current position is within the chamber zone, use its X position.
+//                scorePose.x = robotPose.x;
+//            }
         }
 
         TaskParams taskParams = new TaskParams(alliance, scorePose,noDrive);
         tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
-        startAutoTask(State.GO_TO_SCORE_POSITION, taskParams, completionEvent);
+        startAutoTask(State.SET_SUBSYSTEMS, taskParams, completionEvent);
     }   //autoAssist
 
     //
@@ -220,17 +220,14 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
         switch (state)
         {
             case SET_SUBSYSTEMS:
-                if(!taskParams.noDrive){
-                    //Path to pickup location
-                    robot.robotDrive.purePursuitDrive.start(
-                            currOwner, event1, 0.0,
-                            robot.robotDrive.driveBase.getFieldPosition(), false,
-                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
-                            robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-                }
+                robot.robotDrive.purePursuitDrive.start(
+                        currOwner, event1, 0.0,
+                        robot.robotDrive.driveBase.getFieldPosition(), false,
+                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                        robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
                 if(robot.elevator.getPosition() > RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS)
                 {
-                    robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event3,3);
+                    robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event2,3);
                     sm.waitForSingleEvent(event2, State.GO_TO_SCORE_POSITION);
                 }
                 else
@@ -242,10 +239,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
             case GO_TO_SCORE_POSITION:
                 //Set Elbow and elevator to pickup positions
                 robot.elbow.setPosition(currOwner,0,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event2,3);
-                if(robot.elevator.getPosition() > RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS)
-                {
-                    robot.elevator.setPosition(currOwner, 0, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, true, RobotParams.ElevatorParams.POWER_LIMIT, event3, 3);
-                }
+                robot.elevator.setPosition(currOwner, 0, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, true, RobotParams.ElevatorParams.POWER_LIMIT, event3, 3);
                 //Position wrist and arm subsystems for deposit
                 robot.arm.setPosition(currOwner,0.2,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,null,3);
                 robot.wristVertical.setPosition(currOwner,0.2,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,2);
@@ -259,7 +253,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
             case CLIP_SPECIMEN:
                 //Lower elevator to clip specimen
-                robot.arm.setPosition(currOwner,0.2,7,null,3);
+                robot.arm.setPosition(currOwner,0.2,.8,null,3);
                 robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.MIN_POS_ELBOW_UP,true,RobotParams.ElevatorParams.POWER_LIMIT,event1,3);
                 sm.waitForSingleEvent(event1, State.SCORE_CHAMBER);
                 break;

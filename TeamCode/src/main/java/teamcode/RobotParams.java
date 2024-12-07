@@ -111,7 +111,7 @@ public class RobotParams
         public static final boolean showVisionView              = !inCompetition;
         public static final boolean showVisionStat              = false;
         // Drive Base
-        public static final boolean useDriveBase                = false;
+        public static final boolean useDriveBase                = true;
         public static final boolean usePinpointOdometry         = true;
         public static final boolean useSparkfunOTOS             = false;
         // Subsystems
@@ -166,7 +166,7 @@ public class RobotParams
         public static final double STARTPOS_X                               = Robot.ROBOT_WIDTH/2.0;
         public static final double STARTPOS_Y                               = Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0;
         // Red Net Zone start pose face the net zone touching the alliance wall with the robot's in front of net zone.
-        public static final TrcPose2D STARTPOSE_RED_NET_ZONE                = new TrcPose2D(-(Field.HALF_FIELD_INCHES-(Field.FULL_TILE_INCHES+Robot.ROBOT_LENGTH/2.0)), -Robot.ROBOT_WIDTH/2.0, -90);
+        public static final TrcPose2D STARTPOSE_RED_NET_ZONE                = new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
         public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE        = new TrcPose2D(Robot.ROBOT_WIDTH/2.0, -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
 
@@ -174,32 +174,32 @@ public class RobotParams
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
                 new TrcPose2D(-2.34 * Field.FULL_TILE_INCHES, -2.34 * Field.FULL_TILE_INCHES, 45.0);
         public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE    =
-                new TrcPose2D(-0.3 * Field.FULL_TILE_INCHES, -1.65 * Field.FULL_TILE_INCHES, 0.0);
+                new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0)-2.5, -38, 180);
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D(Robot.ROBOT_WIDTH/2.0+2, -39, 180);
+                new TrcPose2D((Robot.ROBOT_WIDTH/2.0)+2.5, -38, 180);
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
         // Pickup pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
-                new TrcPose2D(35.5, -44, 180.0);
+                new TrcPose2D(39, -44, 180.0);
         // Park pose (Net zone side).
         public static final TrcPose2D RED_ASCENT_ZONE_PARK_POSE     =
                 new TrcPose2D(-1.2*Field.FULL_TILE_INCHES, -0.65*Field.FULL_TILE_INCHES, 90.0);
         // Park pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PARK_POSE=
-                new TrcPose2D(1.7, -1.7, 135);
+                new TrcPose2D(1.2, -2.0, 135);
         // Observation zone auto poses.
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH = {
                 new TrcPose2D(1.4, -1.6, 180),
                 new TrcPose2D(1.4, -0.7, 180),
                 new TrcPose2D(1.97, -0.7, 180),
-                new TrcPose2D(1.97, -2.27, 180),
+                new TrcPose2D(1.97, -2.4, 180),
                 new TrcPose2D(1.97,-0.7, 180),
-                new TrcPose2D(1.97 + .42, -0.7, 180),
-                new TrcPose2D(1.97 + .42, -2.235, 180),
-                new TrcPose2D(1.48, -1.853, 180),
+                new TrcPose2D(1.97 + .45, -0.7, 180),
+                new TrcPose2D(1.97 + .45, -2.23, 180),
+                new TrcPose2D(1.66, -1.88, 180),
         };
 
 
@@ -446,10 +446,10 @@ public class RobotParams
         public static final double HORIZONTAL_LIMIT                         = 26.8;
 
         public static final double MIN_POS                                  = POS_OFFSET;
-        public static final double MIN_POS_ELBOW_UP                         = 14.65;
+        public static final double MIN_POS_ELBOW_UP                         = 12.75;
         public static final double MAX_POS                                  = 58;
         public static final double PICKUP_SAMPLE_POS                        = 12.5;
-        public static final double PICKUP_SPECIMEN_POS                      = 28;
+        public static final double PICKUP_SPECIMEN_POS                      = 30;
         public static final double LOW_BASKET_SCORE_POS                     = 32;
         public static final double HIGH_BASKET_SCORE_POS                    = 48;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
@@ -492,7 +492,7 @@ public class RobotParams
         public static final double BASKET_SCORE_POS                         = 96;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 100;
         public static final double LEVEL1_ASCENT_POS                        = 30;
-        public static final double LEVEL2_ASCENT_START_POS                  = 115;
+        public static final double LEVEL2_ASCENT_START_POS                  = 116;
         public static final double LEVEL2_ASCENT_POS                        = 80;
         public static final double[] POS_PRESETS                            = {10,30,60,90}; //Need to be Updated
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
@@ -522,7 +522,7 @@ public class RobotParams
         public static final double PHYSICAL_MAX_POS                         = 0;
         public static final double MAX_STEP_RATE                            = 0; //TBD
 
-        public static final double PICKUP_SPECIMEN_POS                      = 0.5;
+        public static final double PICKUP_SPECIMEN_POS                      = 0.53;
         public static final double BASKET_SCORE_POS                         = 0.600; //TBD
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.65;
         public static final double PICKUP_SAMPLE_POS_BASE                   = 0.6; //need to be found for low
@@ -537,7 +537,7 @@ public class RobotParams
         public static final boolean PRIMARY_SERVO_VERTICAL_INVERTED         = false;
 
         public static final double PICKUP_SAMPLE_POS_BASE                        = 0.760; //558
-        public static final double PICKUP_SPECIMEN_POS                      = 0.4;
+        public static final double PICKUP_SPECIMEN_POS                      = 0.41;
         public static final double BASKET_SCORE_POS                         = 0.25;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.17; //.165
         public static final double SAMPLE_PICKUP_MODE_START                 = 0.7;
