@@ -36,13 +36,14 @@ import teamcode.autotasks.TaskAutoPickup;
 import teamcode.autotasks.TaskAutoPickupSpecimen;
 import teamcode.autotasks.TaskAutoScoreBasket;
 import teamcode.autotasks.TaskAutoScoreChamber;
+import teamcode.autotasks.TaskElbowElevatorArm;
 import teamcode.subsystems.WristArm;
 import teamcode.subsystems.Claw;
 import teamcode.subsystems.Elbow;
 import teamcode.subsystems.Elevator;
 import teamcode.subsystems.LEDIndicator;
 import teamcode.subsystems.RobotBase;
-import teamcode.subsystems.WristRotational;
+import teamcode.subsystems.RotationalWrist;
 import teamcode.vision.Vision;
 import trclib.motor.TrcMotor;
 import trclib.motor.TrcServo;
@@ -81,8 +82,9 @@ public class Robot {
     public TrcServoGrabber clawServo;
     public TrcMotor elbow;
     public TrcMotor elevator;
-    public TrcServo wristRotational;
-    public TrcServo wristVertical;
+    public TrcServo verticalWrist;
+    public TrcServo rotationalWrist;
+    public TaskElbowElevatorArm elbowElevatorArm;
     // Events.
     public TrcEvent elevatorEvent;
     public TrcEvent elbowEvent;
@@ -143,7 +145,8 @@ public class Robot {
             //
             // Create and initialize other subsystems.
             //
-            if (RobotParams.Preferences.useSubsystems) {
+            if (RobotParams.Preferences.useSubsystems)
+            {
                 if (RobotParams.Preferences.useElevator) {
                     elevator = new Elevator(this).getElevatorParams();
                 }
@@ -157,14 +160,18 @@ public class Robot {
                     elbow = new Elbow(this).getElbow();
                 }
 
+                if (elbow != null && elevator != null) {
+                    elbowElevatorArm = new TaskElbowElevatorArm("ElbowElevatorArm", this, elbow, elevator);
+                })
+
                 if (RobotParams.Preferences.useWristRotational) {
-                    wristRotational = new WristRotational().getWristRotationalServo();
+                    rotationalWrist = new RotationalWrist().getWristRServo();
                 }
 
                 if (RobotParams.Preferences.useWristArm) {
                     wristArm = new WristArm(this);
                     arm = wristArm.getArmServo();
-                    wristVertical = wristArm.getWristVerticalServo();
+                    verticalWrist = wristArm.getWristVerticalServo();
                 }
                 elevatorEvent = new TrcEvent("elevatorEvent");
                 elbowEvent = new TrcEvent("elbowEvent");
@@ -354,16 +361,16 @@ public class Robot {
                             elbow.isLowerLimitSwitchActive(), elbow.isUpperLimitSwitchActive());
                 }
 
-                if (wristVertical != null) {
+                if (verticalWrist != null) {
                     dashboard.displayPrintf(
                             lineNum++, "Wrist Vertical: power=%.3f, pos=%.3f",
-                            wristVertical.getPower(), wristVertical.getPosition());
+                            verticalWrist.getPower(), verticalWrist.getPosition());
                 }
 
-                if (wristRotational != null) {
+                if (rotationalWrist != null) {
                     dashboard.displayPrintf(
                             lineNum++, "WristRotational: power=%.3f, pos=%.3f",
-                            wristRotational.getPower(), wristRotational.getPosition());
+                            rotationalWrist.getPower(), rotationalWrist.getPosition());
                 }
             }
         }
@@ -375,12 +382,13 @@ public class Robot {
     public void cancelAll() {
         globalTracer.traceInfo(moduleName, "Cancel all operations.");
         // Cancel all auto-assist driving.
+        if (elbowElevatorArm != null) elbowElevatorArm.cancel();
         if (elevator != null) elevator.cancel();
         if (clawServo != null) clawServo.cancel();
         if (elbow != null) elbow.cancel();
         if (arm != null) arm.cancel();
-        if (wristVertical != null) wristVertical.cancel();
-        if (wristRotational != null) wristRotational.cancel();
+        if (verticalWrist != null) verticalWrist.cancel();
+        if (rotationalWrist != null) rotationalWrist.cancel();
         if (robotDrive != null) robotDrive.cancel();
         //Cancel all auto tasks.
         //if (pickupSampleTask != null) pickupSampleTask.cancel();

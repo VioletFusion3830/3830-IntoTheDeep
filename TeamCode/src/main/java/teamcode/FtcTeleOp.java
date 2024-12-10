@@ -404,7 +404,7 @@ public class FtcTeleOp extends FtcOpMode
                         if (isSamplePickupMode) {
                             isClawGrabbing = true;
                             double scalePercentage = (robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/(RobotParams.ElevatorParams.HORIZONTAL_LIMIT-12);
-                            robot.wristVertical.setPosition(robot.vWristElevatorScaling()-0.08);
+                            robot.verticalWrist.setPosition(robot.vWristElevatorScaling()-0.08);
                             robot.arm.setPosition(robot.armElevatorScaling() -0.1);
                             robot.clawServo.close(null, .18, null);
                             runtime.reset();
@@ -500,16 +500,16 @@ public class FtcTeleOp extends FtcOpMode
             case B:
                 break;
             case X:
-                if(pressed && robot.wristRotational != null)
+                if(pressed && robot.verticalWrist != null)
                 {
                     if(!is45Left) {
-                        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.DEGREES_45_LEFT);
+                        robot.verticalWrist.setPosition(RobotParams.WristParamsRotational.DEGREES_45_LEFT);
                         isWristRotatorMiddle = false;
                         is45Left = true;
                     }
                     else
                     {
-                        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.DEGREES_45_RIGHT);
+                        robot.verticalWrist.setPosition(RobotParams.WristParamsRotational.DEGREES_45_RIGHT);
                         isWristRotatorMiddle = false;
                         is45Left = false;
                     }
@@ -530,22 +530,22 @@ public class FtcTeleOp extends FtcOpMode
                         //used
                         isSamplePickupMode = false;
                         robot.wristArm.setWristArmBasketScorePos(2);
-                        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
+                        robot.verticalWrist.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
                     }
                 }
                 break;
             case RightBumper:
-                if(pressed && robot.wristRotational != null)
+                if(pressed && robot.verticalWrist != null)
                 {
                     if(!isWristRotatorMiddle)
                     {
-                        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
+                        robot.verticalWrist.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
                         isWristRotatorMiddle = true;
                         is45Left = false;
                     }
                     else
                     {
-                        robot.wristRotational.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
+                        robot.verticalWrist.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
                         isWristRotatorMiddle = false;
                         is45Left = false;
                     }

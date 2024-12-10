@@ -9,18 +9,18 @@ import trclib.robotcore.TrcEvent;
 
 public class WristArm {
     private final TrcServo armServo;
-    private final TrcServo wristVerticalServo;
+    private final TrcServo verticalWristServo;
 
     public WristArm(Robot robot){
         FtcServoActuator.Params armParams = new FtcServoActuator.Params()
                 .setPrimaryServo(RobotParams.ArmParams.PRIMARY_SERVO_NAME,RobotParams.ArmParams.PRIMARY_SERVO_INVERTED);
         armServo = new FtcServoActuator(armParams).getServo();
 
-        FtcServoActuator.Params WristVerticalParams = new FtcServoActuator.Params()
+        FtcServoActuator.Params vWristParams = new FtcServoActuator.Params()
                 .setPrimaryServo(
                         RobotParams.WristParamsVertical.PRIMARY_SERVO_VERTICAL,
                         RobotParams.WristParamsVertical.PRIMARY_SERVO_VERTICAL_INVERTED);
-        wristVerticalServo = new FtcServoActuator(WristVerticalParams).getServo();
+        verticalWristServo = new FtcServoActuator(vWristParams).getServo();
     }
 
     public TrcServo getArmServo()
@@ -30,13 +30,13 @@ public class WristArm {
 
     public TrcServo getWristVerticalServo()
     {
-        return wristVerticalServo;
+        return verticalWristServo;
     }
 
     public void setWristArmPosition(double armPos, double wristVerticalPos,double timeout)
     {
         armServo.setPosition(armPos,null,timeout);
-        wristVerticalServo.setPosition(wristVerticalPos);
+        verticalWristServo.setPosition(wristVerticalPos);
     }
 
     public void setWristArmPickupSamplePos(double timeout)

@@ -8,8 +8,6 @@ import trclib.robotcore.TrcDbgTrace;
 
 public class Elevator {
     private final TrcMotor elevator;
-    private final TrcMotor elevatorMotor3;
-    private final FtcMotorActuator elevatorActuator;
     private final Robot robot;
 
     public Elevator(Robot robot) {
@@ -25,9 +23,9 @@ public class Elevator {
                         RobotParams.ElevatorParams.POS_OFFSET)
                 .setPositionPresets(RobotParams.ElevatorParams.POS_PRESET_TOLERANCE,
                         RobotParams.ElevatorParams.POS_PRESETS);
-        elevatorActuator = new FtcMotorActuator(elevatorParams);
+        FtcMotorActuator elevatorActuator = new FtcMotorActuator(elevatorParams);
         elevator = elevatorActuator.getMotor();
-        elevatorMotor3 = elevatorActuator.createMotor(
+        TrcMotor elevatorMotor3 = elevatorActuator.createMotor(
                 RobotParams.ElevatorParams.SECONDARY_FOLLOWER_MOTOR_NAME,
                 RobotParams.ElevatorParams.SECONDARY_FOLLOWER_MOTOR_TYPE,
                 null);

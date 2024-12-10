@@ -4,20 +4,20 @@ import ftclib.motor.FtcServoActuator;
 import teamcode.RobotParams;
 import trclib.motor.TrcServo;
 
-public class WristRotational {
-    private final TrcServo wristRotatorServo;
+public class RotationalWrist {
+    private final TrcServo rotationalWristServo;
 
-    public WristRotational()
+    public RotationalWrist()
     {
-        FtcServoActuator.Params WristRotatorParams = new FtcServoActuator.Params()
+        FtcServoActuator.Params rotationalWristParams = new FtcServoActuator.Params()
                 .setPrimaryServo(
                         RobotParams.WristParamsRotational.PRIMARY_SERVO_ROTATOR,
                         RobotParams.WristParamsRotational.PRIMARY_SERVO_ROTATOR_INVERTED);
-        wristRotatorServo = new FtcServoActuator(WristRotatorParams).getServo();
+        rotationalWristServo = new FtcServoActuator(rotationalWristParams).getServo();
     }
 
-    public TrcServo getWristRotationalServo()
+    public TrcServo getWristRServo()
     {
-        return wristRotatorServo;
+        return rotationalWristServo;
     }
 }
