@@ -9,8 +9,8 @@ import trclib.robotcore.TrcDbgTrace;
 public class Elevator {
     private final TrcMotor elevator;
     private final TrcMotor elevatorMotor3;
+    private final FtcMotorActuator elevatorActuator;
     private final Robot robot;
-    private int elevatorPosition;
 
     public Elevator(Robot robot) {
         this.robot = robot;
@@ -25,11 +25,13 @@ public class Elevator {
                         RobotParams.ElevatorParams.POS_OFFSET)
                 .setPositionPresets(RobotParams.ElevatorParams.POS_PRESET_TOLERANCE,
                         RobotParams.ElevatorParams.POS_PRESETS);
-        elevator = new FtcMotorActuator(elevatorParams).getMotor();
-        elevatorMotor3 = new FtcMotorActuator(elevatorParams).createMotor(
+        elevatorActuator = new FtcMotorActuator(elevatorParams);
+        elevator = elevatorActuator.getMotor();
+        elevatorMotor3 = elevatorActuator.createMotor(
                 RobotParams.ElevatorParams.SECONDARY_FOLLOWER_MOTOR_NAME,
                 RobotParams.ElevatorParams.SECONDARY_FOLLOWER_MOTOR_TYPE,
                 null);
+        elevatorMotor3.follow(elevator, RobotParams.ElevatorParams.SECONDARY_FOLLOWER_MOTOR_INVERTED);
         //elevator.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG, true, false, null);
         elevator.setSoftwarePidEnabled(RobotParams.ElevatorParams.SOFTWARE_PID_ENABLED);
         elevator.setPositionPidParameters(
@@ -40,10 +42,6 @@ public class Elevator {
                 RobotParams.ElevatorParams.STALL_TOLERANCE,
                 RobotParams.ElevatorParams.STALL_TIMEOUT,
                 RobotParams.ElevatorParams.STALL_RESET_TIMEOUT);
-
-        if (elevatorMotor3 != null) {
-            elevatorMotor3.follow(elevator, RobotParams.ElevatorParams.PRIMARY_MOTOR_INVERTED);
-        }
     }
 
     public TrcMotor getElevatorParams()
