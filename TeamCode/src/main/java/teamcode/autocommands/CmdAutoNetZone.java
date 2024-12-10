@@ -129,6 +129,11 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                     if (autoChoices.preloadType == Robot.GamePieceType.SPECIMEN)
                     {
                         robot.scoreChamberTask.autoScoreChamber(null,false, event);
+                        robot.robotDrive.purePursuitDrive.start(
+                                null, event, 0.0,
+                                robot.robotDrive.driveBase.getFieldPosition(), false,
+                                robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                                robot.adjustPoseByAlliance(-40,-40,180, FtcAuto.Alliance.RED_ALLIANCE));
                     }
                     else
                     {

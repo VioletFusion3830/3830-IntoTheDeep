@@ -436,7 +436,7 @@ public class FtcTeleOp extends FtcOpMode
                 }
                 break;
             case DpadDown:
-                if (pressed)
+                if (pressed && !robot.autoHang.isActive())
                 {
                     isSamplePickupMode = false;
                     robot.autoHang.autoClimbLevel2(null);

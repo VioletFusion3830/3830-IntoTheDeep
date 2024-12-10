@@ -253,7 +253,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
             case CLIP_SPECIMEN:
                 //Lower elevator to clip specimen
-                robot.arm.setPosition(currOwner,0.2,.8,null,3);
+                robot.arm.setPosition(currOwner,0.2,.85,null,3);
                 robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.MIN_POS_ELBOW_UP,true,RobotParams.ElevatorParams.POWER_LIMIT,event1,3);
                 sm.waitForSingleEvent(event1, State.SCORE_CHAMBER);
                 break;
