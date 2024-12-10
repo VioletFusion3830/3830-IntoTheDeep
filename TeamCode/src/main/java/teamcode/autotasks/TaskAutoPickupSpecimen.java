@@ -105,7 +105,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                         robot.wristVertical.acquireExclusiveAccess(ownerName) &&
                         robot.arm.acquireExclusiveAccess(ownerName) &&
                         robot.elevator.acquireExclusiveAccess(ownerName) &&
-                        robot.clawServo.acquireExclusiveAccess(ownerName) &&
+                        //robot.clawServo.acquireExclusiveAccess(ownerName) &&
                         robot.wristRotational.acquireExclusiveAccess(ownerName));
 
         if (success)
@@ -124,7 +124,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                             ", wristVertical=" + ownershipMgr.getOwner(robot.wristVertical) +
                             ", arm=" + ownershipMgr.getOwner(robot.arm) +
                             ", elevator=" + ownershipMgr.getOwner(robot.elevator) +
-                            ", clawServo=" + ownershipMgr.getOwner(robot.clawServo) +
+                            //", clawServo=" + ownershipMgr.getOwner(robot.clawServo) +
                             ", wristRotational=" + ownershipMgr.getOwner(robot.wristRotational) + ").");
             releaseSubsystemsOwnership();
         }
@@ -150,14 +150,14 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                             ", wristVertical=" + ownershipMgr.getOwner(robot.wristVertical) +
                             ", arm=" + ownershipMgr.getOwner(robot.arm) +
                             ", elevator=" + ownershipMgr.getOwner(robot.elevator) +
-                            ", clawServo=" + ownershipMgr.getOwner(robot.clawServo) +
+                            //", clawServo=" + ownershipMgr.getOwner(robot.clawServo) +
                             ", wristRotational=" + ownershipMgr.getOwner(robot.wristRotational) + ").");
             robot.robotDrive.driveBase.releaseExclusiveAccess(currOwner);
             robot.elbow.releaseExclusiveAccess(currOwner);
             robot.wristVertical.releaseExclusiveAccess(currOwner);
             robot.arm.releaseExclusiveAccess(currOwner);
             robot.elevator.releaseExclusiveAccess(currOwner);
-            robot.clawServo.releaseExclusiveAccess(currOwner);
+            //robot.clawServo.releaseExclusiveAccess(currOwner);
             robot.wristRotational.releaseExclusiveAccess(currOwner);
             currOwner = null;
         }
@@ -209,25 +209,27 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                 robot.wristVertical.setPosition(currOwner,0,RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,null,3);
                 robot.clawServo.open(null,null);
                 robot.wristRotational.setPosition(currOwner,0,RobotParams.WristParamsRotational.MIDDLE_P0S,null,3);
-                sm.waitForSingleEvent(event, State.DONE);
+                sm.waitForSingleEvent(event, State.SET_ELEVATOR_ARM);
                 break;
 
             case SET_ELEVATOR_ARM:
                 //Extend elevator to pickup position
-                robot.elevator.setPosition(0, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event);
+                robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS-3,true,RobotParams.ElbowParams.POWER_LIMIT,event,3);
                 sm.addEvent(event);
                 sm.addEvent(event2);
                 sm.waitForEvents(State.GRAB_SPECIMEN, true);
                 break;
 
             case GRAB_SPECIMEN:
-                robot.clawServo.close(null,event);
+                robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,3);
+                robot.clawServo.close(null,.4,event);
                 sm.waitForSingleEvent(event, State.RETRACT_ELEVATOR_ARM);
                 break;
 
             case RETRACT_ELEVATOR_ARM:
+
                 //retract elevator "fire and forget"
-                robot.elbow.setPosition(null,0.3,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,null,3);
+                robot.elevator.setPosition(null,0.3,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,null,3);
                 sm.setState(State.DONE);
                 break;
 

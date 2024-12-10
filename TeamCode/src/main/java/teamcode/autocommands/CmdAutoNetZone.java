@@ -128,14 +128,19 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                     // Score the preloaded sample or specimen.
                     if (autoChoices.preloadType == Robot.GamePieceType.SPECIMEN)
                     {
-                        robot.scoreChamberTask.autoScoreChamber(false, event);
+                        robot.scoreChamberTask.autoScoreChamber(null,false, event);
+                        robot.robotDrive.purePursuitDrive.start(
+                                null, event, 0.0,
+                                robot.robotDrive.driveBase.getFieldPosition(), false,
+                                robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                                robot.adjustPoseByAlliance(-40,-40,180, FtcAuto.Alliance.RED_ALLIANCE));
                     }
                     else
                     {
                         //robot.scoreBasketTask.autoScoreBasket(
                         //        autoChoices.alliance, autoChoices.scoreHeight, true, event);
                     }
-                    sm.waitForSingleEvent(event, State.DRIVE_TO_SPIKE_MARKS);
+                    sm.waitForSingleEvent(event, State.DONE);
                     break;
 
                 case DRIVE_TO_SPIKE_MARKS:

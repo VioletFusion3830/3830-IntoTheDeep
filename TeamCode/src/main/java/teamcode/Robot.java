@@ -168,7 +168,10 @@ public class Robot {
                 }
                 elevatorEvent = new TrcEvent("elevatorEvent");
                 elbowEvent = new TrcEvent("elbowEvent");
-                zeroCalibrate(null, elevatorEvent, elbowEvent);
+                if(runMode == TrcRobot.RunMode.AUTO_MODE)
+                {
+                    zeroCalibrate(null, elevatorEvent, elbowEvent);
+                }
                 // Create autotasks.
                 //pickupSampleTask = new TaskAutoPickupSample("AutoPickupSampleTask", this);
                 pickupSpecimenTask = new TaskAutoPickupSpecimen("AutoPickupSpecimenTask", this);

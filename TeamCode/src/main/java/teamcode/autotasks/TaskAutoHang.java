@@ -22,6 +22,7 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
         LEVEL2_START,
         CLIP,
         LEVEL2_ASCENT,
+        LEVEL2_FINISH,
         LEVEL3_START,
         DONE
     }   //enum State
@@ -194,6 +195,8 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
             case LEVEL2_START:
                 robot.elevator.setPosition(currOwner,0.5,RobotParams.ElevatorParams.LEVEL2_ASCENT_START_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event,3);
                 robot.elbow.setPosition(currOwner,0,95,true,RobotParams.ElevatorParams.POWER_LIMIT,null,3);
+                robot.arm.setPosition(null,0,.8,null,3);
+                robot.wristVertical.setPosition(null,0,.17,null,2);
                 sm.addEvent(event);
                 sm.waitForEvents(State.CLIP);
                 break;
@@ -209,12 +212,13 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
                 robot.elevator.setStallProtection(0.0, 0.0, 0.0, 0.0);
                 //robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
                 robot.elevator.setPositionPidParameters(1,0,0,0,0, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
-                //robot.elbow.setPosition(currOwner,0,RobotParams.ElbowParams.LEVEL2_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,4);
                 robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.LEVEL2_ASCENT_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event2,4);
-                sm.addEvent(event);
-                sm.addEvent(event2);
-                sm.waitForEvents(State.DONE,true);
+                robot.elbow.setPosition(currOwner,0.5,RobotParams.ElbowParams.LEVEL2_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,4);
+                sm.waitForSingleEvent(event2,State.LEVEL2_FINISH);
                 break;
+
+            case LEVEL2_FINISH:
+                sm.waitForSingleEvent(event,State.DONE);
 
             case LEVEL3_START:
                 sm.setState(State.DONE);

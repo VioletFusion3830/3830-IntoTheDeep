@@ -24,6 +24,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
         MOVE_SAMPLES,
         PICKUP_SPECIMEN,
         SCORE_SPECIMEN,
+        PARK_START,
         PARK,
         DONE
     }   //enum State
@@ -32,6 +33,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
     private final FtcAuto.AutoChoices autoChoices;
     private final TrcTimer timer;
     private final TrcEvent event;
+    private final TrcEvent event2;
     private final TrcStateMachine<State> sm;
     private int scoreSpecimenCount = 0;
 
@@ -48,6 +50,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
 
         timer = new TrcTimer(moduleName);
         event = new TrcEvent(moduleName);
+        event2 = new TrcEvent(moduleName);
         sm = new TrcStateMachine<>(moduleName);
         sm.start(State.START);
     }   //CmdAutoObservationZone
@@ -148,36 +151,43 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     }
                     else
                     {
-                        sm.setState(State.PARK);
+                        sm.setState(State.PARK_START);
                     }
                     break;
 
                 case SCORE_SPECIMEN:
                     // Drive to the specimen scoring position.
                     TrcPose2D scorePose = RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
-                    scorePose.x -= 1.5 * scoreSpecimenCount;
+                    scorePose.x -= 1.7 * scoreSpecimenCount;
                     // Score the specimen.
                     robot.scoreChamberTask.autoScoreChamber(scorePose,false, event);
                     sm.waitForSingleEvent(event, State.PICKUP_SPECIMEN);
                     break;
 
-                case PARK:
+                case PARK_START:
                     // Park at the observation zone.
-                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS);
-
                     if (autoChoices.parkPos == FtcAuto.ParkOption.PARK)
                     {
+                        robot.elbow.setPosition(null,0,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,3);
+                        robot.wristArm.setWristArmPickupSpecimenPos(2);
                         robot.robotDrive.purePursuitDrive.start(
-                                event, 0.0, robot.robotDrive.driveBase.getFieldPosition(), false,
+                                event2, 0.0, robot.robotDrive.driveBase.getFieldPosition(), false,
                                 robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
                                 robot.adjustPoseByAlliance(
                                         RobotParams.Game.RED_OBSERVATION_ZONE_PARK_POSE, autoChoices.alliance, true));
-                        sm.waitForSingleEvent(event, State.DONE);
+                        sm.waitForSingleEvent(event, State.PARK);
                     }
                     else
                     {
                         sm.setState(State.DONE);
                     }
+                    break;
+
+                case PARK:
+                    robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS);
+                    sm.addEvent(event2);
+                    sm.addEvent(event);
+                    sm.waitForEvents(State.PARK,true);
                     break;
 
                 default:
