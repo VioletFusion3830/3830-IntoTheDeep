@@ -18,6 +18,7 @@
             <goBILDA5202SeriesMotor name="elevator.primary" port="0"/>
             <goBILDA5202SeriesMotor name="elbow.primary" port="1"/>
             <goBILDA5202SeriesMotor name="elevator.follower" port="2" />
+            <goBILDA5202SeriesMotor name="elevator.follower2" port="3" />
             <Servo name="wristRotator.primary" port="0" />
             <Servo name="wristVertical.primary" port="2" />
         </LynxModule>

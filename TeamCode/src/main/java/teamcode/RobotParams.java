@@ -434,10 +434,13 @@ public class RobotParams
 
         public static final String PRIMARY_MOTOR_NAME                       = SUBSYSTEM_NAME + ".primary";
         public static final String FOLLOWER_MOTOR_NAME                      = SUBSYSTEM_NAME + ".follower";
+        public static final String SECONDARY_FOLLOWER_MOTOR_NAME            = SUBSYSTEM_NAME + ".follower2";
         public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
         public static final MotorType FOLLOWER_MOTOR_TYPE                   = MotorType.DcMotor;
+        public static final MotorType SECONDARY_FOLLOWER_MOTOR_TYPE         = MotorType.DcMotor;
         public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
         public static final boolean FOLLOWER_MOTOR_INVERTED                 = false;
+        public static final boolean SECONDARY_FOLLOWER_MOTOR_INVERTED       = false;
 
         public static final double INCHES_PER_COUNT                         = 0.016481481481;
         public static final double POS_OFFSET                               = 12;

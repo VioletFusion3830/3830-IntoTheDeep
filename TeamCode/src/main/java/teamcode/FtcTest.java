@@ -491,13 +491,13 @@ public class FtcTest extends FtcTeleOp
                             turnPidCtrl = robot.robotDrive.pidDrive.getTurnPidCtrl();
                         }
 
-//                        robot.dashboard.displayPrintf(
-//                                lineNum++, "RobotPose=%s,rawEnc=lf:%.0f,rf:%.0f,lb:%.0f,rb:%.0f",
-//                                robot.robotDrive.driveBase.getFieldPosition(),
-//                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_FRONT].getPosition(),
-//                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_FRONT].getPosition(),
-//                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_BACK].getPosition(),
-//                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_BACK].getPosition());
+                        robot.dashboard.displayPrintf(
+                                lineNum++, "RobotPose=%s,rawEnc=lf:%.0f,rf:%.0f,lb:%.0f,rb:%.0f",
+                                robot.robotDrive.driveBase.getFieldPosition(),
+                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_FRONT].getPosition(),
+                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_FRONT].getPosition(),
+                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_BACK].getPosition(),
+                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_BACK].getPosition());
                         if (xPidCtrl != null)
                         {
                             xPidCtrl.displayPidInfo(lineNum);
