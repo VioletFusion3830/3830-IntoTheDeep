@@ -296,15 +296,15 @@ public class FtcTeleOp extends FtcOpMode
                 if(isClawGrabbing && runtime.seconds() > 0.33)
                 {
                     isClawGrabbing = false;
-                    robot.wristArm.setWristArmPosition(robot.armElevatorScaling(),robot.vWristElevatorScaling(),1);
+                    robot.wristArm.setWristArmPosition(robot.armElevatorScaling(),robot.vWristElevatorScaling(),.2);
                 }
-                if(isSamplePickupMode && !isClawGrabbing && robot.arm != null)
+                if(isSamplePickupMode && !isClawGrabbing && robot.wristArm != null)
                 {
                     double armPos = robot.armElevatorScaling();
 
                     if (armPos != armPrevPos)
                     {
-                            robot.wristArm.setWristArmPosition(armPos,robot.vWristElevatorScaling(),1);
+                            robot.wristArm.setWristArmPosition(armPos,robot.vWristElevatorScaling(),.2);
                     }
                     armPrevPos = armPos;
                 }
@@ -403,7 +403,6 @@ public class FtcTeleOp extends FtcOpMode
                     else {
                         if (isSamplePickupMode) {
                             isClawGrabbing = true;
-                            double scalePercentage = (robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/(RobotParams.ElevatorParams.HORIZONTAL_LIMIT-12);
                             robot.verticalWrist.setPosition(robot.vWristElevatorScaling()-0.08);
                             robot.arm.setPosition(robot.armElevatorScaling() -0.1);
                             robot.clawServo.close(null, .18, null);
@@ -529,8 +528,8 @@ public class FtcTeleOp extends FtcOpMode
                     {
                         //used
                         isSamplePickupMode = false;
-                        robot.wristArm.setWristArmBasketScorePos(2);
-                        robot.verticalWrist.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
+                        robot.wristArm.setWristArmBasketScorePos();
+                        robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
                     }
                 }
                 break;

@@ -23,8 +23,8 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
     public enum State
     {
-        SET_SUBSYSTEMS,
         GO_TO_SCORE_POSITION,
+        PUSH_SPECIMEN,
         CLIP_SPECIMEN,
         SCORE_CHAMBER,
         RETRACT_ELBOW,
@@ -36,13 +36,15 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
         final FtcAuto.Alliance alliance;
         final TrcPose2D scorePose;
         final boolean noDrive;
+        final boolean cycle;
 
         TaskParams(
-            FtcAuto.Alliance alliance, TrcPose2D scorePose, boolean noDrive)
+            FtcAuto.Alliance alliance, TrcPose2D scorePose, boolean noDrive, boolean cycle)
         {
             this.alliance = alliance;
             this.scorePose = scorePose;
             this.noDrive = noDrive;
+            this.cycle = cycle;
         }   //TaskParams
 
         @NonNull
@@ -84,7 +86,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoScoreChamber(TrcPose2D scorePose, boolean noDrive, TrcEvent completionEvent)
+    public void autoScoreChamber(boolean cycle,TrcPose2D scorePose, boolean noDrive, TrcEvent completionEvent)
     {
         TrcPose2D robotPose = robot.robotDrive.driveBase.getFieldPosition();
         FtcAuto.Alliance alliance = robotPose.y < 0.0? FtcAuto.Alliance.RED_ALLIANCE: FtcAuto.Alliance.BLUE_ALLIANCE;
@@ -94,17 +96,17 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
             scorePose = nearNetZone ?
                     RobotParams.Game.RED_NET_CHAMBER_SCORE_POSE.clone() :
                     RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
-//
-//            if (robotPose.x >= -RobotParams.Game.CHAMBER_MAX_SCORE_POS_X &&
-//                    robotPose.x <= RobotParams.Game.CHAMBER_MAX_SCORE_POS_X) {
-//                // If robot current position is within the chamber zone, use its X position.
-//                scorePose.x = robotPose.x;
-//            }
+
+            if (robotPose.x >= -RobotParams.Game.CHAMBER_MAX_SCORE_POS_X &&
+                    robotPose.x <= RobotParams.Game.CHAMBER_MAX_SCORE_POS_X) {
+                // If robot current position is within the chamber zone, use its X position.
+                scorePose.x = robotPose.x;
+            }
         }
 
-        TaskParams taskParams = new TaskParams(alliance, scorePose,noDrive);
+        TaskParams taskParams = new TaskParams(alliance, scorePose,noDrive, cycle);
         tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
-        startAutoTask(State.SET_SUBSYSTEMS, taskParams, completionEvent);
+        startAutoTask(State.GO_TO_SCORE_POSITION, taskParams, completionEvent);
     }   //autoAssist
 
     //
@@ -122,13 +124,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
     protected boolean acquireSubsystemsOwnership()
     {
         boolean success = ownerName == null ||
-                (robot.robotDrive.driveBase.acquireExclusiveAccess(ownerName) &&
-                        robot.elbow.acquireExclusiveAccess(ownerName) &&
-                        robot.wristVertical.acquireExclusiveAccess(ownerName) &&
-                        robot.arm.acquireExclusiveAccess(ownerName) &&
-                        robot.elevator.acquireExclusiveAccess(ownerName) &&
-                        //robot.clawServo.acquireExclusiveAccess(ownerName) &&
-                        robot.wristRotational.acquireExclusiveAccess(ownerName));
+                (robot.robotDrive.driveBase.acquireExclusiveAccess(ownerName));
 
         if (success)
         {
@@ -141,13 +137,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
             tracer.traceWarn(
                     moduleName,
                     "Failed to acquire subsystem ownership (currOwner=" + currOwner +
-                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) +
-                            ", elbow=" + ownershipMgr.getOwner(robot.elbow) +
-                            ", wristVertical=" + ownershipMgr.getOwner(robot.wristVertical) +
-                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
-                            ", elevator=" + ownershipMgr.getOwner(robot.elevator) +
-                            //", clawServo=" + ownershipMgr.getOwner(robot.clawServo) +
-                            ", wristRotational=" + ownershipMgr.getOwner(robot.wristRotational) + ").");
+                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) + ").");
             releaseSubsystemsOwnership();
         }
 
@@ -167,20 +157,8 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
             tracer.traceInfo(
                     moduleName,
                     "Releasing subsystem ownership (currOwner=" + currOwner +
-                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) +
-                            ", elbow=" + ownershipMgr.getOwner(robot.elbow) +
-                            ", wristVertical=" + ownershipMgr.getOwner(robot.wristVertical) +
-                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
-                            ", elevator=" + ownershipMgr.getOwner(robot.elevator) +
-                            //", clawServo=" + ownershipMgr.getOwner(robot.clawServo) +
-                            ", wristRotational=" + ownershipMgr.getOwner(robot.wristRotational) + ").");
+                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) + ").");
             robot.robotDrive.driveBase.releaseExclusiveAccess(currOwner);
-            robot.elbow.releaseExclusiveAccess(currOwner);
-            robot.wristVertical.releaseExclusiveAccess(currOwner);
-            robot.arm.releaseExclusiveAccess(currOwner);
-            robot.elevator.releaseExclusiveAccess(currOwner);
-            //robot.clawServo.releaseExclusiveAccess(currOwner);
-            robot.wristRotational.releaseExclusiveAccess(currOwner);
             currOwner = null;
         }
     }   //releaseSubsystemsOwnership
@@ -194,11 +172,12 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
         tracer.traceInfo(moduleName, "Stopping subsystems.");
         robot.robotDrive.cancel(currOwner);
         robot.elbow.cancel();
-        robot.wristVertical.cancel();
+        robot.verticalWrist.cancel();
         robot.arm.cancel();
         robot.elevator.cancel();
         robot.clawServo.cancel();
-        robot.wristRotational.cancel();
+        robot.rotationalWrist.cancel();
+        //robot.elbowElevatorArm.cancel();
     }   //stopSubsystems
 
     /**
@@ -219,42 +198,49 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
         switch (state)
         {
-            case SET_SUBSYSTEMS:
-                robot.robotDrive.purePursuitDrive.start(
-                        currOwner, event1, 0.0,
-                        robot.robotDrive.driveBase.getFieldPosition(), false,
-                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
-                        robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-                if(robot.elevator.getPosition() > RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS)
-                {
-                    robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event2,3);
-                    sm.waitForSingleEvent(event2, State.GO_TO_SCORE_POSITION);
-                }
-                else
-                {
-                    sm.setState(State.GO_TO_SCORE_POSITION);
-                }
-                break;
-
             case GO_TO_SCORE_POSITION:
+                if(!taskParams.noDrive)
+                {
+                    robot.robotDrive.purePursuitDrive.start(
+                            currOwner, event1, 0.0,
+                            robot.robotDrive.driveBase.getFieldPosition(), false,
+                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                            robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
+                    sm.addEvent(event1);
+                }
                 //Set Elbow and elevator to pickup positions
-                robot.elbow.setPosition(currOwner,0,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event2,3);
-                robot.elevator.setPosition(currOwner, 0, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, true, RobotParams.ElevatorParams.POWER_LIMIT, event3, 3);
+                //robot.elbowElevatorArm.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, event2);
                 //Position wrist and arm subsystems for deposit
-                robot.arm.setPosition(currOwner,0.2,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,null,3);
-                robot.wristVertical.setPosition(currOwner,0.2,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,2);
-                robot.wristRotational.setPosition(currOwner,0,RobotParams.WristParamsRotational.MIDDLE_POS2,null,2);
+                robot.arm.setPosition(currOwner,0.2,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,event3,.3);
+                robot.verticalWrist.setPosition(currOwner,0.2,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,.3);
+                robot.rotationalWrist.setPosition(currOwner,0,RobotParams.WristParamsRotational.MIDDLE_POS2,null,.3);
                 //Wait for completion
-                sm.addEvent(event1);
                 sm.addEvent(event2);
                 sm.addEvent(event3);
                 sm.waitForEvents(State.CLIP_SPECIMEN,true);
                 break;
 
+                case PUSH_SPECIMEN:
+                    if(taskParams.cycle)
+                    {
+                        taskParams.scorePose.x = taskParams.scorePose.x - 2;
+                        robot.robotDrive.purePursuitDrive.start(
+                                currOwner, event1, 0.0,
+                                robot.robotDrive.driveBase.getFieldPosition(), false,
+                                robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                                robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
+                        sm.waitForSingleEvent(event1, State.CLIP_SPECIMEN);
+                    }
+                    else
+                    {
+                        sm.setState(State.CLIP_SPECIMEN);
+                    }
+                break;
+
             case CLIP_SPECIMEN:
                 //Lower elevator to clip specimen
-                robot.arm.setPosition(currOwner,0.2,.85,null,3);
-                robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.MIN_POS_ELBOW_UP,true,RobotParams.ElevatorParams.POWER_LIMIT,event1,3);
+                robot.arm.setPosition(currOwner,0,.85,null,.1);
+                robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.MIN_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event1,3);
                 sm.waitForSingleEvent(event1, State.SCORE_CHAMBER);
                 break;
 
@@ -266,8 +252,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
             case RETRACT_ELBOW:
                 //retract elbow, arm, and elbow "fire and forget"
-                robot.elevator.setPosition(null,0,15,true,RobotParams.ElevatorParams.POWER_LIMIT,null,3);
-                robot.elbow.setPosition(null,0.3,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,true,RobotParams.ElbowParams.POWER_LIMIT,null,3);
+                //robot.elbowElevatorArm.setPosition(null,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,null);
                 sm.setState(State.DONE);
                 break;
 

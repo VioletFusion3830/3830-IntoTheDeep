@@ -22,6 +22,10 @@
 
 package teamcode.autotasks;
 
+import androidx.annotation.NonNull;
+
+import java.util.Locale;
+
 import teamcode.FtcDashboard;
 import teamcode.FtcTeleOp;
 import teamcode.Robot;
@@ -35,29 +39,41 @@ import trclib.robotcore.TrcTaskMgr;
 /**
  * This class implements auto-assist task.
  */
-public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
+public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.State>
 {
-    private static final String moduleName = TaskAutoPickup.class.getSimpleName();
+    private static final String moduleName = TaskAutoPickupAndCycle.class.getSimpleName();
 
     public enum State
     {
         SET_ARM_POS,
         GRAB,
         RESET_ARM_POS,
+        CYCLE_BASKET,
+        SCORE_SAMPLE,
+        CYCLE_INTAKE,
         DONE
     }   //enum State
 
     private static class TaskParams
     {
-        TaskParams()
+        boolean cycle;
+        TaskParams(boolean cycle)
         {
+            this.cycle = cycle;
         }   //TaskParams
+
+        @NonNull
+        public String toString()
+        {
+            return String.format(
+                    Locale.US, "cycle=%s", cycle);
+        }   //toString
+
     }   //class TaskParams
 
     private final String ownerName;
     private final Robot robot;
     private TrcEvent event;
-    private TrcEvent event2;
 
     private String currOwner = null;
 
@@ -67,13 +83,12 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
      * @param ownerName specifies the owner name to take subsystem ownership, can be null if no ownership required.
      * @param robot specifies the robot object that contains all the necessary subsystems.
      */
-    public TaskAutoPickup(String ownerName, Robot robot)
+    public TaskAutoPickupAndCycle(String ownerName, Robot robot)
     {
         super(moduleName, ownerName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.ownerName = ownerName;
         this.robot = robot;
         event = new TrcEvent(moduleName);
-        event2 = new TrcEvent(moduleName);
     }   //TaskAuto
 
     /**
@@ -81,10 +96,12 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoPickup(TrcEvent completionEvent)
+    public void autoPickup(boolean cycle, TrcEvent completionEvent)
     {
-        tracer.traceInfo(moduleName, "event=" + completionEvent);
-        startAutoTask(State.SET_ARM_POS, new TaskParams(), completionEvent);
+        FtcTeleOp.isClawGrabbing = true;
+        TaskAutoPickupAndCycle.TaskParams taskParams = new TaskAutoPickupAndCycle.TaskParams(cycle);
+        tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
+        startAutoTask(State.SET_ARM_POS, taskParams, completionEvent);
     }   //autoAssist
 
     //
@@ -102,9 +119,7 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
     protected boolean acquireSubsystemsOwnership()
     {
         boolean success = ownerName == null ||
-                (robot.arm.acquireExclusiveAccess(ownerName) &&
-                 robot.clawServo.acquireExclusiveAccess(currOwner) &&
-                 robot.wristVertical.acquireExclusiveAccess(currOwner));
+                (robot.arm.acquireExclusiveAccess(ownerName));
 
         if (success)
         {
@@ -117,9 +132,7 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
             tracer.traceWarn(
                     moduleName,
                     "Failed to acquire subsystem ownership (currOwner=" + currOwner+
-                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
-                            ", clawServo=" + ownershipMgr.getOwner(robot.clawServo)+
-                            ", vWrist=" + ownershipMgr.getOwner(robot.wristVertical)+").");
+                            ", arm=" + ownershipMgr.getOwner(robot.arm) + ").");
             releaseSubsystemsOwnership();
         }
 
@@ -139,13 +152,9 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
             tracer.traceInfo(
                     moduleName,
                     "Releasing subsystem ownership (currOwner=" + currOwner +
-                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
-                            ", clawServo=" + ownershipMgr.getOwner(robot.clawServo)+
-                            ", vWrist=" + ownershipMgr.getOwner(robot.wristVertical)+").");
+                            ", arm=" + ownershipMgr.getOwner(robot.arm) + ").");
 
             robot.arm.releaseExclusiveAccess(currOwner);
-            robot.clawServo.releaseExclusiveAccess(currOwner);
-            robot.wristVertical.releaseExclusiveAccess(currOwner);
             currOwner = null;
         }
     }   //releaseSubsystemsOwnership
@@ -159,7 +168,8 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
         tracer.traceInfo(moduleName, "Stopping subsystems.");
         robot.arm.cancel();
         robot.clawServo.cancel();
-        robot.wristVertical.cancel();
+        robot.verticalWrist.cancel();
+        robot.rotationalWrist.cancel();
     }   //stopSubsystems
 
     /**
@@ -181,24 +191,43 @@ public class TaskAutoPickup extends TrcAutoTask<TaskAutoPickup.State>
         switch (state)
         {
             case SET_ARM_POS:
-                FtcTeleOp.isClawGrabbing = true;
-                double armPos = RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START -
-                        (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/18));
-                double vWristPos = RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START -
-                        (RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_SCALE * ((robot.elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/18));
-                robot.wristVertical.setPosition(currOwner,0,vWristPos+ FtcDashboard.ServoTune.ServoB,event2,.3);
-                robot.arm.setPosition(currOwner,0, armPos+ FtcDashboard.ServoTune.ServoA,event,0.3);
-                sm.waitForEvents(State.GRAB);
+                robot.wristArm.setWristArmPosition(currOwner,robot.armElevatorScaling()-0.1,robot.vWristElevatorScaling()-0.08,0.17,event);
+                sm.waitForSingleEvent(event,State.GRAB);
                 break;
 
             case GRAB:
-                robot.clawServo.close(currOwner,event);
-                sm.waitForEvents(State.RESET_ARM_POS,.3);
+                robot.clawServo.close(currOwner, 0, event);
+                sm.waitForSingleEvent(event, State.RESET_ARM_POS);
                 break;
 
             case RESET_ARM_POS:
                 FtcTeleOp.isClawGrabbing = false;
-                sm.setState(State.DONE);
+                if(taskParams.cycle && robot.clawServo.hasObject())
+                {
+                    robot.wristArm.setWristArmHighChamberScorePos(currOwner, 0.2,null);
+                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
+                    sm.setState(State.CYCLE_BASKET);
+                }
+                else
+                {
+                    robot.wristArm.setWristArmPosition(currOwner,robot.armElevatorScaling(),robot.vWristElevatorScaling(),.2,null);
+                    sm.setState(State.DONE);
+                }
+                break;
+
+            case CYCLE_BASKET:
+                robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, event);
+                sm.waitForSingleEvent(event, State.DONE);
+                break;
+
+            case SCORE_SAMPLE:
+                robot.clawServo.open(currOwner, 0, event);
+                sm.waitForSingleEvent(event, State.CYCLE_INTAKE);
+
+            case CYCLE_INTAKE:
+                robot.wristArm.setWristArmPickupSamplePos(0.2, null);
+                robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS, 26.0, event);
+                sm.waitForSingleEvent(event, State.DONE);
                 break;
 
             default:

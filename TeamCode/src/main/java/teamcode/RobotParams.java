@@ -449,7 +449,6 @@ public class RobotParams
         public static final double HORIZONTAL_LIMIT                         = 26.8;
 
         public static final double MIN_POS                                  = POS_OFFSET;
-        public static final double MIN_POS_ELBOW_UP                         = 12.75;
         public static final double MAX_POS                                  = 58;
         public static final double PICKUP_SAMPLE_POS                        = 12.5;
         public static final double PICKUP_SPECIMEN_POS                      = 30;
@@ -458,7 +457,7 @@ public class RobotParams
         public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
         public static final double LEVEL1_ASCENT_POS                        = 45;
         public static final double LEVEL2_ASCENT_START_POS                  = 31;
-        public static final double LEVEL2_ASCENT_POS                        = MIN_POS_ELBOW_UP;
+        public static final double LEVEL2_ASCENT_POS                        = MIN_POS;
         public static final double[] POS_PRESETS                            = {13,30,45};
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
 
@@ -555,9 +554,9 @@ public class RobotParams
         public static final boolean PRIMARY_SERVO_INVERTED                  = false;
 
         public static final double OPEN_POS                                 = 0.105; //486
-        public static final double OPEN_TIME                                = 0.2;
+        public static final double OPEN_TIME                                = 0.16;
         public static final double CLOSE_POS                                = 1;
-        public static final double CLOSE_TIME                               = 0.2;
+        public static final double CLOSE_TIME                               = 0.16;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR                 = false;
         public static final String REV_V3_COLOR_SENSOR_NAME                 = SUBSYSTEM_NAME + ".sensor";

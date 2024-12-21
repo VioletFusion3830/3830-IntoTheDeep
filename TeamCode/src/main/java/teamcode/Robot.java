@@ -32,11 +32,11 @@ import ftclib.driverio.FtcMatchInfo;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.sensor.FtcRobotBattery;
 import teamcode.autotasks.TaskAutoHang;
-import teamcode.autotasks.TaskAutoPickup;
+import teamcode.autotasks.TaskAutoPickupAndCycle;
 import teamcode.autotasks.TaskAutoPickupSpecimen;
 import teamcode.autotasks.TaskAutoScoreBasket;
 import teamcode.autotasks.TaskAutoScoreChamber;
-import teamcode.autotasks.TaskElbowElevatorArm;
+import teamcode.autotasks.TaskElbowElevator;
 import teamcode.subsystems.WristArm;
 import teamcode.subsystems.Claw;
 import teamcode.subsystems.Elbow;
@@ -84,7 +84,7 @@ public class Robot {
     public TrcMotor elevator;
     public TrcServo verticalWrist;
     public TrcServo rotationalWrist;
-    public TaskElbowElevatorArm elbowElevatorArm;
+    public TaskElbowElevator elbowElevator;
     // Events.
     public TrcEvent elevatorEvent;
     public TrcEvent elbowEvent;
@@ -94,7 +94,7 @@ public class Robot {
     public TaskAutoScoreBasket scoreBasketTask;
     public TaskAutoScoreChamber scoreChamberTask;
     public TaskAutoHang autoHang;
-    public TaskAutoPickup autoPickup;
+    public TaskAutoPickupAndCycle autoPickup;
 
     public enum GamePieceType {
         SPECIMEN,
@@ -161,8 +161,8 @@ public class Robot {
                 }
 
                 if (elbow != null && elevator != null) {
-                    elbowElevatorArm = new TaskElbowElevatorArm("ElbowElevatorArm", this, elbow, elevator);
-                })
+                    elbowElevator = new TaskElbowElevator("ElbowElevatorArm", elbow, elevator);
+                }
 
                 if (RobotParams.Preferences.useWristRotational) {
                     rotationalWrist = new RotationalWrist().getWristRServo();
@@ -185,7 +185,7 @@ public class Robot {
                 scoreBasketTask = new TaskAutoScoreBasket("AutoScoreBasketTask", this);
                 scoreChamberTask = new TaskAutoScoreChamber("AutoScoreChamberTask", this);
                 autoHang = new TaskAutoHang("AutoHangTask", this);
-                autoPickup = new TaskAutoPickup("AutoPickUp", this);
+                autoPickup = new TaskAutoPickupAndCycle("AutoPickUp", this);
             }
         }
 
@@ -382,7 +382,7 @@ public class Robot {
     public void cancelAll() {
         globalTracer.traceInfo(moduleName, "Cancel all operations.");
         // Cancel all auto-assist driving.
-        if (elbowElevatorArm != null) elbowElevatorArm.cancel();
+        if (elbowElevator != null) elbowElevator.cancel();
         if (elevator != null) elevator.cancel();
         if (clawServo != null) clawServo.cancel();
         if (elbow != null) elbow.cancel();
