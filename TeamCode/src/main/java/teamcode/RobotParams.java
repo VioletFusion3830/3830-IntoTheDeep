@@ -159,16 +159,20 @@ public class RobotParams
         public static final double TELEOP_PERIOD                    = 120.0;// 2 minutes teleop period
         public static final double SCORE_BASKET_CYCLE_TIME          = 6.0;  // in seconds
         public static final double CHAMBER_LENGTH                   = 26.0;
-        public static final double CHAMBER_MAX_SCORE_POS_X          = (CHAMBER_LENGTH / 2.0)-3;
+        public static final double CHAMBER_MAX_SCORE_POS_X          = (CHAMBER_LENGTH / 2.0);
 
         // Blue alliance positions will be derived using adjustPoseByAlliance.
         // Robot start locations in inches.
-        public static final double STARTPOS_X                               = Robot.ROBOT_WIDTH/2.0;
-        public static final double STARTPOS_Y                               = Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0;
+        public static final double STARTPOS_X                                   = Robot.ROBOT_WIDTH/2.0;
+        public static final double STARTPOS_Y                                   = Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0;
         // Red Net Zone start pose face the net zone touching the alliance wall with the robot's in front of net zone.
-        public static final TrcPose2D STARTPOSE_RED_NET_ZONE                = new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
+        public static final TrcPose2D STARTPOSE_RED_NET_ZONE_SAMPLE                  = new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
-        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE        = new TrcPose2D(Robot.ROBOT_WIDTH/2.0, -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
+        public static final TrcPose2D STARTPOSE_RED_NET_ZONE__SPECIMEN                    = new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
+        // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D(Robot.ROBOT_WIDTH/2.0, -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
+
+
 
         // Score poses (Net zone side).
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
@@ -570,7 +574,8 @@ public class RobotParams
         public static final String SUBSYSTEM_NAME                           = "wristRotator";
         public static final String PRIMARY_SERVO_ROTATOR                    = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_ROTATOR_INVERTED          = false;
-        //Need to be program servo and re get positions
+
+        public static final double ANALOG_INCREMENT                         = 0.1;
         public static final double MIDDLE_P0S                               = 0.2; //0.137
         public static final double MIDDLE_POS2                              = 0.750;
         public static final double DEGREES_45_LEFT                          = 0.312;

@@ -22,8 +22,6 @@
 
 package teamcode;
 
-import static teamcode.FtcAuto.autoChoices;
-
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -37,7 +35,6 @@ import trclib.drivebase.TrcDriveBase;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcRobot;
-import trclib.timer.TrcIntervalTimer;
 import trclib.timer.TrcTimer;
 
 /**
@@ -56,10 +53,8 @@ public class FtcTeleOp extends FtcOpMode
     private boolean driverAltFunc = false;
     private boolean operatorAltFunc = false;
     private boolean relocalizing = false;
-    private double elbowPrevPower = 0.0;
-    private double elevatorPrevPower = 0.0, armPrevPos = 0.0;
+    private double elevatorPrevPower = 0.0, armPrevPos = 0.0, elbowPrevPower = 0.0, rotationalWristPrevPos = 0.0;
     private boolean isSampleTypeRedAlliance = false;
-    private boolean slowDrive = false;
     private boolean isWristRotatorMiddle = false;
     private Double elevatorLimit = null;
     public static Claw.SamplePickupType SamplePickupType = Claw.SamplePickupType.anySample;
@@ -211,32 +206,10 @@ public class FtcTeleOp extends FtcOpMode
                             1, "RobotDrive: Power=(%.2f,y=%.2f,rot=%.2f),Mode:%s",
                             inputs[0], inputs[1], inputs[2], robot.robotDrive.driveBase.getDriveOrientation());
                 }
-
-//                forward = -(Math.atan(5 * gamepad1.left_stick_y) / Math.atan(5));
-//                sideways = -(Math.atan(5 * gamepad1.left_stick_x) / Math.atan(5));
-//                turning = (Math.atan(5 * gamepad1.right_stick_x) / Math.atan(5));
-//                max = Math.max(Math.abs(forward - sideways - turning), Math.max(Math.abs(forward + sideways - turning), Math.max(Math.abs(forward + sideways + turning), Math.abs(forward + turning - sideways))));
-//                if (max > robot.maxSpeed) {
-//                    scaleFactor = robot.maxSpeed / max;
-//                } else {
-//                    scaleFactor = robot.maxSpeed;
-//                }
-//                scaleFactor *= Math.max(Math.abs(1 - slowDriveTriggered), 0.2);
-
                 double slowDriveTriggered = driverGamepad.getRightTrigger() * RobotParams.Robot.DRIVE_NORMAL_SCALE;
-                // Press and hold for slow drive.
-//                if (slowDriveTriggered)
-//                {
-                    double scaleFactor = Math.max(Math.abs(1 - slowDriveTriggered), 0.3);
-                    drivePowerScale = (Math.atan(5 * RobotParams.Robot.DRIVE_NORMAL_SCALE) / Math.atan(5)) * scaleFactor;
-                    turnPowerScale = (Math.atan(5 * RobotParams.Robot.TURN_NORMAL_SCALE) / Math.atan(5)) * scaleFactor;
-//                }
-//                else
-//                {
-//                    robot.globalTracer.traceInfo(moduleName, ">>>>> NormalPower slow.");
-//                    drivePowerScale = RobotParams.Robot.DRIVE_NORMAL_SCALE;
-//                    turnPowerScale = RobotParams.Robot.TURN_NORMAL_SCALE;
-//                }
+                double scaleFactor = Math.max(Math.abs(1 - slowDriveTriggered), 0.3);
+                drivePowerScale = (Math.atan(5 * RobotParams.Robot.DRIVE_NORMAL_SCALE) / Math.atan(5)) * scaleFactor;
+                turnPowerScale = (Math.atan(5 * RobotParams.Robot.TURN_NORMAL_SCALE) / Math.atan(5)) * scaleFactor;
             }
             //
             // Other subsystems.
@@ -278,7 +251,6 @@ public class FtcTeleOp extends FtcOpMode
                     if (robot.elevator != null)
                     {
                         double elevatorPower = operatorGamepad.getLeftStickY(true) * RobotParams.ElevatorParams.POWER_LIMIT;
-
                         if (elevatorPower != elevatorPrevPower)
                         {
                             if (operatorAltFunc)
@@ -292,6 +264,18 @@ public class FtcTeleOp extends FtcOpMode
                         }
                         elevatorPrevPower = elevatorPower;
                     }
+                }
+                if (robot.rotationalWrist != null)
+                {
+                    double rotationalWristIncrement = (-operatorGamepad.getLeftTrigger() + operatorGamepad.getRightTrigger()) * RobotParams.WristParamsRotational.ANALOG_INCREMENT;
+                    double rotationalWristPos = robot.rotationalWrist.getPosition() + rotationalWristIncrement;
+
+                    if (rotationalWristPos != rotationalWristPrevPos)
+                    {
+                        robot.rotationalWrist.setPosition(rotationalWristPos);
+                    }
+                    rotationalWristPrevPos = rotationalWristPos;
+
                 }
                 if(isClawGrabbing && runtime.seconds() > 0.33)
                 {

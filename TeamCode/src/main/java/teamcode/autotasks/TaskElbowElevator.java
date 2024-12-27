@@ -44,6 +44,7 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
     public final TrcMotor elevator;
     private final TrcEvent elbowEvent;
     private final TrcEvent elevatorEvent;
+    private final TrcEvent elevatorEventInital;
 
     private String currOwner = null;
     private Double elevatorInitialPos = null;
@@ -57,6 +58,7 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
         this.elevator = elevator;
         this.elbowEvent = new TrcEvent(RobotParams.ElbowParams.SUBSYSTEM_NAME);
         this.elevatorEvent = new TrcEvent(RobotParams.ElevatorParams.SUBSYSTEM_NAME);
+        this.elevatorEventInital = new TrcEvent(RobotParams.ElevatorParams.SUBSYSTEM_NAME);
     }   //TaskelevatorArm
 
     public void setPosition(
@@ -185,14 +187,29 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
             case SET_POSITION:
                 elbowEvent.clear();
                 elevatorEvent.clear();
+                elevatorEventInital.clear();
                 sm.setState(elevatorInitialPos != null? State.RETRACT_ELEVATOR: State.SET_ELBOW_ANGLE);
                 break;
 
             case RETRACT_ELEVATOR:
-                // We retract the elevator first.
-                elevator.setPosition(
-                            currOwner, 0.0, taskParams.elevatorInitialPos, true, RobotParams.ElevatorParams.POWER_LIMIT, elevatorEvent, 0.0);
-                    sm.waitForSingleEvent(elevatorEvent, State.SET_ELBOW_ANGLE);
+                if (taskParams.elevatorInitialPos != null)
+                {
+                    // We retract the elevator first.
+                    elevator.setPosition(
+                            currOwner, 0.0, taskParams.elevatorInitialPos, true, RobotParams.ElevatorParams.POWER_LIMIT, elevatorEventInital, 0.0);
+                    if (safeSequence) {
+                        sm.waitForSingleEvent(elevatorEventInital, State.SET_ELBOW_ANGLE);
+                    } else {
+                        sm.setState(State.SET_ELBOW_ANGLE);
+                    }
+                }
+                else
+                {
+                    // Caller did not provide initial elevator position, skip this state.
+                    elevatorEventInital.signal();
+                    sm.setState(State.SET_ELBOW_ANGLE);
+
+                }
                 break;
 
             case SET_ELBOW_ANGLE:
@@ -255,6 +272,7 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
                 {
                     sm.addEvent(elbowEvent);
                     sm.addEvent(elevatorEvent);
+                    sm.addEvent(elevatorEventInital);
                     // Don't clear the events.
                     sm.waitForEvents(State.DONE, false, true);
                 }

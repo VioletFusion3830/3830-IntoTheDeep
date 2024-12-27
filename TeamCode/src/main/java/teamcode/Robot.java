@@ -441,8 +441,8 @@ public class Robot {
     public void setRobotStartPosition(FtcAuto.AutoChoices autoChoices) {
         robotDrive.driveBase.setFieldPosition(
                 adjustPoseByAlliance(
-                        autoChoices.startPos == FtcAuto.StartPos.NET_ZONE ?
-                                RobotParams.Game.STARTPOSE_RED_NET_ZONE : RobotParams.Game.STARTPOSE_RED_OBSERVATION_ZONE,
+                        autoChoices.startPos == FtcAuto.StartPos.OBSERVATION_ZONE ?
+                                RobotParams.Game.STARTPOSE_RED_OBSERVATION_ZONE : autoChoices.preloadType == GamePieceType.SAMPLE ? RobotParams.Game.START,
                         autoChoices.alliance, false));
     }   //setRobotStartPosition
 
