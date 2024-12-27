@@ -225,7 +225,7 @@ public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.S
                 sm.waitForSingleEvent(event, State.CYCLE_INTAKE);
 
             case CYCLE_INTAKE:
-                robot.wristArm.setWristArmPickupSamplePos(0.2, null);
+                robot.wristArm.setWristArmPickupSamplePos(currOwner,0, null);
                 robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS, 26.0, event);
                 sm.waitForSingleEvent(event, State.DONE);
                 break;

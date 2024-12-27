@@ -280,7 +280,7 @@ public class FtcTeleOp extends FtcOpMode
                 if(isClawGrabbing && runtime.seconds() > 0.33)
                 {
                     isClawGrabbing = false;
-                    robot.wristArm.setWristArmPosition(robot.armElevatorScaling(),robot.vWristElevatorScaling(),.2);
+                    robot.wristArm.setWristArmPosition(robot.armElevatorScaling(),robot.vWristElevatorScaling());
                 }
                 if(isSamplePickupMode && !isClawGrabbing && robot.wristArm != null)
                 {
@@ -288,7 +288,7 @@ public class FtcTeleOp extends FtcOpMode
 
                     if (armPos != armPrevPos)
                     {
-                            robot.wristArm.setWristArmPosition(armPos,robot.vWristElevatorScaling(),.2);
+                            robot.wristArm.setWristArmPosition(armPos,robot.vWristElevatorScaling());
                     }
                     armPrevPos = armPos;
                 }
@@ -506,7 +506,7 @@ public class FtcTeleOp extends FtcOpMode
                     {
                         //used
                         isSamplePickupMode = true;
-                        robot.wristArm.setWristArmPosition(robot.armElevatorScaling(), robot.vWristElevatorScaling(), 1);
+                        robot.wristArm.setWristArmPosition(robot.armElevatorScaling(), robot.vWristElevatorScaling());
                     }
                     else
                     {

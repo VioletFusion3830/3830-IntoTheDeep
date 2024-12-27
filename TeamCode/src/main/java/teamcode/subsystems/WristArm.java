@@ -35,70 +35,59 @@ public class WristArm {
         return verticalWristServo;
     }
 
-    public void setWristArmPosition(String owner, double armDelay, double vWirstDelay, double armPos, double wristVerticalPos,double timeout, TrcEvent event)
-    {
-        armServo.setPosition(owner,armDelay,armPos,event,timeout);
-        verticalWristServo.setPosition(owner, vWirstDelay,wristVerticalPos,null,timeout);
-    }
-
     public void setWristArmPosition(String owner, double armPos, double wristVerticalPos,double timeout, TrcEvent event)
     {
         armServo.setPosition(owner,0,armPos,event,timeout);
-        verticalWristServo.setPosition(owner,0,wristVerticalPos,null,timeout);
+        verticalWristServo.setPosition(owner, 0,wristVerticalPos,null,timeout);
     }
 
-    public void setWristArmPosition(double armPos, double wristVerticalPos,double timeout)
+    public void setWristArmPosition(double armPos, double wristVerticalPos)
     {
-        armServo.setPosition(0,armPos,null,timeout);
-        verticalWristServo.setPosition(0,wristVerticalPos,null,timeout);
+        setWristArmPosition(null,armPos,wristVerticalPos,0,null);
     }
 
-    public void setWristArmPickupSamplePos(double timeout, TrcEvent event)
+    //Pickup Sample Position
+    public void setWristArmPickupSamplePos(String owner,double timeout, TrcEvent event)
     {
-        armServo.setPosition(0,RobotParams.ArmParams.PICKUP_SAMPLE_POS_BASE,event,timeout);
-        verticalWristServo.setPosition(0,RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS_BASE,null,timeout);
+        setWristArmPosition(owner,RobotParams.ArmParams.PICKUP_SAMPLE_POS_BASE,RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS_BASE,timeout,event);
+    }
+
+    public void setWristArmPickupSamplePos()
+    {
+        setWristArmPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS_BASE,RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS_BASE);
+    }
+
+    //Basket Score Position
+    public void setWristArmBasketScorePos(String owner,double timeout, TrcEvent event)
+    {
+        setWristArmPosition(owner,RobotParams.ArmParams.BASKET_SCORE_POS, RobotParams.WristParamsVertical.BASKET_SCORE_POS,timeout,event);
     }
 
     public void setWristArmBasketScorePos()
     {
-        setWristArmPosition(RobotParams.ArmParams.BASKET_SCORE_POS, RobotParams.WristParamsVertical.BASKET_SCORE_POS, 0);
+        setWristArmPosition(RobotParams.ArmParams.BASKET_SCORE_POS, RobotParams.WristParamsVertical.BASKET_SCORE_POS);
     }
 
     //Pickup Specimen Position
-    public void setWristArmPickupSpecimenPos(String owner, double armDelay, double vWirstDelay, double timeout, TrcEvent event)
-    {
-        armServo.setPosition(owner, armDelay, RobotParams.ArmParams.PICKUP_SPECIMEN_POS, event, timeout);
-        verticalWristServo.setPosition(owner, vWirstDelay, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,null,timeout);
-    }
 
     public void setWristArmPickupSpecimenPos(String owner, double timeout, TrcEvent event)
     {
-        armServo.setPosition(owner,0,RobotParams.ArmParams.PICKUP_SPECIMEN_POS,event,timeout);
-        verticalWristServo.setPosition(owner,0,RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,null,timeout);
+        setWristArmPosition(owner,RobotParams.ArmParams.PICKUP_SPECIMEN_POS,RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,timeout,event);
     }
 
-    public void setWristArmPickupSpecimenPos(double timeout, TrcEvent event)
+    public void setWristArmPickupSpecimenPos()
     {
-        armServo.setPosition(0,RobotParams.ArmParams.PICKUP_SPECIMEN_POS,event,timeout);
-        verticalWristServo.setPosition(0,RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,null,timeout);
+        setWristArmPosition(RobotParams.ArmParams.PICKUP_SPECIMEN_POS,RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS);
     }
 
     //High Chamber Score Position
-    public void setWristArmHighChamberScorePos(String owner, double armDelay, double vWirstDelay, double timeout, TrcEvent event)
-    {
-        armServo.setPosition(owner, armDelay, RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, event, timeout);
-        verticalWristServo.setPosition(owner, vWirstDelay, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,timeout);
-    }
-
     public void setWristArmHighChamberScorePos(String owner, double timeout, TrcEvent event)
     {
-        armServo.setPosition(owner,0,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,event,timeout);
-        verticalWristServo.setPosition(owner,0,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,timeout);
+        setWristArmPosition(owner,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,timeout,event);
     }
 
-    public void setWristArmHighChamberScorePos(double timeout, TrcEvent event)
+    public void setWristArmHighChamberScorePos()
     {
-        armServo.setPosition(0, RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, event, timeout);
-        verticalWristServo.setPosition(0, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, null,timeout);
+        setWristArmPosition(RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS);
     }
 }
