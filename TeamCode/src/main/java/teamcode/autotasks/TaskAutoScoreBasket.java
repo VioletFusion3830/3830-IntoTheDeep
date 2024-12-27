@@ -1,6 +1,9 @@
 package teamcode.autotasks;
 
+import teamcode.FtcAuto;
 import teamcode.Robot;
+import teamcode.RobotParams;
+import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcOwnershipMgr;
@@ -17,7 +20,7 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
     public enum State
     {
         GO_TO_SCORE_POSITION,
-        SET_ELEVATOR_ARM,
+        SET_ARM,
         SCORE_BASKET,
         RETRACT_ELEVATOR_ARM,
         DONE
@@ -25,13 +28,25 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
 
     private static class TaskParams
     {
-        TaskParams()
+        final FtcAuto.Alliance alliance;
+        final TrcPose2D scorePose;
+
+        TaskParams(FtcAuto.Alliance alliance, TrcPose2D scorePose)
         {
+            this.alliance = alliance;
+            this.scorePose = scorePose;
         }   //TaskParams
+
+        public String toString()
+        {
+            return "alliance=" + alliance + ", scorePose=" + scorePose;
+        }
     }   //class TaskParams
 
     private final String ownerName;
     private final Robot robot;
+    private final TrcEvent event1;
+    private final TrcEvent event2;
 
     private String currOwner = null;
 
@@ -46,6 +61,8 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
         super(moduleName, ownerName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.ownerName = ownerName;
         this.robot = robot;
+        this.event1 = new TrcEvent(moduleName + ".event1");
+        this.event2 = new TrcEvent(moduleName + ".event2");
     }   //TaskAuto
 
     /**
@@ -53,20 +70,23 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void atuoScoreBasket(TrcEvent completionEvent)
+    public void atuoScoreBasket(FtcAuto.Alliance alliance, TrcPose2D scorePose, TrcEvent completionEvent)
     {
-        tracer.traceInfo(moduleName, "event=" + completionEvent);
-        startAutoTask(State.GO_TO_SCORE_POSITION, new TaskParams(), completionEvent);
-    }   //autoAssist
+        if (alliance == null)
+        {
+            // Caller is TeleOp, let's determine the alliance color by robot's location.
+            alliance = robot.robotDrive.driveBase.getFieldPosition().y < 0.0?
+                    FtcAuto.Alliance.RED_ALLIANCE: FtcAuto.Alliance.BLUE_ALLIANCE;
+        }
+        if(scorePose == null)
+        {
+            scorePose = RobotParams.Game.RED_BASKET_SCORE_POSE.clone();
+        }
 
-    /**
-     * This method cancels an in progress auto-assist operation if any.
-     */
-    public void autoAssistCancel()
-    {
-        tracer.traceInfo(moduleName, "Canceling auto-assist.");
-        stopAutoTask(false);
-    }   //autoAssistCancel
+        TaskParams taskParams = new TaskParams(alliance, scorePose);
+        tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
+        startAutoTask(State.GO_TO_SCORE_POSITION, taskParams, completionEvent);
+    }   //autoAssist
 
     //
     // Implement TrcAutoTask abstract methods.
@@ -83,7 +103,9 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
     protected boolean acquireSubsystemsOwnership()
     {
         boolean success = ownerName == null ||
-                (robot.robotDrive.driveBase.acquireExclusiveAccess(ownerName));
+                (robot.robotDrive.driveBase.acquireExclusiveAccess(ownerName) &&
+                        robot.arm.acquireExclusiveAccess(ownerName) &&
+                        robot.verticalWrist.acquireExclusiveAccess(ownerName));
 
         if (success)
         {
@@ -96,7 +118,9 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
             tracer.traceWarn(
                     moduleName,
                     "Failed to acquire subsystem ownership (currOwner=" + currOwner +
-                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) + ").");
+                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) +
+                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
+                            ", verticalWrist=" + ownershipMgr.getOwner(robot.verticalWrist) + ").");
             releaseSubsystemsOwnership();
         }
 
@@ -116,8 +140,12 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
             tracer.traceInfo(
                     moduleName,
                     "Releasing subsystem ownership (currOwner=" + currOwner +
-                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) + ").");
+                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) +
+                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
+                            ", verticalWrist=" + ownershipMgr.getOwner(robot.verticalWrist) + ").");
             robot.robotDrive.driveBase.releaseExclusiveAccess(currOwner);
+            robot.arm.releaseExclusiveAccess(currOwner);
+            robot.verticalWrist.releaseExclusiveAccess(currOwner);
             currOwner = null;
         }
     }   //releaseSubsystemsOwnership
@@ -130,6 +158,13 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
         robot.robotDrive.cancel(currOwner);
+        robot.elbow.cancel();
+        robot.verticalWrist.cancel();
+        robot.arm.cancel();
+        robot.elevator.cancel();
+        robot.clawServo.cancel();
+        robot.rotationalWrist.cancel();
+        //robot.elbowElevatorArm.cancel();
     }   //stopSubsystems
 
     /**
@@ -151,20 +186,32 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
         switch (state)
         {
             case GO_TO_SCORE_POSITION:
-                //Set elbow postion and drive to score position
-                //Set elevator halfway
+                robot.robotDrive.purePursuitDrive.start(
+                        currOwner, event2, 0.0,
+                        robot.robotDrive.driveBase.getFieldPosition(), false,
+                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                        robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
+                robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,event1);
+                robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.MIDDLE_P0S,null,0);
+                sm.waitForSingleEvent(event1, State.SET_ARM);
                 break;
 
-            case SET_ELEVATOR_ARM:
-                //Set elevator to score position
+            case SET_ARM:
+                robot.wristArm.setWristArmBasketScorePos(null,0.2, event1);
+                sm.addEvent(event1);
+                sm.addEvent(event2);
+                sm.waitForEvents(State.SCORE_BASKET, true);
                 break;
 
             case SCORE_BASKET:
-                //release sample
+                robot.clawServo.open(null,event1);
+                sm.waitForSingleEvent(event1,State.RETRACT_ELEVATOR_ARM);
                 break;
 
             case RETRACT_ELEVATOR_ARM:
                 //retract elevator, elbow, and arm "fire and forget"
+                robot.wristArm.setWristArmPickupSamplePos();
+                robot.elbowElevator.setPosition(true,RobotParams.ElevatorParams.PICKUP_SAMPLE_POS,RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null, null);
                 break;
 
             default:
