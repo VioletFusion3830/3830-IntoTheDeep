@@ -33,6 +33,7 @@ import ftclib.robotcore.FtcOpMode;
 import ftclib.sensor.FtcRobotBattery;
 import teamcode.autotasks.TaskAutoHang;
 import teamcode.autotasks.TaskAutoPickupAndCycle;
+import teamcode.autotasks.TaskAutoPickupSample;
 import teamcode.autotasks.TaskAutoPickupSpecimen;
 import teamcode.autotasks.TaskAutoScoreBasket;
 import teamcode.autotasks.TaskAutoScoreChamber;
@@ -94,7 +95,8 @@ public class Robot {
     public TaskAutoScoreBasket scoreBasketTask;
     public TaskAutoScoreChamber scoreChamberTask;
     public TaskAutoHang autoHang;
-    public TaskAutoPickupAndCycle autoPickup;
+    public TaskAutoPickupAndCycle autoPickupAndCycle;
+    public TaskAutoPickupSample autoPickupSample;
 
     public enum GamePieceType {
         SPECIMEN,
@@ -180,12 +182,12 @@ public class Robot {
                     zeroCalibrate(null, elevatorEvent, elbowEvent);
                 }
                 // Create autotasks.
-                //pickupSampleTask = new TaskAutoPickupSample("AutoPickupSampleTask", this);
+                autoPickupSample = new TaskAutoPickupSample("AutoPickupSampleTask", this);
                 pickupSpecimenTask = new TaskAutoPickupSpecimen("AutoPickupSpecimenTask", this);
                 scoreBasketTask = new TaskAutoScoreBasket("AutoScoreBasketTask", this);
                 scoreChamberTask = new TaskAutoScoreChamber("AutoScoreChamberTask", this);
                 autoHang = new TaskAutoHang("AutoHangTask", this);
-                autoPickup = new TaskAutoPickupAndCycle("AutoPickUp", this);
+                autoPickupAndCycle = new TaskAutoPickupAndCycle("AutoPickUp", this);
             }
         }
 
@@ -391,12 +393,12 @@ public class Robot {
         if (rotationalWrist != null) rotationalWrist.cancel();
         if (robotDrive != null) robotDrive.cancel();
         //Cancel all auto tasks.
-        //if (pickupSampleTask != null) pickupSampleTask.cancel();
+        if (autoPickupSample != null) autoPickupSample.cancel();
         if (pickupSpecimenTask != null) pickupSpecimenTask.cancel();
         if (scoreBasketTask != null) scoreBasketTask.cancel();
         if (scoreChamberTask != null) scoreChamberTask.cancel();
         if (autoHang != null) autoHang.cancel();
-        if (autoPickup != null) autoPickup.cancel();
+        if (autoPickupAndCycle != null) autoPickupAndCycle.cancel();
     }   //cancelAll
 
     public double vWristElevatorScaling()
@@ -442,7 +444,7 @@ public class Robot {
         robotDrive.driveBase.setFieldPosition(
                 adjustPoseByAlliance(
                         autoChoices.startPos == FtcAuto.StartPos.OBSERVATION_ZONE ?
-                                RobotParams.Game.STARTPOSE_RED_OBSERVATION_ZONE : autoChoices.preloadType == GamePieceType.SAMPLE ? RobotParams.Game.START,
+                                RobotParams.Game.STARTPOSE_RED_OBSERVATION_ZONE : autoChoices.preloadType == GamePieceType.SAMPLE ? RobotParams.Game.STARTPOSE_RED_NET_ZONE_SAMPLE : RobotParams.Game.STARTPOSE_RED_NET_ZONE__SPECIMEN,
                         autoChoices.alliance, false));
     }   //setRobotStartPosition
 

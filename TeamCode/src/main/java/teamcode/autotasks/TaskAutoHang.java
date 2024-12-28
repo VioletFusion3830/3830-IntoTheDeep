@@ -89,7 +89,7 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
         startAutoTask(State.LEVEL3_START, null, completionEvent);
     }   //autoClimbLevel3
 
-    //
+//
     // Implement TrcAutoTask abstract methods.
     //
 
@@ -105,8 +105,8 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
     {
         boolean success = ownerName == null ||
                 (robot.robotDrive.driveBase.acquireExclusiveAccess(ownerName) &&
-                        robot.elbow.acquireExclusiveAccess(ownerName) &&
-                        robot.elevator.acquireExclusiveAccess(ownerName));
+                        robot.arm.acquireExclusiveAccess(ownerName) &&
+                        robot.verticalWrist.acquireExclusiveAccess(ownerName));
 
         if (success)
         {
@@ -120,8 +120,8 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
                     moduleName,
                     "Failed to acquire subsystem ownership (currOwner=" + currOwner +
                             ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) +
-                            ", elbow=" + ownershipMgr.getOwner(robot.elbow) +
-                            ", elevator" + ownershipMgr.getOwner(robot.elevator) +").");
+                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
+                            ", verticalWrist=" + ownershipMgr.getOwner(robot.verticalWrist) + ").");
             releaseSubsystemsOwnership();
         }
 
@@ -142,11 +142,11 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
                     moduleName,
                     "Releasing subsystem ownership (currOwner=" + currOwner +
                             ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) +
-                            ", elbow=" + ownershipMgr.getOwner(robot.elbow) +
-                            ", elevator" + ownershipMgr.getOwner(robot.elevator) +").");
+                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
+                            ", verticalWrist=" + ownershipMgr.getOwner(robot.verticalWrist) + ").");
             robot.robotDrive.driveBase.releaseExclusiveAccess(currOwner);
-            robot.elbow.releaseExclusiveAccess(ownerName);
-            robot.elevator.releaseExclusiveAccess(ownerName);
+            robot.arm.releaseExclusiveAccess(currOwner);
+            robot.verticalWrist.releaseExclusiveAccess(currOwner);
             currOwner = null;
         }
     }   //releaseSubsystemsOwnership
@@ -159,11 +159,12 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
         robot.robotDrive.cancel(currOwner);
-        robot.elevator.setPidStallDetectionEnabled(true);
-        robot.elevator.setPositionPidParameters(RobotParams.ElevatorParams.PID_COEFFS, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
-        robot.elbow.setPositionPidParameters(RobotParams.ElbowParams.PID_COEFFS, RobotParams.ElbowParams.PID_TOLERANCE);
-        robot.elevator.cancel();
         robot.elbow.cancel();
+        robot.verticalWrist.cancel();
+        robot.arm.cancel();
+        robot.elevator.cancel();
+        robot.clawServo.cancel();
+        robot.rotationalWrist.cancel();
     }   //stopSubsystems
 
     /**
@@ -185,24 +186,22 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
         switch (state)
         {
             case LEVEL1_ASCENT:
-                robot.elbow.setPosition(currOwner,0,RobotParams.ElevatorParams.LEVEL1_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,4);
-                robot.elevator.setPosition(currOwner,1,RobotParams.ElevatorParams.LEVEL1_ASCENT_POS,true,RobotParams.ElevatorParams.POWER_LIMIT, event2,4);
-                sm.addEvent(event);
-                sm.addEvent(event2);
-                sm.waitForEvents(State.DONE,true);
+                robot.elbowElevator.setPosition(RobotParams.ElbowParams.LEVEL1_ASCENT_POS,RobotParams.ElevatorParams.LEVEL1_ASCENT_POS,event);
+                robot.wristArm.setWristArmPosition(currOwner,.5,.5,0,null);
+                sm.waitForSingleEvent(event,State.DONE);
                 break;
 
             case LEVEL2_START:
-                robot.elevator.setPosition(currOwner,0.5,RobotParams.ElevatorParams.LEVEL2_ASCENT_START_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event,3);
+                robot.elevator.setPosition(currOwner,0.5,RobotParams.ElevatorParams.LEVEL2_ASCENT_START_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event,2);
                 robot.elbow.setPosition(currOwner,0,95,true,RobotParams.ElevatorParams.POWER_LIMIT,null,3);
                 robot.arm.setPosition(null,0,.8,null,3);
-                robot.wristVertical.setPosition(null,0,.17,null,2);
+                robot.verticalWrist.setPosition(null,0,.17,null,2);
                 sm.addEvent(event);
                 sm.waitForEvents(State.CLIP);
                 break;
 
             case CLIP:
-                robot.elbow.setPosition(currOwner,0,RobotParams.ElbowParams.LEVEL2_ASCENT_START_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,20);
+                robot.elbow.setPosition(currOwner,0,RobotParams.ElbowParams.LEVEL2_ASCENT_START_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,2);
                 sm.addEvent(event);
                 sm.waitForEvents(State.LEVEL2_ASCENT);
                 break;
@@ -212,8 +211,8 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
                 robot.elevator.setStallProtection(0.0, 0.0, 0.0, 0.0);
                 //robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
                 robot.elevator.setPositionPidParameters(1,0,0,0,0, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
-                robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.LEVEL2_ASCENT_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event2,4);
-                robot.elbow.setPosition(currOwner,0.5,RobotParams.ElbowParams.LEVEL2_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,4);
+                robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.LEVEL2_ASCENT_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event2,2);
+                robot.elbow.setPosition(currOwner,0.5,RobotParams.ElbowParams.LEVEL2_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,2);
                 sm.waitForSingleEvent(event2,State.LEVEL2_FINISH);
                 break;
 

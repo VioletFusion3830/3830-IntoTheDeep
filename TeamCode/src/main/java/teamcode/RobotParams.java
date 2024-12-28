@@ -166,9 +166,10 @@ public class RobotParams
         public static final double STARTPOS_X                                   = Robot.ROBOT_WIDTH/2.0;
         public static final double STARTPOS_Y                                   = Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0;
         // Red Net Zone start pose face the net zone touching the alliance wall with the robot's in front of net zone.
-        public static final TrcPose2D STARTPOSE_RED_NET_ZONE_SAMPLE                  = new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
+
+        public static final TrcPose2D STARTPOSE_RED_NET_ZONE_SAMPLE    = new TrcPose2D(-((Field.FULL_TILE_INCHES*2)-(Robot.ROBOT_LENGTH/2)),-(Robot.ROBOT_WIDTH/2.0), 90);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
-        public static final TrcPose2D STARTPOSE_RED_NET_ZONE__SPECIMEN                    = new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
+        public static final TrcPose2D STARTPOSE_RED_NET_ZONE__SPECIMEN = new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
         public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D(Robot.ROBOT_WIDTH/2.0, -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
 
@@ -190,7 +191,7 @@ public class RobotParams
                 new TrcPose2D(39, -44, 180.0);
         // Park pose (Net zone side).
         public static final TrcPose2D RED_ASCENT_ZONE_PARK_POSE     =
-                new TrcPose2D(-1.2*Field.FULL_TILE_INCHES, -0.65*Field.FULL_TILE_INCHES, 90.0);
+                new TrcPose2D(-20, -10, 90.0);
         // Park pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PARK_POSE=
                 new TrcPose2D(1.2, -2.0, 135);
@@ -459,7 +460,7 @@ public class RobotParams
         public static final double LOW_BASKET_SCORE_POS                     = 32;
         public static final double HIGH_BASKET_SCORE_POS                    = 48;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
-        public static final double LEVEL1_ASCENT_POS                        = 45;
+        public static final double LEVEL1_ASCENT_POS                        = 12.5;
         public static final double LEVEL2_ASCENT_START_POS                  = 31;
         public static final double LEVEL2_ASCENT_POS                        = MIN_POS;
         public static final double[] POS_PRESETS                            = {13,30,45};
@@ -497,7 +498,7 @@ public class RobotParams
         public static final double PICKUP_SPECIMEN_POS                      = 10;
         public static final double BASKET_SCORE_POS                         = 96;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 100;
-        public static final double LEVEL1_ASCENT_POS                        = 30;
+        public static final double LEVEL1_ASCENT_POS                        = 60;
         public static final double LEVEL2_ASCENT_START_POS                  = 116;
         public static final double LEVEL2_ASCENT_POS                        = 80;
         public static final double[] POS_PRESETS                            = {10,30,60,90}; //Need to be Updated
@@ -562,7 +563,7 @@ public class RobotParams
         public static final double CLOSE_POS                                = 1;
         public static final double CLOSE_TIME                               = 0.16;
 
-        public static final boolean USE_REV_V3_COLOR_SENSOR                 = false;
+        public static final boolean USE_REV_V3_COLOR_SENSOR                 = true;
         public static final String REV_V3_COLOR_SENSOR_NAME                 = SUBSYSTEM_NAME + ".sensor";
         public static final double SENSOR_TRIGGER_THRESHOLD                 = 2.3; //cm
         public static final boolean ANALOG_TRIGGER_INVERTED                 = true;

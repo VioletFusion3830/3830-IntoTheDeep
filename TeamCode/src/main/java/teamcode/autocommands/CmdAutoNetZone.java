@@ -3,7 +3,6 @@ package teamcode.autocommands;
 import teamcode.FtcAuto;
 import teamcode.Robot;
 import teamcode.RobotParams;
-import teamcode.subsystems.Elbow;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
@@ -22,11 +21,14 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
         START,
         DO_DELAY,
         SCORE_PRELOAD,
-        DRIVE_TO_SPIKE_MARKS,
-        PICKUP_FLOOR_SAMPLE,
-        SCORE_SAMPLE_BASKET,
+        PICKUP_SAMPLE_MARK_1,
+        SCORE_SAMPLE_BASKET_1,
+        PICKUP_SAMPLE_MARK_2,
+        SCORE_SAMPLE_BASKET_2,
+        PICKUP_SAMPLE_MARK_3,
+        SCORE_SAMPLE_BASKET_3,
         GO_PARK,
-        ASCENT,
+        PARK,
         DONE
     }   //enum State
 
@@ -79,7 +81,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
         timer.cancel();
         robot.scoreChamberTask.cancel();
         robot.scoreBasketTask.cancel();
-        //robot.pickupFromGroundTask.cancel();
+        robot.autoPickupSample.cancel();
         sm.stop();
     }   //cancel
 
@@ -128,90 +130,66 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                     // Score the preloaded sample or specimen.
                     if (autoChoices.preloadType == Robot.GamePieceType.SPECIMEN)
                     {
-                        robot.scoreChamberTask.autoScoreChamber(null,false, event);
-                        robot.robotDrive.purePursuitDrive.start(
-                                null, event, 0.0,
-                                robot.robotDrive.driveBase.getFieldPosition(), false,
-                                robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
-                                robot.adjustPoseByAlliance(-40,-40,180, FtcAuto.Alliance.RED_ALLIANCE));
+                        robot.scoreChamberTask.autoScoreChamber(false,false, event);
                     }
                     else
                     {
-                        //robot.scoreBasketTask.autoScoreBasket(
-                        //        autoChoices.alliance, autoChoices.scoreHeight, true, event);
+                        robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance,new TrcPose2D(-50,-18,45) ,event);
                     }
                     sm.waitForSingleEvent(event, State.DONE);
                     break;
 
-                case DRIVE_TO_SPIKE_MARKS:
-                    // Drive to the spike marks to pick up a sample.
-                    // Make sure remaining time is long enough to score a cycle, or else go park.
-                    if (scoreSampleCount < 3)
+                case PICKUP_SAMPLE_MARK_1:
+                    // Pickup first floor sample.
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-55,-30,45), RobotParams.WristParamsRotational.DEGREES_45_LEFT,event);
+                    sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_1);
+                    break;
+
+                case SCORE_SAMPLE_BASKET_1:
+                    // Score first floor sample into the sample in the basket.
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, new TrcPose2D(-55,-40,60), event);
+                    sm.waitForSingleEvent(event, State.PICKUP_SAMPLE_MARK_2);
+                    break;
+
+                case PICKUP_SAMPLE_MARK_2:
+                    // Pickup second floor sample.
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-55,-20,180), RobotParams.WristParamsRotational.MIDDLE_POS2,event);
+                    sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_2);
+                    break;
+
+                case SCORE_SAMPLE_BASKET_2:
+                    // Score second floor sample into the sample in the basket.
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, new TrcPose2D(-55,-40,60), event);
+                    sm.waitForSingleEvent(event, State.PICKUP_SAMPLE_MARK_3);
+                    break;
+
+                case PICKUP_SAMPLE_MARK_3:
+                    // Pickup third floor sample.
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-55,-20,145), RobotParams.WristParamsRotational.DEGREES_45_RIGHT,event);
+                    sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_3);
+                    break;
+
+                case SCORE_SAMPLE_BASKET_3:
+                    // Score third floor sample into the sample in the basket.
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, new TrcPose2D(-55,-40,50), event);
+                    sm.waitForSingleEvent(event, State.PARK);
+                    break;
+
+                case PARK:
+                    if (autoChoices.parkPos == FtcAuto.ParkOption.PARK)
                     {
-                        TrcPose2D spikeMark = RobotParams.Game.RED_NET_ZONE_SPIKEMARK_PICKUP.clone();
-                        spikeMark.x -= 0.37 * scoreSampleCount * RobotParams.Field.FULL_TILE_INCHES;
-                        spikeMark = robot.adjustPoseByAlliance(spikeMark, autoChoices.alliance);
-                        robot.elevator.setPosition(24);
                         robot.robotDrive.purePursuitDrive.start(
                                 event, 0.0, robot.robotDrive.driveBase.getFieldPosition(), false,
                                 robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
-                                spikeMark);
-                        scoreSampleCount++;
-                        sm.waitForSingleEvent(event, State.PICKUP_FLOOR_SAMPLE);
+                                robot.adjustPoseByAlliance(
+                                        RobotParams.Game.RED_ASCENT_ZONE_PARK_POSE, autoChoices.alliance, false));
+                        robot.autoHang.autoClimbLevel1(null);
+                        sm.waitForSingleEvent(event, State.DONE);
                     }
                     else
                     {
-                        sm.setState(State.GO_PARK);
+                        sm.setState(State.DONE);
                     }
-                    break;
-
-                case PICKUP_FLOOR_SAMPLE:
-                    // Pick up a sample from the spike marks.
-                    robot.autoPickup.autoPickup(event);
-                    sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET);
-                    break;
-
-                case SCORE_SAMPLE_BASKET:
-                    // Score the sample into the basket.
-                    //robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, autoChoices.scoreHeight, true, event);
-                    sm.waitForSingleEvent(event, State.DRIVE_TO_SPIKE_MARKS);
-                    break;
-
-                case GO_PARK:
-                    // Go to the ascent zone.
-//                    if (autoChoices.parkOption == FtcAuto.ParkOption.PARK)
-//                    {
-//                        robot.extenderArm.setPosition(
-//                                Elbow.Params.PRE_CLIMB_POS, Extender.Params.PRE_CLIMB_POS, null);
-//                        TrcPose2D targetPose = robot.adjustPoseByAlliance(
-//                                RobotParams.Game.RED_ASCENT_ZONE_PARK_POSE, autoChoices.alliance);
-//                        TrcPose2D intermediate1 = RobotParams.Game.RED_ASCENT_ZONE_PARK_POSE.clone();
-//                        intermediate1.x -= 0.65 * RobotParams.Field.FULL_TILE_INCHES;
-//                        intermediate1 = robot.adjustPoseByAlliance(intermediate1, autoChoices.alliance);
-//                        robot.robotDrive.purePursuitDrive.start(
-//                                event, 0.0, robot.robotDrive.driveBase.getFieldPosition(), false,
-//                                robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
-//                                intermediate1, targetPose);
-//                        sm.waitForSingleEvent(event, State.ASCENT);
-//                    }
-//                    else
-//                    {
-                        sm.setState(State.DONE);
-//                    }
-                    break;
-
-                case ASCENT:
-//                    if (robot.extenderArm != null)
-//                    {
-//                        // Do level 1 ascent.
-//                        robot.extenderArm.setPosition(null, Extender.Params.ASCENT_LEVEL1_POS, event);
-//                        robot.elbow.setPosition(Elbow.Params.ASCENT_LEVEL1_POS, true, 0.6);
-//                        sm.waitForSingleEvent(event, State.DONE);
-//                    }
-//                    else
-//                    {
-                        sm.setState(State.DONE);
-//                    }
                     break;
 
                 default:

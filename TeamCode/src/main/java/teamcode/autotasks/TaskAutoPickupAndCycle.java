@@ -96,13 +96,15 @@ public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.S
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoPickup(boolean cycle, TrcEvent completionEvent)
+    public void autoPickAndCycle(boolean cycle, TrcEvent completionEvent)
     {
         FtcTeleOp.isClawGrabbing = true;
         TaskAutoPickupAndCycle.TaskParams taskParams = new TaskAutoPickupAndCycle.TaskParams(cycle);
         tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
         startAutoTask(State.SET_ARM_POS, taskParams, completionEvent);
     }   //autoAssist
+
+
 
     //
     // Implement TrcAutoTask abstract methods.

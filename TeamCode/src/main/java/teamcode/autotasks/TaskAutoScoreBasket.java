@@ -70,7 +70,7 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void atuoScoreBasket(FtcAuto.Alliance alliance, TrcPose2D scorePose, TrcEvent completionEvent)
+    public void autoScoreBasket(FtcAuto.Alliance alliance, TrcPose2D scorePose, TrcEvent completionEvent)
     {
         if (alliance == null)
         {
