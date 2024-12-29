@@ -30,7 +30,7 @@ public class Elevator {
                 RobotParams.ElevatorParams.SECONDARY_FOLLOWER_MOTOR_TYPE,
                 null);
         elevatorMotor3.follow(elevator, RobotParams.ElevatorParams.SECONDARY_FOLLOWER_MOTOR_INVERTED);
-        //elevator.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG, true, false, null);
+        elevator.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG, true, false, null);
         elevator.setSoftwarePidEnabled(RobotParams.ElevatorParams.SOFTWARE_PID_ENABLED);
         elevator.setPositionPidParameters(
                 RobotParams.ElevatorParams.PID_COEFFS,

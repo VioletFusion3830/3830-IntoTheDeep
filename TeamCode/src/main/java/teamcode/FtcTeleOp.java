@@ -372,7 +372,13 @@ public class FtcTeleOp extends FtcOpMode
             case B:
 //                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
 //                driverAltFunc = pressed;
+                robot.elevator.setPower(-.3);
+                //robot.elevator.setPosition(30);
+                break;
             case X:
+                robot.elevator.setPower(.3);
+                //robot.elevator.setPosition(10);
+                break;
             case Y:
                 break;
 

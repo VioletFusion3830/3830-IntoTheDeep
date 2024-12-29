@@ -443,11 +443,11 @@ public class RobotParams
         public static final MotorType PRIMARY_MOTOR_TYPE                    = MotorType.DcMotor;
         public static final MotorType FOLLOWER_MOTOR_TYPE                   = MotorType.DcMotor;
         public static final MotorType SECONDARY_FOLLOWER_MOTOR_TYPE         = MotorType.DcMotor;
-        public static final boolean PRIMARY_MOTOR_INVERTED                  = false;
-        public static final boolean FOLLOWER_MOTOR_INVERTED                 = false;
-        public static final boolean SECONDARY_FOLLOWER_MOTOR_INVERTED       = false;
+        public static final boolean PRIMARY_MOTOR_INVERTED                  = true;
+        public static final boolean FOLLOWER_MOTOR_INVERTED                 = true;
+        public static final boolean SECONDARY_FOLLOWER_MOTOR_INVERTED       = true;
 
-        public static final double INCHES_PER_COUNT                         = 0.016481481481;
+        public static final double INCHES_PER_COUNT                         = 1;
         public static final double POS_OFFSET                               = 12;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
@@ -468,7 +468,7 @@ public class RobotParams
 
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
-                new TrcPidController.PidCoefficients(0.28,0.4, 0.012, 0,3); //Need to tune
+                new TrcPidController.PidCoefficients(0.1,0.4, 0.012, 0,3); //Need to tune
         public static final double POS_PID_TOLERANCE                        = 0.5;
 
         public static final double MAX_GRAVITY_COMP_POWER                   = 0.08;
