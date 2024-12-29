@@ -177,17 +177,17 @@ public class Robot {
                 }
                 elevatorEvent = new TrcEvent("elevatorEvent");
                 elbowEvent = new TrcEvent("elbowEvent");
-//                if(RobotParams.Preferences.inCompetition)
-//                {
-//                    if(runMode == TrcRobot.RunMode.AUTO_MODE)
-//                    {
-//                        zeroCalibrate(null, elevatorEvent, elbowEvent);
-//                    }
-//                }
-//                else
-//                {
-//                    zeroCalibrate(null, elevatorEvent, elbowEvent);
-//                }
+                if(RobotParams.Preferences.inCompetition)
+                {
+                    if(runMode == TrcRobot.RunMode.AUTO_MODE)
+                    {
+                        zeroCalibrate(null, elevatorEvent, elbowEvent);
+                    }
+                }
+                else
+                {
+                    zeroCalibrate(null, elevatorEvent, elbowEvent);
+                }
                 // Create autotasks.
                 autoPickupSample = new TaskAutoPickupSample("AutoPickupSampleTask", this);
                 pickupSpecimenTask = new TaskAutoPickupSpecimen("AutoPickupSpecimenTask", this);
