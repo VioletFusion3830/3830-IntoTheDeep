@@ -374,13 +374,13 @@ public class FtcTeleOp extends FtcOpMode
 //                driverAltFunc = pressed;
                 if(pressed) {
                     robot.clawGrabber.open();
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> clawGrabber open=" + robot.clawGrabber.isClosed());
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> clawGrabber Closed=" + robot.clawGrabber.isClosed());
                 }
                 break;
             case X:
                 if(pressed) {
                     robot.clawGrabber.close();
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> clawGrabber (close)open=" + robot.clawGrabber.isClosed());
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> clawGrabber (close)Closed=" + robot.clawGrabber.isClosed());
                 }
                 break;
             case Y:
@@ -388,12 +388,12 @@ public class FtcTeleOp extends FtcOpMode
                     if(robot.clawGrabber.isClosed())
                     {
                         robot.clawGrabber.open();
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> clawGrabber open=" + robot.clawGrabber.isClosed());
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> clawGrabber Closed=" + robot.clawGrabber.isClosed());
                     }
                     else
                     {
                         robot.clawGrabber.close();
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> clawGrabber (close)open=" + robot.clawGrabber.isClosed());
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> clawGrabber (close)Closed=" + robot.clawGrabber.isClosed());
                     }
                 }
                 break;
