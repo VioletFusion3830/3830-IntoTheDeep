@@ -451,7 +451,7 @@ public class RobotParams
         public static final double POS_OFFSET                               = 12;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
-        public static final double HORIZONTAL_LIMIT                         = 36.8;
+        public static final double HORIZONTAL_LIMIT                         = 13;
 
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 44;
@@ -558,7 +558,7 @@ public class RobotParams
         public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_INVERTED                  = false;
 
-        public static final double OPEN_POS                                 = 0.85;
+        public static final double OPEN_POS                                 = 0.82;
         public static final double OPEN_TIME                                = 0.16;
         public static final double CLOSE_POS                                = 0.535;
         public static final double CLOSE_TIME                               = 0.16;

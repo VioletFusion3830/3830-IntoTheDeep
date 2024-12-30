@@ -143,6 +143,7 @@ public class FtcTeleOp extends FtcOpMode
             robot.globalTracer.traceInfo(moduleName, "Enabling AprilTagVision.");
             robot.vision.setAprilTagVisionEnabled(true);
         }
+        robot.clawGrabber.close();
     }   //startMode
 
     /**
@@ -221,19 +222,20 @@ public class FtcTeleOp extends FtcOpMode
                     double elbowPower = operatorGamepad.getRightStickY(true) * RobotParams.ElbowParams.POWER_LIMIT;
                     double elbowPos = robot.elbow.getPosition();
 
-//                    if (robot.elevator != null && elbowPos < RobotParams.ElbowParams.RESTRICTED_POS_THRESHOLD)
-//                    {
-//                        double elbowPosRadians = Math.toRadians(elbowPos);
-                        //elevatorLimit = RobotParams.ElevatorParams.MAX_POS - Math.max(Math.cos(elbowPosRadians) * (isSamplePickupMode ? RobotParams.ElevatorParams.HORIZONTAL_LIMIT: 33), 0);
-//                        if (robot.elevator.getPosition() > elevatorLimit)
-//                        {
-//                            robot.elevator.setPosition(elevatorLimit);
-//                        }
-//                    }
-//                    else
-//                    {
-//                        elevatorLimit = RobotParams.ElevatorParams.MAX_POS;
-//                    }
+                    if (robot.elevator != null && elbowPos < RobotParams.ElbowParams.RESTRICTED_POS_THRESHOLD)
+                    {
+                        double elbowPosRadians = Math.toRadians(elbowPos);
+                        elevatorLimit = RobotParams.ElevatorParams.MAX_POS - (Math.max(Math.cos(elbowPosRadians) * (isSamplePickupMode ? RobotParams.ElevatorParams.HORIZONTAL_LIMIT: RobotParams.ElevatorParams.HORIZONTAL_LIMIT), 0));
+                        if (robot.elevator.getPosition() > elevatorLimit)
+                        {
+                            robot.globalTracer.traceInfo(null,"elevatorLimit:" + elevatorLimit);
+                            //robot.elevator.setPosition(elevatorLimit);
+                        }
+                    }
+                    else
+                    {
+                        elevatorLimit = RobotParams.ElevatorParams.MAX_POS;
+                    }
 
                     if (elbowPower != elbowPrevPower)
                     {
@@ -385,17 +387,33 @@ public class FtcTeleOp extends FtcOpMode
                 break;
             case Y:
                 if(pressed) {
-                    if(robot.clawGrabber.isClosed())
+                    boolean isClose = robot.clawGrabber.isClosed();
+                    robot.globalTracer.traceInfo(moduleName, ">>>> Y is pressed: closed=" + isClose);
+                    if(isClose)
                     {
                         robot.clawGrabber.open();
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> OpenClaw Closed=" + robot.clawGrabber.isClosed());
+                        robot.globalTracer.traceInfo(
+                                moduleName, ">>>>> Opening claw: Closed=" + robot.clawGrabber.isClosed());
                     }
                     else
                     {
                         robot.clawGrabber.close();
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> CloseClaw Closed=" + robot.clawGrabber.isClosed());
+                        robot.globalTracer.traceInfo(
+                                moduleName, ">>>>> Closing claw: Closed=" + robot.clawGrabber.isClosed());
                     }
                 }
+//                if(pressed) {
+//                    if(robot.clawGrabber.isClosed())
+//                    {
+//                        robot.clawGrabber.open();
+//                        robot.globalTracer.traceInfo(moduleName, ">>>>> OpenClaw Closed=" + robot.clawGrabber.isClosed());
+//                    }
+//                    else
+//                    {
+//                        robot.clawGrabber.close();
+//                        robot.globalTracer.traceInfo(moduleName, ">>>>> CloseClaw Closed=" + robot.clawGrabber.isClosed());
+//                    }
+//                }
                 break;
 
             case LeftBumper:
