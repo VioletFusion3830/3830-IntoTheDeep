@@ -373,29 +373,27 @@ public class FtcTeleOp extends FtcOpMode
 //                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
 //                driverAltFunc = pressed;
                 if(pressed) {
-                    robot.clawServo.open();
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> clawServo open=" + robot.clawServo.isClosed());
+                    robot.clawGrabber.open();
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> clawGrabber open=" + robot.clawGrabber.isClosed());
                 }
                 break;
             case X:
                 if(pressed) {
-                    robot.clawServo.close();
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> clawServo close=" + robot.clawServo.isClosed());
+                    robot.clawGrabber.close();
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> clawGrabber (close)open=" + robot.clawGrabber.isClosed());
                 }
                 break;
             case Y:
                 if(pressed) {
-                    if(robot.claw.getClawServo().isClosed())
+                    if(robot.clawGrabber.isClosed())
                     {
-                        robot.claw.open();
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> clawServo open=" + robot.clawServo.isClosed());
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> claw open=" + robot.claw.getClawServo().isClosed());
+                        robot.clawGrabber.open();
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> clawGrabber open=" + robot.clawGrabber.isClosed());
                     }
                     else
                     {
-                        robot.claw.close();
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> clawServo close=" + robot.clawServo.isClosed());
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> claw close=" + robot.claw.getClawServo().isClosed());
+                        robot.clawGrabber.close();
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> clawGrabber (close)open=" + robot.clawGrabber.isClosed());
                     }
                 }
                 break;
@@ -404,21 +402,21 @@ public class FtcTeleOp extends FtcOpMode
                 // Toggle claw open/close.
                 if (pressed && robot.claw != null)
                 {
-                    if (robot.clawServo.isClosed())
+                    if (robot.clawGrabber.isClosed())
                     {
-                        robot.claw.getClawServo().open();
+                        robot.claw.getClawGrabber().open();
                     }
                     else {
                         if (isSamplePickupMode) {
                             isClawGrabbing = true;
                             robot.verticalWrist.setPosition(robot.vWristElevatorScaling()-0.08);
                             robot.arm.setPosition(robot.armElevatorScaling() -0.1);
-                            robot.clawServo.close(null, .18, null);
+                            robot.clawGrabber.close(null, .18, null);
                             runtime.reset();
                         }
                         else
                         {
-                            robot.clawServo.close();
+                            robot.clawGrabber.close();
                         }
                     }
                 }

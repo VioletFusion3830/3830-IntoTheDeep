@@ -1,6 +1,5 @@
 package teamcode.autotasks;
 
-import teamcode.FtcDashboard;
 import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.robotcore.TrcAutoTask;
@@ -163,7 +162,7 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
         robot.verticalWrist.cancel();
         robot.arm.cancel();
         robot.elevator.cancel();
-        robot.clawServo.cancel();
+        robot.clawGrabber.cancel();
         robot.rotationalWrist.cancel();
     }   //stopSubsystems
 

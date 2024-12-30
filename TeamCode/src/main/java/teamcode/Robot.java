@@ -80,7 +80,7 @@ public class Robot {
     public TrcServo arm;
     public Claw claw;
     public WristArm wristArm;
-    public TrcServoGrabber clawServo;
+    public TrcServoGrabber clawGrabber;
     public TrcMotor elbow;
     public TrcMotor elevator;
     public TrcServo verticalWrist;
@@ -155,7 +155,7 @@ public class Robot {
 
                 if (RobotParams.Preferences.useClaw) {
                     claw = new Claw(this);
-                    clawServo = new Claw(this).getClawServo();
+                    clawGrabber = claw.getClawGrabber();
                 }
 
                 if (RobotParams.Preferences.useElbow) {
@@ -352,8 +352,8 @@ public class Robot {
                     if (RobotParams.ClawParams.USE_REV_V3_COLOR_SENSOR) {
                         dashboard.displayPrintf(
                                 lineNum++, "Grabber: pos=%.3f, hasObject=%s, sensorDistence=%.3f, autoAssistActive=%s, sensorColor=%.3f, SampleType=%s",
-                                clawServo.getPosition(), clawServo.hasObject(), claw.getSensorDataDistance(),
-                                clawServo.isAutoActive(), claw.getSensorDataColor(), FtcTeleOp.SamplePickupType);
+                                clawGrabber.getPosition(), clawGrabber.hasObject(), claw.getSensorDataDistance(),
+                                clawGrabber.isAutoActive(), claw.getSensorDataColor(), FtcTeleOp.SamplePickupType);
                     }
                 }
 
@@ -393,7 +393,7 @@ public class Robot {
         // Cancel all auto-assist driving.
         if (elbowElevator != null) elbowElevator.cancel();
         if (elevator != null) elevator.cancel();
-        if (clawServo != null) clawServo.cancel();
+        if (clawGrabber != null) clawGrabber.cancel();
         if (elbow != null) elbow.cancel();
         if (arm != null) arm.cancel();
         if (verticalWrist != null) verticalWrist.cancel();

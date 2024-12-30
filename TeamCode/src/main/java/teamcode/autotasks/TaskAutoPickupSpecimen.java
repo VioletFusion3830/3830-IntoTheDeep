@@ -3,10 +3,8 @@ package teamcode.autotasks;
 import androidx.annotation.NonNull;
 
 import teamcode.FtcAuto;
-import teamcode.FtcTeleOp;
 import teamcode.Robot;
 import teamcode.RobotParams;
-import teamcode.subsystems.Claw;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcOwnershipMgr;
@@ -162,7 +160,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
         robot.verticalWrist.cancel();
         robot.arm.cancel();
         robot.elevator.cancel();
-        robot.clawServo.cancel();
+        robot.clawGrabber.cancel();
         robot.rotationalWrist.cancel();
     }   //stopSubsystems
 
@@ -209,7 +207,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                 break;
 
             case GRAB_SPECIMEN:
-                robot.clawServo.close(null,0,event1);
+                robot.clawGrabber.close(null,0,event1);
                 sm.waitForSingleEvent(event1, State.RETRACT_ELEVATOR_ARM);
                 break;
 

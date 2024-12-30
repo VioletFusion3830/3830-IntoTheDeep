@@ -10,12 +10,11 @@ import teamcode.Robot;
 import teamcode.RobotParams;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.subsystem.FtcServoGrabber;
-import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
 import trclib.subsystem.TrcServoGrabber;
 
 public class Claw {
-    private final TrcServoGrabber clawServo; //one servo for open/close
+    private final TrcServoGrabber clawGrabber; //one servo for open/close
     private final RevColorSensorV3 revColorSensorV3;
     private final Robot robot;
 
@@ -60,27 +59,27 @@ public class Claw {
                     RobotParams.ClawParams.ANALOG_TRIGGER_INVERTED,
                     RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD);
         }
-        clawServo = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
+        clawGrabber = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
     }
 
-    public TrcServoGrabber getClawServo()
+    public TrcServoGrabber getClawGrabber()
     {
-        return clawServo;
+        return clawGrabber;
     }
 
     public void open()
     {
-        clawServo.open();
+        clawGrabber.open();
     }
 
     public void close()
     {
-        clawServo.close();
+        clawGrabber.close();
     }
 
     public void autoAssistPickup(String owner, double delay, TrcEvent event, double timeout, SamplePickupType sampleType)
     {
-        clawServo.autoGrab(owner, delay, event, timeout, this::isSampleColorCorrect, sampleType);
+        clawGrabber.autoGrab(owner, delay, event, timeout, this::isSampleColorCorrect, sampleType);
     }
 
     public double getSensorDataDistance()
@@ -125,23 +124,23 @@ public class Claw {
                 break;
             case redAllianceSamples:
                 sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
-                robot.globalTracer.traceInfo(null, "Red Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
+                robot.globalTracer.traceInfo(null, "Red Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawGrabber.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawGrabber.isAutoActive());
                 break;
             case blueAllianceSamples:
                 sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue);
-                robot.globalTracer.traceInfo(null, "Blue Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawServo.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawServo.isAutoActive());
+                robot.globalTracer.traceInfo(null, "Blue Alliance Samples: " + sampleColorCorrect + ", isClawClosed: " + clawGrabber.isClosed() + ", sampleHue: " + sampleHue + ", isAutoActive: " + clawGrabber.isAutoActive());
                 break;
             case anySample:
                 sampleColorCorrect = yellowSampleHue.isHueInRange(sampleHue) || blueSampleHue.isHueInRange(sampleHue) || redSampleHue.isHueInRange(sampleHue);
                 break;
         }
         if (sampleColorCorrect) {
-            clawServo.close();
-            clawServo.cancel();
+            clawGrabber.close();
+            clawGrabber.cancel();
         }
         else
         {
-            clawServo.armTriggerCallback(this::isSampleColorCorrect, sampleType);
+            clawGrabber.armTriggerCallback(this::isSampleColorCorrect, sampleType);
         }
     }
 

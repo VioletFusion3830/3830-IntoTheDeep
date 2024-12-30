@@ -162,7 +162,7 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
         robot.verticalWrist.cancel();
         robot.arm.cancel();
         robot.elevator.cancel();
-        robot.clawServo.cancel();
+        robot.clawGrabber.cancel();
         robot.rotationalWrist.cancel();
         //robot.elbowElevatorArm.cancel();
     }   //stopSubsystems
@@ -204,7 +204,7 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
                 break;
 
             case SCORE_BASKET:
-                robot.clawServo.open(null,event1);
+                robot.clawGrabber.open(null,event1);
                 sm.waitForSingleEvent(event1,State.RETRACT_ELEVATOR_ARM);
                 break;
 

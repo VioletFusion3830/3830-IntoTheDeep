@@ -26,7 +26,6 @@ import androidx.annotation.NonNull;
 
 import java.util.Locale;
 
-import teamcode.FtcDashboard;
 import teamcode.FtcTeleOp;
 import teamcode.Robot;
 import teamcode.RobotParams;
@@ -169,7 +168,7 @@ public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.S
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
         robot.arm.cancel();
-        robot.clawServo.cancel();
+        robot.clawGrabber.cancel();
         robot.verticalWrist.cancel();
         robot.rotationalWrist.cancel();
     }   //stopSubsystems
@@ -198,13 +197,13 @@ public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.S
                 break;
 
             case GRAB:
-                robot.clawServo.close(currOwner, 0, event);
+                robot.clawGrabber.close(currOwner, 0, event);
                 sm.waitForSingleEvent(event, State.RESET_ARM_POS);
                 break;
 
             case RESET_ARM_POS:
                 FtcTeleOp.isClawGrabbing = false;
-                if(taskParams.cycle && robot.clawServo.hasObject())
+                if(taskParams.cycle && robot.clawGrabber.hasObject())
                 {
                     robot.wristArm.setWristArmHighChamberScorePos(currOwner, 0.2,null);
                     robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
@@ -223,7 +222,7 @@ public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.S
                 break;
 
             case SCORE_SAMPLE:
-                robot.clawServo.open(currOwner, 0, event);
+                robot.clawGrabber.open(currOwner, 0, event);
                 sm.waitForSingleEvent(event, State.CYCLE_INTAKE);
 
             case CYCLE_INTAKE:
