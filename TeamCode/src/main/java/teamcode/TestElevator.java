@@ -1,11 +1,13 @@
 package teamcode;
-
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 /*
  * This file contains an example of a Linear "OpMode".
@@ -34,25 +36,20 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
-
 @TeleOp(name="Basic: Omni Linear OpMode", group="Linear OpMode")
 public class TestElevator extends LinearOpMode {
-
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor elevator1 = null;
-    private DcMotor elevator2 = null;
-    private DcMotor elevator3 = null;
-
+    private DcMotorEx elevator1 = null;
+    private DcMotorEx elevator2 = null;
+    private DcMotorEx elevator3 = null;
     @Override
     public void runOpMode() {
-
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-        elevator1  = hardwareMap.get(DcMotor.class, "elevator.primary");
-        elevator2  = hardwareMap.get(DcMotor.class, "elevator.follower");
-        elevator3 = hardwareMap.get(DcMotor.class, "elevator.follower2");
-
+        elevator1  = hardwareMap.get(DcMotorEx.class, "elevator.primary");
+        elevator2  = hardwareMap.get(DcMotorEx.class, "elevator.follower");
+        elevator3 = hardwareMap.get(DcMotorEx.class, "elevator.follower2");
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
         // ########################################################################################
@@ -66,27 +63,23 @@ public class TestElevator extends LinearOpMode {
         elevator1.setDirection(DcMotor.Direction.FORWARD);
         elevator2.setDirection(DcMotor.Direction.FORWARD);
         elevator3.setDirection(DcMotor.Direction.FORWARD);
-
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
         waitForStart();
         runtime.reset();
-
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             double max;
-
-            double power     =  gamepad1.right_stick_x;
-
+            double power     =  gamepad1.right_stick_y;
             // Send calculated power to wheels
             elevator1.setPower(power);
             elevator2.setPower(power);
             elevator3.setPower(power);
-
             // Show the elapsed game time and wheel power.
-            telemetry.addData("Power", power);
+            telemetry.addData("Elevator1", elevator1.getPower()+"/" + elevator1.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("Elevator2", elevator2.getPower()+"/" + elevator2.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("Elevator3", elevator3.getPower()+"/" + elevator3.getCurrent(CurrentUnit.AMPS));
             telemetry.update();
         }
     }}

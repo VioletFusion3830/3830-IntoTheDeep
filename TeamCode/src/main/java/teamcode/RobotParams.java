@@ -451,7 +451,7 @@ public class RobotParams
         public static final double POS_OFFSET                               = 12;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
-        public static final double HORIZONTAL_LIMIT                         = 26.8;
+        public static final double HORIZONTAL_LIMIT                         = 36.8;
 
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 44;
@@ -468,10 +468,10 @@ public class RobotParams
 
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
-                new TrcPidController.PidCoefficients(0.1,0.4, 0.012, 0,3); //Need to tune
+                new TrcPidController.PidCoefficients(0.47,0.2, 0.015,0,1); //Need to tune
         public static final double POS_PID_TOLERANCE                        = 0.5;
 
-        public static final double MAX_GRAVITY_COMP_POWER                   = 0.08;
+        public static final double MAX_GRAVITY_COMP_POWER                   = 0.2;
         public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE                          = 0.1;
         public static final double STALL_TIMEOUT                            = 0.1;
@@ -493,7 +493,7 @@ public class RobotParams
         public static final double RESTRICTED_POS_THRESHOLD                 = 50; //Angle in degrees
 
         public static final double MIN_POS                                  = 10;
-        public static final double MAX_POS                                  = 100;
+        public static final double MAX_POS                                  = 110;
         public static final double PICKUP_SAMPLE_POS                        = 10;
         public static final double PICKUP_SPECIMEN_POS                      = 10;
         public static final double BASKET_SCORE_POS                         = 96;
@@ -506,7 +506,7 @@ public class RobotParams
 
         public static final boolean SOFTWARE_PID_ENABLED                    = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
-                new TrcPidController.PidCoefficients(0.07, 0.1, 0.004, 0.0, 4); //Need to tune
+                new TrcPidController.PidCoefficients(0.07, 0.4, 0.005, 0.0, 5); //Need to tune
         public static final double PID_TOLERANCE                            = 1.0;
 
         public static final double MAX_GRAVITY_COMP_AT_MIN_SLIDER_LENGTH    = 0.12;
@@ -558,9 +558,9 @@ public class RobotParams
         public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_INVERTED                  = false;
 
-        public static final double OPEN_POS                                 = 0.105; //486
+        public static final double OPEN_POS                                 = 0.85;
         public static final double OPEN_TIME                                = 0.16;
-        public static final double CLOSE_POS                                = 1;
+        public static final double CLOSE_POS                                = 0.535;
         public static final double CLOSE_TIME                               = 0.16;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR                 = true;
@@ -576,7 +576,7 @@ public class RobotParams
         public static final String PRIMARY_SERVO_ROTATOR                    = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_ROTATOR_INVERTED          = false;
 
-        public static final double ANALOG_INCREMENT                         = 0.1;
+        public static final double ANALOG_INCREMENT                         = 0.05;
         public static final double MIDDLE_P0S                               = 0.2; //0.137
         public static final double MIDDLE_POS2                              = 0.750;
         public static final double DEGREES_45_LEFT                          = 0.312;

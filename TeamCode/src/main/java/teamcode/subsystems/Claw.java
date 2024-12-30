@@ -68,6 +68,16 @@ public class Claw {
         return clawServo;
     }
 
+    public void open()
+    {
+        clawServo.open();
+    }
+
+    public void close()
+    {
+        clawServo.close();
+    }
+
     public void autoAssistPickup(String owner, double delay, TrcEvent event, double timeout, SamplePickupType sampleType)
     {
         clawServo.autoGrab(owner, delay, event, timeout, this::isSampleColorCorrect, sampleType);

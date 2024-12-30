@@ -1,5 +1,6 @@
 package teamcode.subsystems;
 
+import teamcode.FtcDashboard;
 import trclib.motor.TrcMotor;
 import ftclib.motor.FtcMotorActuator;
 import teamcode.RobotParams;
@@ -30,7 +31,6 @@ public class Elevator {
                 RobotParams.ElevatorParams.SECONDARY_FOLLOWER_MOTOR_TYPE,
                 null);
         elevatorMotor3.follow(elevator, RobotParams.ElevatorParams.SECONDARY_FOLLOWER_MOTOR_INVERTED);
-        elevator.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG, true, false, null);
         elevator.setSoftwarePidEnabled(RobotParams.ElevatorParams.SOFTWARE_PID_ENABLED);
         elevator.setPositionPidParameters(
                 RobotParams.ElevatorParams.PID_COEFFS,
@@ -49,11 +49,9 @@ public class Elevator {
 
     private double getGravityComp(double power)
     {
-        double elevatorPos = elevator.getPosition();
         double elbowAngle = robot.elbow.getPosition();
-        double distanceToBottom = Math.abs(elevatorPos - RobotParams.ElevatorParams.MIN_POS);
 
-        return distanceToBottom > RobotParams.ElevatorParams.POS_PID_TOLERANCE ? RobotParams.ElevatorParams.MAX_GRAVITY_COMP_POWER*Math.sin(Math.toRadians(elbowAngle)) : 0.0;
+        return RobotParams.ElevatorParams.MAX_GRAVITY_COMP_POWER*Math.sin(Math.toRadians(elbowAngle));
     }
 } //Class Elevator
 
