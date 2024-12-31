@@ -408,15 +408,25 @@ public class Robot {
         if (autoPickupAndCycle != null) autoPickupAndCycle.cancel();
     }   //cancelAll
 
-    public double vWristElevatorScaling()
+    public double verticalWristPickupSamplePos()
     {
-        double scalePercentage = (elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/(RobotParams.ElevatorParams.HORIZONTAL_LIMIT-12);
-        return RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START - ((RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * scalePercentage));
+        return verticalWristReadySamplePickupPos()-0.09;
     }
 
-    public double armElevatorScaling()
+    public double armPickupSamplePos()
     {
-        double scalePercentage = (elevator.getPosition() - RobotParams.ElevatorParams.MIN_POS)/(RobotParams.ElevatorParams.HORIZONTAL_LIMIT-12);
+        return armReadySamplePickupPos()-0.12;
+    }
+
+    public double verticalWristReadySamplePickupPos()
+    {
+        double scalePercentage = (elevator.getPosition()-RobotParams.ElevatorParams.MIN_POS)/((RobotParams.ElevatorParams.HORIZONTAL_LIMIT-RobotParams.ElevatorParams.MAX_POS)-RobotParams.ElevatorParams.MIN_POS);
+        return RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START - (RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_SCALE * scalePercentage);
+    }
+
+    public double armReadySamplePickupPos()
+    {
+        double scalePercentage = (elevator.getPosition()-RobotParams.ElevatorParams.MIN_POS)/((RobotParams.ElevatorParams.HORIZONTAL_LIMIT-RobotParams.ElevatorParams.MAX_POS)-RobotParams.ElevatorParams.MIN_POS);
         return RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START - (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * scalePercentage);
     }
 

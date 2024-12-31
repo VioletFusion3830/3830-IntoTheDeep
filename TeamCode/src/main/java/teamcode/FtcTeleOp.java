@@ -209,8 +209,8 @@ public class FtcTeleOp extends FtcOpMode
                 }
                 double slowDriveTriggered = driverGamepad.getRightTrigger() * RobotParams.Robot.DRIVE_NORMAL_SCALE;
                 double scaleFactor = Math.max(Math.abs(1 - slowDriveTriggered), 0.3);
-                drivePowerScale = (Math.atan(5 * RobotParams.Robot.DRIVE_NORMAL_SCALE) / Math.atan(5)) * scaleFactor;
-                turnPowerScale = (Math.atan(5 * RobotParams.Robot.TURN_NORMAL_SCALE) / Math.atan(5)) * scaleFactor;
+                drivePowerScale = Math.atan(5 * RobotParams.Robot.DRIVE_NORMAL_SCALE) / (Math.atan(5) * scaleFactor);
+                turnPowerScale = Math.atan(5 * RobotParams.Robot.TURN_NORMAL_SCALE) / (Math.atan(5) * scaleFactor);
             }
             //
             // Other subsystems.
@@ -228,8 +228,7 @@ public class FtcTeleOp extends FtcOpMode
                         elevatorLimit = RobotParams.ElevatorParams.MAX_POS - (Math.max(Math.cos(elbowPosRadians) * (isSamplePickupMode ? RobotParams.ElevatorParams.HORIZONTAL_LIMIT: RobotParams.ElevatorParams.HORIZONTAL_LIMIT), 0));
                         if (robot.elevator.getPosition() > elevatorLimit)
                         {
-                            robot.globalTracer.traceInfo(null,"elevatorLimit:" + elevatorLimit);
-                            //robot.elevator.setPosition(elevatorLimit);
+                            robot.elevator.setPosition(elevatorLimit);
                         }
                     }
                     else
@@ -261,7 +260,7 @@ public class FtcTeleOp extends FtcOpMode
                             }
                             else
                             {
-                                robot.elevator.setPidPower(elevatorPower, RobotParams.ElevatorParams.MIN_POS, 40, true);//elevatorLimit
+                                robot.elevator.setPidPower(elevatorPower, RobotParams.ElevatorParams.MIN_POS, elevatorLimit, true);
                             }
                         }
                         elevatorPrevPower = elevatorPower;
@@ -269,9 +268,8 @@ public class FtcTeleOp extends FtcOpMode
                 }
                 if (robot.rotationalWrist != null)
                 {
-                    double rotationalWristIncrement = (-operatorGamepad.getLeftTrigger() + operatorGamepad.getRightTrigger()) * RobotParams.WristParamsRotational.ANALOG_INCREMENT;
+                    double rotationalWristIncrement = (operatorGamepad.getLeftTrigger() - operatorGamepad.getRightTrigger()) * RobotParams.WristParamsRotational.ANALOG_INCREMENT;
                     double rotationalWristPos = robot.rotationalWrist.getPosition() + rotationalWristIncrement;
-
                     if (rotationalWristPos != rotationalWristPrevPos)
                     {
                         robot.rotationalWrist.setPosition(rotationalWristPos);
@@ -282,15 +280,15 @@ public class FtcTeleOp extends FtcOpMode
                 if(isClawGrabbing && runtime.seconds() > 0.33)
                 {
                     isClawGrabbing = false;
-                    robot.wristArm.setWristArmPosition(robot.armElevatorScaling(),robot.vWristElevatorScaling());
+                    robot.wristArm.setWristArmPickupReadySamplePos();
                 }
                 if(isSamplePickupMode && !isClawGrabbing && robot.wristArm != null)
                 {
-                    double armPos = robot.armElevatorScaling();
+                    double armPos = robot.armReadySamplePickupPos();
 
                     if (armPos != armPrevPos)
                     {
-                            robot.wristArm.setWristArmPosition(armPos,robot.vWristElevatorScaling());
+                            robot.wristArm.setWristArmPickupReadySamplePos();
                     }
                     armPrevPos = armPos;
                 }
@@ -374,48 +372,11 @@ public class FtcTeleOp extends FtcOpMode
             case B:
 //                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
 //                driverAltFunc = pressed;
-                if(pressed) {
-                    robot.clawGrabber.open();
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> OpenClaw Closed=" + robot.clawGrabber.isClosed());
-                }
                 break;
             case X:
-                if(pressed) {
-                    robot.clawGrabber.close();
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> CloseClaw Closed=" + robot.clawGrabber.isClosed());
-                }
                 break;
             case Y:
-                if(pressed) {
-                    boolean isClose = robot.clawGrabber.isClosed();
-                    robot.globalTracer.traceInfo(moduleName, ">>>> Y is pressed: closed=" + isClose);
-                    if(isClose)
-                    {
-                        robot.clawGrabber.open();
-                        robot.globalTracer.traceInfo(
-                                moduleName, ">>>>> Opening claw: Closed=" + robot.clawGrabber.isClosed());
-                    }
-                    else
-                    {
-                        robot.clawGrabber.close();
-                        robot.globalTracer.traceInfo(
-                                moduleName, ">>>>> Closing claw: Closed=" + robot.clawGrabber.isClosed());
-                    }
-                }
-//                if(pressed) {
-//                    if(robot.clawGrabber.isClosed())
-//                    {
-//                        robot.clawGrabber.open();
-//                        robot.globalTracer.traceInfo(moduleName, ">>>>> OpenClaw Closed=" + robot.clawGrabber.isClosed());
-//                    }
-//                    else
-//                    {
-//                        robot.clawGrabber.close();
-//                        robot.globalTracer.traceInfo(moduleName, ">>>>> CloseClaw Closed=" + robot.clawGrabber.isClosed());
-//                    }
-//                }
-                break;
-
+            break;
             case LeftBumper:
                 // Toggle claw open/close.
                 if (pressed && robot.claw != null)
@@ -427,8 +388,8 @@ public class FtcTeleOp extends FtcOpMode
                     else {
                         if (isSamplePickupMode) {
                             isClawGrabbing = true;
-                            robot.verticalWrist.setPosition(robot.vWristElevatorScaling()-0.08);
-                            robot.arm.setPosition(robot.armElevatorScaling() -0.1);
+                            robot.verticalWrist.setPosition(robot.verticalWristPickupSamplePos());
+                            robot.arm.setPosition(robot.armPickupSamplePos());
                             robot.clawGrabber.close(null, .18, null);
                             runtime.reset();
                         }
@@ -521,22 +482,7 @@ public class FtcTeleOp extends FtcOpMode
         {
             case A:
             case B:
-                break;
             case X:
-                if(pressed && robot.verticalWrist != null)
-                {
-                    if(!is45Left) {
-                        robot.verticalWrist.setPosition(RobotParams.WristParamsRotational.DEGREES_45_LEFT);
-                        isWristRotatorMiddle = false;
-                        is45Left = true;
-                    }
-                    else
-                    {
-                        robot.verticalWrist.setPosition(RobotParams.WristParamsRotational.DEGREES_45_RIGHT);
-                        isWristRotatorMiddle = false;
-                        is45Left = false;
-                    }
-                }
             case Y:
                 break;
             case LeftBumper:
@@ -546,41 +492,27 @@ public class FtcTeleOp extends FtcOpMode
                     {
                         //used
                         isSamplePickupMode = true;
-                        robot.wristArm.setWristArmPosition(robot.armElevatorScaling(), robot.vWristElevatorScaling());
+                        robot.wristArm.setWristArmPickupReadySamplePos();
                     }
                     else
                     {
                         //used
                         isSamplePickupMode = false;
                         robot.wristArm.setWristArmBasketScorePos();
-                        robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
+                        robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                     }
                 }
                 break;
             case RightBumper:
-                if(pressed && robot.verticalWrist != null)
-                {
-                    if(!isWristRotatorMiddle)
-                    {
-                        robot.verticalWrist.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
-                        isWristRotatorMiddle = true;
-                        is45Left = false;
-                    }
-                    else
-                    {
-                        robot.verticalWrist.setPosition(RobotParams.WristParamsRotational.MIN_P0S);
-                        isWristRotatorMiddle = false;
-                        is45Left = false;
-                    }
+                if(pressed) {
+                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                 }
                 break;
             case DpadUp:
-                break;
             case DpadDown:
             case DpadLeft:
             case DpadRight:
                 break;
-
             case Back:
                 if (pressed)
                 {
@@ -590,7 +522,6 @@ public class FtcTeleOp extends FtcOpMode
                     robot.zeroCalibrate(moduleName,null,null);
                 }
                 break;
-
             case Start:
                 break;
         }

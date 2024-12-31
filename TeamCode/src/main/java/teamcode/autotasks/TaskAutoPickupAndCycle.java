@@ -192,7 +192,7 @@ public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.S
         switch (state)
         {
             case SET_ARM_POS:
-                robot.wristArm.setWristArmPosition(currOwner,robot.armElevatorScaling()-0.1,robot.vWristElevatorScaling()-0.08,0.17,event);
+                //robot.wristArm.setWristArmPosition(currOwner,robot.armElevatorScaling()-0.1,robot.vWristElevatorScaling()-0.08,0.17,event);
                 sm.waitForSingleEvent(event,State.GRAB);
                 break;
 
@@ -206,12 +206,12 @@ public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.S
                 if(taskParams.cycle && robot.clawGrabber.hasObject())
                 {
                     robot.wristArm.setWristArmHighChamberScorePos(currOwner, 0.2,null);
-                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.MIDDLE_P0S);
+                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                     sm.setState(State.CYCLE_BASKET);
                 }
                 else
                 {
-                    robot.wristArm.setWristArmPosition(currOwner,robot.armElevatorScaling(),robot.vWristElevatorScaling(),.2,null);
+                    //robot.wristArm.setWristArmPosition(currOwner,robot.armElevatorScaling(),robot.vWristElevatorScaling(),.2,null);
                     sm.setState(State.DONE);
                 }
                 break;

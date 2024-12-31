@@ -29,12 +29,9 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot.*;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import ftclib.drivebase.FtcRobotDrive;
-import ftclib.drivebase.FtcSwerveDrive;
 import ftclib.motor.FtcMotorActuator.MotorType;
 import ftclib.sensor.FtcSparkFunOtos;
 import ftclib.sensor.FtcPinpointOdometry;
-import ftclib.sensor.FtcUltrasonicSensor;
-import ftclib.sensor.GoBildaPinpointDriver;
 import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcDriveBase;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
@@ -230,10 +227,10 @@ public class RobotParams
         // Robot Drive Parameters.
         public static final DriveMode DRIVE_MODE                = DriveMode.ArcadeMode;
         public static final DriveOrientation DRIVE_ORIENTATION  = DriveOrientation.ROBOT;
-        public static final double DRIVE_SLOW_SCALE                         = 0.5;
+        public static final double DRIVE_SLOW_SCALE                         = 0.7;
         public static final double DRIVE_NORMAL_SCALE                       = 1.0;
         public static final double TURN_SLOW_SCALE                          = 0.5;
-        public static final double TURN_NORMAL_SCALE                        = 0.8;
+        public static final double TURN_NORMAL_SCALE                        = 0.5;
     }   //class Robot
 
     /**
@@ -408,13 +405,13 @@ public class RobotParams
             drivePidTolerance = 1.0;
             turnPidTolerance = 1.0;
             xDrivePidCoeffs = new PidCoefficients(0.046, 0.0, 0.0, 0.0, 0.0);
-            xDrivePidPowerLimit = 0.7;
+            xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
             yDrivePidCoeffs = new PidCoefficients(0.08, 0.0, 0.008, 0.0, 0.0);
-            yDrivePidPowerLimit = 0.7;
+            yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
             turnPidCoeffs = new PidCoefficients(0.0282, 0.0, 0.0015, 0.0, 0.0);
-            turnPidPowerLimit = 0.6;
+            turnPidPowerLimit = 0.5;
             turnMaxPidRampRate = null;
             // PID Stall Detection
             pidStallDetectionEnabled = true;
@@ -451,7 +448,7 @@ public class RobotParams
         public static final double POS_OFFSET                               = 12;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
-        public static final double HORIZONTAL_LIMIT                         = 13;
+        public static final double HORIZONTAL_LIMIT                         = 20;
 
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 44;
@@ -523,18 +520,13 @@ public class RobotParams
         public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = true;
 
-        public static final double LOGICAL_MIN_POS                          = 0.83;
-        public static final double LOGICAL_MAX_POS                          = 0.00;
-        public static final double PHYSICAL_MIN_POS                         = 0;
-        public static final double PHYSICAL_MAX_POS                         = 0;
-        public static final double MAX_STEP_RATE                            = 0; //TBD
-
         public static final double PICKUP_SPECIMEN_POS                      = 0.53;
         public static final double BASKET_SCORE_POS                         = 0.600; //TBD
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.65;
-        public static final double PICKUP_SAMPLE_POS_BASE                   = 0.6; //need to be found for low
-        public static final double SAMPLE_PICKUP_MODE_START                 = 0.488;
-        public static final double SAMPLE_PICKUP_MODE_SCALE                 = 0.060; //0.418
+
+        //Elevator Scaling Values
+        public static final double SAMPLE_PICKUP_MODE_START                 = 0.529;
+        public static final double SAMPLE_PICKUP_MODE_SCALE                 = -0.18;
     }
 
     public static class WristParamsVertical
@@ -543,12 +535,14 @@ public class RobotParams
         public static final String PRIMARY_SERVO_VERTICAL                   = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_VERTICAL_INVERTED         = false;
 
-        public static final double PICKUP_SAMPLE_POS_BASE                        = 0.760; //558
+        public static final double PICKUP_SAMPLE_POS_BASE                   = 0.760; //558
         public static final double PICKUP_SPECIMEN_POS                      = 0.41;
         public static final double BASKET_SCORE_POS                         = 0.25;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.17; //.165
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.17;
+
+        //Elevator Scaling Values
         public static final double SAMPLE_PICKUP_MODE_START                 = 0.7;
-        public static final double SAMPLE_PICKUP_MODE_SCALE                 = 0.030; //.745
+        public static final double SAMPLE_PICKUP_MODE_SCALE                 = -0.14;
     }   //class WristParamsVertical
 
     public static final class ClawParams
@@ -560,7 +554,7 @@ public class RobotParams
 
         public static final double OPEN_POS                                 = 0.82;
         public static final double OPEN_TIME                                = 0.16;
-        public static final double CLOSE_POS                                = 0.535;
+        public static final double CLOSE_POS                                = 0.45;
         public static final double CLOSE_TIME                               = 0.16;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR                 = true;
@@ -576,13 +570,13 @@ public class RobotParams
         public static final String PRIMARY_SERVO_ROTATOR                    = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_ROTATOR_INVERTED          = false;
 
-        public static final double ANALOG_INCREMENT                         = 0.05;
-        public static final double MIDDLE_P0S                               = 0.2; //0.137
-        public static final double MIDDLE_POS2                              = 0.750;
-        public static final double DEGREES_45_LEFT                          = 0.312;
-        public static final double DEGREES_45_RIGHT                         = 0.680;
-        public static final double MIN_P0S                                  = 0.460;
-        public static final double[] POS_PRESETS                            = {MIDDLE_P0S, MIN_P0S};
+        public static final double ANALOG_INCREMENT                         = 0.03;
+        public static final double ANALOG_MAX                               = 0.85;
+        public static final double ANALOG_MIN                               = 0.280;
+        public static final double PARALLEL_BASE_P0S                        = 0.565;
+        public static final double PARALLEL_SECONDARY_POS                   = 0.015;
+        public static final double PERPENDICULAR_POS                        = 0.300;
+        public static final double[] POS_PRESETS                            = {PARALLEL_BASE_P0S, PERPENDICULAR_POS};
     }   //class WristParamsRotational
 
 }   //class RobotParams

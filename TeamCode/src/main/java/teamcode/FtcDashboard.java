@@ -11,6 +11,7 @@ public class FtcDashboard
         public static double ServoA = 0.5;
         public static double ServoB = 0.5;
         public static double ServoC = 0.5;
+        public static double ServoD = 0.5;
     }
 
     @Config

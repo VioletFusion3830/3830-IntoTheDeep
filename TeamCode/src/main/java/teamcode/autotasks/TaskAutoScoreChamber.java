@@ -212,7 +212,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                     sm.addEvent(event1);
                 }
                 robot.elbowElevator.setPosition(true,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,null,event2);
-                robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.MIDDLE_POS2,null,0);
+                robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,null,0);
                 robot.arm.setPosition(currOwner,0,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,null,0);
                 robot.verticalWrist.setPosition(currOwner,0.2,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,0);
                 //Wait for completion

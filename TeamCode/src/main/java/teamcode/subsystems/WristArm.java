@@ -49,12 +49,23 @@ public class WristArm {
     //Pickup Sample Position
     public void setWristArmPickupSamplePos(String owner,double timeout, TrcEvent event)
     {
-        setWristArmPosition(owner,RobotParams.ArmParams.PICKUP_SAMPLE_POS_BASE,RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS_BASE,timeout,event);
+        setWristArmPosition(owner,robot.armPickupSamplePos(),robot.verticalWristPickupSamplePos(),timeout,event);
     }
 
     public void setWristArmPickupSamplePos()
     {
-        setWristArmPosition(RobotParams.ArmParams.PICKUP_SAMPLE_POS_BASE,RobotParams.WristParamsVertical.PICKUP_SAMPLE_POS_BASE);
+        setWristArmPosition(robot.armPickupSamplePos(),robot.verticalWristPickupSamplePos());
+    }
+
+    //Ready pickup Sample Position
+    public void setWristArmPickupReadySamplePos(String owner,double timeout, TrcEvent event)
+    {
+        setWristArmPosition(owner,robot.armReadySamplePickupPos(),robot.verticalWristReadySamplePickupPos(),timeout,event);
+    }
+
+    public void setWristArmPickupReadySamplePos()
+    {
+        setWristArmPosition(robot.armReadySamplePickupPos(),robot.verticalWristReadySamplePickupPos());
     }
 
     //Basket Score Position

@@ -92,7 +92,7 @@ public void autoPickupSample(
     }
     if(wirstRotationalPos == null)
     {
-        wirstRotationalPos = RobotParams.WristParamsRotational.MIDDLE_P0S;
+        wirstRotationalPos = RobotParams.WristParamsRotational.PARALLEL_BASE_P0S;
     }
 
     TaskAutoPickupSample.TaskParams taskParams = new TaskAutoPickupSample.TaskParams(alliance, scorePose, wirstRotationalPos);
