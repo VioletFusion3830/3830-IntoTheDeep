@@ -404,14 +404,14 @@ public class RobotParams
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
             turnPidTolerance = 1.0;
-            xDrivePidCoeffs = new PidCoefficients(0.046, 0.0, 0.0, 0.0, 0.0);
+            xDrivePidCoeffs = new PidCoefficients(0.0345, 0.0, 0.00226, 0.0, 0.0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
-            yDrivePidCoeffs = new PidCoefficients(0.08, 0.0, 0.008, 0.0, 0.0);
+            yDrivePidCoeffs = new PidCoefficients(0.0435, 0.0, 0.00195, 0.0, 0.0);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.0282, 0.0, 0.0015, 0.0, 0.0);
-            turnPidPowerLimit = 0.5;
+            turnPidCoeffs = new PidCoefficients(0.0325, 0.0, 0.00225, 0.0, 0.0);
+            turnPidPowerLimit = 0.6;
             turnMaxPidRampRate = null;
             // PID Stall Detection
             pidStallDetectionEnabled = true;
@@ -455,7 +455,7 @@ public class RobotParams
         public static final double PICKUP_SAMPLE_POS                        = 12.5;
         public static final double PICKUP_SPECIMEN_POS                      = 30;
         public static final double LOW_BASKET_SCORE_POS                     = 32;
-        public static final double HIGH_BASKET_SCORE_POS                    = 48;
+        public static final double HIGH_BASKET_SCORE_POS                    = 36;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
         public static final double LEVEL1_ASCENT_POS                        = 12.5;
         public static final double LEVEL2_ASCENT_START_POS                  = 31;

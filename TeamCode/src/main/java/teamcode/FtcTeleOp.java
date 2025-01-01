@@ -481,6 +481,13 @@ public class FtcTeleOp extends FtcOpMode
         switch (button)
         {
             case A:
+                if(pressed)
+                {
+                    robot.elbowElevator.setPosition(true, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, null);
+                    robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
+                    robot.wristArm.setWristArmBasketScorePos(null, 0.2, null);
+                }
+                break;
             case B:
             case X:
             case Y:

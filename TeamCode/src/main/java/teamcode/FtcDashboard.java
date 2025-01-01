@@ -18,13 +18,7 @@ public class FtcDashboard
     public static class TunePID
     {
         public static TrcPidController.PidCoefficients tunePidCoeff = new TrcPidController.PidCoefficients(0, 0, 0.0, 0,0);
-        public static double GarvityComp = 0.0;
-        public static double GarvityComp2 = 0.0;
-    }
-    @Config
-    public static class TunePID_Secondary
-    {
-        public static TrcPidController.PidCoefficients tunePidCoeff = new TrcPidController.PidCoefficients(0.045, 0.2, 0.005, 0.0, 5.0);
+        public static double GarvityComp = 0.0;;
     }
 
     @Config

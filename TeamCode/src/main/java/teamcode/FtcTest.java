@@ -58,7 +58,7 @@ import trclib.timer.TrcTimer;
 public class FtcTest extends FtcTeleOp
 {
     private static final String moduleName = FtcTest.class.getSimpleName();
-    private static final boolean logEvents = true;
+    private static final boolean logEvents = false;
     private static final boolean debugPid = false;
 
     private enum Test
@@ -448,32 +448,6 @@ public class FtcTest extends FtcTeleOp
                     // Intentionally falling through.
                     //
                 case PURE_PURSUIT_DRIVE:
-                    double currTime = TrcTimer.getCurrentTime();
-                    TrcPose2D velPose = robot.robotDrive.driveBase.getFieldVelocity();
-                    double velocity = TrcUtil.magnitude(velPose.x, velPose.y);
-                    double acceleration = 0.0;
-
-                    if (prevTime != 0.0)
-                    {
-                        acceleration = (velocity - prevVelocity)/(currTime - prevTime);
-                    }
-
-                    if (velocity > maxDriveVelocity)
-                    {
-                        maxDriveVelocity = velocity;
-                    }
-
-                    if (acceleration > maxDriveAcceleration)
-                    {
-                        maxDriveAcceleration = acceleration;
-                    }
-
-                    prevTime = currTime;
-                    prevVelocity = velocity;
-
-                    robot.dashboard.displayPrintf(5, "Drive Vel: (%.1f/%.1f)", velocity, maxDriveVelocity);
-                    robot.dashboard.displayPrintf(
-                            6, "Drive Accel: (%.1f/%.1f)", acceleration, maxDriveAcceleration);
                 case PID_DRIVE:
                     if (robot.robotDrive != null)
                     {
@@ -491,21 +465,21 @@ public class FtcTest extends FtcTeleOp
                             turnPidCtrl = robot.robotDrive.pidDrive.getTurnPidCtrl();
                         }
 
-                        robot.dashboard.displayPrintf(
-                                lineNum++, "RobotPose=%s,rawEnc=lf:%.0f,rf:%.0f,lb:%.0f,rb:%.0f",
-                                robot.robotDrive.driveBase.getFieldPosition(),
-                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_FRONT].getPosition(),
-                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_FRONT].getPosition(),
-                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_BACK].getPosition(),
-                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_BACK].getPosition());
-                        if (xPidCtrl != null)
-                        {
-                            xPidCtrl.displayPidInfo(lineNum);
-                            lineNum += 2;
-                        }
-                        yPidCtrl.displayPidInfo(lineNum);
-                        lineNum += 2;
-                        turnPidCtrl.displayPidInfo(lineNum);
+//                        robot.dashboard.displayPrintf(
+//                                lineNum++, "RobotPose=%s,rawEnc=lf:%.0f,rf:%.0f,lb:%.0f,rb:%.0f",
+//                                robot.robotDrive.driveBase.getFieldPosition(),
+//                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_FRONT].getPosition(),
+//                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_FRONT].getPosition(),
+//                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_LEFT_BACK].getPosition(),
+//                                robot.robotDrive.driveMotors[FtcRobotDrive.INDEX_RIGHT_BACK].getPosition());
+//                        if (xPidCtrl != null)
+//                        {
+//                            xPidCtrl.displayPidInfo(lineNum);
+//                            lineNum += 2;
+//                        }
+//                        yPidCtrl.displayPidInfo(lineNum);
+//                        lineNum += 2;
+//                        turnPidCtrl.displayPidInfo(lineNum);
                     }
                     break;
 
@@ -563,10 +537,10 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
+                else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elbow !=null) {
                     if (pressed) {
-                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
-                        robot.elevator.presetPositionDown(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
+                        robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
+                        robot.elbow.presetPositionDown(moduleName, RobotParams.ElbowParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;
@@ -628,10 +602,10 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
+                else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elbow !=null) {
                     if (pressed) {
-                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.POS_PID_TOLERANCE);
-                        robot.elevator.presetPositionUp(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
+                        robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
+                        robot.elbow.presetPositionUp(moduleName, RobotParams.ElbowParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;
@@ -672,12 +646,15 @@ public class FtcTest extends FtcTeleOp
                         if(!pathForward) value = -value;
                         switch (testChoices.test) {
                             case TUNE_X_PID:
+                                robot.robotDrive.driveBase.resetOdometry();
                                 ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(value*12,0,0));
                                 break;
                             case TUNE_Y_PID:
+                                robot.robotDrive.driveBase.resetOdometry();
                                 ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(0,value*12,0));
                                 break;
                             case TUNE_TURN_PID:
+                                robot.robotDrive.driveBase.resetOdometry();
                                 ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(0,0,value));
                                 break;
                         }
