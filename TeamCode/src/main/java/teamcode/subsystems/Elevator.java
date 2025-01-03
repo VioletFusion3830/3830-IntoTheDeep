@@ -31,10 +31,11 @@ public class Elevator {
                 RobotParams.ElevatorParams.SECONDARY_FOLLOWER_MOTOR_TYPE,
                 null);
         elevatorMotor3.follow(elevator, RobotParams.ElevatorParams.SECONDARY_FOLLOWER_MOTOR_INVERTED);
+        //elevator.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG,true,false,null);
         elevator.setSoftwarePidEnabled(RobotParams.ElevatorParams.SOFTWARE_PID_ENABLED);
         elevator.setPositionPidParameters(
                 RobotParams.ElevatorParams.PID_COEFFS,
-                RobotParams.ElevatorParams.POS_PID_TOLERANCE);
+                RobotParams.ElevatorParams.PID_TOLERANCE);
         elevator.setPositionPidPowerComp(this::getGravityComp);
         elevator.setStallProtection(RobotParams.ElevatorParams.STALL_MIN_POWER,
                 RobotParams.ElevatorParams.STALL_TOLERANCE,

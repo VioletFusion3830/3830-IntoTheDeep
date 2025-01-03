@@ -47,7 +47,6 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
     private final TrcEvent elevatorEventInital;
 
     private String currOwner = null;
-    private Double elevatorInitialPos = null;
     private boolean safeSequence = false;
 
     public TaskElbowElevator(String ownerName, TrcMotor elbow, TrcMotor elevator)
@@ -188,7 +187,7 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
                 elbowEvent.clear();
                 elevatorEvent.clear();
                 elevatorEventInital.clear();
-                sm.setState(elevatorInitialPos != null? State.RETRACT_ELEVATOR: State.SET_ELBOW_ANGLE);
+                sm.setState(taskParams.elevatorInitialPos != null? State.RETRACT_ELEVATOR: State.SET_ELBOW_ANGLE);
                 break;
 
             case RETRACT_ELEVATOR:
@@ -217,7 +216,7 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
                 {
                     // Setting target elbow angle
                     elbow.setPosition(
-                            currOwner, 0.0, taskParams.elbowAngle, true, RobotParams.ElevatorParams.POWER_LIMIT, elbowEvent, 1.5);
+                            currOwner, 0.0, taskParams.elbowAngle, true, RobotParams.ElevatorParams.POWER_LIMIT, elbowEvent, 2);
                     if (safeSequence)
                     {
                         //preform safe sequence, so wait for elbow event.

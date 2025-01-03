@@ -126,7 +126,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     // Score the preloaded specimen.
                     robot.scoreChamberTask.autoScoreChamber(false,false, event);
                     scoreSpecimenCount++;
-                    sm.waitForSingleEvent(event, State.MOVE_SAMPLES);
+                    sm.waitForSingleEvent(event, State.DONE);
                     break;
 
                 case MOVE_SAMPLES:

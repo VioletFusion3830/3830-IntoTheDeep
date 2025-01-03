@@ -436,6 +436,10 @@ public class Robot {
      * @param owner specifies the owner ID to check if the caller has ownership of the motor.
      */
     public void zeroCalibrate(String owner, TrcEvent elevatorEvent, TrcEvent elbowEvent) {
+        if(arm != null)
+        {
+            arm.setPosition(RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START);
+        }
         if (elevator != null) {
             elevator.zeroCalibrate(owner, RobotParams.ElevatorParams.ZERO_CAL_POWER, elevatorEvent);
         }

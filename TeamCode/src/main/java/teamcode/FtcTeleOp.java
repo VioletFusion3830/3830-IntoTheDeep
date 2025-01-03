@@ -195,7 +195,7 @@ public class FtcTeleOp extends FtcOpMode
                     }
                 } else {
                     double[] inputs = driverGamepad.getDriveInputs(
-                            RobotParams.Robot.DRIVE_MODE, true, drivePowerScale, turnPowerScale);
+                            RobotParams.Robot.DRIVE_MODE, false, drivePowerScale, turnPowerScale);
 
                     if (robot.robotDrive.driveBase.supportsHolonomicDrive()) {
                         robot.robotDrive.driveBase.holonomicDrive(
@@ -210,7 +210,7 @@ public class FtcTeleOp extends FtcOpMode
                 double slowDriveTriggered = driverGamepad.getRightTrigger() * RobotParams.Robot.DRIVE_NORMAL_SCALE;
                 double scaleFactor = Math.max(Math.abs(1 - slowDriveTriggered), 0.3);
                 drivePowerScale = Math.atan(5 * RobotParams.Robot.DRIVE_NORMAL_SCALE) / (Math.atan(5) * scaleFactor);
-                turnPowerScale = Math.atan(5 * RobotParams.Robot.TURN_NORMAL_SCALE) / (Math.atan(5) * scaleFactor);
+                turnPowerScale = Math.atan(5 * RobotParams.Robot.DRIVE_NORMAL_SCALE) / (Math.atan(5) * scaleFactor) * RobotParams.Robot.TURN_SLOW_SCALE;
             }
             //
             // Other subsystems.
@@ -225,7 +225,7 @@ public class FtcTeleOp extends FtcOpMode
                     if (robot.elevator != null && elbowPos < RobotParams.ElbowParams.RESTRICTED_POS_THRESHOLD)
                     {
                         double elbowPosRadians = Math.toRadians(elbowPos);
-                        elevatorLimit = RobotParams.ElevatorParams.MAX_POS - (Math.max(Math.cos(elbowPosRadians) * (isSamplePickupMode ? RobotParams.ElevatorParams.HORIZONTAL_LIMIT: RobotParams.ElevatorParams.HORIZONTAL_LIMIT), 0));
+                        elevatorLimit = RobotParams.ElevatorParams.MAX_POS - (Math.max(Math.cos(elbowPosRadians) * (isSamplePickupMode ? RobotParams.ElevatorParams.HORIZONTAL_LIMIT: 21.6), 0));
                         if (robot.elevator.getPosition() > elevatorLimit)
                         {
                             robot.elevator.setPosition(elevatorLimit);
@@ -483,13 +483,33 @@ public class FtcTeleOp extends FtcOpMode
             case A:
                 if(pressed)
                 {
-                    robot.elbowElevator.setPosition(true, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, null);
+                    //HighBasket
+                    isSamplePickupMode = false;
+                    robot.elbowElevator.setPosition(true, RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, null);
                     robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
                     robot.wristArm.setWristArmBasketScorePos(null, 0.2, null);
                 }
                 break;
             case B:
+                if(pressed)
+                {
+                    //Pick Specmain
+                    isSamplePickupMode = false;
+                    robot.elbowElevator.setPosition(true, RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, null);
+                    robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
+                    robot.wristArm.setWristArmPickupSpecimenPos(null, 0.2, null);
+                }
+                break;
             case X:
+                if(pressed)
+                {
+                    //Score Specmain
+                    isSamplePickupMode = false;
+                    robot.elbowElevator.setPosition(true, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, null);
+                    robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
+                    robot.wristArm.setWristArmHighChamberScorePos(null, 0.2, null);
+
+                }
             case Y:
                 break;
             case LeftBumper:

@@ -10,6 +10,7 @@ import teamcode.Robot;
 import teamcode.RobotParams;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.subsystem.FtcServoGrabber;
+import trclib.robotcore.TrcDbgTrace;
 import trclib.robotcore.TrcEvent;
 import trclib.subsystem.TrcServoGrabber;
 
@@ -60,6 +61,7 @@ public class Claw {
                     RobotParams.ClawParams.SENSOR_TRIGGER_THRESHOLD);
         }
         clawGrabber = new FtcServoGrabber(RobotParams.ClawParams.SUBSYSTEM_NAME, grabberParams).getGrabber();
+        clawGrabber.tracer.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG);
     }
 
     public TrcServoGrabber getClawGrabber()

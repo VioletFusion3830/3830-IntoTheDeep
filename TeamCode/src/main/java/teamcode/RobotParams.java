@@ -176,10 +176,10 @@ public class RobotParams
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
                 new TrcPose2D(-2.34 * Field.FULL_TILE_INCHES, -2.34 * Field.FULL_TILE_INCHES, 45.0);
         public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE    =
-                new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0)-2.5, -38, 180);
+                new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -38, 180);
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D((Robot.ROBOT_WIDTH/2.0)+2.5, -38, 180);
+                new TrcPose2D((Robot.ROBOT_WIDTH/2.0), -40.5, 180);
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
@@ -222,14 +222,14 @@ public class RobotParams
         public static final String STEER_ZERO_CAL_FILE                      = TEAM_FOLDER_PATH + "/SteerZeroCalibration.txt";
         public static final double DASHBOARD_UPDATE_INTERVAL                = 0.1; // in msec
         public static final String ROBOT_CODEBASE                           = "Robot2025";
-        public static final double ROBOT_LENGTH                             = 15.125;
-        public static final double ROBOT_WIDTH                              = 16.25;
+        public static final double ROBOT_LENGTH                             = 15.8;
+        public static final double ROBOT_WIDTH                              = 16.9;
         // Robot Drive Parameters.
         public static final DriveMode DRIVE_MODE                = DriveMode.ArcadeMode;
         public static final DriveOrientation DRIVE_ORIENTATION  = DriveOrientation.ROBOT;
         public static final double DRIVE_SLOW_SCALE                         = 0.7;
         public static final double DRIVE_NORMAL_SCALE                       = 1.0;
-        public static final double TURN_SLOW_SCALE                          = 0.5;
+        public static final double TURN_SLOW_SCALE                          = 0.7;
         public static final double TURN_NORMAL_SCALE                        = 0.5;
     }   //class Robot
 
@@ -395,26 +395,26 @@ public class RobotParams
             xDrivePosScale = 0.01924724265461924299065420560748;        // in/count
             yDrivePosScale = 0.02166184604662450653409090909091;        // in/count
             // Robot Drive Characteristics
-            robotMaxVelocity = 60;        // inches/sec //60
-            robotMaxAcceleration  = 200;  // inches/sec2 //250
+            robotMaxVelocity = 80;        // inches/sec //60
+            robotMaxAcceleration  = 175;  // inches/sec2 //250
             robotMaxTurnRate = 100;       // degrees/sec
             profiledMaxVelocity = 60;
-            profiledMaxAcceleration = 250;
+            profiledMaxAcceleration = 150;
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
             turnPidTolerance = 1.0;
-            xDrivePidCoeffs = new PidCoefficients(0.0345, 0.0, 0.00226, 0.0, 0.0);
+            xDrivePidCoeffs = new PidCoefficients(0.034, 0.0, 0.0020, 0.0, 0.0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
-            yDrivePidCoeffs = new PidCoefficients(0.0435, 0.0, 0.00195, 0.0, 0.0);
+            yDrivePidCoeffs = new PidCoefficients(0.025, 0.0, 0.00462, 0.0, 0.0);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.0325, 0.0, 0.00225, 0.0, 0.0);
+            turnPidCoeffs = new PidCoefficients(0.0294, 0, 0.0019, 0.0, 0);
             turnPidPowerLimit = 0.6;
             turnMaxPidRampRate = null;
             // PID Stall Detection
-            pidStallDetectionEnabled = true;
+            pidStallDetectionEnabled = false;
             // PurePursuit Parameters
             ppdFollowingDistance = 6.0;
             velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / profiledMaxVelocity, 0.0);
@@ -453,10 +453,10 @@ public class RobotParams
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 44;
         public static final double PICKUP_SAMPLE_POS                        = 12.5;
-        public static final double PICKUP_SPECIMEN_POS                      = 30;
+        public static final double PICKUP_SPECIMEN_POS                      = 22;
         public static final double LOW_BASKET_SCORE_POS                     = 32;
-        public static final double HIGH_BASKET_SCORE_POS                    = 36;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
+        public static final double HIGH_BASKET_SCORE_POS                    = 32;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 15;
         public static final double LEVEL1_ASCENT_POS                        = 12.5;
         public static final double LEVEL2_ASCENT_START_POS                  = 31;
         public static final double LEVEL2_ASCENT_POS                        = MIN_POS;
@@ -465,10 +465,10 @@ public class RobotParams
 
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
-                new TrcPidController.PidCoefficients(0.47,0.2, 0.015,0,1); //Need to tune
-        public static final double POS_PID_TOLERANCE                        = 0.5;
+                new TrcPidController.PidCoefficients(0.27,0, 0,0,0); //Need to tune
+        public static final double PID_TOLERANCE                            = 0.5;
 
-        public static final double MAX_GRAVITY_COMP_POWER                   = 0.2;
+        public static final double MAX_GRAVITY_COMP_POWER                   = 0.10;
         public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
         public static final double STALL_TOLERANCE                          = 0.1;
         public static final double STALL_TIMEOUT                            = 0.1;
@@ -493,8 +493,8 @@ public class RobotParams
         public static final double MAX_POS                                  = 110;
         public static final double PICKUP_SAMPLE_POS                        = 10;
         public static final double PICKUP_SPECIMEN_POS                      = 10;
-        public static final double BASKET_SCORE_POS                         = 96;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 100;
+        public static final double BASKET_SCORE_POS                         = 100;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 110;
         public static final double LEVEL1_ASCENT_POS                        = 60;
         public static final double LEVEL2_ASCENT_START_POS                  = 116;
         public static final double LEVEL2_ASCENT_POS                        = 80;
@@ -520,9 +520,9 @@ public class RobotParams
         public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = true;
 
-        public static final double PICKUP_SPECIMEN_POS                      = 0.53;
-        public static final double BASKET_SCORE_POS                         = 0.600; //TBD
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.65;
+        public static final double PICKUP_SPECIMEN_POS                      = 0.541;
+        public static final double BASKET_SCORE_POS                         = 0.60;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.60;
 
         //Elevator Scaling Values
         public static final double SAMPLE_PICKUP_MODE_START                 = 0.529;
