@@ -179,7 +179,7 @@ public class RobotParams
                 new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -38, 180);
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D((Robot.ROBOT_WIDTH/2.0), -40.5, 180);
+                new TrcPose2D((Robot.ROBOT_WIDTH/2.0), -41, 180);
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
@@ -194,14 +194,16 @@ public class RobotParams
                 new TrcPose2D(1.2, -2.0, 135);
         // Observation zone auto poses.
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH = {
-                new TrcPose2D(1.4, -1.6, 180),
-                new TrcPose2D(1.4, -0.7, 180),
-                new TrcPose2D(1.97, -0.7, 180),
-                new TrcPose2D(1.97, -2.4, 180),
-                new TrcPose2D(1.97,-0.7, 180),
-                new TrcPose2D(1.97 + .45, -0.7, 180),
-                new TrcPose2D(1.97 + .45, -2.23, 180),
-                new TrcPose2D(1.66, -1.88, 180),
+                new TrcPose2D(1.3, -1.5, 180), //Move toward sample 1
+                new TrcPose2D(1.6, -0.9, 180), //Move toward sample 1
+                new TrcPose2D(1.97,-0.9,180), //Move in front of sample 1
+                new TrcPose2D(1.97, -2.1, 170), //Push sample 1
+                new TrcPose2D(1.97,-0.9, 180), //Drive back for sample 2
+                new TrcPose2D(2.45,-0.9, 180), //Move in front of sample 2
+                new TrcPose2D(2.45, -2.1, 180), //Push sample 2
+                new TrcPose2D(2.45, -0.9, 180), //Drive back for sample 3
+                new TrcPose2D(2.6,-0.8,180), //Move in front of sample 3
+                new TrcPose2D(2.6,-2.19,180) //Push sample 3
         };
 
 
@@ -398,8 +400,8 @@ public class RobotParams
             robotMaxVelocity = 80;        // inches/sec //60
             robotMaxAcceleration  = 175;  // inches/sec2 //250
             robotMaxTurnRate = 100;       // degrees/sec
-            profiledMaxVelocity = 60;
-            profiledMaxAcceleration = 150;
+            profiledMaxVelocity = 55;
+            profiledMaxAcceleration = 130;
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
@@ -414,7 +416,7 @@ public class RobotParams
             turnPidPowerLimit = 0.6;
             turnMaxPidRampRate = null;
             // PID Stall Detection
-            pidStallDetectionEnabled = false;
+            pidStallDetectionEnabled = true;
             // PurePursuit Parameters
             ppdFollowingDistance = 6.0;
             velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / profiledMaxVelocity, 0.0);
@@ -456,7 +458,7 @@ public class RobotParams
         public static final double PICKUP_SPECIMEN_POS                      = 22;
         public static final double LOW_BASKET_SCORE_POS                     = 32;
         public static final double HIGH_BASKET_SCORE_POS                    = 32;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 15;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 14.5;
         public static final double LEVEL1_ASCENT_POS                        = 12.5;
         public static final double LEVEL2_ASCENT_START_POS                  = 31;
         public static final double LEVEL2_ASCENT_POS                        = MIN_POS;
@@ -466,7 +468,7 @@ public class RobotParams
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
                 new TrcPidController.PidCoefficients(0.27,0, 0,0,0); //Need to tune
-        public static final double PID_TOLERANCE                            = 0.5;
+        public static final double PID_TOLERANCE                            = 0.75;
 
         public static final double MAX_GRAVITY_COMP_POWER                   = 0.10;
         public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
@@ -520,7 +522,7 @@ public class RobotParams
         public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = true;
 
-        public static final double PICKUP_SPECIMEN_POS                      = 0.541;
+        public static final double PICKUP_SPECIMEN_POS                      = 0.545;
         public static final double BASKET_SCORE_POS                         = 0.60;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.60;
 

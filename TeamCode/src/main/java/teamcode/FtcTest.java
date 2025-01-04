@@ -58,7 +58,7 @@ import trclib.timer.TrcTimer;
 public class FtcTest extends FtcTeleOp
 {
     private static final String moduleName = FtcTest.class.getSimpleName();
-    private static final boolean logEvents = true;
+    private static final boolean logEvents = false;
     private static final boolean debugPid = false;
 
     private enum Test
