@@ -194,12 +194,12 @@ public class FtcTest extends FtcTeleOp
             case TUNE_X_PID:
             case TUNE_Y_PID:
             case TUNE_TURN_PID:
-                if (robot.robotDrive != null &&
-                        (testChoices.test != Test.TUNE_X_PID || robot.robotDrive.driveBase.supportsHolonomicDrive()))
-                {
-                    // Distance targets are in feet, so convert them into inches.
-                    testCommand = new CmdPidDrive(robot.robotDrive.driveBase, robot.robotDrive.pidDrive);
-                }
+//                if (robot.robotDrive != null &&
+//                        (testChoices.test != Test.TUNE_X_PID || robot.robotDrive.driveBase.supportsHolonomicDrive()))
+//                {
+//                    // Distance targets are in feet, so convert them into inches.
+//                    testCommand = new CmdPidDrive(robot.robotDrive.driveBase, robot.robotDrive.pidDrive);
+//                }
                 break;
         }
     }   //robotInit
@@ -647,6 +647,7 @@ public class FtcTest extends FtcTeleOp
                         switch (testChoices.test) {
                             case TUNE_X_PID:
                                 robot.robotDrive.driveBase.resetOdometry();
+                                robot.robotDrive.purePursuitDrive.setXPositionPidCoefficients(FtcDashboard.PPTuneParams.PidCoeff);
                                 robot.robotDrive.purePursuitDrive.start(
                                         null, 0.0, new TrcPose2D(0,0,0), false,
                                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, new TrcPose2D(value*12, 0, 0));
@@ -654,6 +655,7 @@ public class FtcTest extends FtcTeleOp
                                 break;
                             case TUNE_Y_PID:
                                 robot.robotDrive.driveBase.resetOdometry();
+                                robot.robotDrive.purePursuitDrive.setYPositionPidCoefficients(FtcDashboard.PPTuneParams.PidCoeff);
                                 robot.robotDrive.purePursuitDrive.start(
                                         null, 0.0, new TrcPose2D(0,0,0), false,
                                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, new TrcPose2D(0, value*12, 0));
@@ -661,6 +663,7 @@ public class FtcTest extends FtcTeleOp
                                 break;
                             case TUNE_TURN_PID:
                                 robot.robotDrive.driveBase.resetOdometry();
+                                robot.robotDrive.purePursuitDrive.setTurnPidCoefficients(FtcDashboard.PPTuneParams.PidCoeff);
                                 robot.robotDrive.purePursuitDrive.start(
                                         null, 0.0, new TrcPose2D(0,0,0), false,
                                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, new TrcPose2D(0, 0, value));
