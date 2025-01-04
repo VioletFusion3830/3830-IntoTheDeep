@@ -647,15 +647,24 @@ public class FtcTest extends FtcTeleOp
                         switch (testChoices.test) {
                             case TUNE_X_PID:
                                 robot.robotDrive.driveBase.resetOdometry();
-                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(value*12,0,0));
+                                robot.robotDrive.purePursuitDrive.start(
+                                        null, 0.0, new TrcPose2D(0,0,0), false,
+                                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, new TrcPose2D(value*12, 0, 0));
+//                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(value*12,0,0));
                                 break;
                             case TUNE_Y_PID:
                                 robot.robotDrive.driveBase.resetOdometry();
-                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(0,value*12,0));
+                                robot.robotDrive.purePursuitDrive.start(
+                                        null, 0.0, new TrcPose2D(0,0,0), false,
+                                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, new TrcPose2D(0, value*12, 0));
+//                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(0,value*12,0));
                                 break;
                             case TUNE_TURN_PID:
                                 robot.robotDrive.driveBase.resetOdometry();
-                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(0,0,value));
+                                robot.robotDrive.purePursuitDrive.start(
+                                        null, 0.0, new TrcPose2D(0,0,0), false,
+                                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, new TrcPose2D(0, 0, value));
+//                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(0,0,value));
                                 break;
                         }
                     }
