@@ -22,10 +22,6 @@
 
 package teamcode.autotasks;
 
-import androidx.annotation.NonNull;
-
-import java.util.Locale;
-
 import teamcode.FtcTeleOp;
 import teamcode.Robot;
 import teamcode.RobotParams;
@@ -38,36 +34,27 @@ import trclib.robotcore.TrcTaskMgr;
 /**
  * This class implements auto-assist task.
  */
-public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.State>
+public class TaskAutoTeleOpMacros extends TrcAutoTask<TaskAutoTeleOpMacros.State>
 {
-    private static final String moduleName = TaskAutoPickupAndCycle.class.getSimpleName();
+    private static final String moduleName = TaskAutoTeleOpMacros.class.getSimpleName();
 
     public enum State
     {
         SET_ARM_POS,
         GRAB,
         RESET_ARM_POS,
-        CYCLE_BASKET,
-        SCORE_SAMPLE,
-        CYCLE_INTAKE,
+        SET_SUBSYSTEMS_SAMPLE_SCORE_POS,
+        SET_ARM_SAMPLE_SCORE_POS,
+        SET_ARM_SAMPLE_PICKUP_POS,
+        SET_PICKUP_SCALING,
         DONE
     }   //enum State
 
     private static class TaskParams
     {
-        boolean cycle;
-        TaskParams(boolean cycle)
+        TaskParams()
         {
-            this.cycle = cycle;
         }   //TaskParams
-
-        @NonNull
-        public String toString()
-        {
-            return String.format(
-                    Locale.US, "cycle=%s", cycle);
-        }   //toString
-
     }   //class TaskParams
 
     private final String ownerName;
@@ -82,7 +69,7 @@ public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.S
      * @param ownerName specifies the owner name to take subsystem ownership, can be null if no ownership required.
      * @param robot specifies the robot object that contains all the necessary subsystems.
      */
-    public TaskAutoPickupAndCycle(String ownerName, Robot robot)
+    public TaskAutoTeleOpMacros(String ownerName, Robot robot)
     {
         super(moduleName, ownerName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.ownerName = ownerName;
@@ -95,14 +82,22 @@ public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.S
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoPickAndCycle(boolean cycle, TrcEvent completionEvent)
+    public void autoPickSample(TrcEvent completionEvent)
     {
         FtcTeleOp.isClawGrabbing = true;
-        TaskAutoPickupAndCycle.TaskParams taskParams = new TaskAutoPickupAndCycle.TaskParams(cycle);
-        tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
-        startAutoTask(State.SET_ARM_POS, taskParams, completionEvent);
+        startAutoTask(State.SET_ARM_POS, null, completionEvent);
     }   //autoAssist
 
+    public void autoSetSubsystemsSampleScorePos(TrcEvent completionEvent)
+    {
+        FtcTeleOp.isSamplePickupMode = false;
+        startAutoTask(State.SET_SUBSYSTEMS_SAMPLE_SCORE_POS, null, completionEvent);
+    }   //autoAssist
+
+    public void autoSetSubsystemsSamplePickupPos(TrcEvent completionEvent)
+    {
+        startAutoTask(State.SET_ARM_SAMPLE_PICKUP_POS, null, completionEvent);
+    }   //autoAssist
 
 
     //
@@ -171,6 +166,7 @@ public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.S
         robot.clawGrabber.cancel();
         robot.verticalWrist.cancel();
         robot.rotationalWrist.cancel();
+        robot.elbowElevator.cancel();
     }   //stopSubsystems
 
     /**
@@ -191,8 +187,9 @@ public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.S
 
         switch (state)
         {
+            //Auto-assisted Pickup Sample
             case SET_ARM_POS:
-                //robot.wristArm.setWristArmPosition(currOwner,robot.armElevatorScaling()-0.1,robot.vWristElevatorScaling()-0.08,0.17,event);
+                robot.wristArm.setWristArmPickupSamplePos(currOwner,.16, event);
                 sm.waitForSingleEvent(event,State.GRAB);
                 break;
 
@@ -203,32 +200,39 @@ public class TaskAutoPickupAndCycle extends TrcAutoTask<TaskAutoPickupAndCycle.S
 
             case RESET_ARM_POS:
                 FtcTeleOp.isClawGrabbing = false;
-                if(taskParams.cycle && robot.clawGrabber.hasObject())
+                robot.wristArm.setWristArmPickupReadySamplePos(currOwner,0,null);
+                sm.setState(State.DONE);
+                break;
+
+            //Auto-assists set Subsystems Score Sample
+            case SET_SUBSYSTEMS_SAMPLE_SCORE_POS:
+                if(robot.elevator.getPosition() > 15 && robot.elbow.getPosition() < 80)
                 {
-                    robot.wristArm.setWristArmHighChamberScorePos(currOwner, 0.2,null);
-                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
-                    sm.setState(State.CYCLE_BASKET);
+                    robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, event);
                 }
                 else
                 {
-                    //robot.wristArm.setWristArmPosition(currOwner,robot.armElevatorScaling(),robot.vWristElevatorScaling(),.2,null);
-                    sm.setState(State.DONE);
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, event);
                 }
+                robot.rotationalWrist.setPosition(currOwner,0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
+                sm.waitForSingleEvent(event, State.SET_ARM_SAMPLE_SCORE_POS);
                 break;
 
-            case CYCLE_BASKET:
-                robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, event);
+            case SET_ARM_SAMPLE_SCORE_POS:
+                robot.wristArm.setWristArmBasketScorePos(currOwner,0.2, event);
                 sm.waitForSingleEvent(event, State.DONE);
                 break;
 
-            case SCORE_SAMPLE:
-                robot.clawGrabber.open(currOwner, 0, event);
-                sm.waitForSingleEvent(event, State.CYCLE_INTAKE);
+            //Auto-assists set Subsystems pickup Sample
+            case SET_ARM_SAMPLE_PICKUP_POS:
+                robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS, null, event);
+                robot.wristArm.setWristArmPickupReadySamplePos(currOwner,0, null);
+                sm.waitForSingleEvent(event, State.SET_PICKUP_SCALING);
+                break;
 
-            case CYCLE_INTAKE:
-                robot.wristArm.setWristArmPickupSamplePos(currOwner,0, null);
-                robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS, 26.0, event);
-                sm.waitForSingleEvent(event, State.DONE);
+            case SET_PICKUP_SCALING:
+                FtcTeleOp.isSamplePickupMode = true;
+                sm.setState(State.DONE);
                 break;
 
             default:

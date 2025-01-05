@@ -32,7 +32,7 @@ import ftclib.driverio.FtcMatchInfo;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.sensor.FtcRobotBattery;
 import teamcode.autotasks.TaskAutoHang;
-import teamcode.autotasks.TaskAutoPickupAndCycle;
+import teamcode.autotasks.TaskAutoTeleOpMacros;
 import teamcode.autotasks.TaskAutoPickupSample;
 import teamcode.autotasks.TaskAutoPickupSpecimen;
 import teamcode.autotasks.TaskAutoScoreBasket;
@@ -95,7 +95,7 @@ public class Robot {
     public TaskAutoScoreBasket scoreBasketTask;
     public TaskAutoScoreChamber scoreChamberTask;
     public TaskAutoHang autoHang;
-    public TaskAutoPickupAndCycle autoPickupAndCycle;
+    public TaskAutoTeleOpMacros autoPickupAndCycle;
     public TaskAutoPickupSample autoPickupSample;
 
     public enum GamePieceType {
@@ -194,7 +194,7 @@ public class Robot {
                 scoreBasketTask = new TaskAutoScoreBasket("AutoScoreBasketTask", this);
                 scoreChamberTask = new TaskAutoScoreChamber("AutoScoreChamberTask", this);
                 autoHang = new TaskAutoHang("AutoHangTask", this);
-                autoPickupAndCycle = new TaskAutoPickupAndCycle("AutoPickUp", this);
+                autoPickupAndCycle = new TaskAutoTeleOpMacros("AutoPickUp", this);
             }
         }
 

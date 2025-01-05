@@ -491,13 +491,8 @@ public class FtcTeleOp extends FtcOpMode
                 }
                 break;
             case B:
-                if(pressed)
-                {
-                    //Pick Specmain
-                    isSamplePickupMode = false;
-                    robot.elbowElevator.setPosition(true, RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, null);
-                    robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
-                    robot.wristArm.setWristArmPickupSpecimenPos(null, 0.2, null);
+                if(pressed) {
+                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                 }
                 break;
             case X:

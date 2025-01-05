@@ -405,7 +405,7 @@ public class RobotParams
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
-            turnPidTolerance = 1.0;
+            turnPidTolerance = 2.0;
             xDrivePidCoeffs = new PidCoefficients(0.0353,0 /*0.025*/, 0.002, 0.0, 3.0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
