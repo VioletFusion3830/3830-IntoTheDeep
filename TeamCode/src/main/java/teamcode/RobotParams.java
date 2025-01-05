@@ -397,29 +397,29 @@ public class RobotParams
             xDrivePosScale = 0.01924724265461924299065420560748;        // in/count
             yDrivePosScale = 0.02166184604662450653409090909091;        // in/count
             // Robot Drive Characteristics
-            robotMaxVelocity = 80;        // inches/sec //60
+            robotMaxVelocity = 100;        // inches/sec //60
             robotMaxAcceleration  = 175;  // inches/sec2 //250
             robotMaxTurnRate = 100;       // degrees/sec
-            profiledMaxVelocity = 55;
-            profiledMaxAcceleration = 130;
+            profiledMaxVelocity = 70;
+            profiledMaxAcceleration = 100;
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
             turnPidTolerance = 1.0;
-            xDrivePidCoeffs = new PidCoefficients(0.034, 0.0, 0.0020, 0.0, 0.0);
+            xDrivePidCoeffs = new PidCoefficients(0.0353,0 /*0.025*/, 0.002, 0.0, 3.0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
-            yDrivePidCoeffs = new PidCoefficients(0.025, 0.0, 0.00462, 0.0, 0.0);
+            yDrivePidCoeffs = new PidCoefficients(0.0068, 0.03, 0.0026, 0.0, 5.0);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.0294, 0, 0.0019, 0.0, 0);
+            turnPidCoeffs = new PidCoefficients(0.024, 0/*0.00145*/, 0/*0.0026*/, 0.0, 2.0);
             turnPidPowerLimit = 0.6;
             turnMaxPidRampRate = null;
             // PID Stall Detection
             pidStallDetectionEnabled = true;
             // PurePursuit Parameters
-            ppdFollowingDistance = 6.0;
-            velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / profiledMaxVelocity, 0.0);
+            ppdFollowingDistance = 10.0;
+            velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / 90, 0.0); //90
             // Vision
             webCam1 = null; //new FrontCamParams()
             webCam2 = null; //new BackCamParams()

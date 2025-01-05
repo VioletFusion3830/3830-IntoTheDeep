@@ -58,7 +58,7 @@ import trclib.timer.TrcTimer;
 public class FtcTest extends FtcTeleOp
 {
     private static final String moduleName = FtcTest.class.getSimpleName();
-    private static final boolean logEvents = false;
+    private static final boolean logEvents = true;
     private static final boolean debugPid = false;
 
     private enum Test
@@ -194,12 +194,12 @@ public class FtcTest extends FtcTeleOp
             case TUNE_X_PID:
             case TUNE_Y_PID:
             case TUNE_TURN_PID:
-//                if (robot.robotDrive != null &&
-//                        (testChoices.test != Test.TUNE_X_PID || robot.robotDrive.driveBase.supportsHolonomicDrive()))
-//                {
-//                    // Distance targets are in feet, so convert them into inches.
-//                    testCommand = new CmdPidDrive(robot.robotDrive.driveBase, robot.robotDrive.pidDrive);
-//                }
+                if (robot.robotDrive != null &&
+                        (testChoices.test != Test.TUNE_X_PID || robot.robotDrive.driveBase.supportsHolonomicDrive()))
+                {
+                    // Distance targets are in feet, so convert them into inches.
+                    testCommand = new CmdPidDrive(robot.robotDrive.driveBase, robot.robotDrive.pidDrive);
+                }
                 break;
         }
     }   //robotInit
@@ -302,9 +302,12 @@ public class FtcTest extends FtcTeleOp
                     // Doing a 48x48-inch square box with robot heading always pointing to the center of the box.
                     //
                     // Set the current position as the absolute field origin so the path can be an absolute path.
-                    TrcPose2D startPose = new TrcPose2D(0, 0, 180);
+//                    robot.robotDrive.purePursuitDrive.start(
+//                            null, 0.0, new TrcPose2D(0,0,0), false,
+//                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, new TrcPose2D(0, 4*12, 0));
+                    TrcPose2D startPose = new TrcPose2D(8,-64,180);
                     robot.robotDrive.driveBase.setFieldPosition(startPose);
-                    robot.robotDrive.purePursuitDrive.start(startPose, false,robot.robotInfo.profiledMaxVelocity,robot.robotInfo.robotMaxAcceleration,new TrcPose2D(8,48,180));
+                    robot.robotDrive.purePursuitDrive.start(startPose, false,robot.robotInfo.profiledMaxVelocity,robot.robotInfo.robotMaxAcceleration,new TrcPose2D(8,-41,180));
                 }
                 break;
         }
@@ -647,27 +650,27 @@ public class FtcTest extends FtcTeleOp
                         switch (testChoices.test) {
                             case TUNE_X_PID:
                                 robot.robotDrive.driveBase.resetOdometry();
-                                robot.robotDrive.purePursuitDrive.setXPositionPidCoefficients(FtcDashboard.PPTuneParams.PidCoeff);
+                                robot.robotDrive.purePursuitDrive.setXPositionPidCoefficients(FtcDashboard.pPPidCoeff);
                                 robot.robotDrive.purePursuitDrive.start(
                                         null, 0.0, new TrcPose2D(0,0,0), false,
                                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, new TrcPose2D(value*12, 0, 0));
-//                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(value*12,0,0));
+                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.pPPidCoeff, new TrcPose2D(value*12,0,0));
                                 break;
                             case TUNE_Y_PID:
                                 robot.robotDrive.driveBase.resetOdometry();
-                                robot.robotDrive.purePursuitDrive.setYPositionPidCoefficients(FtcDashboard.PPTuneParams.PidCoeff);
-                                robot.robotDrive.purePursuitDrive.start(
-                                        null, 0.0, new TrcPose2D(0,0,0), false,
-                                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, new TrcPose2D(0, value*12, 0));
+                                robot.robotDrive.purePursuitDrive.setYPositionPidCoefficients(FtcDashboard.pPPidCoeff);
+                                robot.robotDrive.purePursuitDrive.setVelocityPidCoefficients(new TrcPidController.PidCoefficients(0,0,0,1/FtcDashboard.PPTuneParams.kfMaxVel,0));
+                                robot.robotDrive.purePursuitDrive.start(null, 0.0, new TrcPose2D(0,0,0), false,
+                                        /*robot.robotInfo.profiledMaxVelocity*/FtcDashboard.PPTuneParams.maxVel, FtcDashboard.PPTuneParams.maxAccel/*robot.robotInfo.profiledMaxAcceleration*/, new TrcPose2D(0, value*12, 0));
 //                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(0,value*12,0));
                                 break;
                             case TUNE_TURN_PID:
                                 robot.robotDrive.driveBase.resetOdometry();
-                                robot.robotDrive.purePursuitDrive.setTurnPidCoefficients(FtcDashboard.PPTuneParams.PidCoeff);
+                                robot.robotDrive.purePursuitDrive.setTurnPidCoefficients(FtcDashboard.pPPidCoeff);
                                 robot.robotDrive.purePursuitDrive.start(
                                         null, 0.0, new TrcPose2D(0,0,0), false,
                                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, new TrcPose2D(0, 0, value));
-//                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.PPTuneParams.PidCoeff, new TrcPose2D(0,0,value));
+                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit,FtcDashboard.pPPidCoeff, new TrcPose2D(0,0,value));
                                 break;
                         }
                     }
