@@ -661,7 +661,7 @@ public class FtcTest extends FtcTeleOp
                                 robot.robotDrive.purePursuitDrive.setYPositionPidCoefficients(FtcDashboard.pPPidCoeff);
                                 robot.robotDrive.purePursuitDrive.setVelocityPidCoefficients(new TrcPidController.PidCoefficients(0,0,0,1/FtcDashboard.PPTuneParams.kfMaxVel,0));
                                 robot.robotDrive.purePursuitDrive.start(null, 0.0, robot.robotDrive.driveBase.getFieldPosition(), false,
-                                        robot.robotInfo.profiledMaxVelocity/*FtcDashboard.PPTuneParams.maxVel*/, /*FtcDashboard.PPTuneParams.maxAccel*/robot.robotInfo.profiledMaxAcceleration, new TrcPose2D(0, value*12, 0));
+                                        /*robot.robotInfo.profiledMaxVelocity*/FtcDashboard.PPTuneParams.maxVel, FtcDashboard.PPTuneParams.maxAccel/*robot.robotInfo.profiledMaxAcceleration*/, new TrcPose2D(0, value*12, 0));
                                 break;
                             case TUNE_TURN_PID:
                                 robot.robotDrive.driveBase.resetOdometry();

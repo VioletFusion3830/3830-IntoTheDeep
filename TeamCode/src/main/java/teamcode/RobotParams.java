@@ -401,7 +401,7 @@ public class RobotParams
             robotMaxAcceleration  = 175;  // inches/sec2 //250
             robotMaxTurnRate = 100;       // degrees/sec
             profiledMaxVelocity = 70;
-            profiledMaxAcceleration = 175; //100
+            profiledMaxAcceleration = 100; //175
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
