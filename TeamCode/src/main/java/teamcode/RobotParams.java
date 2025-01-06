@@ -401,7 +401,7 @@ public class RobotParams
             robotMaxAcceleration  = 175;  // inches/sec2 //250
             robotMaxTurnRate = 100;       // degrees/sec
             profiledMaxVelocity = 70;
-            profiledMaxAcceleration = 100;
+            profiledMaxAcceleration = 175; //100
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
@@ -413,7 +413,7 @@ public class RobotParams
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
             turnPidCoeffs = new PidCoefficients(0.0148, 0/*0.00145*/, 0.0009, 0.0, 2.0);
-            turnPidPowerLimit = 0.6;
+            turnPidPowerLimit = 0.5;
             turnMaxPidRampRate = null;
             // PID Stall Detection
             pidStallDetectionEnabled = true;
