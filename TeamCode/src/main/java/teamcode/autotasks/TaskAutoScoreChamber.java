@@ -202,17 +202,17 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
         switch (state)
         {
             case GO_TO_SCORE_POSITION:
-                if(taskParams.cycle)
-                {
-                    robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
-                }
-                else
-                {
-                    robot.elbowElevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
-                }
-                robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,null,0);
-                robot.arm.setPosition(currOwner,0,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,null,0);
-                robot.verticalWrist.setPosition(currOwner,0.2,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,0);
+//                if(taskParams.cycle)
+//                {
+//                    robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
+//                }
+//                else
+//                {
+//                    robot.elbowElevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
+//                }
+//                robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,null,0);
+//                robot.arm.setPosition(currOwner,0,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,null,0);
+//                robot.verticalWrist.setPosition(currOwner,0.2,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,0);
                 if(!taskParams.noDrive)
                 {
                     robot.robotDrive.purePursuitDrive.start(
@@ -225,7 +225,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                 //Wait for completion
                 sm.addEvent(event1);
                 sm.addEvent(event2);
-                sm.waitForEvents(State.PUSH_SPECIMEN,true);
+                sm.waitForEvents(State.DONE,true);
                 break;
 
             case PUSH_SPECIMEN:

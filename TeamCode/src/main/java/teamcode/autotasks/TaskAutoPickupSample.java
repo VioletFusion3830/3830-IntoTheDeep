@@ -216,7 +216,7 @@ public void autoPickupSample(
 
             case PICKUP_SAMPLE:
                 // Pickup the sample.
-                robot.autoPickupAndCycle.autoPickAndCycle(false, event1);
+                robot.autoPickupAndCycle.autoPickSample(event1);
                 sm.waitForSingleEvent(event1, State.RAISE_ELEVATOR);
                 break;
 

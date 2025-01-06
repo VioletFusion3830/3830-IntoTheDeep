@@ -200,6 +200,8 @@ public class FtcTest extends FtcTeleOp
                     // Distance targets are in feet, so convert them into inches.
                     testCommand = new CmdPidDrive(robot.robotDrive.driveBase, robot.robotDrive.pidDrive);
                 }
+            case PURE_PURSUIT_DRIVE:
+                robot.elbow.setPosition(60);
                 break;
         }
     }   //robotInit
@@ -297,7 +299,7 @@ public class FtcTest extends FtcTeleOp
                 if (robot.robotDrive != null)
                 {
                     robot.robotDrive.purePursuitDrive.setTraceLevel(
-                            TrcDbgTrace.MsgLevel.INFO, logEvents, debugPid, false);
+                            TrcDbgTrace.MsgLevel.DEBUG, logEvents, debugPid, false);
                     //
                     // Doing a 48x48-inch square box with robot heading always pointing to the center of the box.
                     //
@@ -307,7 +309,12 @@ public class FtcTest extends FtcTeleOp
 //                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, new TrcPose2D(0, 4*12, 0));
                     TrcPose2D startPose = new TrcPose2D(8,-64,180);
                     robot.robotDrive.driveBase.setFieldPosition(startPose);
-                    robot.robotDrive.purePursuitDrive.start(startPose, false,robot.robotInfo.profiledMaxVelocity,robot.robotInfo.robotMaxAcceleration,new TrcPose2D(8,-41,180));
+                    robot.robotDrive.purePursuitDrive.start(robot.robotDrive.driveBase.getFieldPosition(), false,robot.robotInfo.profiledMaxVelocity,robot.robotInfo.robotMaxAcceleration,new TrcPose2D(8,-41,180));
+//                    robot.robotDrive.purePursuitDrive.start(
+//                            null, null, 0.0,
+//                            robot.robotDrive.driveBase.getFieldPosition(), false,
+//                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+//                            new TrcPose2D(8,-41,180));
                 }
                 break;
         }

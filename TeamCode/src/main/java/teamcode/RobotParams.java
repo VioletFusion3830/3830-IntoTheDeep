@@ -412,7 +412,7 @@ public class RobotParams
             yDrivePidCoeffs = new PidCoefficients(0.0068, 0.03, 0.0026, 0.0, 5.0);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.024, 0/*0.00145*/, 0/*0.0026*/, 0.0, 2.0);
+            turnPidCoeffs = new PidCoefficients(0.0148, 0/*0.00145*/, 0.0009, 0.0, 2.0);
             turnPidPowerLimit = 0.6;
             turnMaxPidRampRate = null;
             // PID Stall Detection
