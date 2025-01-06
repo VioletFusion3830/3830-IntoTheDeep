@@ -397,11 +397,12 @@ public class RobotParams
             xDrivePosScale = 0.01924724265461924299065420560748;        // in/count
             yDrivePosScale = 0.02166184604662450653409090909091;        // in/count
             // Robot Drive Characteristics
-            robotMaxVelocity = 100;        // inches/sec //60
-            robotMaxAcceleration  = 175;  // inches/sec2 //250
-            robotMaxTurnRate = 100;       // degrees/sec
-            profiledMaxVelocity = 70;
-            profiledMaxAcceleration = 100; //175
+            robotMaxVelocity = 100.0;        // inches/sec //60
+            robotMaxAcceleration  = 175.0;  // inches/sec2 //250
+            robotMaxTurnRate = 100.0;       // degrees/sec
+            profiledMaxVelocity = 70.0;
+            profiledMaxAcceleration = 100.0; //175
+            profiledMaxDeceleration = 100.0;
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;

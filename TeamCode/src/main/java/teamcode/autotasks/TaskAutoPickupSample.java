@@ -202,9 +202,8 @@ public void autoPickupSample(
             case GO_TO_POSITION:
                 // Setup all systems to pickup position.
                 robot.robotDrive.purePursuitDrive.start(
-                        currOwner, event2, 0.0,
-                        robot.robotDrive.driveBase.getFieldPosition(), false,
-                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                        currOwner, event2, 0.0, false,
+                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                         robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
                 robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.PICKUP_SAMPLE_POS, RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,null, event1);
                 robot.rotationalWrist.setPosition(null,0,taskParams.wirstRotationalPos,null,0);
@@ -216,7 +215,7 @@ public void autoPickupSample(
 
             case PICKUP_SAMPLE:
                 // Pickup the sample.
-                robot.autoPickupAndCycle.autoPickSample(event1);
+                robot.sampleTeleOpMacros.autoPickSample(event1);
                 sm.waitForSingleEvent(event1, State.RAISE_ELEVATOR);
                 break;
 

@@ -186,9 +186,9 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                 //Path to pickup location
                 if(!taskParams.positionsSet)
                 {
-                    robot.robotDrive.purePursuitDrive.start(currOwner, event1, 0.0,
-                            robot.robotDrive.driveBase.getFieldPosition(), false, robot.robotInfo.profiledMaxVelocity,
-                            robot.robotInfo.profiledMaxAcceleration, robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance));
+                    robot.robotDrive.purePursuitDrive.start(currOwner, event1, 0.0, false,
+                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
+                            robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance));
                     robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS-2, event2);
                     robot.wristArm.setWristArmPickupSpecimenPos(currOwner,0,null);
                     sm.addEvent(event1);

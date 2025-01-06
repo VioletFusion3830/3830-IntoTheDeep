@@ -34,9 +34,9 @@ import trclib.robotcore.TrcTaskMgr;
 /**
  * This class implements auto-assist task.
  */
-public class TaskAutoTeleOpMacros extends TrcAutoTask<TaskAutoTeleOpMacros.State>
+public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.State>
 {
-    private static final String moduleName = TaskAutoTeleOpMacros.class.getSimpleName();
+    private static final String moduleName = TaskSampleTeleOpMacros.class.getSimpleName();
 
     public enum State
     {
@@ -69,7 +69,7 @@ public class TaskAutoTeleOpMacros extends TrcAutoTask<TaskAutoTeleOpMacros.State
      * @param ownerName specifies the owner name to take subsystem ownership, can be null if no ownership required.
      * @param robot specifies the robot object that contains all the necessary subsystems.
      */
-    public TaskAutoTeleOpMacros(String ownerName, Robot robot)
+    public TaskSampleTeleOpMacros(String ownerName, Robot robot)
     {
         super(moduleName, ownerName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.ownerName = ownerName;

@@ -209,8 +209,9 @@ public class FtcTeleOp extends FtcOpMode
                 }
                 double slowDriveTriggered = driverGamepad.getRightTrigger() * RobotParams.Robot.DRIVE_NORMAL_SCALE;
                 double scaleFactor = Math.max(Math.abs(1 - slowDriveTriggered), 0.3);
-                drivePowerScale = Math.atan(5 * RobotParams.Robot.DRIVE_NORMAL_SCALE) / (Math.atan(5) * scaleFactor);
-                turnPowerScale = Math.atan(5 * RobotParams.Robot.DRIVE_NORMAL_SCALE) / (Math.atan(5) * scaleFactor) * RobotParams.Robot.TURN_SLOW_SCALE;
+
+                drivePowerScale = RobotParams.Robot.DRIVE_NORMAL_SCALE * scaleFactor;
+                turnPowerScale = RobotParams.Robot.TURN_NORMAL_SCALE * scaleFactor;
             }
             //
             // Other subsystems.
@@ -481,33 +482,45 @@ public class FtcTeleOp extends FtcOpMode
         switch (button)
         {
             case A:
-                if(pressed)
-                {
-                    //HighBasket
-                    isSamplePickupMode = false;
-                    robot.elbowElevator.setPosition(true, RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, null);
-                    robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
-                    robot.wristArm.setWristArmBasketScorePos(null, 0.2, null);
-                }
                 break;
             case B:
                 if(pressed) {
                     robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                 }
                 break;
-            case X:
-                if(pressed)
-                {
-                    //Score Specmain
-                    isSamplePickupMode = false;
-                    robot.elbowElevator.setPosition(true, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, null);
-                    robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
-                    robot.wristArm.setWristArmHighChamberScorePos(null, 0.2, null);
 
-                }
+            case X:
             case Y:
                 break;
+
             case LeftBumper:
+                if (pressed)
+                {
+                    if (!robot.sampleTeleOpMacros.isActive())
+                    {
+                        robot.sampleTeleOpMacros.autoSetSubsystemsSampleScorePos(null);
+                    }
+                    else
+                    {
+                        robot.sampleTeleOpMacros.cancel();
+                    }
+                }
+                break;
+
+            case RightBumper:
+                if(pressed)
+                {
+                    if (!robot.sampleTeleOpMacros.isActive())
+                    {
+                        robot.sampleTeleOpMacros.autoSetSubsystemsSamplePickupPos(null);
+                    }
+                    else
+                    {
+                        robot.sampleTeleOpMacros.cancel();
+                    }
+                }
+                break;
+            case DpadUp:
                 if(pressed)
                 {
                     if(!isSamplePickupMode)
@@ -525,12 +538,6 @@ public class FtcTeleOp extends FtcOpMode
                     }
                 }
                 break;
-            case RightBumper:
-                if(pressed) {
-                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
-                }
-                break;
-            case DpadUp:
             case DpadDown:
             case DpadLeft:
             case DpadRight:

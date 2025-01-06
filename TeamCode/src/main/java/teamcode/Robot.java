@@ -32,7 +32,7 @@ import ftclib.driverio.FtcMatchInfo;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.sensor.FtcRobotBattery;
 import teamcode.autotasks.TaskAutoHang;
-import teamcode.autotasks.TaskAutoTeleOpMacros;
+import teamcode.autotasks.TaskSampleTeleOpMacros;
 import teamcode.autotasks.TaskAutoPickupSample;
 import teamcode.autotasks.TaskAutoPickupSpecimen;
 import teamcode.autotasks.TaskAutoScoreBasket;
@@ -95,7 +95,7 @@ public class Robot {
     public TaskAutoScoreBasket scoreBasketTask;
     public TaskAutoScoreChamber scoreChamberTask;
     public TaskAutoHang autoHang;
-    public TaskAutoTeleOpMacros autoPickupAndCycle;
+    public TaskSampleTeleOpMacros sampleTeleOpMacros;
     public TaskAutoPickupSample autoPickupSample;
 
     public enum GamePieceType {
@@ -194,7 +194,7 @@ public class Robot {
                 scoreBasketTask = new TaskAutoScoreBasket("AutoScoreBasketTask", this);
                 scoreChamberTask = new TaskAutoScoreChamber("AutoScoreChamberTask", this);
                 autoHang = new TaskAutoHang("AutoHangTask", this);
-                autoPickupAndCycle = new TaskAutoTeleOpMacros("AutoPickUp", this);
+                sampleTeleOpMacros = new TaskSampleTeleOpMacros("sampleTeleOpMacros", this);
             }
         }
 
@@ -405,7 +405,7 @@ public class Robot {
         if (scoreBasketTask != null) scoreBasketTask.cancel();
         if (scoreChamberTask != null) scoreChamberTask.cancel();
         if (autoHang != null) autoHang.cancel();
-        if (autoPickupAndCycle != null) autoPickupAndCycle.cancel();
+        if (sampleTeleOpMacros != null) sampleTeleOpMacros.cancel();
     }   //cancelAll
 
     public double verticalWristPickupSamplePos()

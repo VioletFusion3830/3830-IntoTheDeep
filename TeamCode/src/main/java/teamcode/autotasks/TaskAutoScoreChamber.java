@@ -216,9 +216,8 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                 if(!taskParams.noDrive)
                 {
                     robot.robotDrive.purePursuitDrive.start(
-                            currOwner, event1, 0.0,
-                            robot.robotDrive.driveBase.getFieldPosition(), false,
-                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                            currOwner, event1, 0.0, false,
+                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
                     sm.addEvent(event1);
                 }
@@ -233,9 +232,8 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                 {
                     taskParams.scorePose.x -= taskParams.scorePose.x > 0 ? -2 : 2;
                     robot.robotDrive.purePursuitDrive.start(
-                            currOwner, event1, 0.0,
-                            robot.robotDrive.driveBase.getFieldPosition(), false,
-                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                            currOwner, event1, 0.0, false,
+                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
                     sm.waitForSingleEvent(event1, State.CLIP_SPECIMEN);
                 }
