@@ -128,7 +128,8 @@ public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.S
             tracer.traceWarn(
                     moduleName,
                     "Failed to acquire subsystem ownership (currOwner=" + currOwner+
-                            ", arm=" + ownershipMgr.getOwner(robot.arm) + ").");
+                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
+                            ", verticalWrist " + ownershipMgr.getOwner(robot.arm) + ").");
             releaseSubsystemsOwnership();
         }
 
@@ -148,8 +149,9 @@ public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.S
             tracer.traceInfo(
                     moduleName,
                     "Releasing subsystem ownership (currOwner=" + currOwner +
-                            ", arm=" + ownershipMgr.getOwner(robot.arm) + ").");
-
+                            ", arm=" + ownershipMgr.getOwner(robot.arm) +
+                            ", verticalWrist " + ownershipMgr.getOwner(robot.verticalWrist) + ").");
+            robot.verticalWrist.releaseExclusiveAccess(currOwner);
             robot.arm.releaseExclusiveAccess(currOwner);
             currOwner = null;
         }
@@ -194,7 +196,7 @@ public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.S
                 break;
 
             case GRAB:
-                robot.clawGrabber.close(currOwner, 0, event);
+                robot.clawGrabber.close(null, 0, event);
                 sm.waitForSingleEvent(event, State.RESET_ARM_POS);
                 break;
 
@@ -208,13 +210,13 @@ public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.S
             case SET_SUBSYSTEMS_SAMPLE_SCORE_POS:
                 if(robot.elevator.getPosition() > 15 && robot.elbow.getPosition() < 80)
                 {
-                    robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, event);
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, event);
                 }
                 else
                 {
-                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, event);
+                    robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, event);
                 }
-                robot.rotationalWrist.setPosition(currOwner,0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
+                robot.rotationalWrist.setPosition(null,0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
                 sm.waitForSingleEvent(event, State.SET_ARM_SAMPLE_SCORE_POS);
                 break;
 
@@ -226,11 +228,11 @@ public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.S
             //Auto-assists set Subsystems pickup Sample
             case SET_ARM_SAMPLE_PICKUP_POS:
                 robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS, null, event);
-                robot.wristArm.setWristArmPickupReadySamplePos(currOwner,0, null);
                 sm.waitForSingleEvent(event, State.SET_PICKUP_SCALING);
                 break;
 
             case SET_PICKUP_SCALING:
+                robot.wristArm.setWristArmPickupReadySamplePos(currOwner,0, null);
                 FtcTeleOp.isSamplePickupMode = true;
                 sm.setState(State.DONE);
                 break;

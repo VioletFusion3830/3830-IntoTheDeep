@@ -197,7 +197,6 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
 
             case SET_ARM:
                 robot.wristArm.setWristArmBasketScorePos(null,0.2, event1);
-                sm.addEvent(event1);
                 sm.addEvent(event2);
                 sm.waitForEvents(State.SCORE_BASKET, true);
                 break;

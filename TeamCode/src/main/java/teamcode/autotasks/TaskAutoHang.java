@@ -103,8 +103,7 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
     protected boolean acquireSubsystemsOwnership()
     {
         boolean success = ownerName == null ||
-                (robot.robotDrive.driveBase.acquireExclusiveAccess(ownerName) &&
-                        robot.arm.acquireExclusiveAccess(ownerName) &&
+                (robot.arm.acquireExclusiveAccess(ownerName) &&
                         robot.verticalWrist.acquireExclusiveAccess(ownerName));
 
         if (success)
@@ -118,7 +117,6 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
             tracer.traceWarn(
                     moduleName,
                     "Failed to acquire subsystem ownership (currOwner=" + currOwner +
-                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) +
                             ", arm=" + ownershipMgr.getOwner(robot.arm) +
                             ", verticalWrist=" + ownershipMgr.getOwner(robot.verticalWrist) + ").");
             releaseSubsystemsOwnership();
@@ -140,10 +138,8 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
             tracer.traceInfo(
                     moduleName,
                     "Releasing subsystem ownership (currOwner=" + currOwner +
-                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) +
                             ", arm=" + ownershipMgr.getOwner(robot.arm) +
                             ", verticalWrist=" + ownershipMgr.getOwner(robot.verticalWrist) + ").");
-            robot.robotDrive.driveBase.releaseExclusiveAccess(currOwner);
             robot.arm.releaseExclusiveAccess(currOwner);
             robot.verticalWrist.releaseExclusiveAccess(currOwner);
             currOwner = null;
@@ -157,7 +153,6 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
     protected void stopSubsystems()
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
-        robot.robotDrive.cancel(currOwner);
         robot.elbow.cancel();
         robot.verticalWrist.cancel();
         robot.arm.cancel();

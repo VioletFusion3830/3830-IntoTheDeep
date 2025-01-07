@@ -176,7 +176,7 @@ public void autoPickupSample(
         robot.elevator.cancel();
         robot.clawGrabber.cancel();
         robot.rotationalWrist.cancel();
-        robot.autoPickupAndCycle.cancel();
+        robot.sampleTeleOpMacros.cancel();
     }   //stopSubsystems
 
 /**

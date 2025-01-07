@@ -87,7 +87,7 @@ public class RobotParams
     {
         // Global config
         public static final RobotType robotType                 = RobotType.MecanumRobot;
-        public static final boolean inCompetition               = false;
+        public static final boolean inCompetition               = true;
         public static final boolean useTraceLog                 = true;
         public static final boolean useLoopPerformanceMonitor   = true;
         public static final boolean useBatteryMonitor           = false;
@@ -232,7 +232,7 @@ public class RobotParams
         public static final double DRIVE_SLOW_SCALE                         = 0.7;
         public static final double DRIVE_NORMAL_SCALE                       = 1.0;
         public static final double TURN_SLOW_SCALE                          = 0.7;
-        public static final double TURN_NORMAL_SCALE                        = 0.5;
+        public static final double TURN_NORMAL_SCALE                        = 0.7;
     }   //class Robot
 
     /**
@@ -401,7 +401,7 @@ public class RobotParams
             robotMaxAcceleration  = 175.0;  // inches/sec2 //250
             robotMaxTurnRate = 100.0;       // degrees/sec
             profiledMaxVelocity = 70.0;
-            profiledMaxAcceleration = 100.0; //175
+            profiledMaxAcceleration = 120.0; //175
             profiledMaxDeceleration = 100.0;
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
@@ -461,8 +461,8 @@ public class RobotParams
         public static final double HIGH_BASKET_SCORE_POS                    = 32;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 14.5;
         public static final double LEVEL1_ASCENT_POS                        = 12.5;
-        public static final double LEVEL2_ASCENT_START_POS                  = 31;
-        public static final double LEVEL2_ASCENT_POS                        = MIN_POS;
+        public static final double LEVEL2_ASCENT_START_POS                  = 21;
+        public static final double LEVEL2_ASCENT_POS                        = 12.5;
         public static final double[] POS_PRESETS                            = {13,28,40};
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
 
@@ -573,7 +573,7 @@ public class RobotParams
         public static final String PRIMARY_SERVO_ROTATOR                    = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_ROTATOR_INVERTED          = false;
 
-        public static final double ANALOG_INCREMENT                         = 0.03;
+        public static final double ANALOG_INCREMENT                         = 0.04;
         public static final double ANALOG_MAX                               = 0.85;
         public static final double ANALOG_MIN                               = 0.280;
         public static final double PARALLEL_BASE_P0S                        = 0.565;

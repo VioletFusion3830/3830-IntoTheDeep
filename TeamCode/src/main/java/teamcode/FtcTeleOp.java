@@ -208,7 +208,7 @@ public class FtcTeleOp extends FtcOpMode
                             inputs[0], inputs[1], inputs[2], robot.robotDrive.driveBase.getDriveOrientation());
                 }
                 double slowDriveTriggered = driverGamepad.getRightTrigger() * RobotParams.Robot.DRIVE_NORMAL_SCALE;
-                double scaleFactor = Math.max(Math.abs(1 - slowDriveTriggered), 0.3);
+                double scaleFactor = Math.max(Math.abs(1 - slowDriveTriggered), 0.4);
 
                 drivePowerScale = RobotParams.Robot.DRIVE_NORMAL_SCALE * scaleFactor;
                 turnPowerScale = RobotParams.Robot.TURN_NORMAL_SCALE * scaleFactor;
@@ -490,37 +490,6 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case X:
-            case Y:
-                break;
-
-            case LeftBumper:
-                if (pressed)
-                {
-                    if (!robot.sampleTeleOpMacros.isActive())
-                    {
-                        robot.sampleTeleOpMacros.autoSetSubsystemsSampleScorePos(null);
-                    }
-                    else
-                    {
-                        robot.sampleTeleOpMacros.cancel();
-                    }
-                }
-                break;
-
-            case RightBumper:
-                if(pressed)
-                {
-                    if (!robot.sampleTeleOpMacros.isActive())
-                    {
-                        robot.sampleTeleOpMacros.autoSetSubsystemsSamplePickupPos(null);
-                    }
-                    else
-                    {
-                        robot.sampleTeleOpMacros.cancel();
-                    }
-                }
-                break;
-            case DpadUp:
                 if(pressed)
                 {
                     if(!isSamplePickupMode)
@@ -538,8 +507,50 @@ public class FtcTeleOp extends FtcOpMode
                     }
                 }
                 break;
+            case Y:
+                break;
+
+            case LeftBumper:
+//                if (pressed)
+//                {
+//                    if (!robot.sampleTeleOpMacros.isActive())
+//                    {
+//                        robot.sampleTeleOpMacros.autoSetSubsystemsSampleScorePos(null);
+//                    }
+//                    else
+//                    {
+//                        robot.sampleTeleOpMacros.cancel();
+//                    }
+//                }
+                break;
+
+            case RightBumper:
+//                if(pressed)
+//                {
+//                    if (!robot.sampleTeleOpMacros.isActive())
+//                    {
+//                        robot.sampleTeleOpMacros.autoSetSubsystemsSamplePickupPos(null);
+//                    }
+//                    else
+//                    {
+//                        robot.sampleTeleOpMacros.cancel();
+//                    }
+//                }
+                break;
+            case DpadUp:
+                break;
             case DpadDown:
+                if(pressed)
+                {
+                    isSamplePickupMode = !isSamplePickupMode;
+                    robot.globalTracer.traceInfo(null, "isSamplePickupMode=" + isSamplePickupMode);
+                }
             case DpadLeft:
+                if(pressed)
+                {
+                    robot.globalTracer.traceInfo(null, "isSamplePickupMode=" + isSamplePickupMode);
+                }
+                break;
             case DpadRight:
                 break;
             case Back:

@@ -179,8 +179,8 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                     if (autoChoices.parkPos == FtcAuto.ParkOption.PARK)
                     {
                         robot.robotDrive.purePursuitDrive.start(
-                                event, 0.0, robot.robotDrive.driveBase.getFieldPosition(), false,
-                                robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                                event, 0.0, false,
+                                robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                                 robot.adjustPoseByAlliance(
                                         RobotParams.Game.RED_ASCENT_ZONE_PARK_POSE, autoChoices.alliance, false));
                         robot.autoHang.autoClimbLevel1(null);

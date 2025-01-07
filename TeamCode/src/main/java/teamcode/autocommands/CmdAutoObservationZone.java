@@ -134,8 +134,8 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     robot.wristArm.setWristArmPickupSpecimenPos();
                     robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,null,0);
                     robot.robotDrive.purePursuitDrive.start(
-                            event, 0.0, robot.robotDrive.driveBase.getFieldPosition(), false,
-                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                            event, 0.0, false,
+                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(
                                     RobotParams.Game.RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH, autoChoices.alliance, true));
                     robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,12.5, event2);
@@ -171,8 +171,8 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                         robot.elbowElevator.setPosition(true, RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, event);
                         robot.wristArm.setWristArmPickupSpecimenPos();
                         robot.robotDrive.purePursuitDrive.start(
-                                event2, 0.0, robot.robotDrive.driveBase.getFieldPosition(), false,
-                                robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                                event2, 0.0, false,
+                                robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                                 robot.adjustPoseByAlliance( RobotParams.Game.RED_OBSERVATION_ZONE_PARK_POSE, autoChoices.alliance, true));
                         sm.addEvent(event);
                         sm.addEvent(event2);
