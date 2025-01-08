@@ -124,8 +124,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
 
                 case SCORE_PRELOAD:
                     // Score the preloaded specimen.
-                    robot.scoreChamberTask.autoScoreChamber(false,false, event);
-                    scoreSpecimenCount++;
+                    robot.scoreChamberTask.autoScoreChamber(null,false,false, event);
                     sm.waitForSingleEvent(event, State.MOVE_SAMPLES);
                     break;
 
@@ -146,9 +145,9 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
 
                 case PICKUP_SPECIMEN:
                     // Pick up a specimen from the wall.
-                    if (scoreSpecimenCount < 5)
+                    if (scoreSpecimenCount < 4)
                     {
-                        robot.pickupSpecimenTask.autoPickupSpecimen(autoChoices.alliance, scoreSpecimenCount == 1, event);
+                        robot.pickupSpecimenTask.autoPickupSpecimen(autoChoices.alliance, scoreSpecimenCount == 0, event);
                         scoreSpecimenCount++;
                         sm.waitForSingleEvent(event, State.DONE);
                     }
@@ -160,7 +159,9 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
 
                 case SCORE_SPECIMEN:
                     // Score the specimen.
-                    robot.scoreChamberTask.autoScoreChamber(scoreSpecimenCount != 2,false, event);
+                    TrcPose2D scorePose = RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
+                    scorePose.x += 1.5 * scoreSpecimenCount;
+                    robot.scoreChamberTask.autoScoreChamber(scorePose,scoreSpecimenCount != 1,false, event);
                     sm.waitForSingleEvent(event, State.PICKUP_SPECIMEN);
                     break;
 

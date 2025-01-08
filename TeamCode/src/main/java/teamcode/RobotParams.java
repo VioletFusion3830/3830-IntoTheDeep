@@ -168,7 +168,7 @@ public class RobotParams
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
         public static final TrcPose2D STARTPOSE_RED_NET_ZONE__SPECIMEN = new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
-        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D((Robot.ROBOT_WIDTH/2.0)+1, -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D((Robot.ROBOT_WIDTH/2.0)+1.5, -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
 
 
 

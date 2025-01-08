@@ -84,14 +84,17 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoScoreChamber(boolean cycle, boolean noDrive, TrcEvent completionEvent)
+    public void autoScoreChamber(TrcPose2D scorePose, boolean cycle, boolean noDrive, TrcEvent completionEvent)
     {
         TrcPose2D robotPose = robot.robotDrive.driveBase.getFieldPosition();
-        FtcAuto.Alliance alliance = robotPose.y < 0.0? FtcAuto.Alliance.RED_ALLIANCE: FtcAuto.Alliance.BLUE_ALLIANCE;
-        boolean nearNetZone = alliance == FtcAuto.Alliance.RED_ALLIANCE ^ robotPose.x > 0.0;
-        TrcPose2D scorePose = nearNetZone ?
-                RobotParams.Game.RED_NET_CHAMBER_SCORE_POSE.clone() :
-                RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
+        FtcAuto.Alliance alliance = robotPose.y < 0.0 ? FtcAuto.Alliance.RED_ALLIANCE : FtcAuto.Alliance.BLUE_ALLIANCE;
+        if (scorePose == null)
+        {
+            boolean nearNetZone = alliance == FtcAuto.Alliance.RED_ALLIANCE ^ robotPose.x > 0.0;
+             scorePose = nearNetZone ?
+                    RobotParams.Game.RED_NET_CHAMBER_SCORE_POSE.clone() :
+                    RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
+        }
 
         if (robotPose.x >= -RobotParams.Game.CHAMBER_MAX_SCORE_POS_X &&
                 robotPose.x <= RobotParams.Game.CHAMBER_MAX_SCORE_POS_X) {
