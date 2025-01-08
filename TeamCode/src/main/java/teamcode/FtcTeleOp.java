@@ -482,10 +482,19 @@ public class FtcTeleOp extends FtcOpMode
         switch (button)
         {
             case A:
+                if(pressed && robot.wristArm != null)
+                {
+                    isSamplePickupMode = false;
+                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
+                    robot.wristArm.setWristArmPickupSpecimenPos();
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,null,null);
+                }
                 break;
+
             case B:
                 if(pressed) {
-                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
+                    robot.arm.setPosition(.8);
+                    robot.elbowElevator.setPosition(12.5,80.0,null,null);
                 }
                 break;
 
@@ -508,6 +517,13 @@ public class FtcTeleOp extends FtcOpMode
                 }
                 break;
             case Y:
+                if(pressed)
+                {
+                    isSamplePickupMode = false;
+                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS);
+                    robot.wristArm.setWristArmHighChamberScorePos();
+                    robot.elbowElevator.setPosition(84.0,13.0,null);
+                }
                 break;
 
             case LeftBumper:
@@ -540,17 +556,17 @@ public class FtcTeleOp extends FtcOpMode
             case DpadUp:
                 break;
             case DpadDown:
-                if(pressed)
-                {
-                    isSamplePickupMode = !isSamplePickupMode;
-                    robot.globalTracer.traceInfo(null, "isSamplePickupMode=" + isSamplePickupMode);
-                }
-            case DpadLeft:
-                if(pressed)
-                {
-                    robot.globalTracer.traceInfo(null, "isSamplePickupMode=" + isSamplePickupMode);
-                }
-                break;
+//                if(pressed)
+//                {
+//                    isSamplePickupMode = !isSamplePickupMode;
+//                    robot.globalTracer.traceInfo(null, "isSamplePickupMode=" + isSamplePickupMode);
+//                }
+//            case DpadLeft:
+//                if(pressed)
+//                {
+//                    robot.globalTracer.traceInfo(null, "isSamplePickupMode=" + isSamplePickupMode);
+//                }
+//                break;
             case DpadRight:
                 break;
             case Back:

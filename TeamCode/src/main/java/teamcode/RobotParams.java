@@ -87,7 +87,7 @@ public class RobotParams
     {
         // Global config
         public static final RobotType robotType                 = RobotType.MecanumRobot;
-        public static final boolean inCompetition               = true;
+        public static final boolean inCompetition               = false;
         public static final boolean useTraceLog                 = true;
         public static final boolean useLoopPerformanceMonitor   = true;
         public static final boolean useBatteryMonitor           = false;
@@ -523,7 +523,7 @@ public class RobotParams
         public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = true;
 
-        public static final double PICKUP_SPECIMEN_POS                      = 0.545;
+        public static final double PICKUP_SPECIMEN_POS                      = 0.57;
         public static final double BASKET_SCORE_POS                         = 0.60;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.60;
 

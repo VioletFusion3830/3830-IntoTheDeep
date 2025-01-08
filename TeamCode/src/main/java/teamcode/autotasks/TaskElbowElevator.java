@@ -187,7 +187,7 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
                 elbowEvent.clear();
                 elevatorEvent.clear();
                 elevatorEventInital.clear();
-                sm.setState(taskParams.elevatorInitialPos != null? State.RETRACT_ELEVATOR: State.SET_ELBOW_ANGLE);
+                sm.setState(State.RETRACT_ELEVATOR);
                 break;
 
             case RETRACT_ELEVATOR:
