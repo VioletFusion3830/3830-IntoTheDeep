@@ -126,7 +126,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     // Score the preloaded specimen.
                     robot.scoreChamberTask.autoScoreChamber(false,false, event);
                     scoreSpecimenCount++;
-                    sm.waitForSingleEvent(event, State.DONE);
+                    sm.waitForSingleEvent(event, State.MOVE_SAMPLES);
                     break;
 
                 case MOVE_SAMPLES:
@@ -138,10 +138,10 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(
                                     RobotParams.Game.RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH, autoChoices.alliance, true));
-                    robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,12.5, event2);
+                    robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,14.0, event2);
                     sm.addEvent(event);
                     sm.addEvent(event2);
-                    sm.waitForEvents(State.DONE, true);
+                    sm.waitForEvents(State.PICKUP_SPECIMEN, true);
                     break;
 
                 case PICKUP_SPECIMEN:
@@ -150,7 +150,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     {
                         robot.pickupSpecimenTask.autoPickupSpecimen(autoChoices.alliance, scoreSpecimenCount == 1, event);
                         scoreSpecimenCount++;
-                        sm.waitForSingleEvent(event, State.SCORE_SPECIMEN);
+                        sm.waitForSingleEvent(event, State.DONE);
                     }
                     else
                     {

@@ -168,7 +168,7 @@ public class RobotParams
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
         public static final TrcPose2D STARTPOSE_RED_NET_ZONE__SPECIMEN = new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
-        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D(Robot.ROBOT_WIDTH/2.0, -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D((Robot.ROBOT_WIDTH/2.0)+1, -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
 
 
 
@@ -179,7 +179,7 @@ public class RobotParams
                 new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -38, 180);
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D((Robot.ROBOT_WIDTH/2.0), -41, 180);
+                new TrcPose2D((Robot.ROBOT_WIDTH/2.0), -36, 180);
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
@@ -195,15 +195,15 @@ public class RobotParams
         // Observation zone auto poses.
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH = {
                 new TrcPose2D(1.3, -1.5, 180), //Move toward sample 1
-                new TrcPose2D(1.6, -0.9, 180), //Move toward sample 1
-                new TrcPose2D(1.97,-0.9,180), //Move in front of sample 1
-                new TrcPose2D(1.97, -2.1, 170), //Push sample 1
-                new TrcPose2D(1.97,-0.9, 180), //Drive back for sample 2
-                new TrcPose2D(2.45,-0.9, 180), //Move in front of sample 2
-                new TrcPose2D(2.45, -2.1, 180), //Push sample 2
-                new TrcPose2D(2.45, -0.9, 180), //Drive back for sample 3
-                new TrcPose2D(2.6,-0.8,180), //Move in front of sample 3
-                new TrcPose2D(2.6,-2.19,180) //Push sample 3
+                new TrcPose2D(1.5, -0.7, 180), //Move toward sample 1
+                new TrcPose2D(1.97,-0.7,180), //Move in front of sample 1
+                new TrcPose2D(1.97, -2.25, 165), //Push sample 1
+                new TrcPose2D(1.97,-0.7, 180), //Drive back for sample 2
+                new TrcPose2D(2.45,-0.7, 180), //Move in front of sample 2
+                new TrcPose2D(2.45, -2.25, 180), //Push sample 2
+                new TrcPose2D(2.45, -0.7, 180), //Drive back for sample 3
+                new TrcPose2D(2.63,-0.7,180), //Move in front of sample 3
+                new TrcPose2D(2.63,-2.3,180) //Push sample 3
         };
 
 
@@ -401,26 +401,26 @@ public class RobotParams
             robotMaxAcceleration  = 175.0;  // inches/sec2 //250
             robotMaxTurnRate = 100.0;       // degrees/sec
             profiledMaxVelocity = 70.0;
-            profiledMaxAcceleration = 120.0; //175
+            profiledMaxAcceleration = 200.0;
             profiledMaxDeceleration = 100.0;
             profiledMaxTurnRate = robotMaxTurnRate;
             // DriveBase PID Parameters
             drivePidTolerance = 1.0;
             turnPidTolerance = 2.0;
-            xDrivePidCoeffs = new PidCoefficients(0.0353,0 /*0.025*/, 0.002, 0.0, 3.0);
+            xDrivePidCoeffs = new PidCoefficients(0.0353,0.02, 0.002, 0.0, 3.0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
-            yDrivePidCoeffs = new PidCoefficients(0.0068, 0.03, 0.0026, 0.0, 5.0);
+            yDrivePidCoeffs = new PidCoefficients(0.0074, 0.0, 0.00275, 0.0, 0.0);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.0148, 0/*0.00145*/, 0.0009, 0.0, 2.0);
+            turnPidCoeffs = new PidCoefficients(0.017, 0.0017, 0.0008, 0.0, 4.0);
             turnPidPowerLimit = 0.5;
             turnMaxPidRampRate = null;
             // PID Stall Detection
             pidStallDetectionEnabled = true;
             // PurePursuit Parameters
             ppdFollowingDistance = 10.0;
-            velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / 90, 0.0); //90
+            velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / FtcDashboard.PPTuneParams.kfMaxVel, 0.0); //90
             // Vision
             webCam1 = null; //new FrontCamParams()
             webCam2 = null; //new BackCamParams()

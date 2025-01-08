@@ -493,8 +493,8 @@ public class FtcTeleOp extends FtcOpMode
 
             case B:
                 if(pressed) {
-                    robot.arm.setPosition(.8);
-                    robot.elbowElevator.setPosition(12.5,80.0,null,null);
+                    robot.arm.setPosition(.80);
+                    robot.elbowElevator.setPosition(12.5,null,null,null);
                 }
                 break;
 

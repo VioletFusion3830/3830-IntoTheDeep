@@ -213,6 +213,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
 
             case RETRACT_ELEVATOR_ARM:
                 //retract elevator & arm "fire and forget"
+                robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS);
                 robot.wristArm.setWristArmHighChamberScorePos(currOwner,0,null);
                 robot.elevator.setPosition(currOwner,0.2,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,null,0);
                 sm.setState(State.DONE);

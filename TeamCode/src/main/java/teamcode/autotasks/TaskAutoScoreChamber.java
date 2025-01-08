@@ -224,7 +224,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                 //Wait for completion
                 sm.addEvent(event1);
                 sm.addEvent(event2);
-                sm.waitForEvents(State.DONE,true);
+                sm.waitForEvents(State.CLIP_SPECIMEN,true);
                 break;
 
             case PUSH_SPECIMEN:
@@ -245,7 +245,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
             case CLIP_SPECIMEN:
                 //Lower elevator to clip specimen
-                robot.arm.setPosition(currOwner,0,.75,null,.1);
+                robot.arm.setPosition(currOwner,0,.8,null,.1);
                 robot.elevator.setPosition(currOwner,0,12.5,true,RobotParams.ElevatorParams.POWER_LIMIT,event1,3);
                 sm.waitForSingleEvent(event1, State.SCORE_CHAMBER);
                 break;
