@@ -88,7 +88,7 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
         startAutoTask(State.LEVEL3_START, null, completionEvent);
     }   //autoClimbLevel3
 
-//
+    //
     // Implement TrcAutoTask abstract methods.
     //
 
@@ -188,8 +188,7 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
             case LEVEL2_START:
                 robot.elevator.setPosition(currOwner,0.5,RobotParams.ElevatorParams.LEVEL2_ASCENT_START_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event,2);
                 robot.elbow.setPosition(currOwner,0,95,true,RobotParams.ElevatorParams.POWER_LIMIT,null,3);
-                robot.arm.setPosition(null,0,.8,null,3);
-                robot.verticalWrist.setPosition(null,0,.17,null,2);
+                robot.wristArm.setWristArmPosition(currOwner,0.3,0.8,0,null);
                 sm.addEvent(event);
                 sm.waitForEvents(State.CLIP);
                 break;
@@ -203,8 +202,7 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
             case LEVEL2_ASCENT:
                 robot.elevator.setPidStallDetectionEnabled(false);
                 robot.elevator.setStallProtection(0.0, 0.0, 0.0, 0.0);
-                //robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
-                //robot.elevator.setPositionPidParameters(1,0,0,0,0, RobotParams.ElevatorParams.PID_TOLERANCE);
+                robot.elevator.setPositionPidParameters(0.6,0,0,0,0, RobotParams.ElevatorParams.PID_TOLERANCE);
                 robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.LEVEL2_ASCENT_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event2,2);
                 robot.elbow.setPosition(currOwner,0.5,RobotParams.ElbowParams.LEVEL2_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,2);
                 sm.waitForSingleEvent(event2,State.LEVEL2_FINISH);

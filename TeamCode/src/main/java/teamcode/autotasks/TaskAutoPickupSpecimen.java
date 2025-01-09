@@ -176,33 +176,38 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
      */
     @Override
     protected void runTaskState(
-            Object params, State state, TrcTaskMgr.TaskType taskType, TrcRobot.RunMode runMode, boolean slowPeriodicLoop)
-    {
+            Object params, State state, TrcTaskMgr.TaskType taskType, TrcRobot.RunMode runMode, boolean slowPeriodicLoop) {
         TaskParams taskParams = (TaskParams) params;
 
-        switch (state)
-        {
+        switch (state) {
             case GO_TO_SCORE_POSITION:
                 //Path to pickup location
-                if(!taskParams.positionsSet)
+                if (!taskParams.positionsSet)
                 {
                     robot.robotDrive.purePursuitDrive.start(currOwner, event1, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance));
-                    robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS-2, event2);
-                    robot.wristArm.setWristArmPickupSpecimenPos(currOwner,0,null);
+                    robot.elbowElevator.setPosition(true, RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS - 2, event2);
+                    robot.wristArm.setWristArmPickupSpecimenPos(currOwner, 0, null);
                     sm.addEvent(event1);
                     sm.addEvent(event2);
                     sm.waitForEvents(State.SET_ELEVATOR, true);
                 }
                 else
                 {
-                    sm.setState(State.GRAB_SPECIMEN);
+                    sm.setState(State.SET_ELEVATOR);
                 }
                 break;
 
             case SET_ELEVATOR:
-                robot.elbowElevator.setPosition(null, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS,event1);
+                if (taskParams.positionsSet)
+                {
+                    robot.elbowElevator.setPosition(null,12.5,event1);
+                }
+                else
+                {
+                    robot.elbowElevator.setPosition(null, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, event1);
+                }
                 sm.waitForSingleEvent(event1, State.GRAB_SPECIMEN);
                 break;
 

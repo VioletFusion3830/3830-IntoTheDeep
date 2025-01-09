@@ -261,6 +261,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
             case RETRACT_ELBOW:
                 //retract elbow, arm, and elbow "fire and forget"
+                robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,null,0);
                 robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,null,null);
                 sm.setState(State.DONE);
                 break;

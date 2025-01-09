@@ -185,7 +185,7 @@ public class RobotParams
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
         // Pickup pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
-                new TrcPose2D(39, -44, 180.0);
+                new TrcPose2D(37, -44, 180.0);
         // Park pose (Net zone side).
         public static final TrcPose2D RED_ASCENT_ZONE_PARK_POSE     =
                 new TrcPose2D(-20, -10, 90.0);
@@ -197,13 +197,13 @@ public class RobotParams
                 new TrcPose2D(1.3, -1.5, 180), //Move toward sample 1
                 new TrcPose2D(1.5, -0.7, 180), //Move toward sample 1
                 new TrcPose2D(1.97,-0.7,180), //Move in front of sample 1
-                new TrcPose2D(1.97, -2.25, 165), //Push sample 1
-                new TrcPose2D(1.97,-0.7, 180), //Drive back for sample 2
-                new TrcPose2D(2.45,-0.7, 180), //Move in front of sample 2
-                new TrcPose2D(2.45, -2.25, 180), //Push sample 2
-                new TrcPose2D(2.45, -0.7, 180), //Drive back for sample 3
-                new TrcPose2D(2.63,-0.7,180), //Move in front of sample 3
-                new TrcPose2D(2.63,-2.3,180) //Push sample 3
+                new TrcPose2D(1.97, -2.35, 180), //Push sample 1
+                new TrcPose2D(1.97,-0.75, 180), //Drive back for sample 2
+                new TrcPose2D(2.45,-0.75, 180), //Move in front of sample 2
+                new TrcPose2D(2.45, -2.3, 180), //Push sample 2
+                new TrcPose2D(2.45, -0.5, 180), //Drive back for sample 3
+                new TrcPose2D(2.7,-0.5,180), //Move in front of sample 3
+                new TrcPose2D(2.66,-2.3,180) //Push sample 3
         };
 
 
@@ -397,30 +397,30 @@ public class RobotParams
             xDrivePosScale = 0.01924724265461924299065420560748;        // in/count
             yDrivePosScale = 0.02166184604662450653409090909091;        // in/count
             // Robot Drive Characteristics
-            robotMaxVelocity = 100.0;        // inches/sec //60
-            robotMaxAcceleration  = 175.0;  // inches/sec2 //250
-            robotMaxTurnRate = 100.0;       // degrees/sec
-            profiledMaxVelocity = 70.0;
-            profiledMaxAcceleration = 200.0;
-            profiledMaxDeceleration = 100.0;
-            profiledMaxTurnRate = robotMaxTurnRate;
+            robotMaxVelocity = 82.0;        // inches/sec //60
+            robotMaxAcceleration  = 185.0;  // inches/sec2 //250
+            robotMaxTurnRate = 168.0;       // degrees/sec
+            profiledMaxVelocity = 75.0;
+            profiledMaxAcceleration = 170.0;
+            profiledMaxDeceleration = 130.0;
+            profiledMaxTurnRate = 100.0;
             // DriveBase PID Parameters
-            drivePidTolerance = 1.0;
-            turnPidTolerance = 2.0;
-            xDrivePidCoeffs = new PidCoefficients(0.0353,0.02, 0.002, 0.0, 3.0);
+            drivePidTolerance = 2.0;
+            turnPidTolerance = 1.5;
+            xDrivePidCoeffs = new PidCoefficients(0.039,0.0, 0.0017, 0.0, 0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
-            yDrivePidCoeffs = new PidCoefficients(0.0074, 0.0, 0.00275, 0.0, 0.0);
+            yDrivePidCoeffs = new PidCoefficients(0.015, 0.02, 0.0031, 0.0, 4);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.017, 0.0017, 0.0008, 0.0, 4.0);
+            turnPidCoeffs = new PidCoefficients(0.02328, 0.104, 0.001375, 0.0, 5);
             turnPidPowerLimit = 0.5;
             turnMaxPidRampRate = null;
             // PID Stall Detection
             pidStallDetectionEnabled = true;
             // PurePursuit Parameters
-            ppdFollowingDistance = 10.0;
-            velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / FtcDashboard.PPTuneParams.kfMaxVel, 0.0); //90
+            ppdFollowingDistance = 12.0;
+            velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / profiledMaxVelocity, 0.0); //90
             // Vision
             webCam1 = null; //new FrontCamParams()
             webCam2 = null; //new BackCamParams()
@@ -456,13 +456,13 @@ public class RobotParams
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 44;
         public static final double PICKUP_SAMPLE_POS                        = 12.5;
-        public static final double PICKUP_SPECIMEN_POS                      = 22;
+        public static final double PICKUP_SPECIMEN_POS                      = 21;
         public static final double LOW_BASKET_SCORE_POS                     = 32;
         public static final double HIGH_BASKET_SCORE_POS                    = 32;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 14.5;
         public static final double LEVEL1_ASCENT_POS                        = 12.5;
-        public static final double LEVEL2_ASCENT_START_POS                  = 21;
-        public static final double LEVEL2_ASCENT_POS                        = 12.5;
+        public static final double LEVEL2_ASCENT_START_POS                  = 21.5;
+        public static final double LEVEL2_ASCENT_POS                        = 10;
         public static final double[] POS_PRESETS                            = {13,28,40};
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
 
@@ -500,7 +500,7 @@ public class RobotParams
         public static final double HIGH_CHAMBER_SCORE_POS                   = 110;
         public static final double LEVEL1_ASCENT_POS                        = 60;
         public static final double LEVEL2_ASCENT_START_POS                  = 116;
-        public static final double LEVEL2_ASCENT_POS                        = 80;
+        public static final double LEVEL2_ASCENT_POS                        = 70;
         public static final double[] POS_PRESETS                            = {10,30,60,90}; //Need to be Updated
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
 

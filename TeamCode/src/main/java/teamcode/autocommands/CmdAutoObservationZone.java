@@ -130,14 +130,14 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
 
                 case MOVE_SAMPLES:
                     // Herd two samples to the observation zone to be converted to specimens.
-                    robot.wristArm.setWristArmPickupSpecimenPos();
                     robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,null,0);
+                    robot.wristArm.setWristArmPosition(null, 6.3, RobotParams.ArmParams.PICKUP_SPECIMEN_POS, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,0,null);
                     robot.robotDrive.purePursuitDrive.start(
                             event, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(
                                     RobotParams.Game.RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH, autoChoices.alliance, true));
-                    robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,14.0, event2);
+                    robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,12.5, event2);
                     sm.addEvent(event);
                     sm.addEvent(event2);
                     sm.waitForEvents(State.PICKUP_SPECIMEN, true);
@@ -149,11 +149,11 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     {
                         robot.pickupSpecimenTask.autoPickupSpecimen(autoChoices.alliance, scoreSpecimenCount == 0, event);
                         scoreSpecimenCount++;
-                        sm.waitForSingleEvent(event, State.DONE);
+                        sm.waitForSingleEvent(event, State.SCORE_SPECIMEN);
                     }
                     else
                     {
-                        sm.setState(State.PARK);
+                        sm.setState(State.DONE);
                     }
                     break;
 

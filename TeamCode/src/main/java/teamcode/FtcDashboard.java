@@ -20,14 +20,14 @@ public class FtcDashboard
     @Config
     public static class TunePID
     {
-        public static TrcPidController.PidCoefficients tunePidCoeff = new TrcPidController.PidCoefficients(0, 0, 0.0, 0,0);
+        public static TrcPidController.PidCoefficients tunePidCoeff = new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.0,0);
         public static double GarvityComp = 0.0;;
     }
 
     @Config
     public static class PPTuneParams
     {
-        public static double tuneDistance = 4;
+        public static double tuneDistance = 3;
         public static double tuneAngleDistance = 90;
         public static double powerLimit = 1;
         public static double maxVel = 70;
@@ -35,5 +35,5 @@ public class FtcDashboard
         public static double maxDecel = 100;
         public static double kfMaxVel = 90;
     }
-    public static TrcPidController.PidCoefficients pPPidCoeff = new TrcPidController.PidCoefficients(0, 0, 0.0, 0,0);
+    public static TrcPidController.PidCoefficients pPPidCoeff = new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.0,0);
 }

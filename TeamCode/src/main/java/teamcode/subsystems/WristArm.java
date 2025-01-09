@@ -35,10 +35,15 @@ public class WristArm {
         return verticalWristServo;
     }
 
+    public void setWristArmPosition(String owner, double delay, double armPos, double wristVerticalPos,double timeout, TrcEvent event)
+    {
+        armServo.setPosition(owner,delay,armPos,event,timeout);
+        verticalWristServo.setPosition(owner, delay,wristVerticalPos,null,timeout);
+    }
+
     public void setWristArmPosition(String owner, double armPos, double wristVerticalPos,double timeout, TrcEvent event)
     {
-        armServo.setPosition(owner,0,armPos,event,timeout);
-        verticalWristServo.setPosition(owner, 0,wristVerticalPos,null,timeout);
+        setWristArmPosition(owner,0,armPos,wristVerticalPos,timeout,event);
     }
 
     public void setWristArmPosition(double armPos, double wristVerticalPos)
