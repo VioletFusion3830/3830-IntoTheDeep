@@ -205,24 +205,24 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
         switch (state)
         {
             case GO_TO_SCORE_POSITION:
-                if(taskParams.cycle)
-                {
-                    robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
-                }
-                else
-                {
-                    robot.elbowElevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
-                }
+                robot.elbowElevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
                 robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,null,0);
                 robot.arm.setPosition(currOwner,0,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,null,0);
                 robot.verticalWrist.setPosition(currOwner,0.2,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,0);
-                if(!taskParams.noDrive)
+                if(taskParams.cycle)
+                {
+                    robot.robotDrive.purePursuitDrive.start(
+                            currOwner, event1, 0.0, false,
+                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
+                            robot.adjustPoseByAlliance(new TrcPose2D(20,-30,180), taskParams.alliance),
+                            robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
+                }
+                else
                 {
                     robot.robotDrive.purePursuitDrive.start(
                             currOwner, event1, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-                    sm.addEvent(event1);
                 }
                 //Wait for completion
                 sm.addEvent(event1);

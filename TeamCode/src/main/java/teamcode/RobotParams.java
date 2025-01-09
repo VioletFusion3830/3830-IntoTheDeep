@@ -179,13 +179,13 @@ public class RobotParams
                 new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -38, 180);
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D((Robot.ROBOT_WIDTH/2.0), -36, 180);
+                new TrcPose2D(10, -36, 180);
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
         // Pickup pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
-                new TrcPose2D(37, -44, 180.0);
+                new TrcPose2D(37, -48, 180.0);
         // Park pose (Net zone side).
         public static final TrcPose2D RED_ASCENT_ZONE_PARK_POSE     =
                 new TrcPose2D(-20, -10, 90.0);
@@ -197,10 +197,10 @@ public class RobotParams
                 new TrcPose2D(1.3, -1.5, 180), //Move toward sample 1
                 new TrcPose2D(1.5, -0.7, 180), //Move toward sample 1
                 new TrcPose2D(1.97,-0.7,180), //Move in front of sample 1
-                new TrcPose2D(1.97, -2.35, 180), //Push sample 1
+                new TrcPose2D(1.97, -2.37, 180), //Push sample 1
                 new TrcPose2D(1.97,-0.75, 180), //Drive back for sample 2
                 new TrcPose2D(2.45,-0.75, 180), //Move in front of sample 2
-                new TrcPose2D(2.45, -2.3, 180), //Push sample 2
+                new TrcPose2D(2.45, -2.32, 180), //Push sample 2
                 new TrcPose2D(2.45, -0.5, 180), //Drive back for sample 3
                 new TrcPose2D(2.7,-0.5,180), //Move in front of sample 3
                 new TrcPose2D(2.66,-2.3,180) //Push sample 3
@@ -456,7 +456,7 @@ public class RobotParams
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 44;
         public static final double PICKUP_SAMPLE_POS                        = 12.5;
-        public static final double PICKUP_SPECIMEN_POS                      = 21;
+        public static final double PICKUP_SPECIMEN_POS                      = 17;
         public static final double LOW_BASKET_SCORE_POS                     = 32;
         public static final double HIGH_BASKET_SCORE_POS                    = 32;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 14.5;
