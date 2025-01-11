@@ -494,7 +494,8 @@ public class FtcTeleOp extends FtcOpMode
             case B:
                 if(pressed) {
                     robot.arm.setPosition(.80);
-                    robot.elbowElevator.setPosition(12.5,null,null,null);
+                    robot.elbowElevator.setPosition(true,12.5,null,null,null);
+                    //robot.elbow.setPosition(0.5,80,true,1);
                 }
                 break;
 
@@ -522,7 +523,7 @@ public class FtcTeleOp extends FtcOpMode
                     isSamplePickupMode = false;
                     robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS);
                     robot.wristArm.setWristArmHighChamberScorePos();
-                    robot.elbowElevator.setPosition(84.0,13.0,null);
+                    robot.elbowElevator.setPosition(84.0,14.0,null);
                 }
                 break;
 

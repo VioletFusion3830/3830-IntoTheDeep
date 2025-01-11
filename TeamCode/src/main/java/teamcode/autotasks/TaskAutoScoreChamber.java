@@ -205,25 +205,21 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
         switch (state)
         {
             case GO_TO_SCORE_POSITION:
-                robot.elbowElevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
-                robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,null,0);
-                robot.arm.setPosition(currOwner,0,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,null,0);
-                robot.verticalWrist.setPosition(currOwner,0.2,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,0);
-                if(taskParams.cycle)
-                {
-                    robot.robotDrive.purePursuitDrive.start(
-                            currOwner, event1, 0.0, false,
-                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                            robot.adjustPoseByAlliance(new TrcPose2D(20,-30,180), taskParams.alliance),
-                            robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-                }
-                else
-                {
-                    robot.robotDrive.purePursuitDrive.start(
-                            currOwner, event1, 0.0, false,
-                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                            robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-                }
+//                if(taskParams.cycle)
+//                {
+//                    robot.elbowElevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
+//                }
+//                else
+//                {
+                    robot.elbowElevator.setPosition(true,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
+//                }
+                robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS, null, 0);
+                robot.arm.setPosition(currOwner,0.15,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,null,0);
+                robot.verticalWrist.setPosition(currOwner,0.15,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,0);
+                robot.robotDrive.purePursuitDrive.start(
+                        currOwner, event1, 0.0, false,
+                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
+                        robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
                 //Wait for completion
                 sm.addEvent(event1);
                 sm.addEvent(event2);
@@ -233,7 +229,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
             case PUSH_SPECIMEN:
                 if(taskParams.cycle)
                 {
-                    taskParams.scorePose.x -= taskParams.scorePose.x > 0 ? -2 : 2;
+                    taskParams.scorePose.x -= -2;
                     robot.robotDrive.purePursuitDrive.start(
                             currOwner, event1, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
@@ -249,7 +245,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
             case CLIP_SPECIMEN:
                 //Lower elevator to clip specimen
                 robot.arm.setPosition(currOwner,0,.8,null,.1);
-                robot.elevator.setPosition(currOwner,0,12.5,true,RobotParams.ElevatorParams.POWER_LIMIT,event1,3);
+                robot.elbowElevator.setPosition(13.0,105.0,null,event1);
                 sm.waitForSingleEvent(event1, State.SCORE_CHAMBER);
                 break;
 
