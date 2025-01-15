@@ -200,10 +200,11 @@ public class RobotParams
                 new TrcPose2D(1.97, -2.45, 180), //Push sample 1
                 new TrcPose2D(1.97,-0.8, 180), //Drive back for sample 2
                 new TrcPose2D(2.45,-0.8, 180), //Move in front of sample 2
-                new TrcPose2D(2.45, -2.42, 180), //Push sample 2
-                new TrcPose2D(2.45, -0.6, 180), //Drive back for sample 3
-                new TrcPose2D(2.81,-0.6,180), //Move in front of sample 3
-                new TrcPose2D(2.67,-2.4,180) //Push sample 3
+                new TrcPose2D(2.45, -2.3, 180), //Push sample 2
+                new TrcPose2D(2.4,-2,180)
+//                new TrcPose2D(2.45, -0.6, 180), //Drive back for sample 3
+//                new TrcPose2D(2.81,-0.6,180), //Move in front of sample 3
+//                new TrcPose2D(2.67,-2.4,180) //Push sample 3
         };
 
 
@@ -451,12 +452,12 @@ public class RobotParams
         public static final double POS_OFFSET                               = 12;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
-        public static final double HORIZONTAL_LIMIT                         = 20;
+        public static final double HORIZONTAL_LIMIT                         = 20; //20
 
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 44;
         public static final double PICKUP_SAMPLE_POS                        = 12.5;
-        public static final double PICKUP_SPECIMEN_POS                      = 15.5;
+        public static final double PICKUP_SPECIMEN_POS                      = 16;
         public static final double LOW_BASKET_SCORE_POS                     = 32;
         public static final double HIGH_BASKET_SCORE_POS                    = 32;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 16;
@@ -555,9 +556,9 @@ public class RobotParams
         public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_INVERTED                  = false;
 
-        public static final double OPEN_POS                                 = 0.82;
-        public static final double OPEN_TIME                                = 0.16;
-        public static final double CLOSE_POS                                = 0.45;
+        public static final double CLOSE_POS                                 = 0.41;
+        public static final double OPEN_TIME                                 = 0.16;
+        public static final double OPEN_POS                                  = 0.84;
         public static final double CLOSE_TIME                               = 0.2;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR                 = false;

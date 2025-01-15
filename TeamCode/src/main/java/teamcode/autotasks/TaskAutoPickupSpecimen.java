@@ -207,7 +207,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
             case SET_ELEVATOR:
                 if(taskParams.positionsSet)
                 {
-                    robot.elbowElevator.setPosition(null, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS+5, event1);
+                    robot.elbowElevator.setPosition(null, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS+4, event1);
                 }
                 else
                 {

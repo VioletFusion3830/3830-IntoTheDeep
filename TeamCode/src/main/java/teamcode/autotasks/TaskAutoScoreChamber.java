@@ -213,13 +213,13 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 //                {
                     robot.elbowElevator.setPosition(true,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
 //                }
-                robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS, null, 0);
-                robot.arm.setPosition(currOwner,0.15,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,null,0);
-                robot.verticalWrist.setPosition(currOwner,0.15,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,null,0);
-                robot.robotDrive.purePursuitDrive.start(
-                        currOwner, event1, 0.0, false,
-                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                        robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
+                    robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS, null, 0);
+                    robot.arm.setPosition(currOwner, 0.15, RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, null, 0);
+                    robot.verticalWrist.setPosition(currOwner, 0.15, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, null, 0);
+                    robot.robotDrive.purePursuitDrive.start(
+                            currOwner, event1, 0.0, false,
+                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
+                            robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
                 //Wait for completion
                 sm.addEvent(event1);
                 sm.addEvent(event2);
