@@ -375,8 +375,16 @@ public class FtcTeleOp extends FtcOpMode
 //                driverAltFunc = pressed;
                 break;
             case X:
+                if(pressed)
+                {
+                    robot.arm.setPosition(1);
+                }
                 break;
             case Y:
+                if(pressed)
+                {
+                    robot.arm.setPosition(0);
+                }
             break;
             case LeftBumper:
                 // Toggle claw open/close.
@@ -493,8 +501,11 @@ public class FtcTeleOp extends FtcOpMode
 
             case B:
                 if(pressed) {
-                    robot.arm.setPosition(.80);
-                    robot.elbowElevator.setPosition(true,12.5,null,null,null);
+//                    robot.arm.setPosition(.80);
+//                    robot.elbowElevator.setPosition(true,12.5,null,null,null);
+                    robot.arm.setPosition(.9);
+                    robot.verticalWrist.setPosition(.63);
+                    robot.elbowElevator.setPosition(100.0,14.0,null);
                     //robot.elbow.setPosition(0.5,80,true,1);
                 }
                 break;

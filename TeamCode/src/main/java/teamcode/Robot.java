@@ -355,6 +355,13 @@ public class Robot {
                                 clawGrabber.getPosition(), clawGrabber.hasObject(), claw.getSensorDataDistance(),
                                 clawGrabber.isAutoActive(), claw.getSensorDataColor(), FtcTeleOp.SamplePickupType);
                     }
+                    else
+                    {
+                        dashboard.displayPrintf(
+                                lineNum++, "Grabber: pos=%.3f, hasObject=%s, sensorDistence=%.3f, autoAssistActive=%s",
+                                clawGrabber.getPosition(), clawGrabber.hasObject(), claw.getSensorDataDistance(),
+                                clawGrabber.isAutoActive());
+                    }
                 }
 
                 if (arm != null) {

@@ -24,6 +24,7 @@ package teamcode;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import java.util.Arrays;
@@ -76,7 +77,8 @@ public class FtcTest extends FtcTeleOp
         TUNE_Y_PID,
         TUNE_TURN_PID,
         PURE_PURSUIT_DRIVE,
-        CALIBRATE_SWERVE_STEERING
+        CALIBRATE_SWERVE_STEERING,
+        TUNE_PP_VELOCITY_PID
     }   //enum Test
 
     /**
@@ -200,6 +202,9 @@ public class FtcTest extends FtcTeleOp
                     testCommand = new CmdPidDrive(robot.robotDrive.driveBase, robot.robotDrive.pidDrive);
                 }
                 break;
+            case TUNE_PP_VELOCITY_PID:
+                telemetry = new MultipleTelemetry(telemetry, com.acmerobotics.dashboard.FtcDashboard.getInstance().getTelemetry());
+                break;
         }
     }   //robotInit
 
@@ -291,8 +296,8 @@ public class FtcTest extends FtcTeleOp
                     robot.robotDrive.pidDrive.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG, logEvents, debugPid, false);
 //                    robot.robotDrive.purePursuitDrive.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG, logEvents, debugPid, false);
                 }
+            case TUNE_PP_VELOCITY_PID:
                 break;
-
             case PURE_PURSUIT_DRIVE:
                 if (robot.robotDrive != null)
                 {
@@ -499,6 +504,19 @@ public class FtcTest extends FtcTeleOp
                         swerveDrive.displaySteerZeroCalibration(lineNum);
                     }
                     break;
+                case TUNE_PP_VELOCITY_PID:
+                    if (robot.robotDrive != null && testChoices.tunePidCoeffs != null) {
+                        robot.dashboard.displayPrintf(7, "TunePid=%s,RobotPose=%s ", testChoices.tunePidCoeffs, robot.robotDrive.driveBase.getFieldPosition());
+
+                        TrcPose2D velPose = robot.robotDrive.driveBase.getFieldVelocity();
+                        double velocity = TrcUtil.magnitude(velPose.x, velPose.y);
+                        double targetVelocity = robot.robotDrive.purePursuitDrive.getCurrentTargetVelocity();
+                        telemetry.addData("robotVelocity", velocity);
+                        telemetry.addData("targetVelocity", robot.robotDrive.purePursuitDrive.getCurrentTargetVelocity());
+                        telemetry.addData("currVelocityError", (targetVelocity - velocity));
+                        telemetry.update();
+                    }
+                    break;
             }
         }
     }   //periodic
@@ -671,12 +689,25 @@ public class FtcTest extends FtcTeleOp
                                 robot.robotDrive.driveBase.resetOdometry();
                                 robot.robotDrive.purePursuitDrive.setTurnPidCoefficients(FtcDashboard.pPPidCoeff);
                                 robot.robotDrive.purePursuitDrive.start(true,
-                                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(0, 0, value));
+                                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(40, 35, value));
                                 //((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit, FtcDashboard.pPPidCoeff, new TrcPose2D(0,0,value));
                                 break;
                         }
                     }
                     passToTeleOp = false;
+                }
+                else if(robot.robotDrive != null && testChoices.test == Test.TUNE_PP_VELOCITY_PID)
+                {
+                    if (pressed)
+                    {
+                        pathForward = !pathForward;
+                        double value = FtcDashboard.PPTuneParams.tuneDistance;
+                        if (!pathForward) value = -value;
+                        robot.robotDrive.driveBase.resetOdometry();
+                        robot.robotDrive.purePursuitDrive.setVelocityPidCoefficients(FtcDashboard.pPPidCoeff);
+                        robot.robotDrive.purePursuitDrive.start(true, robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+                                robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(0, value * 12, 0));
+                    }
                 }
                 break;
 
@@ -899,6 +930,7 @@ public class FtcTest extends FtcTeleOp
         testMenu.addChoice("Tune Turn PID", Test.TUNE_TURN_PID, false);
         testMenu.addChoice("Pure Pursuit Drive", Test.PURE_PURSUIT_DRIVE, false);
         testMenu.addChoice("Calibrate Swerve Steering", Test.CALIBRATE_SWERVE_STEERING, false);
+        testMenu.addChoice("Tune PP Velocity PID", Test.TUNE_PP_VELOCITY_PID, false);
 
         xTargetMenu.setChildMenu(yTargetMenu);
         yTargetMenu.setChildMenu(turnTargetMenu);
