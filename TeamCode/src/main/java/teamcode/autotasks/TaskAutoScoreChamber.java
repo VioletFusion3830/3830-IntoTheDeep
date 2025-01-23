@@ -35,15 +35,13 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
     {
         final FtcAuto.Alliance alliance;
         final TrcPose2D scorePose;
-        final boolean noDrive;
         final boolean cycle;
 
         TaskParams(
-            FtcAuto.Alliance alliance, TrcPose2D scorePose, boolean noDrive, boolean cycle)
+            FtcAuto.Alliance alliance, TrcPose2D scorePose, boolean cycle)
         {
             this.alliance = alliance;
             this.scorePose = scorePose;
-            this.noDrive = noDrive;
             this.cycle = cycle;
         }   //TaskParams
 
@@ -51,8 +49,8 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
         public String toString()
         {
             return String.format(
-                    Locale.US, "alliance=%s,scorePose=%s,noDrive=%s",
-                    alliance, scorePose, noDrive);
+                    Locale.US, "alliance=%s,scorePose=%s",
+                    alliance, scorePose);
         }   //toString
 
     }   //class TaskParams
@@ -84,7 +82,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoScoreChamber(TrcPose2D scorePose, boolean cycle, boolean noDrive, TrcEvent completionEvent)
+    public void autoScoreChamber(TrcPose2D scorePose, boolean cycle, TrcEvent completionEvent)
     {
         TrcPose2D robotPose = robot.robotDrive.driveBase.getFieldPosition();
         FtcAuto.Alliance alliance = robotPose.y < 0.0 ? FtcAuto.Alliance.RED_ALLIANCE : FtcAuto.Alliance.BLUE_ALLIANCE;
@@ -96,13 +94,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                     RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
         }
 
-        if (robotPose.x >= -RobotParams.Game.CHAMBER_MAX_SCORE_POS_X &&
-                robotPose.x <= RobotParams.Game.CHAMBER_MAX_SCORE_POS_X) {
-                // If robot current position is within the chamber zone, use its X position.
-                scorePose.x = robotPose.x;
-        }
-
-        TaskParams taskParams = new TaskParams(alliance, scorePose,noDrive, cycle);
+        TaskParams taskParams = new TaskParams(alliance, scorePose, cycle);
         tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
         startAutoTask(State.GO_TO_SCORE_POSITION, taskParams, completionEvent);
     }   //autoAssist
@@ -205,48 +197,29 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
         switch (state)
         {
             case GO_TO_SCORE_POSITION:
-//                if(taskParams.cycle)
-//                {
-//                    robot.elbowElevator.setPosition(RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
-//                }
-//                else
-//                {
-                    robot.elbowElevator.setPosition(true,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, null, event2);
-//                }
-                    robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS, null, 0);
-                    robot.arm.setPosition(currOwner, 0.15, RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, null, 0);
-                    robot.verticalWrist.setPosition(currOwner, 0.15, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, null, 0);
-                    robot.robotDrive.purePursuitDrive.start(
-                            currOwner, event1, 0.0, false,
-                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                            robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-                //Wait for completion
-                sm.addEvent(event1);
-                sm.addEvent(event2);
-                sm.waitForEvents(State.CLIP_SPECIMEN,true);
-                break;
-
-            case PUSH_SPECIMEN:
+                //Set Subsystems to high chamber score position
+                robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, event1);
+                robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS, null, 0);
+                robot.verticalWrist.setPosition(currOwner, 0.15, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, null, 0);
+                robot.arm.setPosition(currOwner, 0.15, RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, null, 0);
                 if(taskParams.cycle)
                 {
-                    taskParams.scorePose.x -= -2;
                     robot.robotDrive.purePursuitDrive.start(
-                            currOwner, event1, 0.0, false,
+                            currOwner, event2, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-                    sm.waitForSingleEvent(event1, State.CLIP_SPECIMEN);
                 }
                 else
                 {
-                    sm.setState(State.CLIP_SPECIMEN);
+                    robot.robotDrive.purePursuitDrive.start(
+                            currOwner, event2, 0.0, false,
+                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
+                            robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_CYCLE_SCORE_POSE, taskParams.alliance,false));
                 }
-                break;
-
-            case CLIP_SPECIMEN:
-                //Lower elevator to clip specimen
-                robot.arm.setPosition(currOwner,0,.8,null,.1);
-                robot.elbowElevator.setPosition(13.0,105.0,null,event1);
-                sm.waitForSingleEvent(event1, State.SCORE_CHAMBER);
+                //Wait for completion
+                sm.addEvent(event1);
+                sm.addEvent(event2);
+                sm.waitForEvents(State.SCORE_CHAMBER,true);
                 break;
 
             case SCORE_CHAMBER:
@@ -257,6 +230,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
             case RETRACT_ELBOW:
                 //retract elbow, arm, and elbow "fire and forget"
+                robot.verticalWrist.setPosition(currOwner,0,RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,null,0);
                 robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,null,0);
                 robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,null,null);
                 sm.setState(State.DONE);

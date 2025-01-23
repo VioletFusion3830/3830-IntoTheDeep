@@ -124,27 +124,27 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
 
                 case SCORE_PRELOAD:
                     // Score the preloaded specimen. //RED_OBSERVATION_CHAMBER_SCORE_POSE
-                    robot.scoreChamberTask.autoScoreChamber(new TrcPose2D(RobotParams.Robot.ROBOT_WIDTH/2,-41, 180),false,false, event);
+                    robot.scoreChamberTask.autoScoreChamber(new TrcPose2D(RobotParams.Robot.ROBOT_WIDTH/2,-41, 180),false, event);
                     sm.waitForSingleEvent(event, State.MOVE_SAMPLES);
                     break;
 
                 case MOVE_SAMPLES:
-                    // Herd two samples to the observation zone to be converted to specimens.
+                    // Herd three samples to the observation zone to be converted to specimens.
                     robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,null,0);
-                    //robot.wristArm.setWristArmPosition(null, 6.3, RobotParams.ArmParams.PICKUP_SPECIMEN_POS, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,0,null);
+                    robot.wristArm.setWristArmPosition(null, 6.3, RobotParams.ArmParams.PICKUP_SPECIMEN_POS, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,0,null);
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,13.0, event);
                     robot.robotDrive.purePursuitDrive.start(
                             event, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(
                                     RobotParams.Game.RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH, autoChoices.alliance, true));
-//                    robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,13.0, event2);
                     sm.addEvent(event);
                     sm.waitForEvents(State.PICKUP_SPECIMEN, true);
                     break;
 
                 case PICKUP_SPECIMEN:
                     // Pick up a specimen from the wall.
-                    if (scoreSpecimenCount < 3)
+                    if (scoreSpecimenCount < 4)
                     {
                         robot.pickupSpecimenTask.autoPickupSpecimen(autoChoices.alliance, scoreSpecimenCount == 0, event);
                         scoreSpecimenCount++;
@@ -158,16 +158,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
 
                 case SCORE_SPECIMEN:
                     // Score the specimen.
-                    TrcPose2D scorePose = RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
-                    if(scoreSpecimenCount == 1)
-                    {
-                        scorePose.x -= (2 * (scoreSpecimenCount));
-                    }
-                    else
-                    {
-                        scorePose.x -= (2 * scoreSpecimenCount) +2;
-                    }
-                    robot.scoreChamberTask.autoScoreChamber(scorePose,true,scoreSpecimenCount == 1, event);
+                    robot.scoreChamberTask.autoScoreChamber(null,true, event);
                     sm.waitForSingleEvent(event, State.PICKUP_SPECIMEN);
                     break;
 
@@ -175,7 +166,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     // Park at the observation zone.
                     if (autoChoices.parkPos == FtcAuto.ParkOption.PARK)
                     {
-                        robot.elbowElevator.setPosition(false, 12.0, 25.0, event);
+                        robot.elbowElevator.setPosition(true, 12.0, 25.0, event);
                         robot.wristArm.setWristArmPickupSamplePos();
                         robot.robotDrive.purePursuitDrive.start(
                                 event2, 0.0, false,

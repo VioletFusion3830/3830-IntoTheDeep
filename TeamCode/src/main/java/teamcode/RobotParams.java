@@ -179,13 +179,19 @@ public class RobotParams
                 new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -38, 180);
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D(12.5, -41, 180);
+                new TrcPose2D(4, -43, 180);
+        public static final TrcPose2D[] RED_OBSERVATION_ZONE_CYCLE_SCORE_POSE = {
+                new TrcPose2D(8, -40, 180),
+                new TrcPose2D(4, -43, 180)
+                };
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
         // Pickup pose (Observation zone side).
-        public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
-                new TrcPose2D(37, -50, 180.0);
+        public static final TrcPose2D[] RED_OBSERVATION_ZONE_PICKUP   = {
+                new TrcPose2D(35, -42, 180.0),
+                new TrcPose2D(37, -50, 180.0)
+                };
         // Park pose (Net zone side).
         public static final TrcPose2D RED_ASCENT_ZONE_PARK_POSE     =
                 new TrcPose2D(-20, -10, 90.0);
@@ -195,13 +201,13 @@ public class RobotParams
         // Observation zone auto poses.
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH = {
                 new TrcPose2D(1.5, -1.7, 180), //Move toward sample 1
-                new TrcPose2D(1.5, -0.5, 180), //Move toward sample 1
-                new TrcPose2D(1.97,-0.6,180), //Move in front of sample 1
-                new TrcPose2D(1.97, -2.45, 180), //Push sample 1
-                new TrcPose2D(1.97,-0.8, 180), //Drive back for sample 2
-                new TrcPose2D(2.45,-0.8, 180), //Move in front of sample 2
-                new TrcPose2D(2.45, -2.3, 180), //Push sample 2
-                new TrcPose2D(2.4,-2,180)
+//                new TrcPose2D(1.5, -0.5, 180), //Move toward sample 1
+//                new TrcPose2D(1.97,-0.6,180), //Move in front of sample 1
+//                new TrcPose2D(1.97, -2.45, 180), //Push sample 1
+//                new TrcPose2D(1.97,-0.8, 180), //Drive back for sample 2
+//                new TrcPose2D(2.45,-0.8, 180), //Move in front of sample 2
+//                new TrcPose2D(2.45, -2.3, 180), //Push sample 2
+//                new TrcPose2D(2.4,-2,180)
 //                new TrcPose2D(2.45, -0.6, 180), //Drive back for sample 3
 //                new TrcPose2D(2.81,-0.6,180), //Move in front of sample 3
 //                new TrcPose2D(2.67,-2.4,180) //Push sample 3

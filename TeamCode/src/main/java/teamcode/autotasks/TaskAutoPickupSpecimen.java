@@ -183,37 +183,22 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
         switch (state) {
             case GO_TO_SCORE_POSITION:
                 //Path to pickup location
-//                if(taskParams.positionsSet)
-//                {
-//                    TrcPose2D scorePose = RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP.clone();
-//                    scorePose.y += 2;
-//                    robot.robotDrive.purePursuitDrive.start(currOwner, event1, 0.0, false,
-//                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-//                            robot.adjustPoseByAlliance(scorePose, taskParams.alliance));
-//                }
-//                else
-//                {
+                if(!taskParams.positionsSet)
+                {
                     robot.robotDrive.purePursuitDrive.start(currOwner, event1, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                            robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance));
-//                }
-                    robot.elbowElevator.setPosition(true, RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, event2);
+                            robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance, false));
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, null, event2);
                     robot.wristArm.setWristArmPickupSpecimenPos(currOwner, 0, null);
-                    sm.addEvent(event1);
-                    sm.addEvent(event2);
-                    sm.waitForEvents(State.SET_ELEVATOR, true);
-                break;
-
-            case SET_ELEVATOR:
-                if(taskParams.positionsSet)
-                {
-                    robot.elbowElevator.setPosition(null, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS+4, event1);
+                    robot.rotationalWrist.setPosition(currOwner, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
                 }
                 else
                 {
-                    robot.elbowElevator.setPosition(null, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS+2, event1);
+                    sm.setState(State.GRAB_SPECIMEN);
                 }
-                sm.waitForSingleEvent(event1, State.GRAB_SPECIMEN);
+                sm.addEvent(event1);
+                sm.addEvent(event2);
+                sm.waitForEvents(State.SET_ELEVATOR, true);
                 break;
 
             case GRAB_SPECIMEN:
@@ -225,7 +210,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                 //retract elevator & arm "fire and forget"
                 robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS);
                 robot.wristArm.setWristArmHighChamberScorePos(currOwner,0,null);
-                robot.elevator.setPosition(currOwner,0.2,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,true,RobotParams.ElbowParams.POWER_LIMIT,null,0);
+                robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,null, event1);
                 sm.setState(State.DONE);
                 break;
 
