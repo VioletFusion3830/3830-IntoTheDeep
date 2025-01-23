@@ -506,7 +506,7 @@ public class FtcTest extends FtcTeleOp
                     break;
                 case TUNE_PP_VELOCITY_PID:
                     if (robot.robotDrive != null && testChoices.tunePidCoeffs != null) {
-                        robot.dashboard.displayPrintf(7, "TunePid=%s,RobotPose=%s ", testChoices.tunePidCoeffs, robot.robotDrive.driveBase.getFieldPosition());
+                        robot.dashboard.displayPrintf(7, "TunePid=%s,RobotPose=%s,TargetPose=%s ", testChoices.tunePidCoeffs, robot.robotDrive.driveBase.getFieldPosition(), FtcDashboard.PPTuneParams.tuneDistance*12);
 
                         TrcPose2D velPose = robot.robotDrive.driveBase.getFieldVelocity();
                         double velocity = TrcUtil.magnitude(velPose.x, velPose.y);
@@ -705,8 +705,8 @@ public class FtcTest extends FtcTeleOp
                         if (!pathForward) value = -value;
                         robot.robotDrive.driveBase.resetOdometry();
                         robot.robotDrive.purePursuitDrive.setVelocityPidCoefficients(FtcDashboard.pPPidCoeff);
-                        robot.robotDrive.purePursuitDrive.start(true, robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
-                                robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(0, value * 12, 0));
+                        robot.robotDrive.purePursuitDrive.start(true, FtcDashboard.PPTuneParams.maxVel, FtcDashboard.PPTuneParams.maxAccel,
+                                FtcDashboard.PPTuneParams.maxDecel, new TrcPose2D(0, value * 12, 0));
                     }
                 }
                 break;

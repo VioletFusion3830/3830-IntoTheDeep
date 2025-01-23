@@ -401,9 +401,9 @@ public class RobotParams
             robotMaxVelocity = 82.0;        // inches/sec //60
             robotMaxAcceleration  = 185.0;  // inches/sec2 //250
             robotMaxTurnRate = 168.0;       // degrees/sec
-            profiledMaxVelocity = 75.0;
-            profiledMaxAcceleration = 170.0;
-            profiledMaxDeceleration = 130.0;
+            profiledMaxVelocity = 70.0;
+            profiledMaxAcceleration = 100.0;
+            profiledMaxDeceleration = 80.0;
             profiledMaxTurnRate = 100.0;
             // DriveBase PID Parameters
             drivePidTolerance = 2.0;
@@ -420,8 +420,8 @@ public class RobotParams
             // PID Stall Detection
             pidStallDetectionEnabled = true;
             // PurePursuit Parameters
-            ppdFollowingDistance = 12.0;
-            velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 1.0 / profiledMaxVelocity, 0.0); //90
+            ppdFollowingDistance = 6.0;
+            velPidCoeffs = new PidCoefficients(0.028, 0.0, 0.0, 0.0115, 0.0);
             // Vision
             webCam1 = null; //new FrontCamParams()
             webCam2 = null; //new BackCamParams()

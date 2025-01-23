@@ -31,8 +31,8 @@ public class FtcDashboard
         public static double tuneAngleDistance = 90;
         public static double powerLimit = 1;
         public static double maxVel = 70;
-        public static double maxAccel = 120.0;
-        public static double maxDecel = 100;
+        public static double maxAccel = 100;
+        public static double maxDecel = 80;
         public static double kfMaxVel = 90;
     }
     public static TrcPidController.PidCoefficients pPPidCoeff = new TrcPidController.PidCoefficients(0.0, 0.0, 0.0, 0.0,0);
