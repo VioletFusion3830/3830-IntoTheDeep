@@ -130,11 +130,11 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                     // Score the preloaded sample or specimen.
                     if (autoChoices.preloadType == Robot.GamePieceType.SPECIMEN)
                     {
-                        robot.scoreChamberTask.autoScoreChamber(null,false,false, event);
+                        robot.scoreChamberTask.autoScoreChamber(null,false, event);
                     }
                     else
                     {
-                        robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance,new TrcPose2D(-50,-18,45) ,event);
+                        robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance,RobotParams.Game.RED_BASKET_SCORE_POSE ,event);
                     }
                     sm.waitForSingleEvent(event, State.DONE);
                     break;
@@ -147,7 +147,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case SCORE_SAMPLE_BASKET_1:
                     // Score first floor sample into the sample in the basket.
-                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, new TrcPose2D(-55,-40,60), event);
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, event);
                     sm.waitForSingleEvent(event, State.PICKUP_SAMPLE_MARK_2);
                     break;
 
@@ -159,7 +159,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case SCORE_SAMPLE_BASKET_2:
                     // Score second floor sample into the sample in the basket.
-                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, new TrcPose2D(-55,-40,60), event);
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, event);
                     sm.waitForSingleEvent(event, State.PICKUP_SAMPLE_MARK_3);
                     break;
 
@@ -171,7 +171,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case SCORE_SAMPLE_BASKET_3:
                     // Score third floor sample into the sample in the basket.
-                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, new TrcPose2D(-55,-40,50), event);
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, event);
                     sm.waitForSingleEvent(event, State.PARK);
                     break;
 
