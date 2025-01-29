@@ -70,10 +70,10 @@ public class RobotParams
         {
             robotName = "VisionOnly";
             // Front Camera
-            webCam1 = new FrontCamParams();
+            webCam1 = null;
             // Back Camera
-            webCam2 = new BackCamParams();
-            limelight = new LimelightParams();
+            webCam2 = null;
+            limelight = null;
         }   //VisionOnlyParams
     }   //class VisionOnlyParams
 
@@ -101,6 +101,7 @@ public class RobotParams
         public static final boolean useWebCam                   = false; // false to use Android phone camera.
         public static final boolean useBuiltinCamBack           = false; // For Android Phone as Robot Controller.
         public static final boolean tuneColorBlobVision         = false;
+        public static final boolean useWebcamAprilTagVision     = false;
         public static final boolean useLimelightVision          = false;
         public static final boolean useCameraStreamProcessor    = false;
         public static final boolean useAprilTagVision           = false;
@@ -241,102 +242,6 @@ public class RobotParams
         public static final double TURN_SLOW_SCALE                          = 0.7;
         public static final double TURN_NORMAL_SCALE                        = 0.7;
     }   //class Robot
-
-    /**
-     * This class contains the parameters of the front camera.
-     */
-    public static class FrontCamParams extends FtcRobotDrive.VisionInfo
-    {
-        public FrontCamParams()
-        {
-            camName = "WebCam 1";
-            camImageWidth = 640;
-            camImageHeight = 480;
-            camXOffset = 0.0;                   // Inches to the right from robot center
-            camYOffset = 0;                   // Inches forward from robot center
-            camZOffset = 0;                  // Inches up from the floor
-            camPitch = 0;                    // degrees down from horizontal
-            camYaw = 0.0;                       // degrees clockwise from robot front
-            camRoll = 0.0;
-            camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
-            camOrientation = OpenCvCameraRotation.UPRIGHT;
-            // Homography: cameraRect in pixels, worldRect in inches
-            cameraRect = new TrcHomographyMapper.Rectangle(
-                0.0, 120.0,                                             // Camera Top Left
-                camImageWidth -1, 120.0,                                // Camera Top Right
-                0.0, camImageHeight - 1,                                // Camera Bottom Left
-                camImageWidth - 1, camImageHeight - 1);                 // Camera Bottom Right
-            worldRect = new TrcHomographyMapper.Rectangle(
-                -12.5626, 48.0 - Robot.ROBOT_LENGTH/2.0 - camYOffset,   // World Top Left
-                11.4375, 44.75 - Robot.ROBOT_LENGTH/2.0 - camYOffset,   // World Top Right
-                -2.5625, 21.0 - Robot.ROBOT_LENGTH/2.0 - camYOffset,    // World Bottom Left
-                2.5626, 21.0 - Robot.ROBOT_LENGTH/2.0 - camYOffset);    // World Bottom Right
-        }   //FrontCamParams
-    }   //class FrontCamParams
-
-    /**
-     * This class contains the parameters of the back camera.
-     */
-    public static class BackCamParams extends FtcRobotDrive.VisionInfo
-    {
-        public BackCamParams()
-        {
-            camName = null;
-            camImageWidth = 640;
-            camImageHeight = 480;
-            camXOffset = 0.0;                   // Inches to the right from robot center
-            camYOffset = 0;                   // Inches forward from robot center
-            camZOffset = 0;                  // Inches up from the floor
-            camPitch = 0;                    // degrees down from horizontal
-            camYaw = 0.0;                       // degrees clockwise from robot front
-            camRoll = 0.0;
-            camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
-            camOrientation = OpenCvCameraRotation.UPRIGHT;
-            // Homography: cameraRect in pixels, worldRect in inches
-            cameraRect = new TrcHomographyMapper.Rectangle(
-                0.0, 120.0,                                             // Camera Top Left
-                camImageWidth -1, 120.0,                                // Camera Top Right
-                0.0, camImageHeight - 1,                                // Camera Bottom Left
-                camImageWidth - 1, camImageHeight - 1);                 // Camera Bottom Right
-            worldRect = new TrcHomographyMapper.Rectangle(
-                -12.5626, 48.0 - Robot.ROBOT_LENGTH/2.0 - camYOffset,   // World Top Left
-                11.4375, 44.75 - Robot.ROBOT_LENGTH/2.0 - camYOffset,   // World Top Right
-                -2.5625, 21.0 - Robot.ROBOT_LENGTH/2.0 - camYOffset,    // World Bottom Left
-                2.5626, 21.0 - Robot.ROBOT_LENGTH/2.0 - camYOffset);    // World Bottom Right
-        }   //BackCamParams
-    }   //class BackCamParams
-
-    /**
-     * This class contains the parameters of the Limelight vision processor.
-     */
-    public static class LimelightParams extends FtcRobotDrive.VisionInfo
-    {
-        public LimelightParams()
-        {
-            camName = null;
-            camImageWidth = 640;
-            camImageHeight = 480;
-            camXOffset = 0.0;                   // Inches to the right from robot center
-            camYOffset = 0;                   // Inches forward from robot center
-            camZOffset = 0;                  // Inches up from the floor
-            camPitch = 0;                    // degrees down from horizontal
-            camYaw = 0.0;                       // degrees clockwise from robot front
-            camRoll = 0.0;
-            camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
-            camOrientation = OpenCvCameraRotation.UPRIGHT;
-            // Homography: cameraRect in pixels, worldRect in inches
-            cameraRect = new TrcHomographyMapper.Rectangle(
-                0.0, 0.0,                                             // Camera Top Left
-                camImageWidth - 1, 0.0,                                // Camera Top Right
-                0.0, camImageHeight - 1,                                // Camera Bottom Left
-                camImageWidth - 1, camImageHeight - 1);                 // Camera Bottom Right
-            worldRect = new TrcHomographyMapper.Rectangle(
-                -12.5626, 48.0 - Robot.ROBOT_LENGTH/2.0 - camYOffset,   // World Top Left
-                11.4375, 44.75 - Robot.ROBOT_LENGTH/2.0 - camYOffset,   // World Top Right
-                -2.5625, 21.0 - Robot.ROBOT_LENGTH/2.0 - camYOffset,    // World Bottom Left
-                2.5626, 21.0 - Robot.ROBOT_LENGTH/2.0 - camYOffset);    // World Bottom Right
-        }   //LimelightParams
-    }   //class LimelightParams
 
     /**
      * This class contains the Mecanum Robot Parameters.
