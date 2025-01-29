@@ -422,7 +422,7 @@ public class Robot {
 
     public double armPickupSamplePos()
     {
-        return armReadySamplePickupPos()-0.12;
+        return armReadySamplePickupPos()-0.13;
     }
 
     public double verticalWristReadySamplePickupPos()

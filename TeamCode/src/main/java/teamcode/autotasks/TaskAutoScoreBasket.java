@@ -190,26 +190,29 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
                         currOwner, event2, 0.0, false,
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                         robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-                robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,event1);
+                robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.BASKET_SCORE_POS,RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,event1);
                 robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,null,0);
+                robot.wristArm.setWristArmPosition(currOwner,0.55,0.4 ,0,null);
                 sm.waitForSingleEvent(event1, State.SET_ARM);
                 break;
 
             case SET_ARM:
-                robot.wristArm.setWristArmBasketScorePos(null,0.2, event1);
+                robot.wristArm.setWristArmBasketScorePos(currOwner,0.10, event1);
+                sm.addEvent(event1);
                 sm.addEvent(event2);
                 sm.waitForEvents(State.SCORE_BASKET, true);
                 break;
 
             case SCORE_BASKET:
                 robot.clawGrabber.open(null,event1);
-                sm.waitForSingleEvent(event1,State.RETRACT_ELEVATOR_ARM);
+                sm.waitForSingleEvent(event1,State.SCORE_BASKET);
                 break;
 
             case RETRACT_ELEVATOR_ARM:
                 //retract elevator, elbow, and arm "fire and forget"
-                robot.wristArm.setWristArmPickupSamplePos();
+                robot.wristArm.setWristArmPickupReadySamplePos();
                 robot.elbowElevator.setPosition(true,RobotParams.ElevatorParams.PICKUP_SAMPLE_POS,RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null, null);
+                sm.setState(State.DONE);
                 break;
 
             default:
