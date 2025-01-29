@@ -199,7 +199,6 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
             case GO_TO_SCORE_POSITION:
                 //Set Subsystems to high chamber score position
                 robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, event1);
-                robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS, null, 0);
                 robot.verticalWrist.setPosition(currOwner, 0.15, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, null, 0);
                 robot.arm.setPosition(currOwner, 0.15, RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, null, 0);
                 if(taskParams.cycle)
@@ -222,6 +221,12 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                 sm.waitForEvents(State.SCORE_CHAMBER,true);
                 break;
 
+            case CLIP_SPECIMEN:
+                //Clip specimen
+                robot.elbowElevator.setPosition(null,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS+3,event1);
+                robot.wristArm.setWristArmPosition(currOwner,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,0,null);
+                sm.waitForSingleEvent(event1,State.SCORE_CHAMBER);
+
             case SCORE_CHAMBER:
                 //release specimen
                 robot.clawGrabber.open(null,event1);
@@ -230,9 +235,8 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
             case RETRACT_ELBOW:
                 //retract elbow, arm, and elbow "fire and forget"
-                robot.verticalWrist.setPosition(currOwner,0,RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,null,0);
-                robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,null,0);
-                robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,null,null);
+                robot.wristArm.setWristArmPickupSpecimenPos(currOwner,0,null);
+                robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS,null);
                 sm.setState(State.DONE);
                 break;
 

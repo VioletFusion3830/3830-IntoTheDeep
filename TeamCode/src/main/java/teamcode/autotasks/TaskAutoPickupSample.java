@@ -205,12 +205,12 @@ public void autoPickupSample(
                         currOwner, event2, 0.0, false,
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                         robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-                robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.PICKUP_SAMPLE_POS, RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,null, event1);
+                robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.PICKUP_SAMPLE_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null, event1);
                 robot.rotationalWrist.setPosition(null,0,taskParams.wirstRotationalPos,null,0);
-                robot.wristArm.setWristArmPickupSamplePos();
+                robot.wristArm.setWristArmPosition(currOwner,RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START-0.1,RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START-.02,0,null);
                 sm.addEvent(event1);
                 sm.addEvent(event2);
-                sm.waitForEvents(State.PICKUP_SAMPLE, true);
+                sm.waitForEvents(State.DONE, true);
                 break;
 
             case PICKUP_SAMPLE:
@@ -220,7 +220,9 @@ public void autoPickupSample(
                 break;
 
             case RAISE_ELEVATOR:
+                //Fire and Forget
                 robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,null);
+                sm.setState(State.DONE);
                 break;
 
             default:

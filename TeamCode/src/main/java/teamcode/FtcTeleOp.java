@@ -143,7 +143,11 @@ public class FtcTeleOp extends FtcOpMode
             robot.globalTracer.traceInfo(moduleName, "Enabling AprilTagVision.");
             robot.vision.setAprilTagVisionEnabled(true);
         }
-        robot.clawGrabber.close();
+
+        if(robot.claw != null)
+        {
+            robot.clawGrabber.close();
+        }
     }   //startMode
 
     /**
@@ -373,18 +377,13 @@ public class FtcTeleOp extends FtcOpMode
             case B:
 //                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
 //                driverAltFunc = pressed;
+//                if(pressed)
+//                {
+//                    robot.arm.setPosition(0.49);
+//                }
                 break;
             case X:
-                if(pressed)
-                {
-                    robot.arm.setPosition(1);
-                }
-                break;
             case Y:
-                if(pressed)
-                {
-                    robot.arm.setPosition(0);
-                }
             break;
             case LeftBumper:
                 // Toggle claw open/close.
@@ -490,27 +489,26 @@ public class FtcTeleOp extends FtcOpMode
         switch (button)
         {
             case A:
+                //Pickup Specimen pos
                 if(pressed && robot.wristArm != null)
                 {
                     isSamplePickupMode = false;
                     robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                     robot.wristArm.setWristArmPickupSpecimenPos();
-                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,null,null);
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,13.0,null);
                 }
                 break;
 
             case B:
+                //Clip Specamin pos
                 if(pressed) {
-//                    robot.arm.setPosition(.80);
-//                    robot.elbowElevator.setPosition(true,12.5,null,null,null);
-                    robot.arm.setPosition(.9);
-                    robot.verticalWrist.setPosition(.63);
-                    robot.elbowElevator.setPosition(100.0,14.0,null);
-                    //robot.elbow.setPosition(0.5,80,true,1);
+                    robot.arm.setPosition(0.73);
+                    robot.elbowElevator.setPosition(85.0,24.0,null);
                 }
                 break;
 
             case X:
+                //Basket Arm Positions
                 if(pressed)
                 {
                     if(!isSamplePickupMode)
@@ -529,12 +527,13 @@ public class FtcTeleOp extends FtcOpMode
                 }
                 break;
             case Y:
+                //Ready clip position
                 if(pressed)
                 {
                     isSamplePickupMode = false;
-                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS);
+                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                     robot.wristArm.setWristArmHighChamberScorePos();
-                    robot.elbowElevator.setPosition(84.0,14.0,null);
+                    robot.elbowElevator.setPosition(85.0,17.0,null);
                 }
                 break;
 

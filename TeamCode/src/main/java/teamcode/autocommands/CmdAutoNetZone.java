@@ -136,13 +136,13 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                     {
                         robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance,RobotParams.Game.RED_BASKET_SCORE_POSE ,event);
                     }
-                    sm.waitForSingleEvent(event, State.DONE);
+                    sm.waitForSingleEvent(event, State.PICKUP_SAMPLE_MARK_1);
                     break;
 
                 case PICKUP_SAMPLE_MARK_1:
                     // Pickup first floor sample.
-                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-55,-30,45), 0.68,event);
-                    sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_1);
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, RobotParams.Game.RED_NET_ZONE_SPIKEMARK_PICKUP, 0.68,event);
+                    sm.waitForSingleEvent(event, State.DONE);
                     break;
 
                 case SCORE_SAMPLE_BASKET_1:

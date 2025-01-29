@@ -188,7 +188,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                     robot.robotDrive.purePursuitDrive.start(currOwner, event1, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance, false));
-                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, null, event2);
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, event2);
                     robot.wristArm.setWristArmPickupSpecimenPos(currOwner, 0, null);
                     robot.rotationalWrist.setPosition(currOwner, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
                 }
@@ -208,9 +208,8 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
 
             case RETRACT_ELEVATOR_ARM:
                 //retract elevator & arm "fire and forget"
-                robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS);
                 robot.wristArm.setWristArmHighChamberScorePos(currOwner,0,null);
-                robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,null, event1);
+                robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, event1);
                 sm.setState(State.DONE);
                 break;
 
