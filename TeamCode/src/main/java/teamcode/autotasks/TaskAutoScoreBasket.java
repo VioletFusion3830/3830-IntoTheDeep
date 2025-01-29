@@ -198,19 +198,21 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
 
             case SET_ARM:
                 robot.wristArm.setWristArmBasketScorePos(currOwner,0.10, event1);
+                robot.globalTracer.traceInfo(null,"Event1 State =" + event1.toString() + " Event2 State =" + event2.toString());
+                event1.clear();
                 sm.addEvent(event1);
                 sm.addEvent(event2);
-                sm.waitForEvents(State.SCORE_BASKET, true);
+                sm.waitForEvents(State.SCORE_BASKET,false,true);
                 break;
 
             case SCORE_BASKET:
                 robot.clawGrabber.open(null,event1);
-                sm.waitForSingleEvent(event1,State.SCORE_BASKET);
+                sm.waitForSingleEvent(event1,State.RETRACT_ELEVATOR_ARM);
                 break;
 
             case RETRACT_ELEVATOR_ARM:
                 //retract elevator, elbow, and arm "fire and forget"
-                robot.wristArm.setWristArmPickupReadySamplePos();
+                robot.wristArm.setWristArmPosition(currOwner,RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START-0.1,RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START-.02,0,null);
                 robot.elbowElevator.setPosition(true,RobotParams.ElevatorParams.PICKUP_SAMPLE_POS,RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null, null);
                 sm.setState(State.DONE);
                 break;

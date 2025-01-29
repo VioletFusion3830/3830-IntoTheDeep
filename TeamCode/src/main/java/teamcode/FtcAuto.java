@@ -212,7 +212,7 @@ public class FtcAuto extends FtcOpMode
             robot.elbowEvent.clear();
             if(robot.elbow != null && robot.elevator != null && robot.rotationalWrist != null && robot.verticalWrist != null)
             {
-                robot.elbow.setPosition(58.5);
+                robot.elbow.setPosition(60);
                 robot.wristArm.setWristArmPosition(0.09,0.55);
                 robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS);
                 robot.clawGrabber.close(null,4,null);
@@ -259,6 +259,8 @@ public class FtcAuto extends FtcOpMode
                 autoChoices.delay, autoChoices.drivePower, null,
                 new TrcPose2D(autoChoices.xTarget*12.0, autoChoices.yTarget*12.0, autoChoices.turnTarget));
         }
+        robot.robotDrive.purePursuitDrive.setTraceLevel(
+                TrcDbgTrace.MsgLevel.DEBUG,true, true, false);
     }   //startMode
 
     /**

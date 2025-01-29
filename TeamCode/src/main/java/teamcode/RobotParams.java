@@ -455,7 +455,7 @@ public class RobotParams
         public static final boolean SECONDARY_FOLLOWER_MOTOR_INVERTED       = false;
 
         public static final double INCHES_PER_COUNT                         = 0.012;
-        public static final double POS_OFFSET                               = 12;
+        public static final double POS_OFFSET                               = 13;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
         public static final double HORIZONTAL_LIMIT                         = 20; //20
@@ -532,7 +532,7 @@ public class RobotParams
 
         public static final double PICKUP_SPECIMEN_POS                      = 0.59;
         public static final double BASKET_SCORE_POS                         = 0.68;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.70;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.7;
 
         //Elevator Scaling Values
         public static final double SAMPLE_PICKUP_MODE_START                 = 0.53;
@@ -546,9 +546,9 @@ public class RobotParams
         public static final boolean PRIMARY_SERVO_VERTICAL_INVERTED         = false;
 
         public static final double PICKUP_SAMPLE_POS_BASE                   = 0.760; //558
-        public static final double PICKUP_SPECIMEN_POS                      = 0.39;
+        public static final double PICKUP_SPECIMEN_POS                      = 0.44;
         public static final double BASKET_SCORE_POS                         = 0.25;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.17;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.19;
 
         //Elevator Scaling Values
         public static final double SAMPLE_PICKUP_MODE_START                 = 0.69;
