@@ -381,7 +381,7 @@ public class FtcTeleOp extends FtcOpMode
 //                {
 //                    robot.arm.setPosition(0.49);
 //                }
-                break;
+//                break;
             case X:
             case Y:
             break;
@@ -410,22 +410,7 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case RightBumper:
-                break;
-
             case DpadUp:
-                if(pressed)
-                {
-                    if(!isSampleTypeRedAlliance)
-                    {
-                        SamplePickupType = Claw.SamplePickupType.redAllianceSamples;
-                        isSampleTypeRedAlliance = true;
-                    }
-                    else
-                    {
-                        SamplePickupType = Claw.SamplePickupType.blueAllianceSamples;
-                        isSampleTypeRedAlliance = false;
-                    }
-                }
                 break;
             case DpadDown:
                 if (pressed && !robot.autoHang.isActive())
@@ -451,27 +436,27 @@ public class FtcTeleOp extends FtcOpMode
                 }
                 break;
             case Start:
-                if (robot.vision != null && robot.vision.aprilTagVision != null && robot.robotDrive != null)
-                {
-                    // On press of the button, we will start looking for AprilTag for re-localization.
-                    // On release of the button, we will set the robot's field location if we found the AprilTag.
-                    relocalizing = pressed;
-                    if (!pressed)
-                    {
-                        if (robotFieldPose != null)
-                        {
-                            // Vision found an AprilTag, set the new robot field location.
-                            robot.globalTracer.traceInfo(
-                                moduleName, ">>>>> Finish re-localizing: pose=" + robotFieldPose);
-                            robot.robotDrive.driveBase.setFieldPosition(robotFieldPose, false);
-                            robotFieldPose = null;
-                        }
-                    }
-                    else
-                    {
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Start re-localizing ...");
-                    }
-                }
+//                if (robot.vision != null && robot.vision.aprilTagVision != null && robot.robotDrive != null)
+//                {
+//                    // On press of the button, we will start looking for AprilTag for re-localization.
+//                    // On release of the button, we will set the robot's field location if we found the AprilTag.
+//                    relocalizing = pressed;
+//                    if (!pressed)
+//                    {
+//                        if (robotFieldPose != null)
+//                        {
+//                            // Vision found an AprilTag, set the new robot field location.
+//                            robot.globalTracer.traceInfo(
+//                                moduleName, ">>>>> Finish re-localizing: pose=" + robotFieldPose);
+//                            robot.robotDrive.driveBase.setFieldPosition(robotFieldPose, false);
+//                            robotFieldPose = null;
+//                        }
+//                    }
+//                    else
+//                    {
+//                        robot.globalTracer.traceInfo(moduleName, ">>>>> Start re-localizing ...");
+//                    }
+//                }
                 break;
         }
     }   //driverButtonEvent
@@ -495,7 +480,7 @@ public class FtcTeleOp extends FtcOpMode
                     isSamplePickupMode = false;
                     robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                     robot.wristArm.setWristArmPickupSpecimenPos();
-                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,13.0,null);
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS,null);
                 }
                 break;
 
@@ -503,7 +488,7 @@ public class FtcTeleOp extends FtcOpMode
                 //Clip Specamin pos
                 if(pressed) {
                     robot.arm.setPosition(0.73);
-                    robot.elbowElevator.setPosition(85.0,24.0,null);
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElevatorParams.HIGH_CHAMBER_CLIP_POS,null);
                 }
                 break;
 
@@ -526,6 +511,7 @@ public class FtcTeleOp extends FtcOpMode
                     }
                 }
                 break;
+
             case Y:
                 //Ready clip position
                 if(pressed)
@@ -533,51 +519,14 @@ public class FtcTeleOp extends FtcOpMode
                     isSamplePickupMode = false;
                     robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                     robot.wristArm.setWristArmHighChamberScorePos();
-                    robot.elbowElevator.setPosition(85.0,17.0,null);
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,null);
                 }
                 break;
 
             case LeftBumper:
-//                if (pressed)
-//                {
-//                    if (!robot.sampleTeleOpMacros.isActive())
-//                    {
-//                        robot.sampleTeleOpMacros.autoSetSubsystemsSampleScorePos(null);
-//                    }
-//                    else
-//                    {
-//                        robot.sampleTeleOpMacros.cancel();
-//                    }
-//                }
-                break;
-
             case RightBumper:
-//                if(pressed)
-//                {
-//                    if (!robot.sampleTeleOpMacros.isActive())
-//                    {
-//                        robot.sampleTeleOpMacros.autoSetSubsystemsSamplePickupPos(null);
-//                    }
-//                    else
-//                    {
-//                        robot.sampleTeleOpMacros.cancel();
-//                    }
-//                }
-                break;
             case DpadUp:
-                break;
             case DpadDown:
-//                if(pressed)
-//                {
-//                    isSamplePickupMode = !isSamplePickupMode;
-//                    robot.globalTracer.traceInfo(null, "isSamplePickupMode=" + isSamplePickupMode);
-//                }
-//            case DpadLeft:
-//                if(pressed)
-//                {
-//                    robot.globalTracer.traceInfo(null, "isSamplePickupMode=" + isSamplePickupMode);
-//                }
-//                break;
             case DpadRight:
                 break;
             case Back:

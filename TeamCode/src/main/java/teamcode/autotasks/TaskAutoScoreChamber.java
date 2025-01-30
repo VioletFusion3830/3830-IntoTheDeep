@@ -223,8 +223,8 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
 
             case CLIP_SPECIMEN:
                 //Clip specimen
-                robot.elbowElevator.setPosition(null,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS+3,event1);
-                robot.wristArm.setWristArmPosition(currOwner,RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS,0,null);
+                robot.elbowElevator.setPosition(null,RobotParams.ElevatorParams.HIGH_CHAMBER_CLIP_POS,event1);
+                robot.arm.setPosition(currOwner,0,0.73,null,0);
                 sm.waitForSingleEvent(event1,State.SCORE_CHAMBER);
 
             case SCORE_CHAMBER:
