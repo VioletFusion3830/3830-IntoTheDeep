@@ -356,21 +356,21 @@ public class RobotParams
         public static final boolean SECONDARY_FOLLOWER_MOTOR_INVERTED       = false;
 
         public static final double INCHES_PER_COUNT                         = 0.012;
-        public static final double POS_OFFSET                               = 13;
+        public static final double POS_OFFSET                               = 12;
         public static final double POWER_LIMIT                              = 1.0;
         public static final double ZERO_CAL_POWER                           = -0.25;
         public static final double HORIZONTAL_LIMIT                         = 20; //20
 
-        public static final double MIN_POS                                  = POS_OFFSET;
+        public static final double MIN_POS                                  = 13.5;
         public static final double MAX_POS                                  = 44;
-        public static final double PICKUP_SAMPLE_POS                        = 12.5;
-        public static final double PICKUP_SPECIMEN_POS                      = 13;
+        public static final double PICKUP_SAMPLE_POS                        = 13.5;
+        public static final double PICKUP_SPECIMEN_POS                      = 13.5;
         public static final double HIGH_BASKET_SCORE_POS                    = 36;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 17;
-        public static final double HIGH_CHAMBER_CLIP_POS                    = 24.0;
-        public static final double LEVEL1_ASCENT_POS                        = 12.5;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
+        public static final double HIGH_CHAMBER_CLIP_POS                    = 25.0;
+        public static final double LEVEL1_ASCENT_POS                        = 13.5;
         public static final double LEVEL2_ASCENT_START_POS                  = 25;
-        public static final double LEVEL2_ASCENT_POS                        = 10;
+        public static final double LEVEL2_ASCENT_POS                        = 14;
         public static final double[] POS_PRESETS                            = {13,28,40};
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
 
