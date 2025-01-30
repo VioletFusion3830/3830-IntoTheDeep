@@ -260,7 +260,7 @@ public class FtcAuto extends FtcOpMode
                 new TrcPose2D(autoChoices.xTarget*12.0, autoChoices.yTarget*12.0, autoChoices.turnTarget));
         }
         robot.robotDrive.purePursuitDrive.setTraceLevel(
-                TrcDbgTrace.MsgLevel.INFO,true, true, false);
+                TrcDbgTrace.MsgLevel.INFO,false, true, false);
     }   //startMode
 
     /**
