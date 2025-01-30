@@ -86,10 +86,6 @@ public void autoPickupSample(
         alliance = robot.robotDrive.driveBase.getFieldPosition().y < 0.0?
                 FtcAuto.Alliance.RED_ALLIANCE: FtcAuto.Alliance.BLUE_ALLIANCE;
     }
-    if(scorePose == null)
-    {
-        scorePose = RobotParams.Game.RED_NET_ZONE_SPIKEMARK_PICKUP.clone();
-    }
     if(wirstRotationalPos == null)
     {
         wirstRotationalPos = RobotParams.WristParamsRotational.PARALLEL_BASE_P0S;

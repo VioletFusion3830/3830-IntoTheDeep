@@ -467,9 +467,9 @@ public class RobotParams
         public static final double LOW_BASKET_SCORE_POS                     = 32;
         public static final double HIGH_BASKET_SCORE_POS                    = 36;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
-        public static final double LEVEL1_ASCENT_POS                        = 12.5;
+        public static final double LEVEL1_ASCENT_POS                        = 14;
         public static final double LEVEL2_ASCENT_START_POS                  = 25;
-        public static final double LEVEL2_ASCENT_POS                        = 10;
+        public static final double LEVEL2_ASCENT_POS                        = 14;
         public static final double[] POS_PRESETS                            = {13,28,40};
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
 
