@@ -26,8 +26,6 @@ import android.os.Environment;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot.*;
 
-import org.openftc.easyopencv.OpenCvCameraRotation;
-
 import ftclib.drivebase.FtcRobotDrive;
 import ftclib.motor.FtcMotorActuator.MotorType;
 import ftclib.sensor.FtcSparkFunOtos;
@@ -37,10 +35,8 @@ import trclib.drivebase.TrcDriveBase;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.driverio.TrcGameController.DriveMode;
 import trclib.pathdrive.TrcPose2D;
-import trclib.pathdrive.TrcPose3D;
 import trclib.robotcore.TrcPidController;
 import trclib.robotcore.TrcPidController.PidCoefficients;
-import trclib.vision.TrcHomographyMapper;
 
 /**
  * This class contains robot and subsystem constants and parameters.
@@ -368,10 +364,10 @@ public class RobotParams
         public static final double MIN_POS                                  = POS_OFFSET;
         public static final double MAX_POS                                  = 44;
         public static final double PICKUP_SAMPLE_POS                        = 12.5;
-        public static final double PICKUP_SPECIMEN_POS                      = 16;
-        public static final double LOW_BASKET_SCORE_POS                     = 32;
+        public static final double PICKUP_SPECIMEN_POS                      = 13;
         public static final double HIGH_BASKET_SCORE_POS                    = 36;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 17;
+        public static final double HIGH_CHAMBER_CLIP_POS                    = 24.0;
         public static final double LEVEL1_ASCENT_POS                        = 12.5;
         public static final double LEVEL2_ASCENT_START_POS                  = 25;
         public static final double LEVEL2_ASCENT_POS                        = 10;
@@ -409,7 +405,7 @@ public class RobotParams
         public static final double PICKUP_SAMPLE_POS                        = 10;
         public static final double PICKUP_SPECIMEN_POS                      = 10;
         public static final double BASKET_SCORE_POS                         = 95;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 105;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 85;
         public static final double LEVEL1_ASCENT_POS                        = 60;
         public static final double LEVEL2_ASCENT_START_POS                  = 116;
         public static final double LEVEL2_ASCENT_POS                        = 70;
