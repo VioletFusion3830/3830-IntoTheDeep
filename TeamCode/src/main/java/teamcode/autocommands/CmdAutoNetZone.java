@@ -183,7 +183,8 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                                 robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                                 robot.adjustPoseByAlliance(
                                         RobotParams.Game.RED_ASCENT_ZONE_PARK_POSE, autoChoices.alliance, false));
-                        robot.elbow.setPosition(null,2,60,true,1,null,0);
+                        robot.elbowElevator.setPosition(true,14.0,60.0,null,null);
+                        //robot.elbow.setPosition(null,0,60,true,1,null,0);
                         robot.wristArm.setWristArmPosition(0.5,0.5);
                         sm.waitForSingleEvent(event, State.DONE);
                     }

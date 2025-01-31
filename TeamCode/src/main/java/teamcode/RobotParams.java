@@ -191,8 +191,8 @@ public class RobotParams
                 };
         // Park pose (Net zone side).
         public static final TrcPose2D[] RED_ASCENT_ZONE_PARK_POSE     = {
-                new TrcPose2D(-30, -14, 90.0),
-                new TrcPose2D(-20,-14,90)
+                new TrcPose2D(-35, -14, 90.0),
+                new TrcPose2D(-24,-14,90)
         };
         // Park pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PARK_POSE=

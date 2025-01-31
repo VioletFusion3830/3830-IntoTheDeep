@@ -213,7 +213,7 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
             case RETRACT_ELEVATOR_ARM:
                 //retract elevator, elbow, and arm "fire and forget"
                 robot.wristArm.setWristArmPosition(currOwner,RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START,RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START,0,null);
-                robot.elbowElevator.setPosition(true,RobotParams.ElevatorParams.PICKUP_SAMPLE_POS,RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null, null);
+                //robot.elbowElevator.setPosition(true,RobotParams.ElevatorParams.PICKUP_SAMPLE_POS,RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null, null);
                 sm.setState(State.DONE);
                 break;
 
