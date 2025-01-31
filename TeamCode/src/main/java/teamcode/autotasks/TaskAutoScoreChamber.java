@@ -201,7 +201,8 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                 robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, event1);
                 robot.verticalWrist.setPosition(currOwner, 0.15, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, null, 0);
                 robot.arm.setPosition(currOwner, 0.15, RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, null, 0);
-                if(taskParams.cycle)
+                robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
+                if(!taskParams.cycle)
                 {
                     robot.robotDrive.purePursuitDrive.start(
                             currOwner, event2, 0.0, false,
@@ -218,19 +219,19 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                 //Wait for completion
                 sm.addEvent(event1);
                 sm.addEvent(event2);
-                sm.waitForEvents(State.SCORE_CHAMBER,true);
+                sm.waitForEvents(State.CLIP_SPECIMEN,true);
                 break;
 
             case CLIP_SPECIMEN:
                 //Clip specimen
-                robot.elbowElevator.setPosition(null,RobotParams.ElevatorParams.HIGH_CHAMBER_CLIP_POS,event1);
+                robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_CHAMBER_CLIP_POS, event1);
                 robot.arm.setPosition(currOwner,0,0.73,null,0);
-                sm.waitForSingleEvent(event1,State.SCORE_CHAMBER);
+                sm.waitForSingleEvent(event1,State.DONE);
 
             case SCORE_CHAMBER:
                 //release specimen
                 robot.clawGrabber.open(null,event1);
-                sm.waitForSingleEvent(event1, State.RETRACT_ELBOW);
+                sm.waitForSingleEvent(event1, State.DONE);
                 break;
 
             case RETRACT_ELBOW:

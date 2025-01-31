@@ -124,8 +124,8 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
 
                 case SCORE_PRELOAD:
                     // Score the preloaded specimen. //RED_OBSERVATION_CHAMBER_SCORE_POSE
-                    robot.scoreChamberTask.autoScoreChamber(new TrcPose2D(RobotParams.Robot.ROBOT_WIDTH/2,-41, 180),false, event);
-                    sm.waitForSingleEvent(event, State.MOVE_SAMPLES);
+                    robot.scoreChamberTask.autoScoreChamber(new TrcPose2D(0,-33, 180),false, event);
+                    sm.waitForSingleEvent(event, State.DONE);
                     break;
 
                 case MOVE_SAMPLES:

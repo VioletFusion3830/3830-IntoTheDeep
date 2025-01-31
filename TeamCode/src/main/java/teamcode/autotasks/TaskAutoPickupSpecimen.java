@@ -190,7 +190,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                             robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance, false));
                     robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, event2);
                     robot.wristArm.setWristArmPickupSpecimenPos(currOwner, 0, null);
-                    robot.rotationalWrist.setPosition(currOwner, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
+                    robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
                 }
                 else
                 {

@@ -3,6 +3,7 @@ package teamcode.subsystems;
 import ftclib.motor.FtcServoActuator;
 import teamcode.RobotParams;
 import trclib.motor.TrcServo;
+import trclib.robotcore.TrcDbgTrace;
 
 public class RotationalWrist {
     private final TrcServo rotationalWristServo;
@@ -14,6 +15,7 @@ public class RotationalWrist {
                         RobotParams.WristParamsRotational.PRIMARY_SERVO_ROTATOR,
                         RobotParams.WristParamsRotational.PRIMARY_SERVO_ROTATOR_INVERTED);
         rotationalWristServo = new FtcServoActuator(rotationalWristParams).getServo();
+        rotationalWristServo.tracer.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG);
     }
 
     public TrcServo getWristRServo()

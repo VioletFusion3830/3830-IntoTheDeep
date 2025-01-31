@@ -165,7 +165,7 @@ public class RobotParams
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
         public static final TrcPose2D STARTPOSE_RED_NET_ZONE__SPECIMEN = new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
-        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D((Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2.5), 180);
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D(0, -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2.5), 180);
 
 
 
@@ -368,7 +368,7 @@ public class RobotParams
         public static final double PICKUP_SAMPLE_POS                        = 13.5;
         public static final double PICKUP_SPECIMEN_POS                      = 13.5;
         public static final double HIGH_BASKET_SCORE_POS                    = 37;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 17;
         public static final double HIGH_CHAMBER_CLIP_POS                    = 25.0;
         public static final double LEVEL1_ASCENT_POS                        = 13.5;
         public static final double LEVEL2_ASCENT_START_POS                  = 25;
