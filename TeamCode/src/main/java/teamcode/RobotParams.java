@@ -171,7 +171,7 @@ public class RobotParams
 
         // Score poses (Net zone side).
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
-                new TrcPose2D(-2.3 * Field.FULL_TILE_INCHES, -2.28 * Field.FULL_TILE_INCHES, 45.0);
+                new TrcPose2D(-52, -52.5, 45.0);
         public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE    =
                 new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -38, 180);
         // Score pose (Observation zone side).
@@ -365,7 +365,7 @@ public class RobotParams
         public static final double MAX_POS                                  = 44;
         public static final double PICKUP_SAMPLE_POS                        = 13.5;
         public static final double PICKUP_SPECIMEN_POS                      = 13.5;
-        public static final double HIGH_BASKET_SCORE_POS                    = 36;
+        public static final double HIGH_BASKET_SCORE_POS                    = 37;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
         public static final double HIGH_CHAMBER_CLIP_POS                    = 25.0;
         public static final double LEVEL1_ASCENT_POS                        = 13.5;
@@ -404,10 +404,10 @@ public class RobotParams
         public static final double MAX_POS                                  = 110;
         public static final double PICKUP_SAMPLE_POS                        = 10;
         public static final double PICKUP_SPECIMEN_POS                      = 10;
-        public static final double BASKET_SCORE_POS                         = 95;
+        public static final double BASKET_SCORE_POS                         = 100;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 85; 
         public static final double LEVEL1_ASCENT_POS                        = 60;
-        public static final double LEVEL2_ASCENT_START_POS                  = 116;
+        public static final double LEVEL2_ASCENT_START_POS                  = 110;
         public static final double LEVEL2_ASCENT_POS                        = 70;
         public static final double[] POS_PRESETS                            = {10,30,60,90}; //Need to be Updated
         public static final double POS_PRESET_TOLERANCE                     = 5.0;

@@ -192,7 +192,7 @@ public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.S
             //Auto-assisted Pickup Sample
             case SET_ARM_POS:
                 robot.wristArm.setWristArmPickupSamplePos(currOwner,.16, event);
-                sm.waitForSingleEvent(event,State.GRAB);
+                sm.waitForSingleEvent(event,State.RESET_ARM_POS);
                 break;
 
             case GRAB:

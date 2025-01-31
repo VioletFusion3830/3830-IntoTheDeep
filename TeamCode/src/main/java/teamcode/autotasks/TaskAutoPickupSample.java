@@ -23,6 +23,7 @@ public class TaskAutoPickupSample extends TrcAutoTask<TaskAutoPickupSample.State
     public enum State
     {
         GO_TO_POSITION,
+        SET_ARM_POS,
         PICKUP_SAMPLE,
         RAISE_ELEVATOR,
         DONE
@@ -203,17 +204,21 @@ public void autoPickupSample(
                         robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
                 robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.PICKUP_SAMPLE_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null, event1);
                 robot.rotationalWrist.setPosition(null,0,taskParams.wirstRotationalPos,null,0);
-                robot.wristArm.setWristArmPosition(currOwner,RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START-0.1,RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START+0.01,0,null);
+                robot.wristArm.setWristArmPosition(currOwner,RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START,RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START,0,null);
                 sm.addEvent(event1);
                 sm.addEvent(event2);
-                sm.waitForEvents(State.DONE, true);
+                sm.waitForEvents(State.SET_ARM_POS, true);
+                break;
+
+            case SET_ARM_POS:
+                // Set Arm to Pickup Pos
+                robot.wristArm.setWristArmPickupSamplePos(currOwner,.16, event1);
+                sm.waitForSingleEvent(event1, State.DONE);
                 break;
 
             case PICKUP_SAMPLE:
-                // Pickup the sample.
-                robot.sampleTeleOpMacros.autoPickSample(event1);
+                robot.clawGrabber.close(null, 0, event1);
                 sm.waitForSingleEvent(event1, State.RAISE_ELEVATOR);
-                break;
 
             case RAISE_ELEVATOR:
                 //Fire and Forget
