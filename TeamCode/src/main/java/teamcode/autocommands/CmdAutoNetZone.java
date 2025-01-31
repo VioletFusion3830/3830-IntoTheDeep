@@ -141,7 +141,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case PICKUP_SAMPLE_MARK_1:
                     // Pickup first floor sample.
-                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance,new TrcPose2D(-55.5,-42.5,22), 0.5,event);
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance,new TrcPose2D(-48,-45,0), RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,event);
                     sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_1);
                     break;
 
@@ -153,8 +153,8 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case PICKUP_SAMPLE_MARK_2:
                     // Pickup second floor sample.
-                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-55,-45,5), RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,event);
-                    sm.waitForSingleEvent(event, State.DONE);
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-57.5,-44.5,0), RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,event);
+                    sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_2);
                     break;
 
                 case SCORE_SAMPLE_BASKET_2:
@@ -165,7 +165,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case PICKUP_SAMPLE_MARK_3:
                     // Pickup third floor sample.
-                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-55,-20,-45), 0.45,event);
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-55,-39.5,-40), 0.7,event);
                     sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_3);
                     break;
 
@@ -183,7 +183,8 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                                 robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                                 robot.adjustPoseByAlliance(
                                         RobotParams.Game.RED_ASCENT_ZONE_PARK_POSE, autoChoices.alliance, false));
-                        robot.autoHang.autoClimbLevel1(null);
+                        robot.elbow.setPosition(null,2,60,true,1,null,0);
+                        robot.wristArm.setWristArmPosition(0.5,0.5);
                         sm.waitForSingleEvent(event, State.DONE);
                     }
                     else

@@ -213,7 +213,7 @@ public void autoPickupSample(
             case SET_ARM_POS:
                 // Set Arm to Pickup Pos
                 robot.wristArm.setWristArmPickupSamplePos(currOwner,.16, event1);
-                sm.waitForSingleEvent(event1, State.DONE);
+                sm.waitForSingleEvent(event1, State.PICKUP_SAMPLE);
                 break;
 
             case PICKUP_SAMPLE:

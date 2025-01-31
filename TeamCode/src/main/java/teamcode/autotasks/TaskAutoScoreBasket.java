@@ -197,7 +197,7 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
                 break;
 
             case SET_ARM:
-                robot.wristArm.setWristArmBasketScorePos(currOwner,0.14, event1);
+                robot.wristArm.setWristArmBasketScorePos(currOwner,0.25, event1);
                 event1.clear();
                 sm.addEvent(event1);
                 sm.addEvent(event2);
@@ -205,9 +205,9 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
                 break;
 
             case SCORE_BASKET:
+                event1.clear();
                 robot.clawGrabber.open(null,event1);
-                robot.globalTracer.traceInfo(null,"event1:" + event1.toString());
-                sm.waitForSingleEvent(event1,State.RETRACT_ELEVATOR_ARM);
+                sm.waitForSingleEvent(event1,State.RETRACT_ELEVATOR_ARM,false,0.2);
                 break;
 
             case RETRACT_ELEVATOR_ARM:

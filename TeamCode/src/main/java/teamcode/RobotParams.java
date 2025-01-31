@@ -171,7 +171,7 @@ public class RobotParams
 
         // Score poses (Net zone side).
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
-                new TrcPose2D(-52, -52.5, 45.0);
+                new TrcPose2D(-54, -53, 45.0);
         public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE    =
                 new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -38, 180);
         // Score pose (Observation zone side).
@@ -190,8 +190,10 @@ public class RobotParams
                 new TrcPose2D(37, -50, 180.0)
                 };
         // Park pose (Net zone side).
-        public static final TrcPose2D RED_ASCENT_ZONE_PARK_POSE     =
-                new TrcPose2D(-20, -10, 90.0);
+        public static final TrcPose2D[] RED_ASCENT_ZONE_PARK_POSE     = {
+                new TrcPose2D(-30, -14, 90.0),
+                new TrcPose2D(-20,-14,90)
+        };
         // Park pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PARK_POSE=
                 new TrcPose2D(1.5, -1.8, 135);
@@ -309,16 +311,16 @@ public class RobotParams
             robotMaxAcceleration  = 185.0;  // inches/sec2 //250
             robotMaxTurnRate = 168.0;       // degrees/sec
             profiledMaxVelocity = 70.0;
-            profiledMaxAcceleration = 100.0;
+            profiledMaxAcceleration = 190.0;
             profiledMaxDeceleration = 80.0;
             profiledMaxTurnRate = 100.0;
             // DriveBase PID Parameters
-            drivePidTolerance = 2.0;
+            drivePidTolerance = 1.5;
             turnPidTolerance = 1.5;
-            xDrivePidCoeffs = new PidCoefficients(0.047,0.03, 0.0013, 0.0, 4);
+            xDrivePidCoeffs = new PidCoefficients(0.074,0.048, 0.0, 0.0,4);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
-            yDrivePidCoeffs = new PidCoefficients(0.023, 0.025,0.0029, 0.0, 4);
+            yDrivePidCoeffs = new PidCoefficients(0.047, 0.03, 0.0013, 0.0, 4);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
             turnPidCoeffs = new PidCoefficients(0.0265, 0.1, 0.0021, 0.0, 5); //KP: 0.025, kI: 0.092, KD: 0.00205
