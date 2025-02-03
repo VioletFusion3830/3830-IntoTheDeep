@@ -565,10 +565,10 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
+                else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elbow !=null) {
                     if (pressed) {
-                        //robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.PID_TOLERANCE);
-                        robot.elevator.presetPositionDown(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
+                        robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
+                        robot.elbow.presetPositionDown(moduleName, RobotParams.ElbowParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;
@@ -630,10 +630,10 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
+                else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elbow !=null) {
                     if (pressed) {
-                        //robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.PID_TOLERANCE);
-                        robot.elevator.presetPositionUp(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
+                        robot.elbow.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElbowParams.PID_TOLERANCE);
+                        robot.elbow.presetPositionUp(moduleName, RobotParams.ElbowParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
                     passToTeleOp = false;
@@ -671,29 +671,34 @@ public class FtcTest extends FtcTeleOp
                     {
                         pathForward = !pathForward;
                         double value = testChoices.test == Test.TUNE_TURN_PID ? FtcDashboard.PPTuneParams.tuneAngleDistance : FtcDashboard.PPTuneParams.tuneDistance;
+                        double sign = 1;
                         if(!pathForward) value = -value;
+                        if(!pathForward) sign = -sign;
                         switch (testChoices.test) {
                             case TUNE_X_PID:
                                 robot.robotDrive.driveBase.resetOdometry();
-                                robot.robotDrive.purePursuitDrive.setXPositionPidCoefficients(FtcDashboard.pPPidCoeff);
-                                robot.robotDrive.purePursuitDrive.start(true, robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
-                                        robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(value*12, 0, 0));
-//                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit, FtcDashboard.pPPidCoeff, new TrcPose2D(value*12,0,0));
+//                                robot.robotDrive.purePursuitDrive.setXPositionPidCoefficients(FtcDashboard.pPPidCoeff);
+//                                robot.robotDrive.purePursuitDrive.start(true, robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration,
+//                                        robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(value*12, 0, 0));
+                                robot.robotDrive.pidDrive.getXPidCtrl().setSquareRootOutputEnabled(true);
+                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit, FtcDashboard.pPPidCoeff, new TrcPose2D(value*12,0,0));
                                 break;
                             case TUNE_Y_PID:
                                 //robot.robotDrive.driveBase.holonomicDrive(0.0, FtcDashboard.PPTuneParams.powerLimit, 0.0);
                                 robot.robotDrive.driveBase.resetOdometry();
-                                robot.robotDrive.purePursuitDrive.setYPositionPidCoefficients(FtcDashboard.pPPidCoeff);
-                                robot.robotDrive.purePursuitDrive.start(true, robot.robotInfo.profiledMaxVelocity,  robot.robotInfo.profiledMaxAcceleration,
-                                        robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(0, value*12, 0));
-                                //((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit, FtcDashboard.pPPidCoeff, new TrcPose2D(0,value*12,0));
+//                                robot.robotDrive.purePursuitDrive.setYPositionPidCoefficients(FtcDashboard.pPPidCoeff);
+//                                robot.robotDrive.purePursuitDrive.start(true, robot.robotInfo.profiledMaxVelocity,  robot.robotInfo.profiledMaxAcceleration,
+//                                        robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(0, value*12, 0));
+                                robot.robotDrive.pidDrive.getYPidCtrl().setSquareRootOutputEnabled(true);
+                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit, FtcDashboard.pPPidCoeff, new TrcPose2D(0,value*12,0));
                                 break;
                             case TUNE_TURN_PID:
                                 robot.robotDrive.driveBase.resetOdometry();
-                                robot.robotDrive.purePursuitDrive.setTurnPidCoefficients(FtcDashboard.pPPidCoeff);
-                                robot.robotDrive.purePursuitDrive.start(true,
-                                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(0, 0, value));
-                                //((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit, FtcDashboard.pPPidCoeff, new TrcPose2D(0,0,value));
+//                                robot.robotDrive.purePursuitDrive.setTurnPidCoefficients(FtcDashboard.pPPidCoeff);
+//                                robot.robotDrive.purePursuitDrive.start(true,
+//                                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(sign*30, sign*15, value));
+                                robot.robotDrive.pidDrive.getTurnPidCtrl().setSquareRootOutputEnabled(true);
+                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit, FtcDashboard.pPPidCoeff, new TrcPose2D(0,0,value));
                                 break;
                         }
                     }

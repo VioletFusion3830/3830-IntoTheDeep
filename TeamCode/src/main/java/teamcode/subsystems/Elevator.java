@@ -41,6 +41,7 @@ public class Elevator {
                 RobotParams.ElevatorParams.STALL_TOLERANCE,
                 RobotParams.ElevatorParams.STALL_TIMEOUT,
                 RobotParams.ElevatorParams.STALL_RESET_TIMEOUT);
+        elevator.getPosPidCtrl().setSquareRootOutputEnabled(true);
     }
 
     public TrcMotor getElevatorParams()

@@ -141,7 +141,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case PICKUP_SAMPLE_MARK_1:
                     // Pickup first floor sample.
-                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance,new TrcPose2D(-48,-45,0), RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,event);
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance,new TrcPose2D(-48,-43,0), RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,event);
                     sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_1);
                     break;
 
@@ -165,7 +165,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case PICKUP_SAMPLE_MARK_3:
                     // Pickup third floor sample.
-                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-55,-39.5,-40), 0.7,event);
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-55,-40,-40), 0.7,event);
                     sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_3);
                     break;
 
@@ -183,9 +183,9 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                                 robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                                 robot.adjustPoseByAlliance(
                                         RobotParams.Game.RED_ASCENT_ZONE_PARK_POSE, autoChoices.alliance, false));
-                        robot.elbowElevator.setPosition(true,14.0,60.0,null,null);
+                        robot.elbowElevator.setPosition(true,14.0,59.0,null,null);
                         //robot.elbow.setPosition(null,0,60,true,1,null,0);
-                        robot.wristArm.setWristArmPosition(0.5,0.5);
+                        robot.wristArm.setWristArmPosition(0.49,0.5);
                         sm.waitForSingleEvent(event, State.DONE);
                     }
                     else

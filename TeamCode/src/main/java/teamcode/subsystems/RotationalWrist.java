@@ -15,7 +15,6 @@ public class RotationalWrist {
                         RobotParams.WristParamsRotational.PRIMARY_SERVO_ROTATOR,
                         RobotParams.WristParamsRotational.PRIMARY_SERVO_ROTATOR_INVERTED);
         rotationalWristServo = new FtcServoActuator(rotationalWristParams).getServo();
-        rotationalWristServo.tracer.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG);
     }
 
     public TrcServo getWristRServo()

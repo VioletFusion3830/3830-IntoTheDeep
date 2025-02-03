@@ -37,6 +37,7 @@ public class Elbow
                 RobotParams.ElbowParams.STALL_TOLERANCE,
                 RobotParams.ElbowParams.STALL_TIMEOUT,
                 RobotParams.ElbowParams.STALL_RESET_TIMEOUT);
+        robot.elbow.getPosPidCtrl().setSquareRootOutputEnabled(true);
     }   //Elbow
 
     public TrcMotor getElbow()

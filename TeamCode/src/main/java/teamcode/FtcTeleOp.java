@@ -282,7 +282,7 @@ public class FtcTeleOp extends FtcOpMode
                     rotationalWristPrevPos = rotationalWristPos;
 
                 }
-                if(isClawGrabbing && runtime.seconds() > 0.33)
+                if(isClawGrabbing && runtime.seconds() > 0.3)
                 {
                     isClawGrabbing = false;
                     robot.wristArm.setWristArmPickupReadySamplePos();
@@ -398,7 +398,7 @@ public class FtcTeleOp extends FtcOpMode
                             isClawGrabbing = true;
                             robot.verticalWrist.setPosition(robot.verticalWristPickupSamplePos());
                             robot.arm.setPosition(robot.armPickupSamplePos());
-                            robot.clawGrabber.close(null, .18, null);
+                            robot.clawGrabber.close(null, .11, null);
                             runtime.reset();
                         }
                         else
@@ -488,7 +488,7 @@ public class FtcTeleOp extends FtcOpMode
                 //Clip Specamin pos
                 if(pressed) {
                     robot.arm.setPosition(0.73);
-                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElevatorParams.HIGH_CHAMBER_CLIP_POS,null);
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,23.0,null);
                 }
                 break;
 

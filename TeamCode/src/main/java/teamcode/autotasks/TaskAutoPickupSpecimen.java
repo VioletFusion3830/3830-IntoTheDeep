@@ -191,14 +191,19 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                     robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, event2);
                     robot.wristArm.setWristArmPickupSpecimenPos(currOwner, 0, null);
                     robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
+                    sm.addEvent(event1);
+                    sm.addEvent(event2);
+                    sm.waitForEvents(State.SET_ELEVATOR, true);
                 }
                 else
                 {
-                    sm.setState(State.GRAB_SPECIMEN);
+                    sm.setState(State.SET_ELEVATOR);
                 }
-                sm.addEvent(event1);
-                sm.addEvent(event2);
-                sm.waitForEvents(State.SET_ELEVATOR, true);
+                break;
+
+            case SET_ELEVATOR:
+                robot.elevator.setPosition(0.2, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS+2,true,1,event1,1);
+                sm.waitForSingleEvent(event1,State.GRAB_SPECIMEN);
                 break;
 
             case GRAB_SPECIMEN:

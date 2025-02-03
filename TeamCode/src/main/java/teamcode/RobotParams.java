@@ -83,7 +83,7 @@ public class RobotParams
     {
         // Global config
         public static final RobotType robotType                 = RobotType.MecanumRobot;
-        public static final boolean inCompetition               = false;
+        public static final boolean inCompetition               = true;
         public static final boolean useTraceLog                 = true;
         public static final boolean useLoopPerformanceMonitor   = true;
         public static final boolean useBatteryMonitor           = false;
@@ -165,7 +165,7 @@ public class RobotParams
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
         public static final TrcPose2D STARTPOSE_RED_NET_ZONE__SPECIMEN = new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
-        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D(0, -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2.5), 180);
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D((Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2.5), 180);
 
 
 
@@ -176,18 +176,18 @@ public class RobotParams
                 new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -38, 180);
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D(4, -43, 180);
+                new TrcPose2D(0, -33, 180);
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_CYCLE_SCORE_POSE = {
                 new TrcPose2D(8, -40, 180),
-                new TrcPose2D(4, -43, 180)
+                new TrcPose2D(4, -32, 180)
                 };
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
         // Pickup pose (Observation zone side).
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_PICKUP   = {
-                new TrcPose2D(35, -42, 180.0),
-                new TrcPose2D(37, -50, 180.0)
+                new TrcPose2D(38, -42, 180.0),
+                new TrcPose2D(38, -52, 180.0)
                 };
         // Park pose (Net zone side).
         public static final TrcPose2D[] RED_ASCENT_ZONE_PARK_POSE     = {
@@ -196,20 +196,20 @@ public class RobotParams
         };
         // Park pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PARK_POSE=
-                new TrcPose2D(1.5, -1.8, 135);
+                new TrcPose2D(30, -50, 135);
         // Observation zone auto poses.
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH = {
-                new TrcPose2D(1.5, -1.7, 180), //Move toward sample 1
-//                new TrcPose2D(1.5, -0.5, 180), //Move toward sample 1
-//                new TrcPose2D(1.97,-0.6,180), //Move in front of sample 1
-//                new TrcPose2D(1.97, -2.45, 180), //Push sample 1
-//                new TrcPose2D(1.97,-0.8, 180), //Drive back for sample 2
-//                new TrcPose2D(2.45,-0.8, 180), //Move in front of sample 2
-//                new TrcPose2D(2.45, -2.3, 180), //Push sample 2
-//                new TrcPose2D(2.4,-2,180)
-//                new TrcPose2D(2.45, -0.6, 180), //Drive back for sample 3
-//                new TrcPose2D(2.81,-0.6,180), //Move in front of sample 3
-//                new TrcPose2D(2.67,-2.4,180) //Push sample 3
+                new TrcPose2D(12, -38, 180), //Move toward sample 1
+                new TrcPose2D(32, -38, 180), //Move toward sample 1
+                new TrcPose2D(36,-16,180),
+                new TrcPose2D(45,-17,180), //Move in front of sample 1
+                new TrcPose2D(46, -51, 180), //Push sample 1
+                new TrcPose2D(47,-17, 180), //Drive back for sample 2
+                new TrcPose2D(54,-18, 180), //Move in front of sample 2
+                new TrcPose2D(55, -52, 180), //Push sample 2
+//                new TrcPose2D(56,-17,180), //Drive back for sample 3
+//                new TrcPose2D(60,-18,180), //Move in front of sample 3
+//                new TrcPose2D(60,-55,180) //Push sample 3
         };
 
 
@@ -315,16 +315,19 @@ public class RobotParams
             profiledMaxDeceleration = 80.0;
             profiledMaxTurnRate = 100.0;
             // DriveBase PID Parameters
-            drivePidTolerance = 1.5;
-            turnPidTolerance = 1.5;
-            xDrivePidCoeffs = new PidCoefficients(0.074,0.048, 0.0, 0.0,4);
+            usePidDrive = true;
+            enablePidDriveSquareRootPid = true;
+            usePurePursuitDrive = true;
+            enablePurePursuitDriveSquareRootPid = true;
+            drivePidTolerance = 0.5;
+            turnPidTolerance = 1;
+            xDrivePidCoeffs = new PidCoefficients(0.055,0.0, 0.0037, 0.0,0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
-            yDrivePidCoeffs = new PidCoefficients(0.047, 0.03, 0.0013, 0.0, 4);
+            yDrivePidCoeffs = new PidCoefficients(0.028, 0.0, 0.0031, 0.0, 0);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.0265, 0.1, 0.0021, 0.0, 5); //KP: 0.025, kI: 0.092, KD: 0.00205
-            turnPidPowerLimit = 0.6;
+            turnPidCoeffs = new PidCoefficients(0.009, 0.02, 0.0003, 0.0, 2);
             turnMaxPidRampRate = null;
             // PID Stall Detection
             pidStallDetectionEnabled = true;
@@ -369,7 +372,7 @@ public class RobotParams
         public static final double PICKUP_SPECIMEN_POS                      = 13.5;
         public static final double HIGH_BASKET_SCORE_POS                    = 37;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 17;
-        public static final double HIGH_CHAMBER_CLIP_POS                    = 25.0;
+        public static final double HIGH_CHAMBER_CLIP_POS                    = 22.5;
         public static final double LEVEL1_ASCENT_POS                        = 13.5;
         public static final double LEVEL2_ASCENT_START_POS                  = 25;
         public static final double LEVEL2_ASCENT_POS                        = 14;
@@ -433,12 +436,12 @@ public class RobotParams
         public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = true;
 
-        public static final double PICKUP_SPECIMEN_POS                      = 0.59;
+        public static final double PICKUP_SPECIMEN_POS                      = 0.62;
         public static final double BASKET_SCORE_POS                         = 0.68;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.7;
 
         //Elevator Scaling Values
-        public static final double SAMPLE_PICKUP_MODE_START                 = 0.53;
+        public static final double SAMPLE_PICKUP_MODE_START                 = 0.54;
         public static final double SAMPLE_PICKUP_MODE_SCALE                 = -0.18;
     }
 
@@ -449,12 +452,12 @@ public class RobotParams
         public static final boolean PRIMARY_SERVO_VERTICAL_INVERTED         = false;
 
         public static final double PICKUP_SAMPLE_POS_BASE                   = 0.760; //558
-        public static final double PICKUP_SPECIMEN_POS                      = 0.44;
+        public static final double PICKUP_SPECIMEN_POS                      = 0.43;
         public static final double BASKET_SCORE_POS                         = 0.25;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.19;
 
         //Elevator Scaling Values
-        public static final double SAMPLE_PICKUP_MODE_START                 = 0.69;
+        public static final double SAMPLE_PICKUP_MODE_START                 = 0.7;
         public static final double SAMPLE_PICKUP_MODE_SCALE                 = -0.14;
     }   //class WristParamsVertical
 
@@ -467,7 +470,7 @@ public class RobotParams
 
         public static final double OPEN_POS                                 = 0.5;
         public static final double CLOSE_TIME                               = 0.3;
-        public static final double CLOSE_POS                                = 0.99; //0.84
+        public static final double CLOSE_POS                                = 1; //0.84
         public static final double OPEN_TIME                                = 0.2;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR                 = false;
