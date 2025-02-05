@@ -141,7 +141,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case PICKUP_SAMPLE_MARK_1:
                     // Pickup first floor sample.
-                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance,new TrcPose2D(-48,-43,0), RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,event);
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance,new TrcPose2D(-48,-44.5,0), RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,event);
                     sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_1);
                     break;
 

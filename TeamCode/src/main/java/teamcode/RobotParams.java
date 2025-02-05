@@ -83,7 +83,7 @@ public class RobotParams
     {
         // Global config
         public static final RobotType robotType                 = RobotType.MecanumRobot;
-        public static final boolean inCompetition               = true;
+        public static final boolean inCompetition               = false;
         public static final boolean useTraceLog                 = true;
         public static final boolean useLoopPerformanceMonitor   = true;
         public static final boolean useBatteryMonitor           = false;
@@ -171,7 +171,7 @@ public class RobotParams
 
         // Score poses (Net zone side).
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
-                new TrcPose2D(-54, -53, 45.0);
+                new TrcPose2D(-55.5, -55.5, 45.0);
         public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE    =
                 new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -38, 180);
         // Score pose (Observation zone side).
@@ -311,8 +311,8 @@ public class RobotParams
             robotMaxAcceleration  = 185.0;  // inches/sec2 //250
             robotMaxTurnRate = 168.0;       // degrees/sec
             profiledMaxVelocity = 70.0;
-            profiledMaxAcceleration = 190.0;
-            profiledMaxDeceleration = 80.0;
+            profiledMaxAcceleration = 160.0;
+            profiledMaxDeceleration = 120.0;
             profiledMaxTurnRate = 100.0;
             // DriveBase PID Parameters
             usePidDrive = true;
@@ -333,7 +333,7 @@ public class RobotParams
             pidStallDetectionEnabled = true;
             // PurePursuit Parameters
             ppdFollowingDistance = 6.0;
-            velPidCoeffs = new PidCoefficients(0.028, 0.0, 0.0, 0.0115, 0.0);
+            velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 0.001, 0.0);
             // Vision
             webCam1 = null; //new FrontCamParams()
             webCam2 = null; //new BackCamParams()
@@ -370,7 +370,7 @@ public class RobotParams
         public static final double MAX_POS                                  = 44;
         public static final double PICKUP_SAMPLE_POS                        = 13.5;
         public static final double PICKUP_SPECIMEN_POS                      = 13.5;
-        public static final double HIGH_BASKET_SCORE_POS                    = 37;
+        public static final double HIGH_BASKET_SCORE_POS                    = 35;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 17;
         public static final double HIGH_CHAMBER_CLIP_POS                    = 22.5;
         public static final double LEVEL1_ASCENT_POS                        = 13.5;
@@ -381,7 +381,7 @@ public class RobotParams
 
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
-                new TrcPidController.PidCoefficients(0.27,0, 0,0,0); //Need to tune
+                new TrcPidController.PidCoefficients(0.15,0, 0.002,0,0); //0.27
         public static final double PID_TOLERANCE                            = 0.75;
 
         public static final double MAX_GRAVITY_COMP_POWER                   = 0.10;
@@ -409,12 +409,12 @@ public class RobotParams
         public static final double MAX_POS                                  = 110;
         public static final double PICKUP_SAMPLE_POS                        = 10;
         public static final double PICKUP_SPECIMEN_POS                      = 10;
-        public static final double BASKET_SCORE_POS                         = 100;
+        public static final double BASKET_SCORE_POS                         = 95;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 85; 
         public static final double LEVEL1_ASCENT_POS                        = 60;
         public static final double LEVEL2_ASCENT_START_POS                  = 110;
         public static final double LEVEL2_ASCENT_POS                        = 70;
-        public static final double[] POS_PRESETS                            = {10,30,60,90}; //Need to be Updated
+        public static final double[] POS_PRESETS                            = {10,60,90}; //Need to be Updated
         public static final double POS_PRESET_TOLERANCE                     = 5.0;
 
         public static final boolean SOFTWARE_PID_ENABLED                    = true;
@@ -469,7 +469,7 @@ public class RobotParams
         public static final boolean PRIMARY_SERVO_INVERTED                  = false;
 
         public static final double OPEN_POS                                 = 0.5;
-        public static final double CLOSE_TIME                               = 0.3;
+        public static final double CLOSE_TIME                               = 0.11;
         public static final double CLOSE_POS                                = 1; //0.84
         public static final double OPEN_TIME                                = 0.2;
 

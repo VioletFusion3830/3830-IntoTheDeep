@@ -190,14 +190,14 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
                         currOwner, event2, 0.0, false,
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                         robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-                robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.BASKET_SCORE_POS,RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,event1);
+                robot.elbowElevator.setPosition(RobotParams.ElbowParams.BASKET_SCORE_POS,RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,true,event1);
                 robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,null,0);
-                robot.wristArm.setWristArmPosition(currOwner,0.45,0.4 ,0,null);
+                robot.wristArm.setWristArmPosition(currOwner,0.56,0.48 ,0,null);
                 sm.waitForSingleEvent(event1, State.SET_ARM);
                 break;
 
             case SET_ARM:
-                robot.wristArm.setWristArmBasketScorePos(currOwner,0.25, event1);
+                robot.wristArm.setWristArmBasketScorePos(currOwner,0.13, event1);
                 event1.clear();
                 sm.addEvent(event1);
                 sm.addEvent(event2);

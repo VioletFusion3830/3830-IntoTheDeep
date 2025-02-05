@@ -202,7 +202,7 @@ public void autoPickupSample(
                         currOwner, event2, 0.0, false,
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                         robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-                robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.PICKUP_SAMPLE_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null, event1);
+                robot.elbowElevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null,true, event1);
                 robot.rotationalWrist.setPosition(null,0,taskParams.wirstRotationalPos,null,0);
                 robot.wristArm.setWristArmPosition(currOwner,RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START,RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START,0,null);
                 sm.addEvent(event1);

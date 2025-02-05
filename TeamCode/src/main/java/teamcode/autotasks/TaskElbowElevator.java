@@ -48,6 +48,8 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
 
     private String currOwner = null;
     private boolean safeSequence = false;
+    private boolean elevatorDelay = false;
+    private boolean elbowDelay = false;
 
     public TaskElbowElevator(String ownerName, TrcMotor elbow, TrcMotor elevator)
     {
@@ -61,29 +63,49 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
     }   //TaskelevatorArm
 
     public void setPosition(
-            boolean safeSequence,Double elevatorInitialPos, Double elbowAngle, Double elevatorPosition, TrcEvent completionEvent)
+            boolean safeSequence,Double elevatorInitialPos, Double elbowAngle, Double elevatorPosition, boolean elevatorDealy, boolean elbowDealy, TrcEvent completionEvent)
     {
         TaskParams taskParams = new TaskParams(elevatorInitialPos,elbowAngle, elevatorPosition);
         tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
         this.safeSequence = safeSequence;
+        this.elevatorDelay = elevatorDealy;
+        this.elbowDelay = elbowDealy;
         startAutoTask(State.SET_POSITION, taskParams, completionEvent);
+    }   //setPosition
+
+    public void setPosition(
+            boolean safeSequence,Double elevatorInitialPos, Double elbowAngle,  Double elevatorPosition, TrcEvent completionEvent)
+    {
+        setPosition(safeSequence, elevatorInitialPos, elbowAngle, elevatorPosition,false,false, completionEvent);
+    }   //setPosition
+
+    public void setPosition(
+            Double elevatorInitialPos, Double elbowAngle,  Double elevatorPosition, boolean elbowDelay, TrcEvent completionEvent)
+    {
+        setPosition(false, elevatorInitialPos, elbowAngle, elevatorPosition,false,elbowDelay, completionEvent);
+    }   //setPosition
+
+    public void setPosition(
+           Double elbowAngle,  Double elevatorPosition, boolean elevatorDelay, TrcEvent completionEvent)
+    {
+        setPosition(false, null, elbowAngle, elevatorPosition,elevatorDelay,false, completionEvent);
     }   //setPosition
 
     public void setPosition(
             Double elevatorInitialPos, Double elbowAngle,  Double elevatorPosition, TrcEvent completionEvent)
     {
-        setPosition(false, elevatorInitialPos, elbowAngle, elevatorPosition, completionEvent);
+        setPosition(false, elevatorInitialPos, elbowAngle, elevatorPosition,false,false, completionEvent);
     }   //setPosition
 
     public void setPosition(
             boolean safeSequence,Double elbowAngle, Double elevatorPosition, TrcEvent completionEvent)
     {
-        setPosition(safeSequence, null, elbowAngle, elevatorPosition, completionEvent);
+        setPosition(safeSequence, null, elbowAngle, elevatorPosition,false,false,completionEvent);
     }   //setPosition
 
     public void setPosition(Double elbowAngle, Double elevatorPosition, TrcEvent completionEvent)
     {
-        setPosition(false, null, elbowAngle, elevatorPosition, completionEvent);
+        setPosition(false, null, elbowAngle, elevatorPosition,false,false, completionEvent);
     }   //setPosition
 
     /**
@@ -215,8 +237,15 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
                 if (taskParams.elbowAngle != null)
                 {
                     // Setting target elbow angle
-                    elbow.setPosition(
-                            currOwner, 0.0, taskParams.elbowAngle, true, RobotParams.ElevatorParams.POWER_LIMIT, elbowEvent, 2);
+                    if(elbowDelay) {
+                        elbow.setPosition(
+                                currOwner, 0.44, taskParams.elbowAngle, true, RobotParams.ElevatorParams.POWER_LIMIT, elbowEvent, 2);
+                    }
+                    else
+                    {
+                        elbow.setPosition(
+                                currOwner, 0.0, taskParams.elbowAngle, true, RobotParams.ElevatorParams.POWER_LIMIT, elbowEvent, 2);
+                    }
                     if (safeSequence)
                     {
                         //preform safe sequence, so wait for elbow event.
@@ -240,8 +269,16 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
                 if (taskParams.elevatorPosition != null)
                 {
                     // Set target extender position.
-                    elevator.setPosition(
-                            currOwner, 0.0, taskParams.elevatorPosition, true, RobotParams.ElevatorParams.POWER_LIMIT, elevatorEvent, 2.0);
+                    if(elevatorDelay)
+                    {
+                        elevator.setPosition(
+                                currOwner, 0.42, taskParams.elevatorPosition, true, RobotParams.ElevatorParams.POWER_LIMIT, elevatorEvent, 2.0);
+                    }
+                    else
+                    {
+                        elevator.setPosition(
+                                currOwner, 0.0, taskParams.elevatorPosition, true, RobotParams.ElevatorParams.POWER_LIMIT, elevatorEvent, 2.0);
+                    }
                     if (safeSequence)
                     {
                         // Performing safe sequence, so wait for elevator event.

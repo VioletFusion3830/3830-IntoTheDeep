@@ -191,7 +191,7 @@ public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.S
         {
             //Auto-assisted Pickup Sample
             case SET_ARM_POS:
-                robot.wristArm.setWristArmPickupSamplePos(currOwner,.16, event);
+                robot.wristArm.setWristArmPickupSamplePos(currOwner,.1, event);
                 sm.waitForSingleEvent(event,State.RESET_ARM_POS);
                 break;
 
@@ -214,7 +214,7 @@ public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.S
                 }
                 else
                 {
-                    robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS, event);
+                    robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,true,false, event);
                 }
                 robot.rotationalWrist.setPosition(null,0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
                 sm.waitForSingleEvent(event, State.SET_ARM_SAMPLE_SCORE_POS);
