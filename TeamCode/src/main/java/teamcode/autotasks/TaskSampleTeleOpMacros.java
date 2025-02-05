@@ -214,20 +214,21 @@ public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.S
                 }
                 else
                 {
-                    robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,true,false, event);
+                    robot.elbowElevator.setPosition(false,RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.BASKET_SCORE_POS, RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,true,false, event);
                 }
                 robot.rotationalWrist.setPosition(null,0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
                 sm.waitForSingleEvent(event, State.SET_ARM_SAMPLE_SCORE_POS);
                 break;
 
             case SET_ARM_SAMPLE_SCORE_POS:
-                robot.wristArm.setWristArmBasketScorePos(currOwner,0.2, event);
+                robot.wristArm.setWristArmBasketScorePos(currOwner,0.1, event);
                 sm.waitForSingleEvent(event, State.DONE);
                 break;
 
             //Auto-assists set Subsystems pickup Sample
             case SET_ARM_SAMPLE_PICKUP_POS:
-                robot.elbowElevator.setPosition(true, RobotParams.ElevatorParams.MIN_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS, null, event);
+                robot.wristArm.setWristArmPosition(currOwner,0.5, 0.5,0,null);
+                robot.elbowElevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null,true, event);
                 sm.waitForSingleEvent(event, State.SET_PICKUP_SCALING);
                 break;
 

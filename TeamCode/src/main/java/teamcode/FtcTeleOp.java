@@ -524,7 +524,35 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case LeftBumper:
+                if (robot.sampleTeleOpMacros != null && pressed)
+                {
+                    if (!robot.scoreChamberTask.isActive())
+                    {
+                        robot.sampleTeleOpMacros.autoSetSubsystemsSampleScorePos(null);
+                    }
+                    else
+                    {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel TeleOp Macro");
+                        robot.sampleTeleOpMacros.cancel();
+                    }
+                }
+                break;
+
             case RightBumper:
+                if (robot.sampleTeleOpMacros != null && pressed)
+                {
+                    if (!robot.scoreChamberTask.isActive())
+                    {
+                        robot.sampleTeleOpMacros.autoSetSubsystemsSamplePickupPos(null);
+                    }
+                    else
+                    {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel TeleOp Macro");
+                        robot.sampleTeleOpMacros.cancel();
+                    }
+                }
+                break;
+
             case DpadUp:
             case DpadDown:
             case DpadRight:
