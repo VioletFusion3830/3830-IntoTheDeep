@@ -130,7 +130,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                     // Score the preloaded sample or specimen.
                     if (autoChoices.preloadType == Robot.GamePieceType.SPECIMEN)
                     {
-                        robot.scoreChamberTask.autoScoreChamber(null,false, event);
+                        robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance,null,false, event);
                     }
                     else
                     {

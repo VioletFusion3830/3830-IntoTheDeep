@@ -124,14 +124,12 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     break;
 
                 case SCORE_PRELOAD:
-                    //robot.robotDrive.purePursuitDrive.setTurnPidCoefficients(new TrcPidController.PidCoefficients(0.02,0.06,0,0,5));
-                    //robot.robotDrive.purePursuitDrive.setXPositionPidCoefficients(new TrcPidController.PidCoefficients(0.75,0.06, 0.0, 0.0,4));
-                    // Score the preloaded specimen. //RED_OBSERVATION_CHAMBER_SCORE_POSE
+                    // Score the preloaded specimen.
                     TrcPose2D[] scorePose1 = {
-                        new TrcPose2D(4, -32, 180)
+                        new TrcPose2D(8, -40, 180)
                     };
-                    robot.scoreChamberTask.autoScoreChamber(scorePose1,false, event);
-                    sm.waitForSingleEvent(event, State.MOVE_SAMPLES);
+                    robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance,scorePose1,false, event);
+                    sm.waitForSingleEvent(event, State.DONE);
                     break;
 
                 case MOVE_SAMPLES:
@@ -172,7 +170,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                                 new TrcPose2D(8, -42, 180),
                                 new TrcPose2D(2, -32, 180)
                         };
-                        robot.scoreChamberTask.autoScoreChamber(scorePose,true, event);
+                        robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance, scorePose,true, event);
                     }
                     else if(scoreSpecimenCount == 2)
                     {
@@ -180,7 +178,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                                 new TrcPose2D(6, -42, 180),
                                 new TrcPose2D(0, -32, 180)
                         };
-                        robot.scoreChamberTask.autoScoreChamber(scorePose,true, event);
+                        robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance, scorePose,true, event);
                     }
                     else if(scoreSpecimenCount == 3)
                     {
@@ -188,7 +186,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                                 new TrcPose2D(4, -42, 180),
                                 new TrcPose2D(-2, -32, 180)
                         };
-                        robot.scoreChamberTask.autoScoreChamber(scorePose,true, event);
+                        robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance, scorePose,true, event);
                     }
                     sm.waitForSingleEvent(event, State.PICKUP_SPECIMEN);
                     break;

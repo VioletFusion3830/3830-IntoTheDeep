@@ -327,7 +327,7 @@ public class RobotParams
             yDrivePidCoeffs = new PidCoefficients(0.028, 0.0, 0.0031, 0.0, 0);
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.009, 0.02, 0.0003, 0.0, 2);
+            turnPidCoeffs = new PidCoefficients(0.009, 0.0, 0.0003, 0.0, 0);
             turnMaxPidRampRate = null;
             // PID Stall Detection
             pidStallDetectionEnabled = true;
@@ -410,7 +410,7 @@ public class RobotParams
         public static final double PICKUP_SAMPLE_POS                        = 10;
         public static final double PICKUP_SPECIMEN_POS                      = 10;
         public static final double BASKET_SCORE_POS                         = 95;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 85; 
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 110;
         public static final double LEVEL1_ASCENT_POS                        = 60;
         public static final double LEVEL2_ASCENT_START_POS                  = 110;
         public static final double LEVEL2_ASCENT_POS                        = 70;

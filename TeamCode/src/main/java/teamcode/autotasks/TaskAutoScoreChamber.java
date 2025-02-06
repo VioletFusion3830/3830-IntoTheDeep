@@ -82,16 +82,13 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoScoreChamber(TrcPose2D[] scorePose, boolean cycle, TrcEvent completionEvent)
+    public void autoScoreChamber(FtcAuto.Alliance alliance, TrcPose2D[] scorePose,boolean cycle, TrcEvent completionEvent)
     {
-        TrcPose2D robotPose = robot.robotDrive.driveBase.getFieldPosition();
-        FtcAuto.Alliance alliance = robotPose.y < 0.0 ? FtcAuto.Alliance.RED_ALLIANCE : FtcAuto.Alliance.BLUE_ALLIANCE;
-        if (scorePose == null)
+        if (alliance == null)
         {
-//            boolean nearNetZone = alliance == FtcAuto.Alliance.RED_ALLIANCE ^ robotPose.x > 0.0;
-//             scorePose = nearNetZone ?
-//                    RobotParams.Game.RED_NET_CHAMBER_SCORE_POSE.clone() :
-//                    RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
+            // Caller is TeleOp, let's determine the alliance color by robot's location.
+            alliance = robot.robotDrive.driveBase.getFieldPosition().y < 0.0?
+                    FtcAuto.Alliance.RED_ALLIANCE: FtcAuto.Alliance.BLUE_ALLIANCE;
         }
 
         TaskParams taskParams = new TaskParams(alliance, scorePose, cycle);
@@ -175,7 +172,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
         robot.elevator.cancel();
         robot.clawGrabber.cancel();
         robot.rotationalWrist.cancel();
-        //robot.elbowElevatorArm.cancel();
+        robot.elbowElevator.cancel();
     }   //stopSubsystems
 
     /**
@@ -211,7 +208,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
                     //Wait for completion
                     sm.addEvent(event1);
                     sm.addEvent(event2);
-                    sm.waitForEvents(State.CLIP_SPECIMEN,true,3);
+                    sm.waitForEvents(State.DONE,true,3);
                 }
                 else
                 {
