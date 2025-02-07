@@ -1,9 +1,8 @@
 package teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
-import trclib.robotcore.TrcPidController;
+import trclib.controller.TrcPidController;
 
 @Config
 public class FtcDashboard

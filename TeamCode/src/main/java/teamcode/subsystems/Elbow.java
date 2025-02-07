@@ -29,15 +29,14 @@ public class Elbow
                 .setPositionPresets(RobotParams.ElbowParams.POS_PRESET_TOLERANCE,
                         RobotParams.ElbowParams.POS_PRESETS);
         elbow = new FtcMotorActuator(elbowParams).getMotor();
-        elbow.setSoftwarePidEnabled(RobotParams.ElbowParams.SOFTWARE_PID_ENABLED);
         elbow.setPositionPidParameters(RobotParams.ElbowParams.PID_COEFFS,
-                RobotParams.ElbowParams.PID_TOLERANCE);
+                RobotParams.ElbowParams.PID_TOLERANCE,
+                RobotParams.ElbowParams.SOFTWARE_PID_ENABLED);
         elbow.setPositionPidPowerComp(this::getElbowPowerComp);
         elbow.setStallProtection(RobotParams.ElbowParams.STALL_MIN_POWER,
                 RobotParams.ElbowParams.STALL_TOLERANCE,
                 RobotParams.ElbowParams.STALL_TIMEOUT,
                 RobotParams.ElbowParams.STALL_RESET_TIMEOUT);
-        //elbow.getPosPidCtrl().setSquareRootOutputEnabled(true);
     }   //Elbow
 
     public TrcMotor getElbow()

@@ -32,16 +32,14 @@ public class Elevator {
                 null);
         elevatorMotor3.follow(elevator, RobotParams.ElevatorParams.SECONDARY_FOLLOWER_MOTOR_INVERTED);
         //elevator.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG,true,false,null);
-        elevator.setSoftwarePidEnabled(RobotParams.ElevatorParams.SOFTWARE_PID_ENABLED);
         elevator.setPositionPidParameters(
                 RobotParams.ElevatorParams.PID_COEFFS,
-                RobotParams.ElevatorParams.PID_TOLERANCE);
+                RobotParams.ElevatorParams.PID_TOLERANCE,RobotParams.ElevatorParams.SOFTWARE_PID_ENABLED,true);
         elevator.setPositionPidPowerComp(this::getGravityComp);
         elevator.setStallProtection(RobotParams.ElevatorParams.STALL_MIN_POWER,
                 RobotParams.ElevatorParams.STALL_TOLERANCE,
                 RobotParams.ElevatorParams.STALL_TIMEOUT,
                 RobotParams.ElevatorParams.STALL_RESET_TIMEOUT);
-        elevator.getPosPidCtrl().setSquareRootOutputEnabled(true);
     }
 
     public TrcMotor getElevatorParams()

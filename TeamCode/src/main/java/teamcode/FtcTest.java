@@ -45,7 +45,7 @@ import trclib.command.CmdTimedDrive;
 import trclib.dataprocessor.TrcUtil;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
-import trclib.robotcore.TrcPidController;
+import trclib.controller.TrcPidController;
 import trclib.robotcore.TrcRobot;
 import trclib.timer.TrcElapsedTimer;
 import trclib.timer.TrcTimer;
@@ -573,7 +573,7 @@ public class FtcTest extends FtcTeleOp
                 }
                 else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
                     if (pressed) {
-                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.PID_TOLERANCE);
+                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.PID_TOLERANCE,true,true);
                         robot.elevator.presetPositionDown(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
@@ -638,7 +638,7 @@ public class FtcTest extends FtcTeleOp
                 }
                 else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
                     if (pressed) {
-                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.PID_TOLERANCE);
+                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.PID_TOLERANCE,true,true);
                         robot.elevator.presetPositionUp(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.

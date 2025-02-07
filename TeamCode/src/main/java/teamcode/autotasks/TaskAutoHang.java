@@ -202,7 +202,7 @@ public class TaskAutoHang extends TrcAutoTask<TaskAutoHang.State>
             case LEVEL2_ASCENT:
                 robot.elevator.setPidStallDetectionEnabled(false);
                 robot.elevator.setStallProtection(0.0, 0.0, 0.0, 0.0);
-                robot.elevator.setPositionPidParameters(0.6,0,0,0,0, RobotParams.ElevatorParams.PID_TOLERANCE);
+                robot.elevator.setPositionPidParameters(0.4,0,0,0,RobotParams.ElevatorParams.PID_TOLERANCE,RobotParams.ElevatorParams.SOFTWARE_PID_ENABLED);
                 robot.elevator.setPosition(currOwner,0,RobotParams.ElevatorParams.LEVEL2_ASCENT_POS,true,RobotParams.ElevatorParams.POWER_LIMIT,event2,2);
                 robot.elbow.setPosition(currOwner,0.5,RobotParams.ElbowParams.LEVEL2_ASCENT_POS,true,RobotParams.ElbowParams.POWER_LIMIT,event,2);
                 sm.waitForSingleEvent(event2,State.LEVEL2_FINISH);

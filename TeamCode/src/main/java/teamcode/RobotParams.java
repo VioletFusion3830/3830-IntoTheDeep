@@ -35,8 +35,8 @@ import trclib.drivebase.TrcDriveBase;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
 import trclib.driverio.TrcGameController.DriveMode;
 import trclib.pathdrive.TrcPose2D;
-import trclib.robotcore.TrcPidController;
-import trclib.robotcore.TrcPidController.PidCoefficients;
+import trclib.controller.TrcPidController;
+import trclib.controller.TrcPidController.PidCoefficients;
 
 /**
  * This class contains robot and subsystem constants and parameters.
