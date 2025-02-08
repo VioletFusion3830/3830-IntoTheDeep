@@ -5,7 +5,6 @@ import teamcode.Robot;
 import teamcode.RobotParams;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcEvent;
-import trclib.robotcore.TrcPidController;
 import trclib.robotcore.TrcRobot;
 import trclib.robotcore.TrcStateMachine;
 import trclib.timer.TrcTimer;

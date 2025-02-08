@@ -146,9 +146,6 @@ public class FtcAuto extends FtcOpMode
             TrcDbgTrace.openTraceLog(RobotParams.Robot.LOG_FOLDER_PATH, filePrefix);
         }
 
-        robot.dashboard.displayPrintf(5,"elbow" + robot.elbow.getPosition());
-
-
         //
         // Create and run choice menus.
         //
@@ -260,7 +257,8 @@ public class FtcAuto extends FtcOpMode
                 new TrcPose2D(autoChoices.xTarget*12.0, autoChoices.yTarget*12.0, autoChoices.turnTarget));
         }
         robot.robotDrive.purePursuitDrive.setTraceLevel(
-                TrcDbgTrace.MsgLevel.INFO,false, true, false);
+                TrcDbgTrace.MsgLevel.DEBUG,false, false, false);
+        robot.robotDrive.purePursuitDrive.getTurnPidCtrl().tracer.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG);
     }   //startMode
 
     /**

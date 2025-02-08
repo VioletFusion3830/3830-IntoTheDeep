@@ -182,13 +182,15 @@ public class RobotParams
                 new TrcPose2D(4, -32, 180)
                 };
         // Pickup pose (Net zone side).
-        public static final TrcPose2D RED_NET_ZONE_SPIKEMARK_PICKUP =
+        public static final TrcPose2D RED_NET_ZONE_PICKUP =
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
         // Pickup pose (Observation zone side).
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_PICKUP   = {
                 new TrcPose2D(38, -42, 180.0),
                 new TrcPose2D(38, -52, 180.0)
                 };
+        public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP_START   =
+                new TrcPose2D(38, -52, 180.0);
         // Park pose (Net zone side).
         public static final TrcPose2D[] RED_ASCENT_ZONE_PARK_POSE     = {
                 new TrcPose2D(-35, -14, 90.0),
