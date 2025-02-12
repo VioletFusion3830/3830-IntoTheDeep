@@ -85,7 +85,6 @@ public class FtcAuto extends FtcOpMode
         public double delay = 0.0;
         public Alliance alliance = null;
         public StartPos startPos = StartPos.NET_ZONE;
-        public Robot.GamePieceType preloadType = Robot.GamePieceType.SPECIMEN;
         public AutoStrategy autoStrategy = AutoStrategy.FULL_AUTO;
         public ParkOption parkPos = ParkOption.PARK;
         public double xTarget = 0.0;
@@ -103,7 +102,6 @@ public class FtcAuto extends FtcOpMode
                 "delay=%.0f " +
                 "alliance=\"%s\" " +
                 "startPos=\"%s\" " +
-                "preloadType=\"%s\" " +
                 "AutoStrategy=\"%s\" " +
                 "parkOption=\"%s\" " +
                 "xTarget=%.1f " +
@@ -111,7 +109,7 @@ public class FtcAuto extends FtcOpMode
                 "turnTarget=%.0f " +
                 "driveTime=%.0f " +
                 "drivePower=%.1f",
-                delay, alliance, startPos, preloadType, autoStrategy, parkPos, xTarget, yTarget, turnTarget, driveTime, drivePower);
+                delay, alliance, startPos, autoStrategy, parkPos, xTarget, yTarget, turnTarget, driveTime, drivePower);
         }   //toString
 
     }   //class AutoChoices
@@ -211,7 +209,7 @@ public class FtcAuto extends FtcOpMode
             {
                 robot.elbow.setPosition(60);
                 robot.wristArm.setWristArmPosition(0.09,0.55);
-                robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS);
+                robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                 robot.clawGrabber.close(null,4,null);
             }
         }
@@ -256,9 +254,6 @@ public class FtcAuto extends FtcOpMode
                 autoChoices.delay, autoChoices.drivePower, null,
                 new TrcPose2D(autoChoices.xTarget*12.0, autoChoices.yTarget*12.0, autoChoices.turnTarget));
         }
-        robot.robotDrive.purePursuitDrive.setTraceLevel(
-                TrcDbgTrace.MsgLevel.DEBUG,false, false, false);
-        robot.robotDrive.purePursuitDrive.getTurnPidCtrl().tracer.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG);
     }   //startMode
 
     /**
@@ -331,8 +326,7 @@ public class FtcAuto extends FtcOpMode
         FtcChoiceMenu<Alliance> allianceMenu = new FtcChoiceMenu<>("Alliance:", delayMenu);
         FtcChoiceMenu<AutoStrategy> strategyMenu = new FtcChoiceMenu<>("Auto Strategies:", allianceMenu);
         FtcChoiceMenu<StartPos> startPosMenu = new FtcChoiceMenu<>("Start Position:", strategyMenu);
-        FtcChoiceMenu<Robot.GamePieceType> preloadTypeMenu = new FtcChoiceMenu<>("Preload Type:", startPosMenu);
-        FtcChoiceMenu<ParkOption> parkOptionMenu = new FtcChoiceMenu<>("Park Option:", preloadTypeMenu);
+        FtcChoiceMenu<ParkOption> parkOptionMenu = new FtcChoiceMenu<>("Park Option:", startPosMenu);
 
         FtcValueMenu xTargetMenu = new FtcValueMenu(
             "xTarget:", strategyMenu, -12.0, 12.0, 0.5, 4.0, " %.1f ft");
@@ -362,11 +356,8 @@ public class FtcAuto extends FtcOpMode
         strategyMenu.addChoice("Timed Drive", AutoStrategy.TIMED_DRIVE, false, driveTimeMenu);
         strategyMenu.addChoice("Do nothing", AutoStrategy.DO_NOTHING, false);
 
-        startPosMenu.addChoice("Start Net Zone", StartPos.NET_ZONE, true, preloadTypeMenu);
-        startPosMenu.addChoice("Start Observation Zone", StartPos.OBSERVATION_ZONE, false, preloadTypeMenu);
-
-        preloadTypeMenu.addChoice("Preload Specimen", Robot.GamePieceType.SPECIMEN, true, parkOptionMenu);
-        preloadTypeMenu.addChoice("Preload Sample", Robot.GamePieceType.SAMPLE, false, parkOptionMenu);
+        startPosMenu.addChoice("Start Net Zone", StartPos.NET_ZONE, true, parkOptionMenu);
+        startPosMenu.addChoice("Start Observation Zone", StartPos.OBSERVATION_ZONE, false, parkOptionMenu);
 
         parkOptionMenu.addChoice("Park", ParkOption.PARK, true);
         parkOptionMenu.addChoice("Don't Park", ParkOption.NO_PARK, false);
@@ -382,7 +373,6 @@ public class FtcAuto extends FtcOpMode
         autoChoices.alliance = allianceMenu.getCurrentChoiceObject();
         autoChoices.autoStrategy = strategyMenu.getCurrentChoiceObject();
         autoChoices.startPos = startPosMenu.getCurrentChoiceObject();
-        autoChoices.preloadType = preloadTypeMenu.getCurrentChoiceObject();
         autoChoices.parkPos = parkOptionMenu.getCurrentChoiceObject();
         autoChoices.xTarget = xTargetMenu.getCurrentValue();
         autoChoices.yTarget = yTargetMenu.getCurrentValue();

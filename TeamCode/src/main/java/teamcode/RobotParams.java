@@ -160,37 +160,32 @@ public class RobotParams
         public static final double STARTPOS_X                                   = Robot.ROBOT_WIDTH/2.0;
         public static final double STARTPOS_Y                                   = Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0;
         // Red Net Zone start pose face the net zone touching the alliance wall with the robot's in front of net zone.
-
         public static final TrcPose2D STARTPOSE_RED_NET_ZONE_SAMPLE    = new TrcPose2D((((Field.FULL_TILE_INCHES)+(Robot.ROBOT_LENGTH/2)-Field.HALF_FIELD_INCHES)),(Robot.ROBOT_WIDTH/2.0)-Field.HALF_FIELD_INCHES, 90);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
-        public static final TrcPose2D STARTPOSE_RED_NET_ZONE__SPECIMEN = new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2), 180);
-        // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
-        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D((Robot.ROBOT_WIDTH/2.0), -(Field.HALF_FIELD_INCHES - (Robot.ROBOT_LENGTH/2.0)+2.5), 180);
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D(STARTPOS_X, -STARTPOS_Y, 0);
 
+        // Score pose (Observation zone side).
+        public static final TrcPose2D RED_OBSERVATION_FORWARD_CHAMBER_SCORE_POSE =
+                new TrcPose2D(STARTPOS_X,-43,0);
+        public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
+                new TrcPose2D(0, -33, 180);
 
+        // Pickup pose (Observation zone side).
+        public static final TrcPose2D[] RED_OBSERVATION_ZONE_CYCLE_PICKUP   = {
+                new TrcPose2D(36, -36, 180.0),
+                new TrcPose2D(36, -46, 180.0)
+        };
+        public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
+                new TrcPose2D(36, -46, 180.0);
 
         // Score poses (Net zone side).
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
                 new TrcPose2D(-55.5, -55.5, 45.0);
         public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE    =
                 new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -38, 180);
-        // Score pose (Observation zone side).
-        public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D(0, -33, 180);
-        public static final TrcPose2D[] RED_OBSERVATION_ZONE_CYCLE_SCORE_POSE = {
-                new TrcPose2D(8, -40, 180),
-                new TrcPose2D(4, -32, 180)
-                };
         // Pickup pose (Net zone side).
         public static final TrcPose2D RED_NET_ZONE_PICKUP =
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
-        // Pickup pose (Observation zone side).
-        public static final TrcPose2D[] RED_OBSERVATION_ZONE_PICKUP   = {
-                new TrcPose2D(38, -42, 180.0),
-                new TrcPose2D(38, -52, 180.0)
-                };
-        public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP_START   =
-                new TrcPose2D(38, -52, 180.0);
         // Park pose (Net zone side).
         public static final TrcPose2D[] RED_ASCENT_ZONE_PARK_POSE     = {
                 new TrcPose2D(-35, -14, 90.0),
@@ -314,7 +309,7 @@ public class RobotParams
             robotMaxTurnRate = 168.0;       // degrees/sec
             profiledMaxVelocity = 70.0;
             profiledMaxAcceleration = 160.0;
-            profiledMaxDeceleration = 120.0;
+            profiledMaxDeceleration = 110.0;
             profiledMaxTurnRate = 100.0;
             // DriveBase PID Parameters
             usePidDrive = true;
@@ -326,16 +321,16 @@ public class RobotParams
             xDrivePidCoeffs = new PidCoefficients(0.055,0.0, 0.0037, 0.0,0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
-            yDrivePidCoeffs = new PidCoefficients(0.028, 0.0, 0.0031, 0.0, 0);
+            yDrivePidCoeffs = new PidCoefficients(0.026, 0.0, 0.0034, 0.0, 0); //0.028 , 0.0031
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.009, 0.0, 0.0003, 0.0, 0);
+            turnPidCoeffs = new PidCoefficients(0.0068, 0.0, 0.0004, 0.0, 2);
             turnMaxPidRampRate = null;
             // PID Stall Detection
             pidStallDetectionEnabled = true;
             // PurePursuit Parameters
             ppdFollowingDistance = 6.0;
-            velPidCoeffs = new PidCoefficients(0.0, 0.0, 0.0, 0.001, 0.0);
+            velPidCoeffs = new PidCoefficients(0, 0,0, 0.009, 0);
             // Vision
             webCam1 = null; //new FrontCamParams()
             webCam2 = null; //new BackCamParams()
