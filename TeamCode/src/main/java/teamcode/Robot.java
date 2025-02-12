@@ -32,6 +32,7 @@ import ftclib.driverio.FtcMatchInfo;
 import ftclib.robotcore.FtcOpMode;
 import ftclib.sensor.FtcRobotBattery;
 import teamcode.autotasks.TaskAutoHang;
+import teamcode.autotasks.TaskAutoSweepSamples;
 import teamcode.autotasks.TaskSampleTeleOpMacros;
 import teamcode.autotasks.TaskAutoPickupSample;
 import teamcode.autotasks.TaskAutoPickupSpecimen;
@@ -97,6 +98,7 @@ public class Robot {
     public TaskAutoHang autoHang;
     public TaskSampleTeleOpMacros sampleTeleOpMacros;
     public TaskAutoPickupSample autoPickupSample;
+    public TaskAutoSweepSamples autoSweepSamples;
 
     public enum GamePieceType {
         SPECIMEN,
@@ -195,6 +197,7 @@ public class Robot {
                 scoreChamberTask = new TaskAutoScoreChamber("AutoScoreChamberTask", this);
                 autoHang = new TaskAutoHang("AutoHangTask", this);
                 sampleTeleOpMacros = new TaskSampleTeleOpMacros("sampleTeleOpMacros", this);
+                autoSweepSamples = new TaskAutoSweepSamples("AutoSweepSamples", this);
             }
         }
 
@@ -413,6 +416,7 @@ public class Robot {
         if (scoreChamberTask != null) scoreChamberTask.cancel();
         if (autoHang != null) autoHang.cancel();
         if (sampleTeleOpMacros != null) sampleTeleOpMacros.cancel();
+        if (autoSweepSamples != null) autoSweepSamples.cancel();
     }   //cancelAll
 
     public double verticalWristPickupSamplePos()
@@ -472,7 +476,7 @@ public class Robot {
         robotDrive.driveBase.setFieldPosition(
                 adjustPoseByAlliance(
                         autoChoices.startPos == FtcAuto.StartPos.OBSERVATION_ZONE ?
-                                RobotParams.Game.STARTPOSE_RED_OBSERVATION_ZONE : autoChoices.preloadType == GamePieceType.SAMPLE ? RobotParams.Game.STARTPOSE_RED_NET_ZONE_SAMPLE : RobotParams.Game.STARTPOSE_RED_NET_ZONE__SPECIMEN,
+                                RobotParams.Game.STARTPOSE_RED_OBSERVATION_ZONE : RobotParams.Game.STARTPOSE_RED_NET_ZONE_SAMPLE,
                         autoChoices.alliance, false));
     }   //setRobotStartPosition
 

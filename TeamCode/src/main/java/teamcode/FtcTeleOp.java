@@ -375,12 +375,14 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case B:
+
 //                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
 //                driverAltFunc = pressed;
 //                if(pressed)
 //                {
 //                    robot.arm.setPosition(0.49);
 //                }
+                break;
 //                break;
             case X:
             case Y:
@@ -526,7 +528,7 @@ public class FtcTeleOp extends FtcOpMode
             case LeftBumper:
                 if (robot.sampleTeleOpMacros != null && pressed)
                 {
-                    if (!robot.scoreChamberTask.isActive())
+                    if (!robot.sampleTeleOpMacros.isActive())
                     {
                         robot.sampleTeleOpMacros.autoSetSubsystemsSampleScorePos(null);
                     }
@@ -541,7 +543,7 @@ public class FtcTeleOp extends FtcOpMode
             case RightBumper:
                 if (robot.sampleTeleOpMacros != null && pressed)
                 {
-                    if (!robot.scoreChamberTask.isActive())
+                    if (!robot.sampleTeleOpMacros.isActive())
                     {
                         robot.sampleTeleOpMacros.autoSetSubsystemsSamplePickupPos(null);
                     }
