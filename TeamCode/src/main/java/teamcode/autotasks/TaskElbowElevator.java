@@ -96,6 +96,12 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
         setPosition(safeSequence, null, elbowAngle, elevatorPosition,0.0,0.0,completionEvent);
     }   //setPosition
 
+    public void setPosition(Double elbowAngle, Double elevatorPosition, double elevatorDelay, double elbowDelay, TrcEvent completionEvent)
+    {
+        setPosition(false, null, elbowAngle, elevatorPosition,elevatorDelay,elbowDelay, completionEvent);
+    }   //setPosition
+
+
     public void setPosition(Double elbowAngle, Double elevatorPosition, TrcEvent completionEvent)
     {
         setPosition(false, null, elbowAngle, elevatorPosition,0.0,0.0, completionEvent);

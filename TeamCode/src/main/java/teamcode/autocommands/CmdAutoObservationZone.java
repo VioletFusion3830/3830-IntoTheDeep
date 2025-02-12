@@ -20,6 +20,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
     {
         START,
         DO_DELAY,
+        SET_POSITIONS_TO_SCORE_PRELOAD,
         SCORE_PRELOAD,
         MOVE_SAMPLES,
         PICKUP_SPECIMEN,
@@ -114,37 +115,40 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     {
                         robot.globalTracer.traceInfo(moduleName, "***** Do delay " + autoChoices.delay + "s.");
                         timer.set(autoChoices.delay, event);
-                        sm.waitForSingleEvent(event, State.SCORE_PRELOAD);
+                        sm.waitForSingleEvent(event, State.SET_POSITIONS_TO_SCORE_PRELOAD);
                     }
                     else
                     {
-                        sm.setState(State.SCORE_PRELOAD);
+                        sm.setState(State.SET_POSITIONS_TO_SCORE_PRELOAD);
                     }
                     break;
 
-                case SCORE_PRELOAD:
-                    // Score the preloaded specimen.
-                    TrcPose2D[] scorePose1 = {
-                        new TrcPose2D(8, -40, 180)
-                    };
-                    robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance,scorePose1,false, event);
-                    sm.waitForSingleEvent(event, State.DONE);
-                    break;
-
-                case MOVE_SAMPLES:
-                    // Herd three samples to the observation zone to be converted to specimens.
+                case SET_POSITIONS_TO_SCORE_PRELOAD:
+                    robot.robotDrive.purePursuitDrive.getYPosPidCtrl().setNoOscillation(true);
                     robot.robotDrive.purePursuitDrive.start(
                             event, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(
-                                    RobotParams.Game.RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH, autoChoices.alliance, false));
-                    robot.wristArm.setWristArmPosition(null, 0, 0.8, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,0,null);
-                    robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,null,0);
-                    robot.wristArm.setWristArmPosition(null, 5, RobotParams.ArmParams.PICKUP_SPECIMEN_POS, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,0,null);
-                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,13.0, event2);
+                                    RobotParams.Game.RED_OBSERVATION_FORWARD_CHAMBER_SCORE_POSE, autoChoices.alliance, false));
+                    robot.elbowElevator.setPosition(45.0,23.0,event2);
+                    robot.wristArm.setWristArmPosition(0.45,0.25);
                     sm.addEvent(event);
                     sm.addEvent(event2);
-                    sm.waitForEvents(State.PICKUP_SPECIMEN, true);
+                    sm.waitForEvents(State.SCORE_PRELOAD,true);
+                    break;
+
+                case SCORE_PRELOAD:
+                    // Score the preloaded specimen.
+                    robot.clawGrabber.open(event);
+                    robot.elbowElevator.setPosition(45.0,13.0,null);
+                    sm.waitForSingleEvent(event, State.MOVE_SAMPLES);
+                    break;
+
+                case MOVE_SAMPLES:
+                    robot.robotDrive.purePursuitDrive.getYPosPidCtrl().setNoOscillation(false);
+                    // Herd three samples to the observation zone to be converted to specimens.
+                    robot.autoSweepSamples.sweepSpikeMarkSamples(autoChoices.alliance,event);
+                    sm.waitForSingleEvent(event, State.PICKUP_SPECIMEN);
                     break;
 
                 case PICKUP_SPECIMEN:
@@ -153,7 +157,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     {
                         scoreSpecimenCount++;
                         robot.pickupSpecimenTask.autoPickupSpecimen(autoChoices.alliance, scoreSpecimenCount == 1, event);
-                        sm.waitForSingleEvent(event, State.SCORE_SPECIMEN);
+                        sm.waitForSingleEvent(event, State.DONE);
                     }
                     else
                     {

@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import teamcode.FtcAuto;
 import teamcode.Robot;
 import teamcode.RobotParams;
+import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcAutoTask;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcOwnershipMgr;
@@ -21,6 +22,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
     public enum State
     {
         GO_TO_SCORE_POSITION,
+        FIRST_RUN_POSITION,
         SET_ELEVATOR,
         GRAB_SPECIMEN,
         RETRACT_ELEVATOR_ARM,
@@ -30,18 +32,18 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
     private static class TaskParams
     {
         final FtcAuto.Alliance alliance;
-        final boolean positionsSet;
+        final boolean firstCycle;
 
-        TaskParams(FtcAuto.Alliance alliance, boolean positionsSet)
+        TaskParams(FtcAuto.Alliance alliance, boolean firstCycle)
         {
             this.alliance = alliance;
-            this.positionsSet = positionsSet;
+            this.firstCycle = firstCycle;
         }   //TaskParams
 
         @NonNull
         public String toString()
         {
-            return "alliance=" + alliance + ", positionsSet=" + positionsSet;
+            return "alliance=" + alliance + ", positionsSet=" + firstCycle;
         }   //toString
     }   //class TaskParams
 
@@ -72,7 +74,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoPickupSpecimen(FtcAuto.Alliance alliance,boolean positionsSet, TrcEvent completionEvent)
+    public void autoPickupSpecimen(FtcAuto.Alliance alliance,boolean firstCycle, TrcEvent completionEvent)
     {
         if (alliance == null)
         {
@@ -81,7 +83,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                     FtcAuto.Alliance.RED_ALLIANCE: FtcAuto.Alliance.BLUE_ALLIANCE;
         }
 
-        TaskParams taskParams = new TaskParams(alliance, positionsSet);
+        TaskParams taskParams = new TaskParams(alliance, firstCycle);
         tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
         startAutoTask(State.GO_TO_SCORE_POSITION, taskParams, completionEvent);
     }   //autoAssist
@@ -182,28 +184,31 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
         switch (state) {
             case GO_TO_SCORE_POSITION:
                 //Path to pickup location
-                if(!taskParams.positionsSet)
+                robot.wristArm.setWristArmPickupSpecimenPos(currOwner, 0, null);
+                robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
+                robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, event1);
+                if(taskParams.firstCycle)
                 {
-                    robot.robotDrive.purePursuitDrive.start(currOwner, event1, 0.0, false,
+                    robot.robotDrive.purePursuitDrive.start(currOwner, null, 0.0, false,
+                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
+                            robot.adjustPoseByAlliance(new TrcPose2D(36, -40, 180.0), taskParams.alliance, false));
+                    sm.waitForSingleEvent(event1, State.DONE);
+                }
+                else {
+                    robot.robotDrive.purePursuitDrive.start(currOwner, event2, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance, false));
-                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, event2);
-                    robot.wristArm.setWristArmPickupSpecimenPos(currOwner, 0, null);
-                    robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
                     sm.addEvent(event1);
                     sm.addEvent(event2);
-                    sm.waitForEvents(State.SET_ELEVATOR, true);
-                }
-                else
-                {
-                    sm.setState(State.SET_ELEVATOR);
+                    sm.waitForEvents(State.DONE, true);
                 }
                 break;
 
-            case SET_ELEVATOR:
-                robot.elevator.setPosition(0.2, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS+2,true,1,event1,1);
-                sm.waitForSingleEvent(event1,State.GRAB_SPECIMEN);
-                break;
+            case FIRST_RUN_POSITION:
+                robot.robotDrive.purePursuitDrive.start(currOwner, event1, 0.0, false,
+                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
+                        robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance, false));
+                sm.waitForSingleEvent(event1, State.GRAB_SPECIMEN);
 
             case GRAB_SPECIMEN:
                 robot.clawGrabber.close(null,0,event1);

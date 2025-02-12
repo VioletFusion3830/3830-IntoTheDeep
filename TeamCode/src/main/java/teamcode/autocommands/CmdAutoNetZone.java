@@ -127,15 +127,8 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                     break;
 
                 case SCORE_PRELOAD:
-                    // Score the preloaded sample or specimen.
-                    if (autoChoices.preloadType == Robot.GamePieceType.SPECIMEN)
-                    {
-                        robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance,null,false, event);
-                    }
-                    else
-                    {
-                        robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance,RobotParams.Game.RED_BASKET_SCORE_POSE ,event);
-                    }
+                    // Score the preloaded sample
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance,RobotParams.Game.RED_BASKET_SCORE_POSE ,event);
                     sm.waitForSingleEvent(event, State.PICKUP_SAMPLE_MARK_1);
                     break;
 
