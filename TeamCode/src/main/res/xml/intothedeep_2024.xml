@@ -9,7 +9,6 @@
             <goBILDA5202SeriesMotor name="rbDriveMotor" port="3" />
             <Servo name="grabber.primary" port="0" />
             <Servo name="arm.primary" port="2" />
-            <Servo name="wristRotator.primary" port="4" />
             <Servo name="wristVertical.primary" port="5" />
             <AnalogInput name="arm.encoder" port="0" />
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
@@ -21,6 +20,7 @@
             <goBILDA5202SeriesMotor name="elbow.primary" port="1"/>
             <goBILDA5202SeriesMotor name="elevator.follower" port="2" />
             <goBILDA5202SeriesMotor name="elevator.follower2" port="3" />
+            <Servo name="wristRotator.primary" port="4" />
         </LynxModule>
     </LynxUsbDevice>
 </Robot>
