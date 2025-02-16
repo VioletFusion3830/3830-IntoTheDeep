@@ -196,31 +196,16 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
             case GO_TO_SCORE_POSITION:
                 //Set Subsystems to high chamber score position
                 robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, event1);
-                robot.verticalWrist.setPosition(currOwner, 0.15, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, null, 0);
-                robot.arm.setPosition(currOwner, 0.15, RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, null, 0);
-                robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
-                if(!taskParams.cycle)
-                {
-                    robot.robotDrive.purePursuitDrive.start(
+                robot.verticalWrist.setPosition(currOwner, 0, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, null, 0);
+                robot.arm.setPosition(currOwner, 0, RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, null, 0);
+                robot.robotDrive.purePursuitDrive.start(
                             currOwner, event2, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance,false));
-                    //Wait for completion
-                    sm.addEvent(event1);
-                    sm.addEvent(event2);
-                    sm.waitForEvents(State.DONE,true,3);
-                }
-                else
-                {
-                    robot.robotDrive.purePursuitDrive.start(
-                            currOwner, event2, 0.0, false,
-                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                            robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance,false));
-                    //Wait for completion
-                    sm.addEvent(event1);
-                    sm.addEvent(event2);
-                    sm.waitForEvents(State.CLIP_SPECIMEN,true,4.5);
-                }
+                //Wait for completion
+                sm.addEvent(event1);
+                sm.addEvent(event2);
+                sm.waitForEvents(State.DONE,true);
                 break;
 
             case CLIP_SPECIMEN:

@@ -130,8 +130,8 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(
                                     RobotParams.Game.RED_OBSERVATION_FORWARD_CHAMBER_SCORE_POSE, autoChoices.alliance, false));
-                    robot.elbowElevator.setPosition(45.0,23.0,event2);
-                    robot.wristArm.setWristArmPosition(0.45,0.25);
+                    robot.elbowElevator.setPosition(40.0,27.0,event2);
+                    robot.wristArm.setWristArmPosition(0.5,0.25);
                     sm.addEvent(event);
                     sm.addEvent(event2);
                     sm.waitForEvents(State.SCORE_PRELOAD,true);
@@ -140,14 +140,23 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                 case SCORE_PRELOAD:
                     // Score the preloaded specimen.
                     robot.clawGrabber.open(event);
-                    robot.elbowElevator.setPosition(45.0,13.0,null);
+                    robot.elbowElevator.setPosition(39.0,13.0,null);
                     sm.waitForSingleEvent(event, State.MOVE_SAMPLES);
                     break;
 
                 case MOVE_SAMPLES:
                     robot.robotDrive.purePursuitDrive.getYPosPidCtrl().setNoOscillation(false);
                     // Herd three samples to the observation zone to be converted to specimens.
-                    robot.autoSweepSamples.sweepSpikeMarkSamples(autoChoices.alliance,event);
+                    robot.robotDrive.purePursuitDrive.start(
+                            event, 0.0, false,
+                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
+                            robot.adjustPoseByAlliance(
+                                    RobotParams.Game.RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH, autoChoices.alliance, false));
+                    robot.wristArm.setWristArmPosition(null, 0, 0.8, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,0,null);
+                    robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,null,0);
+                    robot.wristArm.setWristArmPosition(null, 6, RobotParams.ArmParams.PICKUP_SPECIMEN_POS, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,0,null);
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,13.0, event2);
+                    //robot.autoSweepSamples.sweepSpikeMarkSamples(autoChoices.alliance,event);
                     sm.waitForSingleEvent(event, State.PICKUP_SPECIMEN);
                     break;
 
@@ -157,12 +166,16 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     {
                         scoreSpecimenCount++;
                         robot.pickupSpecimenTask.autoPickupSpecimen(autoChoices.alliance, scoreSpecimenCount == 1, event);
-                        sm.waitForSingleEvent(event, State.DONE);
+                        if (scoreSpecimenCount <= 1)
+                        {
+                            sm.waitForSingleEvent(event, State.SCORE_SPECIMEN);
+                        }
+                        else
+                        {
+                            sm.setState(State.DONE);
+                        }
                     }
-                    else
-                    {
-                        sm.setState(State.PARK);
-                    }
+                    else sm.setState(State.DONE);
                     break;
 
                 case SCORE_SPECIMEN:
@@ -170,16 +183,15 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     if(scoreSpecimenCount == 1)
                     {
                         TrcPose2D[] scorePose = {
-                                new TrcPose2D(8, -42, 180),
-                                new TrcPose2D(2, -32, 180)
+                                new TrcPose2D(7,-37, 180),
+                                new TrcPose2D(7,-35, 180)
                         };
                         robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance, scorePose,true, event);
                     }
                     else if(scoreSpecimenCount == 2)
                     {
                         TrcPose2D[] scorePose = {
-                                new TrcPose2D(6, -42, 180),
-                                new TrcPose2D(0, -32, 180)
+                                new TrcPose2D(7, -35, 180),
                         };
                         robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance, scorePose,true, event);
                     }

@@ -186,23 +186,24 @@ public class TaskAutoSweepSamples extends TrcAutoTask<TaskAutoSweepSamples.State
         {
             case GO_TO_START_POSITION:
                 // Setup all systems to pickup position.
+                robot.robotDrive.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
                 TrcPose2D[] RED_OBSERVATION_ZONE_SWEEP_SAMPLE_1 = {
-                        new TrcPose2D(10, -45, 40),
-                        new TrcPose2D(30, -40, 40)
+                        new TrcPose2D(8, -54, 40),
+                        new TrcPose2D(29, -40, 40)
                 };
                 robot.robotDrive.purePursuitDrive.start(
                         currOwner, event2, 0.0, false,
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                         robot.adjustPoseByAlliance(RED_OBSERVATION_ZONE_SWEEP_SAMPLE_1, taskParams.alliance, false));
-                robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,26.0,0.3,0, event1);
-                robot.wristArm.setWristArmPosition(currOwner,0.8,0.08,0.66,0,null);
+                robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,26.0,0.5,0, event1);
+                robot.wristArm.setWristArmPosition(currOwner,0.8,0.08,0.67,0,null);
                 sm.addEvent(event1);
                 sm.addEvent(event2);
                 sm.waitForEvents(State.SWEEP_SAMPLE, true);
                 break;
 
             case LOWER_ARM:
-                robot.wristArm.setWristArmPosition(currOwner,0.08,0.66,0.2,event1);
+                robot.wristArm.setWristArmPosition(currOwner,0.08,0.67,0.15,event1);
                 sm.waitForSingleEvent(event1, State.SWEEP_SAMPLE);
                 break;
 
@@ -212,10 +213,10 @@ public class TaskAutoSweepSamples extends TrcAutoTask<TaskAutoSweepSamples.State
                 robot.robotDrive.purePursuitDrive.start(
                         currOwner, event1, 0.0, false,
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                        robot.adjustPoseByAlliance(new TrcPose2D(40, -45, 140), taskParams.alliance));
-                robot.elbowElevator.setPosition(null, 24.0, null);
-                if(samplesSweeped == 1) sm.waitForSingleEvent(event1, State.DONE);
-                else if(samplesSweeped == 2) sm.waitForSingleEvent(event1, State.DONE);
+                        robot.adjustPoseByAlliance(new TrcPose2D(35, -50, 120), taskParams.alliance));
+                robot.elbowElevator.setPosition(null, 20.0, null);
+                if(samplesSweeped == 1) sm.waitForSingleEvent(event1, State.REST_FOR_SAMPLE_2);
+                else if(samplesSweeped == 2) sm.waitForSingleEvent(event1, State.REST_FOR_SAMPLE_3);
                 else sm.waitForSingleEvent(event1, State.DONE);
                 break;
 
@@ -224,9 +225,26 @@ public class TaskAutoSweepSamples extends TrcAutoTask<TaskAutoSweepSamples.State
                         currOwner, event1, 0.0, false,
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                         robot.adjustPoseByAlliance(new TrcPose2D(39,-40,40), taskParams.alliance));
-                robot.elbowElevator.setPosition(null,26.0, null);
-                robot.wristArm.setWristArmPosition(currOwner,0.0,0.4,0.68,0,null);
+                robot.elbowElevator.setPosition(null,27.0,0.2,0, null);
+                robot.wristArm.setWristArmPosition(currOwner,0.0,0.3,0.68,0,null);
                 sm.waitForSingleEvent(event1, State.LOWER_ARM);
+                break;
+
+            case REST_FOR_SAMPLE_3:
+                robot.robotDrive.purePursuitDrive.start(
+                        currOwner, event1, 0.0, false,
+                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
+                        robot.adjustPoseByAlliance(new TrcPose2D(43,-40,40), taskParams.alliance));
+                robot.elbowElevator.setPosition(null,26.0,0.2,0, null);
+                robot.wristArm.setWristArmPosition(currOwner,0.0,0.3,0.68,0,null);
+                sm.waitForSingleEvent(event1, State.LOWER_ARM);
+                break;
+
+            case SET_SUBSYSTEMS:
+                robot.elbowElevator.setPosition(null, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, null);
+                robot.wristArm.setWristArmPosition(currOwner,0.0,0.2,0.68,0,null);
+                robot.robotDrive.purePursuitDrive.getTurnPidCtrl().setNoOscillation(false);
+                sm.setState(State.DONE);
                 break;
 
             default:

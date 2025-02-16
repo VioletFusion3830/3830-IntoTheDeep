@@ -184,17 +184,11 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
         switch (state) {
             case GO_TO_SCORE_POSITION:
                 //Path to pickup location
-                robot.wristArm.setWristArmPickupSpecimenPos(currOwner, 0, null);
-                robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
-                robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, event1);
-                if(taskParams.firstCycle)
+                if(taskParams.firstCycle) sm.setState(State.GRAB_SPECIMEN);
+                else
                 {
-                    robot.robotDrive.purePursuitDrive.start(currOwner, null, 0.0, false,
-                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                            robot.adjustPoseByAlliance(new TrcPose2D(36, -40, 180.0), taskParams.alliance, false));
-                    sm.waitForSingleEvent(event1, State.DONE);
-                }
-                else {
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, event1);
+                    robot.wristArm.setWristArmPickupSpecimenPos(currOwner, 0, null);
                     robot.robotDrive.purePursuitDrive.start(currOwner, event2, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance, false));
@@ -209,10 +203,12 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                         robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance, false));
                 sm.waitForSingleEvent(event1, State.GRAB_SPECIMEN);
+                break;
 
             case GRAB_SPECIMEN:
                 robot.clawGrabber.close(null,0,event1);
-                sm.waitForSingleEvent(event1, State.RETRACT_ELEVATOR_ARM);
+                if(taskParams.firstCycle) sm.waitForSingleEvent(event1,State.DONE);
+                else sm.waitForSingleEvent(event1, State.RETRACT_ELEVATOR_ARM);
                 break;
 
             case RETRACT_ELEVATOR_ARM:
