@@ -231,7 +231,8 @@ public class FtcTeleOp extends FtcOpMode
                     {
                         double elbowPosRadians = Math.toRadians(elbowPos);
                         elevatorLimit = RobotParams.ElevatorParams.MAX_POS - (Math.max(Math.cos(elbowPosRadians) * (isSamplePickupMode ? RobotParams.ElevatorParams.HORIZONTAL_LIMIT: 21.6), 0));
-                        if (robot.elevator.getPosition() > elevatorLimit)
+                        double pidTarget = robot.elevator.getPidTarget();
+                        if (robot.elevator.getPosition() > elevatorLimit && (pidTarget == 0.0 || pidTarget > elevatorLimit))
                         {
                             robot.elevator.setPosition(elevatorLimit);
                         }
@@ -385,6 +386,10 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 //                break;
             case X:
+                if(pressed)
+                {
+                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
+                }
             case Y:
             break;
             case LeftBumper:
