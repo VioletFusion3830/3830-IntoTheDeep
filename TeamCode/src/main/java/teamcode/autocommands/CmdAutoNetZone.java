@@ -134,7 +134,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case PICKUP_SAMPLE_MARK_1:
                     // Pickup first floor sample.
-                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance,new TrcPose2D(-48,-44.5,0), RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,event);
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance,new TrcPose2D(-48,-44.5,0), RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,event);
                     sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_1);
                     break;
 
@@ -146,7 +146,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case PICKUP_SAMPLE_MARK_2:
                     // Pickup second floor sample.
-                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-57.5,-44.5,0), RobotParams.WristParamsRotational.PARALLEL_SECONDARY_POS,event);
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-57.5,-44.5,0), RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,event);
                     sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_2);
                     break;
 
@@ -158,7 +158,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case PICKUP_SAMPLE_MARK_3:
                     // Pickup third floor sample.
-                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-55,-40,-40), 0.7,event);
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-55,-40,-30), 0.7,event);
                     sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_3);
                     break;
 

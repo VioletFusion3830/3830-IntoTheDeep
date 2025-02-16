@@ -202,10 +202,10 @@ public void autoPickupSample(
                         currOwner, event2, 0.0, false,
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                         robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-//                robot.elbowElevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null,0,0.44, event1);
-//                robot.rotationalWrist.setPosition(null,0,taskParams.wirstRotationalPos,null,0);
-//                robot.wristArm.setWristArmPosition(currOwner,RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START,RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START,0,null);
-//                sm.addEvent(event1);
+                robot.elbowElevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS, RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null,0,0.44, event1);
+                robot.rotationalWrist.setPosition(null,0,taskParams.wirstRotationalPos,null,0);
+                robot.wristArm.setWristArmPosition(currOwner,RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START,RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START,0,null);
+                sm.addEvent(event1);
                 sm.addEvent(event2);
                 sm.waitForEvents(State.SET_ARM_POS, true);
                 break;
@@ -222,7 +222,7 @@ public void autoPickupSample(
 
             case RAISE_ELEVATOR:
                 //Fire and Forget
-                //robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,null);
+                robot.elbowElevator.setPosition(true,RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,null);
                 sm.setState(State.DONE);
                 break;
 
