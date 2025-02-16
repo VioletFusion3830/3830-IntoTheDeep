@@ -180,7 +180,7 @@ public class RobotParams
 
         // Score poses (Net zone side).
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
-                new TrcPose2D(-55.5, -55.5, 45.0);
+                new TrcPose2D(-56, -56, 45.0);
         public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE    =
                 new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -38, 180);
         // Pickup pose (Net zone side).
@@ -188,8 +188,8 @@ public class RobotParams
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
         // Park pose (Net zone side).
         public static final TrcPose2D[] RED_ASCENT_ZONE_PARK_POSE     = {
-                new TrcPose2D(-35, -14, 90.0),
-                new TrcPose2D(-24,-14,90)
+                new TrcPose2D(-30, -10, 90.0),
+                new TrcPose2D(-24,-10,90)
         };
         // Park pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PARK_POSE=
@@ -366,7 +366,7 @@ public class RobotParams
         public static final double MAX_POS                                  = 44;
         public static final double PICKUP_SAMPLE_POS                        = 13.5;
         public static final double PICKUP_SPECIMEN_POS                      = 13.5;
-        public static final double HIGH_BASKET_SCORE_POS                    = 35;
+        public static final double HIGH_BASKET_SCORE_POS                    = 34;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 17;
         public static final double HIGH_CHAMBER_CLIP_POS                    = 22.5;
         public static final double LEVEL1_ASCENT_POS                        = 13.5;
