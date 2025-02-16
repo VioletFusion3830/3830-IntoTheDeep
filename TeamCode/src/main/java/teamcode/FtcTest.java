@@ -296,9 +296,11 @@ public class FtcTest extends FtcTeleOp
                     //robot.robotDrive.pidDrive.setTraceLevel(TrcDbgTrace.MsgLevel.INFO, logEvents, debugPid, false);
 //                    robot.robotDrive.purePursuitDrive.setTraceLevel(TrcDbgTrace.MsgLevel.DEBUG, logEvents, debugPid, false);
                 }
+                robot.robotDrive.purePursuitDrive.setMoveOutputLimit(0.8);
             case TUNE_PP_VELOCITY_PID:
                 robot.robotDrive.purePursuitDrive.setTraceLevel(
                         TrcDbgTrace.MsgLevel.INFO, logEvents, debugPid, false);
+                //robot.robotDrive.purePursuitDrive.setMoveOutputLimit(0.8);
                 break;
             case PURE_PURSUIT_DRIVE:
                 if (robot.robotDrive != null)
@@ -696,7 +698,7 @@ public class FtcTest extends FtcTeleOp
                                 robot.robotDrive.driveBase.resetOdometry();
                                 robot.robotDrive.purePursuitDrive.setTurnPidCoefficients(FtcDashboard.pPPidCoeff);
                                 robot.robotDrive.purePursuitDrive.start(true,
-                                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(0, 0, value));
+                                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(0, sign*FtcDashboard.PPTuneParams.tuneDistance, value));
 //                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit, FtcDashboard.pPPidCoeff, new TrcPose2D(0,0,value));
                                 break;
                         }

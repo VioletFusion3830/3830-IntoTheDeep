@@ -10,7 +10,7 @@ public class FtcDashboard
     @Config
     public static class ServoTune
     {
-        public static double ServoA = 0.5;
+        public static double ServoA = 0.55;
         public static double ServoB = 0.5;
         public static double ServoC = 0.5;
         public static double ServoD = 0.5;

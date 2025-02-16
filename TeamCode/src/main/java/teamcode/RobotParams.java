@@ -166,17 +166,17 @@ public class RobotParams
 
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_FORWARD_CHAMBER_SCORE_POSE =
-                new TrcPose2D(STARTPOS_X,-43,0);
+                new TrcPose2D(STARTPOS_X,-45,-5);
         public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
                 new TrcPose2D(0, -33, 180);
 
         // Pickup pose (Observation zone side).
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_CYCLE_PICKUP   = {
                 new TrcPose2D(36, -36, 180.0),
-                new TrcPose2D(36, -46, 180.0)
+                new TrcPose2D(36, -48, 180.0)
         };
         public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
-                new TrcPose2D(36, -46, 180.0);
+                new TrcPose2D(36, -48, 180.0);
 
         // Score poses (Net zone side).
         public static final TrcPose2D RED_BASKET_SCORE_POSE         =
@@ -196,19 +196,17 @@ public class RobotParams
                 new TrcPose2D(30, -50, 135);
         // Observation zone auto poses.
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH = {
-                new TrcPose2D(12, -38, 180), //Move toward sample 1
-                new TrcPose2D(32, -38, 180), //Move toward sample 1
-                new TrcPose2D(36,-16,180),
-                new TrcPose2D(45,-17,180), //Move in front of sample 1
-                new TrcPose2D(46, -51, 180), //Push sample 1
-                new TrcPose2D(47,-17, 180), //Drive back for sample 2
-                new TrcPose2D(54,-18, 180), //Move in front of sample 2
-                new TrcPose2D(55, -52, 180), //Push sample 2
-//                new TrcPose2D(56,-17,180), //Drive back for sample 3
-//                new TrcPose2D(60,-18,180), //Move in front of sample 3
-//                new TrcPose2D(60,-55,180) //Push sample 3
+                new TrcPose2D(32,-39,180), //Move toward sample 1
+                new TrcPose2D(34,-17,180), //Move toward sample 1
+                new TrcPose2D(43,-18,180), //Move in front of sample 1
+                new TrcPose2D(46,-46.5,180), //Push sample 1
+                new TrcPose2D(48,-18,180), //Drive back for sample 2
+                new TrcPose2D(53,-19,180), //Move in front of sample 2
+                new TrcPose2D(54,-44.5,180), //Push sample 2 (edited due to problem x should be 55)
+                new TrcPose2D(57,-18,180), //Drive back for sample 3
+                new TrcPose2D(62,-19,180), //Move in front of sample 3
+                new TrcPose2D(61,-48.6,180) //Push sample 3
         };
-
 
     }   //class Game
 
@@ -321,16 +319,17 @@ public class RobotParams
             xDrivePidCoeffs = new PidCoefficients(0.055,0.0, 0.0037, 0.0,0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
-            yDrivePidCoeffs = new PidCoefficients(0.026, 0.0, 0.0034, 0.0, 0); //0.028 , 0.0031
+            yDrivePidCoeffs = new PidCoefficients(0.028, 0.0, 0.0031, 0.0, 0); //0.028 , 0.0031 //0.026 0.0034
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.0068, 0.0, 0.0004, 0.0, 2);
+            turnPidCoeffs = new PidCoefficients(0.0064, 0.0, 0.0004, 0.0, 2);
+            turnPidPowerLimit = 0.5;
             turnMaxPidRampRate = null;
             // PID Stall Detection
             pidStallDetectionEnabled = true;
             // PurePursuit Parameters
             ppdFollowingDistance = 6.0;
-            velPidCoeffs = new PidCoefficients(0, 0,0, 0.009, 0);
+            velPidCoeffs = new PidCoefficients(0.012, 0,0, 0.0082, 0);
             // Vision
             webCam1 = null; //new FrontCamParams()
             webCam2 = null; //new BackCamParams()
@@ -484,10 +483,9 @@ public class RobotParams
         public static final boolean PRIMARY_SERVO_ROTATOR_INVERTED          = false;
 
         public static final double ANALOG_INCREMENT                         = 0.04;
-        public static final double ANALOG_MAX                               = 0.85;
-        public static final double ANALOG_MIN                               = 0.280;
-        public static final double PARALLEL_BASE_P0S                        = 0.565;
-        public static final double PARALLEL_SECONDARY_POS                   = 0.015;
+        public static final double PARALLEL_BASE_P0S                        = 0.56
+                ;
+        public static final double PARALLEL_SECONDARY_POS                   = 0.28;
         public static final double PERPENDICULAR_POS                        = 0.300;
         public static final double[] POS_PRESETS                            = {PARALLEL_BASE_P0S, PERPENDICULAR_POS};
     }   //class WristParamsRotational
