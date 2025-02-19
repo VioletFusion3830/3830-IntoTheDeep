@@ -75,6 +75,7 @@ public class Vision
     {
         public SampleCamParams()
         {
+            //Camera intrinsects
             camName = "Webcam 1";
             camImageWidth = 640;
             camImageHeight = 480;
@@ -85,7 +86,7 @@ public class Vision
             camPitch = -32.346629699;           // degrees up from horizontal
             camRoll = 0.0;
             camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
-            camOrientation = OpenCvCameraRotation.UPRIGHT;
+            camOrientation = OpenCvCameraRotation.UPSIDE_DOWN;
             // Homography: cameraRect in pixels, worldRect in inches
             cameraRect = new TrcHomographyMapper.Rectangle(
                     14.0, 28.0,                     // Camera Top Left
@@ -152,15 +153,16 @@ public class Vision
                     .setSolidityRange(0.0, 100.0)
                     .setVerticesRange(0.0, 1000.0)
                     .setAspectRatioRange(0.5, 2.0);
-    private static final TrcOpenCvColorBlobPipeline.FilterContourParams tuneFilterContourParams =
+
+    public static TrcOpenCvColorBlobPipeline.FilterContourParams tuneFilterContourParams =
             new TrcOpenCvColorBlobPipeline.FilterContourParams()
-                    .setMinArea(10.0)
-                    .setMinPerimeter(12.0)
-                    .setWidthRange(0.0, 1000.0)
-                    .setHeightRange(0.0, 1000.0)
+                    .setMinArea(500)
+                    .setMinPerimeter(100)
+                    .setWidthRange(40, 160)
+                    .setHeightRange(40, 100)
                     .setSolidityRange(0.0, 100.0)
                     .setVerticesRange(0.0, 1000.0)
-                    .setAspectRatioRange(0.5, 2.5);
+                    .setAspectRatioRange(0.5, 2.0);
 
     private final TrcDbgTrace tracer;
     private final Robot robot;
@@ -222,7 +224,7 @@ public class Vision
 
             tracer.traceInfo(moduleName, "Starting RawEocvColorBlobVision...");
             rawColorBlobPipeline = new FtcRawEocvColorBlobPipeline(
-                    "rawColorBlobPipeline", colorConversion, redSampleColorThresholds, tuneFilterContourParams, true);
+                    "rawColorBlobPipeline", colorConversion, teamcode.FtcDashboard.TuneVision.tuneSampleColorThreshold, tuneFilterContourParams, true);
             // By default, display original Mat.
             rawColorBlobPipeline.setVideoOutput(0);
             rawColorBlobPipeline.setAnnotateEnabled(true);

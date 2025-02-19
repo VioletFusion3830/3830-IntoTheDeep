@@ -79,6 +79,11 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
         timer.cancel();
         robot.scoreChamberTask.cancel();
         robot.pickupSpecimenTask.cancel();
+        robot.elbowElevator.cancel();
+        robot.arm.cancel();
+        robot.verticalWrist.cancel();
+        robot.clawGrabber.cancel();
+        robot.rotationalWrist.cancel();
         sm.stop();
     }   //cancel
 
@@ -124,7 +129,6 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     break;
 
                 case SET_POSITIONS_TO_SCORE_PRELOAD:
-                    robot.robotDrive.purePursuitDrive.getYPosPidCtrl().setNoOscillation(true);
                     robot.robotDrive.purePursuitDrive.start(
                             event, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
@@ -145,64 +149,51 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     break;
 
                 case MOVE_SAMPLES:
-                    robot.robotDrive.purePursuitDrive.getYPosPidCtrl().setNoOscillation(false);
                     // Herd three samples to the observation zone to be converted to specimens.
                     robot.robotDrive.purePursuitDrive.start(
                             event, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(
                                     RobotParams.Game.RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH, autoChoices.alliance, false));
+                    //Set Arm up so it does not hit the wall
                     robot.wristArm.setWristArmPosition(null, 0, 0.8, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,0,null);
                     robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,null,0);
+                    //Set Arm to pick sample off wall
                     robot.wristArm.setWristArmPosition(null, 6, RobotParams.ArmParams.PICKUP_SPECIMEN_POS, RobotParams.WristParamsVertical.PICKUP_SPECIMEN_POS,0,null);
-                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,13.0, event2);
-                    //robot.autoSweepSamples.sweepSpikeMarkSamples(autoChoices.alliance,event);
+                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,13.0, null);
                     sm.waitForSingleEvent(event, State.PICKUP_SPECIMEN);
                     break;
 
                 case PICKUP_SPECIMEN:
                     // Pick up a specimen from the wall.
-                    if (scoreSpecimenCount < 2)
+                    if (scoreSpecimenCount < 4)
                     {
                         scoreSpecimenCount++;
                         robot.pickupSpecimenTask.autoPickupSpecimen(autoChoices.alliance, scoreSpecimenCount == 1, event);
-                        if (scoreSpecimenCount <= 1)
-                        {
-                            sm.waitForSingleEvent(event, State.SCORE_SPECIMEN);
-                        }
-                        else
-                        {
-                            sm.setState(State.DONE);
-                        }
+                        sm.waitForSingleEvent(event,State.SCORE_SPECIMEN);
                     }
-                    else sm.setState(State.DONE);
+                    else sm.setState(State.PARK);
                     break;
 
                 case SCORE_SPECIMEN:
                     // Score the specimen.
+                    TrcPose2D[] scorePose;
                     if(scoreSpecimenCount == 1)
                     {
-                        TrcPose2D[] scorePose = {
-                                new TrcPose2D(7,-37, 180),
-                                new TrcPose2D(7,-35, 180)
+                        scorePose = new TrcPose2D[]{
+                                new TrcPose2D(11, -37, 180),
+                                new TrcPose2D(10, -33.5, 180),
+                                new TrcPose2D(7, -33.5, 180)
                         };
-                        robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance, scorePose,true, event);
                     }
-                    else if(scoreSpecimenCount == 2)
+                    else
                     {
-                        TrcPose2D[] scorePose = {
-                                new TrcPose2D(7, -35, 180),
+                        scorePose = new TrcPose2D[]{
+                                new TrcPose2D(9, -35, 180),
+                                new TrcPose2D(7, -33.5, 180)
                         };
-                        robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance, scorePose,true, event);
                     }
-                    else if(scoreSpecimenCount == 3)
-                    {
-                        TrcPose2D[] scorePose = {
-                                new TrcPose2D(4, -42, 180),
-                                new TrcPose2D(-2, -32, 180)
-                        };
-                        robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance, scorePose,true, event);
-                    }
+                    robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance, scorePose,true, event);
                     sm.waitForSingleEvent(event, State.PICKUP_SPECIMEN);
                     break;
 
@@ -210,7 +201,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     // Park at the observation zone.
                     if (autoChoices.parkPos == FtcAuto.ParkOption.PARK)
                     {
-                        robot.elbowElevator.setPosition(true,15.0, 12.0, 20.0, event);
+                        robot.elbowElevator.setPosition(true,13.0, RobotParams.ElbowParams.MIN_POS, null, event);
                         robot.wristArm.setWristArmPickupSpecimenPos();
                         robot.robotDrive.purePursuitDrive.start(
                                 event2, 0.0, false,

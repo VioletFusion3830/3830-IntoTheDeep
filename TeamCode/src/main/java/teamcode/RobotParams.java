@@ -30,6 +30,7 @@ import ftclib.drivebase.FtcRobotDrive;
 import ftclib.motor.FtcMotorActuator.MotorType;
 import ftclib.sensor.FtcSparkFunOtos;
 import ftclib.sensor.FtcPinpointOdometry;
+import teamcode.vision.Vision;
 import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcDriveBase;
 import trclib.drivebase.TrcDriveBase.DriveOrientation;
@@ -93,17 +94,17 @@ public class RobotParams
         public static final boolean useBlinkinLED               = false;
         public static final boolean useGobildaLED               = false;
         // Vision
-        public static final boolean useVision                   = false;
-        public static final boolean useWebCam                   = false; // false to use Android phone camera.
+        public static final boolean useVision                   = true;
+        public static final boolean useWebCam                   = true; // false to use Android phone camera.
         public static final boolean useBuiltinCamBack           = false; // For Android Phone as Robot Controller.
-        public static final boolean tuneColorBlobVision         = false;
+        public static final boolean tuneColorBlobVision         = true;
         public static final boolean useWebcamAprilTagVision     = false;
         public static final boolean useLimelightVision          = false;
-        public static final boolean useCameraStreamProcessor    = false;
+        public static final boolean useCameraStreamProcessor    = !inCompetition;
         public static final boolean useAprilTagVision           = false;
         public static final boolean useColorBlobVision          = false;
         public static final boolean showVisionView              = !inCompetition;
-        public static final boolean showVisionStat              = false;
+        public static final boolean showVisionStat              = true;
         // Drive Base
         public static final boolean useDriveBase                = true;
         public static final boolean usePinpointOdometry         = true;
@@ -172,8 +173,8 @@ public class RobotParams
 
         // Pickup pose (Observation zone side).
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_CYCLE_PICKUP   = {
-                new TrcPose2D(36, -36, 180.0),
-                new TrcPose2D(36, -48, 180.0)
+                new TrcPose2D(32, -42, 180.0),
+                new TrcPose2D(34.5, -48, 180.0)
         };
         public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
                 new TrcPose2D(36, -48, 180.0);
@@ -197,15 +198,15 @@ public class RobotParams
         // Observation zone auto poses.
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH = {
                 new TrcPose2D(32,-39,180), //Move toward sample 1
-                new TrcPose2D(34,-17,180), //Move toward sample 1
+                new TrcPose2D(35,-18,180), //Move toward sample 1
                 new TrcPose2D(43,-18,180), //Move in front of sample 1
-                new TrcPose2D(46,-46.5,180), //Push sample 1
+                new TrcPose2D(46,-46,180), //Push sample 1
                 new TrcPose2D(48,-18,180), //Drive back for sample 2
-                new TrcPose2D(53,-19,180), //Move in front of sample 2
-                new TrcPose2D(54,-44.5,180), //Push sample 2 (edited due to problem x should be 55)
+                new TrcPose2D(52,-19,180), //Move in front of sample 2 (edited due to problem x should be 53)
+                new TrcPose2D(53,-44.5,180), //Push sample 2 (edited due to problem x should be 55)
                 new TrcPose2D(57,-18,180), //Drive back for sample 3
-                new TrcPose2D(62,-19,180), //Move in front of sample 3
-                new TrcPose2D(61,-48.6,180) //Push sample 3
+                new TrcPose2D(61,-19,180), //Move in front of sample 3
+                new TrcPose2D(61,-48.7,180) //Push sample 3
         };
 
     }   //class Game
@@ -322,7 +323,7 @@ public class RobotParams
             yDrivePidCoeffs = new PidCoefficients(0.028, 0.0, 0.0031, 0.0, 0); //0.028 , 0.0031 //0.026 0.0034
             yDrivePidPowerLimit = 1.0;
             yDriveMaxPidRampRate = null;
-            turnPidCoeffs = new PidCoefficients(0.0064, 0.0, 0.0004, 0.0, 2);
+            turnPidCoeffs = new PidCoefficients(0.0062, 0.0, 0.00044, 0.0, 0);
             turnPidPowerLimit = 0.5;
             turnMaxPidRampRate = null;
             // PID Stall Detection
@@ -331,7 +332,7 @@ public class RobotParams
             ppdFollowingDistance = 6.0;
             velPidCoeffs = new PidCoefficients(0.012, 0,0, 0.0082, 0);
             // Vision
-            webCam1 = null; //new FrontCamParams()
+            webCam1 = new Vision.SampleCamParams();
             webCam2 = null; //new BackCamParams()
             limelight = null; //new LimelightParams()
             // Miscellaneous
@@ -367,8 +368,8 @@ public class RobotParams
         public static final double PICKUP_SAMPLE_POS                        = 13.5;
         public static final double PICKUP_SPECIMEN_POS                      = 13.5;
         public static final double HIGH_BASKET_SCORE_POS                    = 34;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 17;
-        public static final double HIGH_CHAMBER_CLIP_POS                    = 22.5;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
+        public static final double HIGH_CHAMBER_CLIP_POS                    = 24;
         public static final double LEVEL1_ASCENT_POS                        = 13.5;
         public static final double LEVEL2_ASCENT_START_POS                  = 25;
         public static final double LEVEL2_ASCENT_POS                        = 14;
@@ -434,7 +435,7 @@ public class RobotParams
 
         public static final double PICKUP_SPECIMEN_POS                      = 0.62;
         public static final double BASKET_SCORE_POS                         = 0.68;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.7;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 0.63;
 
         //Elevator Scaling Values
         public static final double SAMPLE_PICKUP_MODE_START                 = 0.54;

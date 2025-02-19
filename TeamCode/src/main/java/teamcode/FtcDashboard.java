@@ -3,6 +3,7 @@ package teamcode;
 import com.acmerobotics.dashboard.config.Config;
 
 import trclib.controller.TrcPidController;
+import trclib.vision.TrcOpenCvColorBlobPipeline;
 
 @Config
 public class FtcDashboard
@@ -14,6 +15,18 @@ public class FtcDashboard
         public static double ServoB = 0.5;
         public static double ServoC = 0.5;
         public static double ServoD = 0.5;
+    }
+
+    @Config
+    public static class TuneVision
+    {
+        public static double[] tuneSampleColorThreshold = {100.0, 250.0, 120.0, 200.0, 30.0, 80.0};
+        public static double minArea = 500;
+        public static double minPerimeter = 100;
+        public static double minWidthRange = 40;
+        public static double maxWidthRange = 160;
+        public static double minHeightRange = 40;
+        public static double maxHeightRange = 100;
     }
 
     @Config

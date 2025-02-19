@@ -191,10 +191,10 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                     robot.wristArm.setWristArmPickupSpecimenPos(currOwner, 0, null);
                     robot.robotDrive.purePursuitDrive.start(currOwner, event2, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                            robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance, false));
+                            robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_CYCLE_PICKUP, taskParams.alliance, false));
                     sm.addEvent(event1);
                     sm.addEvent(event2);
-                    sm.waitForEvents(State.DONE, true);
+                    sm.waitForEvents(State.GRAB_SPECIMEN, true);
                 }
                 break;
 

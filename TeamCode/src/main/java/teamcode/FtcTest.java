@@ -49,6 +49,7 @@ import trclib.controller.TrcPidController;
 import trclib.robotcore.TrcRobot;
 import trclib.timer.TrcElapsedTimer;
 import trclib.timer.TrcTimer;
+import trclib.vision.TrcOpenCvColorBlobPipeline;
 
 /**
  * This class contains the Test Mode program. It extends FtcTeleOp so that we can teleop control the robot for
@@ -275,6 +276,7 @@ public class FtcTest extends FtcTeleOp
                     colorThresholdIndex = 0;
                     colorThresholdMultiplier = 1.0;
                     updateColorThresholds();
+                    robot.arm.setPosition(1);
                 }
                 break;
 
@@ -581,20 +583,27 @@ public class FtcTest extends FtcTeleOp
                 break;
 
             case B:
-                if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
+                if(testChoices.test == Test.TUNE_COLORBLOB_VISION &&
                         robot.vision != null && robot.vision.rawColorBlobVision != null)
                 {
-                    if (pressed)
+                    if(pressed)
                     {
-                        // Increment to next color threshold index.
-                        colorThresholdIndex++;
-                        if (colorThresholdIndex >= colorThresholds.length)
-                        {
-                            colorThresholdIndex = colorThresholds.length - 1;
-                        }
                     }
-                    passToTeleOp = false;
                 }
+//                if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
+//                        robot.vision != null && robot.vision.rawColorBlobVision != null)
+//                {
+//                    if (pressed)
+//                    {
+//                        // Increment to next color threshold index.
+//                        colorThresholdIndex++;
+//                        if (colorThresholdIndex >= colorThresholds.length)
+//                        {
+//                            colorThresholdIndex = colorThresholds.length - 1;
+//                        }
+//                    }
+//                    passToTeleOp = false;
+//                }
                 else if (testChoices.test == Test.VISION_TEST)
                 {
                     if (pressed)
@@ -608,20 +617,20 @@ public class FtcTest extends FtcTeleOp
                 break;
 
             case X:
-                if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
-                        robot.vision != null && robot.vision.rawColorBlobVision != null)
-                {
-                    if (pressed)
-                    {
-                        // Decrement to previous color threshold index.
-                        colorThresholdIndex--;
-                        if (colorThresholdIndex < 0)
-                        {
-                            colorThresholdIndex = 0;
-                        }
-                    }
-                    passToTeleOp = false;
-                }
+//                if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
+//                        robot.vision != null && robot.vision.rawColorBlobVision != null)
+//                {
+//                    if (pressed)
+//                    {
+//                        // Decrement to previous color threshold index.
+//                        colorThresholdIndex--;
+//                        if (colorThresholdIndex < 0)
+//                        {
+//                            colorThresholdIndex = 0;
+//                        }
+//                    }
+//                    passToTeleOp = false;
+//                }
                 break;
 
             case Y:
@@ -698,7 +707,7 @@ public class FtcTest extends FtcTeleOp
                                 robot.robotDrive.driveBase.resetOdometry();
                                 robot.robotDrive.purePursuitDrive.setTurnPidCoefficients(FtcDashboard.pPPidCoeff);
                                 robot.robotDrive.purePursuitDrive.start(true,
-                                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(0, sign*FtcDashboard.PPTuneParams.tuneDistance, value));
+                                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration, new TrcPose2D(sign*FtcDashboard.PPTuneParams.tuneDistance, 0, value));
 //                                ((CmdPidDrive)testCommand).start(0,FtcDashboard.PPTuneParams.powerLimit, FtcDashboard.pPPidCoeff, new TrcPose2D(0,0,value));
                                 break;
                         }
@@ -732,19 +741,19 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                else if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
-                        robot.vision != null && robot.vision.rawColorBlobVision != null)
-                {
-                    if (pressed &&
-                            colorThresholds[colorThresholdIndex] + colorThresholdMultiplier <=
-                                    COLOR_THRESHOLD_HIGH_RANGES[colorThresholdIndex/2])
-                    {
-                        // Increment color threshold value.
-                        colorThresholds[colorThresholdIndex] += colorThresholdMultiplier;
-                        updateColorThresholds();
-                    }
-                    passToTeleOp = false;
-                }
+//                else if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
+//                        robot.vision != null && robot.vision.rawColorBlobVision != null)
+//                {
+//                    if (pressed &&
+//                            colorThresholds[colorThresholdIndex] + colorThresholdMultiplier <=
+//                                    COLOR_THRESHOLD_HIGH_RANGES[colorThresholdIndex/2])
+//                    {
+//                        // Increment color threshold value.
+//                        colorThresholds[colorThresholdIndex] += colorThresholdMultiplier;
+//                        updateColorThresholds();
+//                    }
+//                    passToTeleOp = false;
+//                }
                 break;
 
             case DpadDown:
@@ -759,19 +768,19 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                else if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
-                        robot.vision != null && robot.vision.rawColorBlobVision != null)
-                {
-                    if (pressed &&
-                            colorThresholds[colorThresholdIndex] - colorThresholdMultiplier >=
-                                    COLOR_THRESHOLD_LOW_RANGES[colorThresholdIndex/2])
-                    {
-                        // Decrement color threshold value.
-                        colorThresholds[colorThresholdIndex] -= colorThresholdMultiplier;
-                        updateColorThresholds();
-                    }
-                    passToTeleOp = false;
-                }
+//                else if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
+//                        robot.vision != null && robot.vision.rawColorBlobVision != null)
+//                {
+//                    if (pressed &&
+//                            colorThresholds[colorThresholdIndex] - colorThresholdMultiplier >=
+//                                    COLOR_THRESHOLD_LOW_RANGES[colorThresholdIndex/2])
+//                    {
+//                        // Decrement color threshold value.
+//                        colorThresholds[colorThresholdIndex] -= colorThresholdMultiplier;
+//                        updateColorThresholds();
+//                    }
+//                    passToTeleOp = false;
+//                }
                 break;
 
             case DpadLeft:
@@ -786,16 +795,16 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                else if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
-                        robot.vision != null && robot.vision.rawColorBlobVision != null)
-                {
-                    if (pressed && colorThresholdMultiplier * 10.0 <= 100.0)
-                    {
-                        // Increment the significant multiplier.
-                        colorThresholdMultiplier *= 10.0;
-                    }
-                    passToTeleOp = false;
-                }
+//                else if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
+//                        robot.vision != null && robot.vision.rawColorBlobVision != null)
+//                {
+//                    if (pressed && colorThresholdMultiplier * 10.0 <= 100.0)
+//                    {
+//                        // Increment the significant multiplier.
+//                        colorThresholdMultiplier *= 10.0;
+//                    }
+//                    passToTeleOp = false;
+//                }
                 break;
 
             case DpadRight:
@@ -810,16 +819,16 @@ public class FtcTest extends FtcTeleOp
                     }
                     passToTeleOp = false;
                 }
-                else if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
-                        robot.vision != null && robot.vision.rawColorBlobVision != null)
-                {
-                    if (pressed && colorThresholdMultiplier / 10.0 >= 1.0)
-                    {
-                        // Decrement the significant multiplier.
-                        colorThresholdMultiplier /= 10.0;
-                    }
-                    passToTeleOp = false;
-                }
+//                else if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
+//                        robot.vision != null && robot.vision.rawColorBlobVision != null)
+//                {
+//                    if (pressed && colorThresholdMultiplier / 10.0 >= 1.0)
+//                    {
+//                        // Decrement the significant multiplier.
+//                        colorThresholdMultiplier /= 10.0;
+//                    }
+//                    passToTeleOp = false;
+//                }
                 break;
 
             case Back:
