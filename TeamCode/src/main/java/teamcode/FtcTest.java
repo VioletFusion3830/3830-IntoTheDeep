@@ -258,12 +258,8 @@ public class FtcTest extends FtcTeleOp
                         robot.globalTracer.traceInfo(moduleName, "Enabling YellowSampleVision.");
                         robot.vision.setSampleVisionEnabled(Vision.SampleType.YellowSample,true);
                     }
-                    if (robot.vision.limelightVision != null)
-                    {
-                        robot.globalTracer.traceInfo(moduleName, "Enabling LimelightVision.");
-                        robot.vision.setLimelightVisionEnabled(0, true);
-                    }
                 }
+                robot.arm.setPosition(1);
                 break;
 
             case TUNE_COLORBLOB_VISION:
@@ -444,6 +440,7 @@ public class FtcTest extends FtcTeleOp
                 case VISION_TEST:
                 case TUNE_COLORBLOB_VISION:
                     doVisionTest();
+                    //robot.dashboard.displayPrintf(2,robot.vision.tuneFilterContourParams.toString());
                     break;
 
                 case X_TIMED_DRIVE:
@@ -583,11 +580,17 @@ public class FtcTest extends FtcTeleOp
                 break;
 
             case B:
-                if(testChoices.test == Test.TUNE_COLORBLOB_VISION &&
+                if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
                         robot.vision != null && robot.vision.rawColorBlobVision != null)
                 {
-                    if(pressed)
+                    if (pressed)
                     {
+                        robot.vision.tuneFilterContourParams.setMinArea(FtcDashboard.TuneVision.minArea);
+                        robot.vision.tuneFilterContourParams.setMinPerimeter(FtcDashboard.TuneVision.minPerimeter);
+                        robot.vision.tuneFilterContourParams.setWidthRange(FtcDashboard.TuneVision.minWidthRange, FtcDashboard.TuneVision.maxWidthRange);
+                        robot.vision.tuneFilterContourParams.setHeightRange(FtcDashboard.TuneVision.minHeightRange,FtcDashboard.TuneVision.maxHeightRange);
+                        robot.vision.tuneFilterContourParams.setWidthRange(FtcDashboard.TuneVision.minWidthRange,FtcDashboard.TuneVision.maxWidthRange);
+                        robot.vision.tuneFilterContourParams.setAspectRatioRange(FtcDashboard.TuneVision.aspectRatioA,FtcDashboard.TuneVision.aspectRatioB);
                     }
                 }
 //                if (testChoices.test == Test.TUNE_COLORBLOB_VISION &&
@@ -1169,20 +1172,16 @@ public class FtcTest extends FtcTeleOp
             }
             if (robot.vision.redSampleVision != null)
             {
-                robot.vision.getDetectedSample(Vision.SampleType.RedSample, 0,lineNum++);
+                robot.vision.getDetectedSamplePose(Vision.SampleType.RedSample, 0,lineNum++);
             }
             if (robot.vision.blueSampleVision != null)
             {
-                robot.vision.getDetectedSample(Vision.SampleType.BlueSample,0, lineNum++);
+                robot.vision.getDetectedSamplePose(Vision.SampleType.BlueSample,0, lineNum++);
             }
             if (robot.vision.yellowSampleVision != null)
             {
-                robot.vision.getDetectedSample(Vision.SampleType.YellowSample,0, lineNum++);
-            }
-
-            if (robot.vision.limelightVision != null)
-            {
-                robot.vision.getLimelightDetectedObject(FtcLimelightVision.ResultType.Fiducial, null, lineNum++);
+                //Test
+                robot.vision.getDetectedSamplePose(Vision.SampleType.YellowSample,0, lineNum++);
             }
         }
     }   //doVisionTest

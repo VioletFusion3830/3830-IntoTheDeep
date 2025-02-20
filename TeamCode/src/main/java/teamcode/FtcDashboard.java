@@ -21,12 +21,15 @@ public class FtcDashboard
     public static class TuneVision
     {
         public static double[] tuneSampleColorThreshold = {100.0, 250.0, 120.0, 200.0, 30.0, 80.0};
-        public static double minArea = 500;
-        public static double minPerimeter = 100;
-        public static double minWidthRange = 40;
-        public static double maxWidthRange = 160;
-        public static double minHeightRange = 40;
-        public static double maxHeightRange = 100;
+        public static double minArea = 1000;
+        public static double maxArea = 100000;
+        public static double minPerimeter = 200;
+        public static double minWidthRange = 20;
+        public static double maxWidthRange = 180;
+        public static double minHeightRange = 20;
+        public static double maxHeightRange = 180;
+        public static double aspectRatioA = 0.4;
+        public static double aspectRatioB = 2.5;
     }
 
     @Config

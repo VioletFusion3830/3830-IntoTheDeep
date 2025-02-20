@@ -30,6 +30,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.opencv.calib3d.Calib3d;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfDouble;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.MatOfPoint3f;
+import org.opencv.core.Point;
+import org.opencv.core.Point3;
+import org.opencv.core.RotatedRect;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -75,7 +85,6 @@ public class Vision
     {
         public SampleCamParams()
         {
-            //Camera intrinsects
             camName = "Webcam 1";
             camImageWidth = 640;
             camImageHeight = 480;
@@ -86,7 +95,7 @@ public class Vision
             camPitch = -32.346629699;           // degrees up from horizontal
             camRoll = 0.0;
             camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
-            camOrientation = OpenCvCameraRotation.UPSIDE_DOWN;
+            camOrientation = OpenCvCameraRotation.UPRIGHT;
             // Homography: cameraRect in pixels, worldRect in inches
             cameraRect = new TrcHomographyMapper.Rectangle(
                     14.0, 28.0,                     // Camera Top Left
@@ -146,23 +155,24 @@ public class Vision
     private static final double[] yellowSampleColorThresholds = {100.0, 250.0, 120.0, 200.0, 30.0, 80.0};
     private static final TrcOpenCvColorBlobPipeline.FilterContourParams sampleFilterContourParams =
             new TrcOpenCvColorBlobPipeline.FilterContourParams()
-                    .setMinArea(500.0)
-                    .setMinPerimeter(100.0)
-                    .setWidthRange(40.0, 160.0)
-                    .setHeightRange(40.0, 160.0)
+                    .setMinArea(1000.0)
+                    .setMinPerimeter(200.0)
+                    .setWidthRange(20.0, 180.0)
+                    .setHeightRange(20.0, 180.0)
                     .setSolidityRange(0.0, 100.0)
                     .setVerticesRange(0.0, 1000.0)
-                    .setAspectRatioRange(0.5, 2.0);
-
-    public static TrcOpenCvColorBlobPipeline.FilterContourParams tuneFilterContourParams =
+                    .setAspectRatioRange(0.5, 2.5);
+    public static final TrcOpenCvColorBlobPipeline.FilterContourParams tuneFilterContourParams =
             new TrcOpenCvColorBlobPipeline.FilterContourParams()
-                    .setMinArea(500)
-                    .setMinPerimeter(100)
-                    .setWidthRange(40, 160)
-                    .setHeightRange(40, 100)
+                    .setMinArea(1000.0)
+                    .setMinPerimeter(200.0)
+                    .setWidthRange(0.0, 1000.0)
+                    .setHeightRange(0.0, 1000.0)
                     .setSolidityRange(0.0, 100.0)
                     .setVerticesRange(0.0, 1000.0)
-                    .setAspectRatioRange(0.5, 2.0);
+                    .setAspectRatioRange(0.5, 2.5);
+
+    public static double[] tuneSampleColorThreshold = {100.0, 250.0, 120.0, 200.0, 30.0, 80.0};
 
     private final TrcDbgTrace tracer;
     private final Robot robot;
@@ -179,6 +189,9 @@ public class Vision
     public FtcVisionEocvColorBlob yellowSampleVision;
     private FtcEocvColorBlobProcessor yellowSampleProcessor;
     public FtcVision vision;
+
+    private Mat cameraMatrix = new Mat(3, 3, CvType.CV_64FC1);
+    private MatOfDouble distCoeffs = new MatOfDouble();
 
     /**
      * Constructor: Create an instance of the object.
@@ -250,7 +263,7 @@ public class Vision
             {
                 cameraStreamProcessor = new FtcCameraStreamProcessor();
                 visionProcessorsList.add(cameraStreamProcessor);
-//                FtcDashboard.getInstance().startCameraStream(cameraStreamProcessor, 0);
+                FtcDashboard.getInstance().startCameraStream(cameraStreamProcessor, 0);
             }
 
             if (RobotParams.Preferences.useWebcamAprilTagVision)
@@ -272,19 +285,19 @@ public class Vision
                 tracer.traceInfo(moduleName, "Starting Webcam SampleVision...");
 
                 redSampleVision = new FtcVisionEocvColorBlob(
-                        LEDIndicator.NO_BLOB, colorConversion, redSampleColorThresholds, sampleFilterContourParams,
+                        LEDIndicator.RED_SAMPLE, colorConversion, redSampleColorThresholds, sampleFilterContourParams,
                         true, robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
                 redSampleProcessor = redSampleVision.getVisionProcessor();
                 visionProcessorsList.add(redSampleProcessor);
 
                 blueSampleVision = new FtcVisionEocvColorBlob(
-                        LEDIndicator.NO_BLOB, colorConversion, blueSampleColorThresholds, sampleFilterContourParams,
+                        LEDIndicator.BLUE_SAMPLE, colorConversion, blueSampleColorThresholds, sampleFilterContourParams,
                         true, robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
                 blueSampleProcessor = blueSampleVision.getVisionProcessor();
                 visionProcessorsList.add(blueSampleProcessor);
 
                 yellowSampleVision = new FtcVisionEocvColorBlob(
-                        LEDIndicator.NO_BLOB, colorConversion, yellowSampleColorThresholds, sampleFilterContourParams,
+                        LEDIndicator.YELLOW_SAMPLE, colorConversion, yellowSampleColorThresholds, sampleFilterContourParams,
                         true, robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
                 yellowSampleProcessor = yellowSampleVision.getVisionProcessor();
                 visionProcessorsList.add(yellowSampleProcessor);
@@ -319,6 +332,20 @@ public class Vision
                 }
             }
         }
+
+        // Focal lengths (fx, fy) and principal point (cx, cy)
+        double fx = 294; // Replace with your camera's focal length in pixels
+        double fy = 294;
+        double cx = 302; // Replace with your camera's principal point x-coordinate (usually image width / 2)
+        double cy = 250; // Replace with your camera's principal point y-coordinate (usually image height / 2)
+        cameraMatrix.put(0, 0,
+                fx, 0, cx,
+                0, fy, cy,
+                0, 0, 1);
+        // Distortion coefficients (k1, k2, p1, p2, k3)
+        // If you have calibrated your camera and have these values, use them
+        // Otherwise, you can assume zero distortion for simplicity
+        distCoeffs = new MatOfDouble(0, 0, 0, 0, 0);
     }   //Vision
 
     /**
@@ -508,15 +535,15 @@ public class Vision
                         break;
 
                     case 1:
-                        objectName = LEDIndicator.NO_BLOB;
+                        objectName = LEDIndicator.RED_SAMPLE;
                         break;
 
                     case 2:
-                        objectName = LEDIndicator.NO_BLOB;
+                        objectName = LEDIndicator.BLUE_SAMPLE;
                         break;
 
                     case 3:
-                        objectName = LEDIndicator.NO_BLOB;
+                        objectName = LEDIndicator.YELLOW_SAMPLE;
                         break;
 
                     default:
@@ -879,6 +906,159 @@ public class Vision
 
         return sampleInfo;
     }   //getDetectedSample
+
+    /**
+     * This method calls ColorBlob vision to detect the specified Sample object.
+     *
+     * @param sampleType specifies the sample type to be detected.
+     * @param groundOffset specifies the ground offset of the detected sample.
+     * @param lineNum specifies the dashboard line number to display the detected object info, -1 to disable printing.
+     * @return detected Sample object info.
+     */
+    public TrcPose2D getDetectedSamplePose(SampleType sampleType, double groundOffset, int lineNum)
+    {
+        TrcPose2D samplePose = null;
+        TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject> sampleInfo =
+                getDetectedSample(sampleType, groundOffset, lineNum);
+
+        if (sampleInfo != null)
+        {
+            MatOfPoint objContour = sampleInfo.detectedObj.object;
+            Point[] points = objContour.toArray();
+            MatOfPoint2f contour2f = new MatOfPoint2f(points);
+            // Do a rect fit to the contour, and draw it on the screen
+            RotatedRect rotatedRect = Imgproc.minAreaRect(contour2f);
+            // The angle OpenCV gives us can be ambiguous, so look at the shape of
+            // the rectangle to fix that.
+            double rotRectAngle = rotatedRect.angle;
+            if (rotatedRect.size.width < rotatedRect.size.height)
+            {
+                rotRectAngle += 90;
+            }
+            // Compute the angle and store it
+            double angle = -(rotRectAngle - 180);
+            // Prepare object points and image points for solvePnP
+            // Assuming the object is a rectangle with known dimensions
+            double objectWidth = 1.5 * 2.54;  // Replace with your object's width in real-world units (e.g., centimeters)
+            double objectHeight = 3.5 * 2.54; // Replace with your object's height in real-world units
+
+            // Define the 3D coordinates of the object corners in the object coordinate space
+            MatOfPoint3f objectPoints = new MatOfPoint3f(
+                    new Point3(-objectWidth/2, -objectHeight/2, 0),
+                    new Point3(objectWidth / 2, -objectHeight / 2, 0),
+                    new Point3(objectWidth / 2, objectHeight / 2, 0),
+                    new Point3(-objectWidth / 2, objectHeight / 2, 0)
+            );
+
+            // Get the 2D image points from the detected rectangle corners
+            Point[] rectPoints = new Point[4];
+            rotatedRect.points(rectPoints);
+
+            // Order the image points in the same order as object points
+            Point[] orderedRectPoints = orderPoints(rectPoints);
+
+            MatOfPoint2f imagePoints = new MatOfPoint2f(orderedRectPoints);
+
+            // Solve PnP
+            Mat rvec = new Mat();
+            Mat tvec = new Mat();
+
+
+            boolean success = Calib3d.solvePnP(
+                    objectPoints, // Object points in 3D
+                    imagePoints,  // Corresponding image points
+                    cameraMatrix,
+                    distCoeffs,
+                    rvec,
+                    tvec);
+            robot.dashboard.displayPrintf(3,"IsSuccess: " + success);
+
+            if (success)
+            {
+                // TODO: Verify if we need to convert the coordinate system.
+                samplePose = new TrcPose2D(tvec.get(0, 0)[0], tvec.get(1, 0)[0], angle);
+                robot.dashboard.displayPrintf(4,"SamplePose" + samplePose);
+//                // Draw the coordinate axes on the image
+//                drawAxis(input, rvec, tvec, cameraMatrix, distCoeffs);
+//
+//                // Store the pose information
+//                AnalyzedStone analyzedStone = new AnalyzedStone();
+//                analyzedStone.angle = rotRectAngle;
+//                analyzedStone.color = color;
+//                analyzedStone.rvec = rvec;
+//                analyzedStone.tvec = tvec;
+//                internalStoneList.add(analyzedStone);
+            }
+        }
+
+        return samplePose;
+    }   //getDetectedSamplePose
+
+    private Point[] orderPoints(Point[] pts)
+    {
+        // Orders the array of 4 points in the order: top-left, top-right, bottom-right, bottom-left
+        Point[] orderedPts = new Point[4];
+
+        // Sum and difference of x and y coordinates
+        double[] sum = new double[4];
+        double[] diff = new double[4];
+
+        for (int i = 0; i < 4; i++)
+        {
+            sum[i] = pts[i].x + pts[i].y;
+            diff[i] = pts[i].y - pts[i].x;
+        }
+
+        // Top-left point has the smallest sum
+        int tlIndex = indexOfMin(sum);
+        orderedPts[0] = pts[tlIndex];
+
+        // Bottom-right point has the largest sum
+        int brIndex = indexOfMax(sum);
+        orderedPts[2] = pts[brIndex];
+
+        // Top-right point has the smallest difference
+        int trIndex = indexOfMin(diff);
+        orderedPts[1] = pts[trIndex];
+
+        // Bottom-left point has the largest difference
+        int blIndex = indexOfMax(diff);
+        orderedPts[3] = pts[blIndex];
+
+        return orderedPts;
+    }
+
+    private int indexOfMin(double[] array)
+    {
+        int index = 0;
+        double min = array[0];
+
+        for (int i = 1; i < array.length; i++)
+        {
+            if (array[i] < min)
+            {
+                min = array[i];
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    private int indexOfMax(double[] array)
+    {
+        int index = 0;
+        double max = array[0];
+
+        for (int i = 1; i < array.length; i++)
+        {
+            if (array[i] > max)
+            {
+                max = array[i];
+                index = i;
+            }
+        }
+        return index;
+    }
 
     /**
      * This method returns the target Z offset from ground.

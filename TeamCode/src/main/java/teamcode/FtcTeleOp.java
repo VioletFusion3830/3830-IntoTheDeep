@@ -380,15 +380,15 @@ public class FtcTeleOp extends FtcOpMode
 //                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
 //                driverAltFunc = pressed;
                 //Arm replacement code
-//                if(pressed)
-//                {
-//                    robot.arm.setPosition(0.48);
-//                }
-                //Vwrist replacement code
                 if(pressed)
                 {
-                    robot.verticalWrist.setPosition(0.55);
+                    robot.arm.setPosition(0.48);
                 }
+                //Vwrist replacement code
+//                if(pressed)
+//                {
+//                    robot.verticalWrist.setPosition(0.55);
+//                }
                 break;
             case X:
                 if(pressed)
