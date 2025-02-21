@@ -94,7 +94,7 @@ public class RobotParams
         public static final boolean useBlinkinLED               = false;
         public static final boolean useGobildaLED               = false;
         // Vision
-        public static final boolean useVision                   = true;
+        public static final boolean useVision                   = false;
         public static final boolean useWebCam                   = true; // false to use Android phone camera.
         public static final boolean useBuiltinCamBack           = false; // For Android Phone as Robot Controller.
         public static final boolean tuneColorBlobVision         = false;
@@ -167,14 +167,16 @@ public class RobotParams
 
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_FORWARD_CHAMBER_SCORE_POSE =
-                new TrcPose2D(STARTPOS_X,-45,-5);
-        public static final TrcPose2D RED_OBSERVATION_CHAMBER_SCORE_POSE =
-                new TrcPose2D(0, -33, 180);
+                new TrcPose2D(STARTPOS_X,-45.5,-5);
+        public static final TrcPose2D[] RED_OBSERVATION_CHAMBER_SCORE_POSE = {
+                        new TrcPose2D(9, -35, 180),
+                        new TrcPose2D(7, -33.5, 180)
+                };
 
         // Pickup pose (Observation zone side).
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_CYCLE_PICKUP   = {
                 new TrcPose2D(32, -42, 180.0),
-                new TrcPose2D(34.5, -48, 180.0)
+                new TrcPose2D(34.5, -49, 180.0)
         };
         public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
                 new TrcPose2D(36, -48, 180.0);
@@ -206,7 +208,7 @@ public class RobotParams
                 new TrcPose2D(53,-44.5,180), //Push sample 2 (edited due to problem x should be 55)
                 new TrcPose2D(57,-18,180), //Drive back for sample 3
                 new TrcPose2D(61,-19,180), //Move in front of sample 3
-                new TrcPose2D(61,-48.7,180) //Push sample 3
+                new TrcPose2D(61,-49,180) //Push sample 3
         };
 
     }   //class Game
@@ -364,7 +366,7 @@ public class RobotParams
         public static final double HORIZONTAL_LIMIT                         = 20; //20
 
         public static final double MIN_POS                                  = 13.5;
-        public static final double MAX_POS                                  = 44;
+        public static final double MAX_POS                                  = 44; //44
         public static final double PICKUP_SAMPLE_POS                        = 13.5;
         public static final double PICKUP_SPECIMEN_POS                      = 13.5;
         public static final double HIGH_BASKET_SCORE_POS                    = 34;
@@ -403,7 +405,7 @@ public class RobotParams
         public static final double RESTRICTED_POS_THRESHOLD                 = 50; //Angle in degrees
 
         public static final double MIN_POS                                  = 10;
-        public static final double MAX_POS                                  = 110;
+        public static final double MAX_POS                                  = 95; //110
         public static final double PICKUP_SAMPLE_POS                        = 10;
         public static final double PICKUP_SPECIMEN_POS                      = 10;
         public static final double BASKET_SCORE_POS                         = 95;
@@ -438,7 +440,7 @@ public class RobotParams
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.63;
 
         //Elevator Scaling Values
-        public static final double SAMPLE_PICKUP_MODE_START                 = 0.54;
+        public static final double SAMPLE_PICKUP_MODE_START                 = 0.57;
         public static final double SAMPLE_PICKUP_MODE_SCALE                 = -0.18;
     }
 
@@ -484,8 +486,7 @@ public class RobotParams
         public static final boolean PRIMARY_SERVO_ROTATOR_INVERTED          = false;
 
         public static final double ANALOG_INCREMENT                         = 0.04;
-        public static final double PARALLEL_BASE_P0S                        = 0.56
-                ;
+        public static final double PARALLEL_BASE_P0S                        = 0.56;
         public static final double PARALLEL_SECONDARY_POS                   = 0.28;
         public static final double PERPENDICULAR_POS                        = 0.300;
         public static final double[] POS_PRESETS                            = {PARALLEL_BASE_P0S, PERPENDICULAR_POS};

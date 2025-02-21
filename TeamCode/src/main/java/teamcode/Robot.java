@@ -39,6 +39,7 @@ import teamcode.autotasks.TaskAutoPickupSpecimen;
 import teamcode.autotasks.TaskAutoScoreBasket;
 import teamcode.autotasks.TaskAutoScoreChamber;
 import teamcode.autotasks.TaskElbowElevator;
+import teamcode.autotasks.TaskSpecimenTeleOpMacros;
 import teamcode.subsystems.WristArm;
 import teamcode.subsystems.Claw;
 import teamcode.subsystems.Elbow;
@@ -99,6 +100,7 @@ public class Robot {
     public TaskSampleTeleOpMacros sampleTeleOpMacros;
     public TaskAutoPickupSample autoPickupSample;
     public TaskAutoSweepSamples autoSweepSamples;
+    public TaskSpecimenTeleOpMacros specimenTeleOpMacros;
 
     public enum GamePieceType {
         SPECIMEN,
@@ -198,6 +200,7 @@ public class Robot {
                 autoHang = new TaskAutoHang("AutoHangTask", this);
                 sampleTeleOpMacros = new TaskSampleTeleOpMacros("sampleTeleOpMacros", this);
                 autoSweepSamples = new TaskAutoSweepSamples("AutoSweepSamples", this);
+                specimenTeleOpMacros = new TaskSpecimenTeleOpMacros("specimenTeleOpMacros", this);
             }
         }
 
@@ -417,6 +420,7 @@ public class Robot {
         if (autoHang != null) autoHang.cancel();
         if (sampleTeleOpMacros != null) sampleTeleOpMacros.cancel();
         if (autoSweepSamples != null) autoSweepSamples.cancel();
+        if (specimenTeleOpMacros != null) specimenTeleOpMacros.cancel();
     }   //cancelAll
 
     public double verticalWristPickupSamplePos()
@@ -426,7 +430,7 @@ public class Robot {
 
     public double armPickupSamplePos()
     {
-        return armReadySamplePickupPos()-0.18;
+        return armReadySamplePickupPos()-0.21;
     }
 
     public double verticalWristReadySamplePickupPos()

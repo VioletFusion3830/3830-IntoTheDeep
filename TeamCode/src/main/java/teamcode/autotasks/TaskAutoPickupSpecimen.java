@@ -187,6 +187,7 @@ public class TaskAutoPickupSpecimen extends TrcAutoTask<TaskAutoPickupSpecimen.S
                 if(taskParams.firstCycle) sm.setState(State.GRAB_SPECIMEN);
                 else
                 {
+                    robot.clawGrabber.open();
                     robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, event1);
                     robot.wristArm.setWristArmPickupSpecimenPos(currOwner, 0, null);
                     robot.robotDrive.purePursuitDrive.start(currOwner, event2, 0.0, false,

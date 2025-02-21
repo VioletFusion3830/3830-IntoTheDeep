@@ -239,7 +239,7 @@ public class FtcTeleOp extends FtcOpMode
                     }
                     else
                     {
-                        elevatorLimit = RobotParams.ElevatorParams.MAX_POS;
+                        elevatorLimit = 40.0;
                     }
 
                     if (elbowPower != elbowPrevPower)
@@ -380,10 +380,10 @@ public class FtcTeleOp extends FtcOpMode
 //                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
 //                driverAltFunc = pressed;
                 //Arm replacement code
-                if(pressed)
-                {
-                    robot.arm.setPosition(0.48);
-                }
+//                if(pressed)
+//                {
+//                    robot.arm.setPosition(0.48);
+//                }
                 //Vwrist replacement code
 //                if(pressed)
 //                {
@@ -422,6 +422,17 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case RightBumper:
+                if (robot.specimenTeleOpMacros != null && pressed)
+                {
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Starting TeleOp Macro");
+                    robot.specimenTeleOpMacros.autoScoreSpecamins(null,null);
+                }
+                else
+                {
+                    robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel TeleOp Macro");
+                    robot.sampleTeleOpMacros.cancel();
+                }
+                break;
             case DpadUp:
                 break;
             case DpadDown:

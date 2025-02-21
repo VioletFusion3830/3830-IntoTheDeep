@@ -20,10 +20,7 @@ public class TaskSpecimenTeleOpMacros extends TrcAutoTask<TaskSpecimenTeleOpMacr
 
     public enum State
     {
-        GO_TO_PICKUP_SPECIMEN_POSITION,
-        GRAB_SPECIMEN,
-        GO_TO_SCORING_SPECIMEN_POSITION,
-        CLIP_SPECIMEN,
+        PICKUP_SPECIMEN,
         SCORE_SPECIMEN,
         DONE
     }   //enum State
@@ -46,8 +43,7 @@ public class TaskSpecimenTeleOpMacros extends TrcAutoTask<TaskSpecimenTeleOpMacr
 
     private final String ownerName;
     private final Robot robot;
-    private final TrcEvent event1;
-    private final TrcEvent event2;
+    private final TrcEvent event;
 
     private String currOwner = null;
     double timesCycled = 0;
@@ -63,8 +59,7 @@ public class TaskSpecimenTeleOpMacros extends TrcAutoTask<TaskSpecimenTeleOpMacr
         super(moduleName, ownerName, TrcTaskMgr.TaskType.POST_PERIODIC_TASK);
         this.ownerName = ownerName;
         this.robot = robot;
-        this.event1 = new TrcEvent(moduleName + ".event");
-        this.event2 = new TrcEvent(moduleName + ".event2");
+        this.event = new TrcEvent(moduleName + ".event");
     }   //TaskAuto
 
     /**
@@ -72,7 +67,7 @@ public class TaskSpecimenTeleOpMacros extends TrcAutoTask<TaskSpecimenTeleOpMacr
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoClipSpecamins(FtcAuto.Alliance alliance, TrcEvent completionEvent)
+    public void autoScoreSpecamins(FtcAuto.Alliance alliance, TrcEvent completionEvent)
     {
         if (alliance == null)
         {
@@ -81,10 +76,9 @@ public class TaskSpecimenTeleOpMacros extends TrcAutoTask<TaskSpecimenTeleOpMacr
                     FtcAuto.Alliance.RED_ALLIANCE: FtcAuto.Alliance.BLUE_ALLIANCE;
         }
 
-        timesCycled = 0;
         TaskParams taskParams = new TaskParams(alliance);
         tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
-        startAutoTask(State.GO_TO_PICKUP_SPECIMEN_POSITION, taskParams, completionEvent);
+        startAutoTask(State.PICKUP_SPECIMEN, taskParams, completionEvent);
     }   //autoAssist
 
     //
@@ -101,10 +95,7 @@ public class TaskSpecimenTeleOpMacros extends TrcAutoTask<TaskSpecimenTeleOpMacr
     @Override
     protected boolean acquireSubsystemsOwnership()
     {
-        boolean success = ownerName == null ||
-                (robot.robotDrive.driveBase.acquireExclusiveAccess(ownerName) &&
-                        robot.verticalWrist.acquireExclusiveAccess(ownerName) &&
-                        robot.arm.acquireExclusiveAccess(ownerName));
+        boolean success = true;
 
         if (success)
         {
@@ -116,10 +107,7 @@ public class TaskSpecimenTeleOpMacros extends TrcAutoTask<TaskSpecimenTeleOpMacr
             TrcOwnershipMgr ownershipMgr = TrcOwnershipMgr.getInstance();
             tracer.traceWarn(
                     moduleName,
-                    "Failed to acquire subsystem ownership (currOwner=" + currOwner +
-                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) +
-                            ", wristVertical=" + ownershipMgr.getOwner(robot.verticalWrist) +
-                            ", arm=" + ownershipMgr.getOwner(robot.arm) + ").");
+                    "Failed to acquire subsystem ownership (currOwner=" + currOwner + ").");
             releaseSubsystemsOwnership();
         }
 
@@ -138,13 +126,7 @@ public class TaskSpecimenTeleOpMacros extends TrcAutoTask<TaskSpecimenTeleOpMacr
             TrcOwnershipMgr ownershipMgr = TrcOwnershipMgr.getInstance();
             tracer.traceInfo(
                     moduleName,
-                    "Releasing subsystem ownership (currOwner=" + currOwner +
-                            ", robotDrive=" + ownershipMgr.getOwner(robot.robotDrive.driveBase) +
-                            ", wristVertical=" + ownershipMgr.getOwner(robot.verticalWrist) +
-                            ", arm=" + ownershipMgr.getOwner(robot.arm) + ").");
-            robot.robotDrive.driveBase.releaseExclusiveAccess(currOwner);
-            robot.verticalWrist.releaseExclusiveAccess(currOwner);
-            robot.arm.releaseExclusiveAccess(currOwner);
+                    "Releasing subsystem ownership (currOwner=" + currOwner + ").");
             currOwner = null;
         }
     }   //releaseSubsystemsOwnership
@@ -156,13 +138,8 @@ public class TaskSpecimenTeleOpMacros extends TrcAutoTask<TaskSpecimenTeleOpMacr
     protected void stopSubsystems()
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
-        robot.robotDrive.cancel(currOwner);
-        robot.elbow.cancel();
-        robot.verticalWrist.cancel();
-        robot.arm.cancel();
-        robot.elevator.cancel();
-        robot.clawGrabber.cancel();
-        robot.rotationalWrist.cancel();
+        robot.pickupSpecimenTask.cancel();
+        robot.scoreChamberTask.cancel();
     }   //stopSubsystems
 
     /**
@@ -181,59 +158,14 @@ public class TaskSpecimenTeleOpMacros extends TrcAutoTask<TaskSpecimenTeleOpMacr
         TaskParams taskParams = (TaskParams) params;
 
         switch (state) {
-            case GO_TO_PICKUP_SPECIMEN_POSITION:
-                //Path to pickup location
-                if(timesCycled == 0)
-                {
-                    robot.robotDrive.purePursuitDrive.start(currOwner, event1, 0.0, false,
-                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                            robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance));
-                }
-                else
-                {
-                    robot.robotDrive.purePursuitDrive.start(currOwner, event1, 0.0, false,
-                            robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                            robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_ZONE_PICKUP, taskParams.alliance, false));
-                }
-                robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS, RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS, event2);
-                    robot.wristArm.setWristArmPickupSpecimenPos(currOwner, 0, null);
-                    robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
-                    sm.addEvent(event1);
-                    sm.addEvent(event2);
-                    sm.waitForEvents(State.GRAB_SPECIMEN, true);
-                break;
-
-            case GRAB_SPECIMEN:
-                robot.clawGrabber.close(null,0,event1);
-                sm.waitForSingleEvent(event1, State.GO_TO_SCORING_SPECIMEN_POSITION);
-                break;
-
-            case GO_TO_SCORING_SPECIMEN_POSITION:
-                //Path to scoring location
-                robot.robotDrive.purePursuitDrive.start(
-                        currOwner, event2, 0.0, false,
-                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                        robot.adjustPoseByAlliance(RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE, taskParams.alliance));
-                robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, event1);
-                robot.verticalWrist.setPosition(currOwner, 0, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, null, 0);
-                robot.arm.setPosition(currOwner, 0, RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, null, 0);
-                robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
-                sm.addEvent(event1);
-                sm.addEvent(event2);
-                sm.waitForEvents(State.CLIP_SPECIMEN,true);
-                break;
-
-            case CLIP_SPECIMEN:
-                //Clip specimen
-                robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_CHAMBER_CLIP_POS, event1);
-                robot.wristArm.setWristArmPosition(currOwner,0.75,0.25,0,null);
-                sm.waitForSingleEvent(event1, State.SCORE_SPECIMEN);
+            case PICKUP_SPECIMEN:
+                robot.pickupSpecimenTask.autoPickupSpecimen(taskParams.alliance, false, event);
+                sm.waitForEvents(State.SCORE_SPECIMEN, true);
                 break;
 
             case SCORE_SPECIMEN:
-                //release specimen
-                robot.clawGrabber.open(null,event1);
-                sm.waitForSingleEvent(event1, State.GO_TO_PICKUP_SPECIMEN_POSITION);
+                robot.scoreChamberTask.autoScoreChamber(taskParams.alliance, RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE,true, event);
+                sm.waitForSingleEvent(event, State.PICKUP_SPECIMEN);
                 break;
 
             default:
