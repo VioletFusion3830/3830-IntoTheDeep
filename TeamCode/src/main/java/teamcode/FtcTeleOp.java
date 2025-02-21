@@ -31,6 +31,7 @@ import ftclib.drivebase.FtcSwerveDrive;
 import ftclib.driverio.FtcGamepad;
 import ftclib.robotcore.FtcOpMode;
 import teamcode.subsystems.Claw;
+import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcDriveBase;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcDbgTrace;
@@ -59,6 +60,7 @@ public class FtcTeleOp extends FtcOpMode
     private Double elevatorLimit = null;
     public static Claw.SamplePickupType SamplePickupType = Claw.SamplePickupType.anySample;
     public static boolean isSamplePickupMode = true, isClawGrabbing = false, is45Left = false;
+    public static boolean headinglock = false;
     private ElapsedTime runtime;
 
     private TrcPose2D robotFieldPose = null;
@@ -201,11 +203,23 @@ public class FtcTeleOp extends FtcOpMode
                     double[] inputs = driverGamepad.getDriveInputs(
                             RobotParams.Robot.DRIVE_MODE, false, drivePowerScale, turnPowerScale);
 
-                    if (robot.robotDrive.driveBase.supportsHolonomicDrive()) {
+                    if(!headinglock)
+                    {
+                        if (robot.robotDrive.driveBase.supportsHolonomicDrive()) {
+                            robot.robotDrive.driveBase.holonomicDrive(
+                                    null, inputs[0], inputs[1], inputs[2], robot.robotDrive.driveBase.getDriveGyroAngle());
+                        } else {
+                            robot.robotDrive.driveBase.arcadeDrive(inputs[1], inputs[2]);
+                        }
+                    }
+                    else
+                    {
+//                        double headinglockPower = robot.robotDrive.purePursuitDrive.getTurnPidCtrl().calculate(robot.robotDrive.driveBase.getHeading(), 180);
+//                        headinglockPower = TrcUtil.clipRange(headinglockPower, -0.5, 0.5);
+//                        robot.robotDrive.driveBase.holonomicDrive(
+//                                null, inputs[0], inputs[1], headinglockPower, 0.0);
                         robot.robotDrive.driveBase.holonomicDrive(
-                                null, inputs[0], inputs[1], inputs[2], robot.robotDrive.driveBase.getDriveGyroAngle());
-                    } else {
-                        robot.robotDrive.driveBase.arcadeDrive(inputs[1], inputs[2]);
+                                        null, inputs[0], inputs[1], 0.0, robot.robotDrive.driveBase.getHeading() - 180.0);
                     }
                     robot.dashboard.displayPrintf(
                             1, "RobotDrive: Power=(%.2f,y=%.2f,rot=%.2f),Mode:%s",
@@ -393,7 +407,7 @@ public class FtcTeleOp extends FtcOpMode
             case X:
                 if(pressed)
                 {
-                    robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
+                    headinglock = !headinglock;
                 }
             case Y:
             break;
