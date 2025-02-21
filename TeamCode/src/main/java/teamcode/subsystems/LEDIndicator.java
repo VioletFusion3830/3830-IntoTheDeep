@@ -36,9 +36,9 @@ import trclib.driverio.TrcRevBlinkin;
 public class LEDIndicator
 {
     // LED pattern names.
-    public static final String RED_SAMPLE = "RedBlob";
-    public static final String BLUE_SAMPLE = "BlueBlob";
-    public static final String YELLOW_SAMPLE = "NoBlob";
+    public static final String RED_SAMPLE = "RedSample";
+    public static final String BLUE_SAMPLE = "BlueSample";
+    public static final String YELLOW_SAMPLE = "YellowSample";
     public static final String APRIL_TAG = "AprilTag";
     public static final String DRIVE_ORIENTATION_FIELD = "FieldMode";
     public static final String DRIVE_ORIENTATION_ROBOT = "RobotMode";

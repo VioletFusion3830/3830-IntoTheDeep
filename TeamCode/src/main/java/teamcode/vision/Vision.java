@@ -971,13 +971,11 @@ public class Vision
                     distCoeffs,
                     rvec,
                     tvec);
-            robot.dashboard.displayPrintf(3,"IsSuccess: " + success);
 
             if (success)
             {
                 // TODO: Verify if we need to convert the coordinate system.
                 samplePose = new TrcPose2D(tvec.get(0, 0)[0], tvec.get(1, 0)[0], angle);
-                robot.dashboard.displayPrintf(4,"SamplePose" + samplePose);
 //                // Draw the coordinate axes on the image
 //                drawAxis(input, rvec, tvec, cameraMatrix, distCoeffs);
 //
@@ -990,7 +988,7 @@ public class Vision
 //                internalStoneList.add(analyzedStone);
             }
         }
-
+        robot.dashboard.displayPrintf(4,"SamplePose" + samplePose);
         return samplePose;
     }   //getDetectedSamplePose
 
