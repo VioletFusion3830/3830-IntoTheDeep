@@ -134,7 +134,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(
                                     RobotParams.Game.RED_OBSERVATION_FORWARD_CHAMBER_SCORE_POSE, autoChoices.alliance, false));
-                    robot.elbowElevator.setPosition(40.0,27.0,event2);
+                    robot.elbowElevator.setPosition(39.0,28.0,event2);
                     robot.wristArm.setWristArmPosition(0.5,0.25);
                     sm.addEvent(event);
                     sm.addEvent(event2);
@@ -188,10 +188,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     }
                     else
                     {
-                        scorePose = new TrcPose2D[]{
-                                new TrcPose2D(9, -35, 180),
-                                new TrcPose2D(7, -33.5, 180)
-                        };
+                        scorePose = RobotParams.Game.RED_OBSERVATION_CHAMBER_SCORE_POSE.clone();
                     }
                     robot.scoreChamberTask.autoScoreChamber(autoChoices.alliance, scorePose,true, event);
                     sm.waitForSingleEvent(event, State.PICKUP_SPECIMEN);
