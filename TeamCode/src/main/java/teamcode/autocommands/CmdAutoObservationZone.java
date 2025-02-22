@@ -134,7 +134,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(
                                     RobotParams.Game.RED_OBSERVATION_FORWARD_CHAMBER_SCORE_POSE, autoChoices.alliance, false));
-                    robot.elbowElevator.setPosition(39.0,28.0,event2);
+                    robot.elbowElevator.setPosition(39.0,27.5,event2);
                     robot.wristArm.setWristArmPosition(0.5,0.25);
                     sm.addEvent(event);
                     sm.addEvent(event2);
@@ -181,9 +181,9 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     if(scoreSpecimenCount == 1)
                     {
                         scorePose = new TrcPose2D[]{
-                                new TrcPose2D(11, -37, 180),
-                                new TrcPose2D(10, -33.5, 180),
-                                new TrcPose2D(7, -33.5, 180)
+                                new TrcPose2D(11, -38, 180),
+                                new TrcPose2D(10, -33, 180),
+                                new TrcPose2D(6, -34, 180)
                         };
                     }
                     else
@@ -198,7 +198,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     // Park at the observation zone.
                     if (autoChoices.parkPos == FtcAuto.ParkOption.PARK)
                     {
-                        robot.elbowElevator.setPosition(true,13.0, RobotParams.ElbowParams.MIN_POS, null, event);
+                        robot.elbowElevator.setPosition(13.0, RobotParams.ElbowParams.MIN_POS, null, event);
                         robot.wristArm.setWristArmPickupSpecimenPos();
                         robot.robotDrive.purePursuitDrive.start(
                                 event2, 0.0, false,

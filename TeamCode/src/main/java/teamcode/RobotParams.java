@@ -170,13 +170,13 @@ public class RobotParams
                 new TrcPose2D(STARTPOS_X,-45.5,-5);
         public static final TrcPose2D[] RED_OBSERVATION_CHAMBER_SCORE_POSE = {
                         new TrcPose2D(9, -35, 180),
-                        new TrcPose2D(7, -33.5, 180)
+                        new TrcPose2D(7, -34, 180)
                 };
 
         // Pickup pose (Observation zone side).
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_CYCLE_PICKUP   = {
                 new TrcPose2D(32, -42, 180.0),
-                new TrcPose2D(34.5, -49, 180.0)
+                new TrcPose2D(34.5, -48.7, 180.0)
         };
         public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
                 new TrcPose2D(36, -48, 180.0);
@@ -191,8 +191,8 @@ public class RobotParams
                 new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
         // Park pose (Net zone side).
         public static final TrcPose2D[] RED_ASCENT_ZONE_PARK_POSE     = {
-                new TrcPose2D(-30, -10, 90.0),
-                new TrcPose2D(-24,-10,90)
+                new TrcPose2D(-33, -10, 90.0),
+                new TrcPose2D(-24, -10,90)
         };
         // Park pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_ZONE_PARK_POSE=
@@ -200,15 +200,15 @@ public class RobotParams
         // Observation zone auto poses.
         public static final TrcPose2D[] RED_OBSERVATION_ZONE_SAMPLE_MOVE_PATH = {
                 new TrcPose2D(32,-39,180), //Move toward sample 1
-                new TrcPose2D(35,-18,180), //Move toward sample 1
+                new TrcPose2D(34,-18,180), //Move toward sample 1
                 new TrcPose2D(43,-18,180), //Move in front of sample 1
                 new TrcPose2D(46,-46,180), //Push sample 1
                 new TrcPose2D(48,-18,180), //Drive back for sample 2
                 new TrcPose2D(52,-19,180), //Move in front of sample 2 (edited due to problem x should be 53)
                 new TrcPose2D(53,-44.5,180), //Push sample 2 (edited due to problem x should be 55)
-                new TrcPose2D(57,-18,180), //Drive back for sample 3
+                new TrcPose2D(57,-17,180), //Drive back for sample 3
                 new TrcPose2D(61,-19,180), //Move in front of sample 3
-                new TrcPose2D(61,-49,180) //Push sample 3
+                new TrcPose2D(61,-49.5,180) //Push sample 3
         };
 
     }   //class Game
@@ -371,7 +371,7 @@ public class RobotParams
         public static final double PICKUP_SPECIMEN_POS                      = 13.5;
         public static final double HIGH_BASKET_SCORE_POS                    = 34;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
-        public static final double HIGH_CHAMBER_CLIP_POS                    = 24;
+        public static final double HIGH_CHAMBER_CLIP_POS                    = 23.3;
         public static final double LEVEL1_ASCENT_POS                        = 13.5;
         public static final double LEVEL2_ASCENT_START_POS                  = 25;
         public static final double LEVEL2_ASCENT_POS                        = 14;
@@ -408,7 +408,7 @@ public class RobotParams
         public static final double MAX_POS                                  = 95; //110
         public static final double PICKUP_SAMPLE_POS                        = 10;
         public static final double PICKUP_SPECIMEN_POS                      = 10;
-        public static final double BASKET_SCORE_POS                         = 95;
+        public static final double BASKET_SCORE_POS                         = 97;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 110;
         public static final double LEVEL1_ASCENT_POS                        = 60;
         public static final double LEVEL2_ASCENT_START_POS                  = 110;
@@ -435,7 +435,7 @@ public class RobotParams
         public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = true;
 
-        public static final double PICKUP_SPECIMEN_POS                      = 0.62;
+        public static final double PICKUP_SPECIMEN_POS                      = 0.63; //0.6
         public static final double BASKET_SCORE_POS                         = 0.68;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.63;
 
@@ -451,7 +451,7 @@ public class RobotParams
         public static final boolean PRIMARY_SERVO_VERTICAL_INVERTED         = false;
 
         public static final double PICKUP_SAMPLE_POS_BASE                   = 0.760; //558
-        public static final double PICKUP_SPECIMEN_POS                      = 0.43;
+        public static final double PICKUP_SPECIMEN_POS                      = 0.43; //0.45
         public static final double BASKET_SCORE_POS                         = 0.25;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.19;
 
@@ -467,9 +467,9 @@ public class RobotParams
         public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".primary";
         public static final boolean PRIMARY_SERVO_INVERTED                  = false;
 
-        public static final double OPEN_POS                                 = 0.5;
-        public static final double CLOSE_TIME                               = 0.11;
-        public static final double CLOSE_POS                                = 1; //0.84
+        public static final double OPEN_POS                                 = 0.10;
+        public static final double CLOSE_TIME                               = 0.13;
+        public static final double CLOSE_POS                                = 0.48;
         public static final double OPEN_TIME                                = 0.2;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR                 = false;

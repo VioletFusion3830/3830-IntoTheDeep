@@ -195,7 +195,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
         {
             case GO_TO_SCORE_POSITION:
                 //Set Subsystems to high chamber score position
-                robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS, event1);
+                robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,0.3,0, event1);
                 robot.verticalWrist.setPosition(currOwner, 0, RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS, null, 0);
                 robot.arm.setPosition(currOwner, 0, RobotParams.ArmParams.HIGH_CHAMBER_SCORE_POS, null, 0);
                 robot.robotDrive.purePursuitDrive.start(
@@ -211,7 +211,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
             case CLIP_SPECIMEN:
                 //Clip specimen
                 robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS, RobotParams.ElevatorParams.HIGH_CHAMBER_CLIP_POS, event1);
-                robot.wristArm.setWristArmPosition(currOwner,0.71,0.25,0,null);
+                robot.wristArm.setWristArmPosition(currOwner,0.70,0.25,0,null);
                 sm.waitForSingleEvent(event1,State.SCORE_CHAMBER);
                 break;
 
@@ -224,7 +224,7 @@ public class TaskAutoScoreChamber extends TrcAutoTask<TaskAutoScoreChamber.State
             case RETRACT_ELBOW:
                 //retract elbow, arm, and elbow "fire and forget"
                 robot.wristArm.setWristArmPickupSpecimenPos(currOwner,0,null);
-                robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS,null);
+                robot.elbowElevator.setPosition(RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS ,RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,null,null);
                 sm.setState(State.DONE);
                 break;
 

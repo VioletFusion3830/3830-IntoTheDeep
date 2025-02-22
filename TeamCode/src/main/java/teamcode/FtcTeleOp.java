@@ -31,6 +31,7 @@ import ftclib.drivebase.FtcSwerveDrive;
 import ftclib.driverio.FtcGamepad;
 import ftclib.robotcore.FtcOpMode;
 import teamcode.subsystems.Claw;
+import trclib.controller.TrcPidController;
 import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcDriveBase;
 import trclib.pathdrive.TrcPose2D;
@@ -60,7 +61,7 @@ public class FtcTeleOp extends FtcOpMode
     private Double elevatorLimit = null;
     public static Claw.SamplePickupType SamplePickupType = Claw.SamplePickupType.anySample;
     public static boolean isSamplePickupMode = true, isClawGrabbing = false, is45Left = false;
-    public static boolean headinglock = false;
+    public boolean headinglock = false;
     private ElapsedTime runtime;
 
     private TrcPose2D robotFieldPose = null;
@@ -214,12 +215,18 @@ public class FtcTeleOp extends FtcOpMode
                     }
                     else
                     {
-//                        double headinglockPower = robot.robotDrive.purePursuitDrive.getTurnPidCtrl().calculate(robot.robotDrive.driveBase.getHeading(), 180);
-//                        headinglockPower = TrcUtil.clipRange(headinglockPower, -0.5, 0.5);
-//                        robot.robotDrive.driveBase.holonomicDrive(
-//                                null, inputs[0], inputs[1], headinglockPower, 0.0);
-                        robot.robotDrive.driveBase.holonomicDrive(
-                                        null, inputs[0], inputs[1], 0.0, robot.robotDrive.driveBase.getHeading() - 180.0);
+                        robot.robotDrive.purePursuitDrive.getTurnPidCtrl().setPidCoefficients(new TrcPidController.PidCoefficients(0.006,0,0.0004,0,0));
+                            double headinglockPower = robot.robotDrive.purePursuitDrive.getTurnPidCtrl().calculate(robot.robotDrive.driveBase.getHeading(), 180);
+                            if(inputs[0] > 0.3 || inputs[1] > 0.3)
+                            {
+                                headinglockPower = TrcUtil.clipRange(headinglockPower, -0.12, 0.12);
+                            }
+                            else
+                            {
+                                headinglockPower = TrcUtil.clipRange(headinglockPower, -0.18, 0.18);
+                            }
+                            robot.robotDrive.driveBase.holonomicDrive(
+                                    null, inputs[0], inputs[1], headinglockPower, 0.0);
                     }
                     robot.dashboard.displayPrintf(
                             1, "RobotDrive: Power=(%.2f,y=%.2f,rot=%.2f),Mode:%s",
@@ -405,10 +412,10 @@ public class FtcTeleOp extends FtcOpMode
 //                }
                 break;
             case X:
-                if(pressed)
-                {
-                    headinglock = !headinglock;
-                }
+//                if(pressed)
+//                {
+//                    headinglock = !headinglock;
+//                }
             case Y:
             break;
             case LeftBumper:
@@ -436,15 +443,18 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case RightBumper:
-                if (robot.specimenTeleOpMacros != null && pressed)
+                if(robot.specimenTeleOpMacros != null)
                 {
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Starting TeleOp Macro");
-                    robot.specimenTeleOpMacros.autoScoreSpecamins(null,null);
-                }
-                else
-                {
-                    robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel TeleOp Macro");
-                    robot.sampleTeleOpMacros.cancel();
+                    if (pressed)
+                    {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Starting TeleOp Macro");
+                        robot.specimenTeleOpMacros.autoScoreSpecamins(null, null);
+                    }
+                    else
+                    {
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel TeleOp Macro");
+                        robot.sampleTeleOpMacros.cancel();
+                    }
                 }
                 break;
             case DpadUp:
@@ -525,7 +535,7 @@ public class FtcTeleOp extends FtcOpMode
                 //Clip Specamin pos
                 if(pressed) {
                     robot.arm.setPosition(0.73);
-                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,23.0,null);
+                    robot.elbowElevator.setPosition(87.0,23.0,null);
                 }
                 break;
 
@@ -554,9 +564,10 @@ public class FtcTeleOp extends FtcOpMode
                 if(pressed)
                 {
                     isSamplePickupMode = false;
+                    robot.elbowElevator.setPosition(87.0,18.0,0.2,0,null);
                     robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                     robot.wristArm.setWristArmHighChamberScorePos();
-                    robot.elbowElevator.setPosition(RobotParams.ElbowParams.HIGH_CHAMBER_SCORE_POS,RobotParams.ElevatorParams.HIGH_CHAMBER_SCORE_POS,null);
+                    robot.wristArm.setWristArmPosition(0.71,RobotParams.WristParamsVertical.HIGH_CHAMBER_SCORE_POS);
                 }
                 break;
 
