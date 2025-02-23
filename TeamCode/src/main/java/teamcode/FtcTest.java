@@ -571,7 +571,7 @@ public class FtcTest extends FtcTeleOp
                 }
                 else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
                     if (pressed) {
-                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.PID_TOLERANCE,true,true);
+                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.PID_TOLERANCE,true);
                         robot.elevator.presetPositionDown(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
@@ -649,7 +649,7 @@ public class FtcTest extends FtcTeleOp
                 }
                 else if (testChoices.test == Test.SUBSYSTEMS_TEST && robot.elevator !=null) {
                     if (pressed) {
-                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.PID_TOLERANCE,true,true);
+                        robot.elevator.setPositionPidParameters(FtcDashboard.TunePID.tunePidCoeff, RobotParams.ElevatorParams.PID_TOLERANCE,true);
                         robot.elevator.presetPositionUp(moduleName, RobotParams.ElevatorParams.POWER_LIMIT);
                     }
                     // This prevents the button event passing back to TeleOp. In effect, we are overriding the A button in TeleOp.
@@ -1172,16 +1172,16 @@ public class FtcTest extends FtcTeleOp
             }
             if (robot.vision.redSampleVision != null)
             {
-                robot.vision.getDetectedSamplePose(Vision.SampleType.RedSample, 0,lineNum++);
+                robot.vision.getDetectedSample(Vision.SampleType.RedSample, 0,lineNum++);
             }
             if (robot.vision.blueSampleVision != null)
             {
-                robot.vision.getDetectedSamplePose(Vision.SampleType.BlueSample,0, lineNum++);
+                robot.vision.getDetectedSample(Vision.SampleType.BlueSample,0, lineNum++);
             }
             if (robot.vision.yellowSampleVision != null)
             {
                 //Test
-                robot.vision.getDetectedSamplePose(Vision.SampleType.YellowSample,0, lineNum++);
+                robot.vision.getDetectedSample(Vision.SampleType.YellowSample,0, lineNum++);
             }
         }
     }   //doVisionTest
