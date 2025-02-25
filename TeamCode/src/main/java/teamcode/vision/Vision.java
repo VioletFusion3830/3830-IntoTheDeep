@@ -927,18 +927,35 @@ public class Vision
     }   //getTargetGroundOffset
 
     /**
-     * This method is called by the Arrays.sort to sort the target object by increasing distance.
+     * This method is called by Arrays.sort to sort the target objects by increasing distance
+     * to the reference point provided inches from the camera.
      *
-     * @param a specifies the first target
+     * @param a specifies the first target.
      * @param b specifies the second target.
-     * @return negative value if a has closer distance than b, 0 if a and b have equal distances, positive value
-     *         if a has higher distance than b.
+     * @return negative value if a is closer to (0, 4.5) than b, 0 if both are equally close,
+     *         positive value if b is closer to (0, 4.5) than a.
      */
+
     private int compareDistance(
             TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject> a,
             TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject> b)
     {
-        return (int)((a.objPose.y - b.objPose.y)*100);
-    }   //compareDistance
+        double targetX = 0.0;  // X reference point
+        double targetY = 4.5;  // Y reference point
+
+        // Ignore objects behind 4.5 inches (i only want to use my elevator for y axis)
+        boolean aInvalid = a.objPose.y < targetY;
+        boolean bInvalid = b.objPose.y < targetY;
+
+        if (aInvalid && !bInvalid) return 1;  // a is invalid, so b is prioritized
+        if (!aInvalid && bInvalid) return -1; // b is invalid, so a is prioritized
+        if (aInvalid && bInvalid) return 0;   // Both are invalid, keep order
+
+        // Calculate Euclidean distance from reference point for each object
+        double distA = Math.sqrt(Math.pow(a.objPose.x - targetX, 2) + Math.pow(a.objPose.y - targetY, 2));
+        double distB = Math.sqrt(Math.pow(b.objPose.x - targetX, 2) + Math.pow(b.objPose.y - targetY, 2));
+
+        return (int)((distA - distB)*100);
+    }   // compareDistance
 
 }   //class Vision
