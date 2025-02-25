@@ -129,12 +129,14 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     break;
 
                 case SET_POSITIONS_TO_SCORE_PRELOAD:
+                    robot.robotDrive.purePursuitDrive.getTurnPidCtrl().setNoOscillation(true);
+                    robot.robotDrive.purePursuitDrive.getYPosPidCtrl().setNoOscillation(true);
                     robot.robotDrive.purePursuitDrive.start(
                             event, 0.0, false,
                             robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                             robot.adjustPoseByAlliance(
                                     RobotParams.Game.RED_OBSERVATION_FORWARD_CHAMBER_SCORE_POSE, autoChoices.alliance, false));
-                    robot.elbowElevator.setPosition(39.0,27.5,event2);
+                    robot.elbowElevator.setPosition(40.0,27.0,event2);
                     robot.wristArm.setWristArmPosition(0.5,0.25);
                     sm.addEvent(event);
                     sm.addEvent(event2);
@@ -144,7 +146,9 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                 case SCORE_PRELOAD:
                     // Score the preloaded specimen.
                     robot.clawGrabber.open(event);
-                    robot.elbowElevator.setPosition(39.0,13.0,null);
+                    robot.elbowElevator.setPosition(35.0,13.0,null);
+                    robot.robotDrive.purePursuitDrive.getTurnPidCtrl().setNoOscillation(false);
+                    robot.robotDrive.purePursuitDrive.getYPosPidCtrl().setNoOscillation(false);
                     sm.waitForSingleEvent(event, State.MOVE_SAMPLES);
                     break;
 
@@ -183,7 +187,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                         scorePose = new TrcPose2D[]{
                                 new TrcPose2D(11, -38, 180),
                                 new TrcPose2D(10, -33, 180),
-                                new TrcPose2D(6, -34, 180)
+                                new TrcPose2D(6, -33.5, 180)
                         };
                     }
                     else

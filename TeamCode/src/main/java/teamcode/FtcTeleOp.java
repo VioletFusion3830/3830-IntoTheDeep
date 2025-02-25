@@ -56,11 +56,9 @@ public class FtcTeleOp extends FtcOpMode
     private boolean operatorAltFunc = false;
     private boolean relocalizing = false;
     private double elevatorPrevPower = 0.0, armPrevPos = 0.0, elbowPrevPower = 0.0, rotationalWristPrevPos = 0.0;
-    private boolean isSampleTypeRedAlliance = false;
-    private boolean isWristRotatorMiddle = false;
     private Double elevatorLimit = null;
     public static Claw.SamplePickupType SamplePickupType = Claw.SamplePickupType.anySample;
-    public static boolean isSamplePickupMode = true, isClawGrabbing = false, is45Left = false;
+    public static boolean isSamplePickupMode = true, isClawGrabbing = false;
     public boolean headinglock = false;
     private ElapsedTime runtime;
 
@@ -443,19 +441,6 @@ public class FtcTeleOp extends FtcOpMode
                 break;
 
             case RightBumper:
-                if(robot.specimenTeleOpMacros != null)
-                {
-                    if (pressed)
-                    {
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Starting TeleOp Macro");
-                        robot.specimenTeleOpMacros.autoScoreSpecamins(null, null);
-                    }
-                    else
-                    {
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel TeleOp Macro");
-                        robot.sampleTeleOpMacros.cancel();
-                    }
-                }
                 break;
             case DpadUp:
                 break;
@@ -548,13 +533,14 @@ public class FtcTeleOp extends FtcOpMode
                         //used
                         isSamplePickupMode = true;
                         robot.wristArm.setWristArmPickupReadySamplePos();
+                        robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                     }
                     else
                     {
                         //used
                         isSamplePickupMode = false;
                         robot.wristArm.setWristArmBasketScorePos();
-                        robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
+                        robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PERPENDICULAR_POS);
                     }
                 }
                 break;

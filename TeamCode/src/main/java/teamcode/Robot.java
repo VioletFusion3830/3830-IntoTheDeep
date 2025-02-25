@@ -425,12 +425,12 @@ public class Robot {
 
     public double verticalWristPickupSamplePos()
     {
-        return verticalWristReadySamplePickupPos()-0.13;
+        return verticalWristReadySamplePickupPos()-0.14;
     }
 
     public double armPickupSamplePos()
     {
-        return armReadySamplePickupPos()-0.21;
+        return armReadySamplePickupPos()-0.22;
     }
 
     public double verticalWristReadySamplePickupPos()
@@ -443,6 +443,18 @@ public class Robot {
     {
         double scalePercentage = (elevator.getPosition()-RobotParams.ElevatorParams.MIN_POS)/((RobotParams.ElevatorParams.HORIZONTAL_LIMIT-RobotParams.ElevatorParams.MAX_POS)-RobotParams.ElevatorParams.MIN_POS);
         return RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START - (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * scalePercentage);
+    }
+
+    public double setRotationalWristToAnglePos(double angle)
+    {
+        // Map the angle from 90-180 to the range 0-90
+        if (angle > 90) {
+            angle = 180 - angle;  // Reflect the angle to the 0-90 range
+        }
+
+        // Linear interpolation formula to map the angle to a position
+        return RobotParams.WristParamsRotational.PERPENDICULAR_POS +
+                (RobotParams.WristParamsRotational.PARALLEL_BASE_P0S - RobotParams.WristParamsRotational.PERPENDICULAR_POS) * (angle / 90);
     }
 
     /**

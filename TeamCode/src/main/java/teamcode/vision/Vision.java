@@ -88,25 +88,25 @@ public class Vision
             camName = "Webcam 1";
             camImageWidth = 640;
             camImageHeight = 480;
-            camXOffset = -4.25;                 // Inches to the right from robot center
-            camYOffset = 5.5;                   // Inches forward from robot center
-            camZOffset = 10.608;                // Inches up from the floor
-            camYaw = -2.0;                      // degrees clockwise from robot forward
-            camPitch = -32.346629699;           // degrees up from horizontal
+            camXOffset = 0;                 // Inches to the right from robot center
+            camYOffset = 0;                   // Inches forward from robot center
+            camZOffset = 8.503;                // Inches up from the floor
+            camYaw = 0;                      // degrees clockwise from robot forward
+            camPitch = -49.116;           // degrees up from horizontal
             camRoll = 0.0;
             camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
-            camOrientation = OpenCvCameraRotation.UPRIGHT;
+            camOrientation = OpenCvCameraRotation.UPSIDE_DOWN;
             // Homography: cameraRect in pixels, worldRect in inches
             cameraRect = new TrcHomographyMapper.Rectangle(
-                    14.0, 28.0,                     // Camera Top Left
-                    612.0, 33.0,                    // Camera Top Right
-                    56.0, 448.0,                    // Camera Bottom Left
-                    581.0, 430.5);                  // Camera Bottom Right
+                    139, 152,                     // Camera Top Left
+                    467, 157,                    // Camera Top Right
+                    555, 448.0,                    // Camera Bottom Left
+                    581.0, 527);                  // Camera Bottom Right
             worldRect = new TrcHomographyMapper.Rectangle(
-                    -19.0, 37.5,                    // World Top Left
-                    24.0, 37.5,                     // World Top Right
-                    -4.75, 9.0,                     // World Bottom Left
-                    6.25, 9.0);                     // World Bottom Right
+                    -10.375, 13.625,                    // World Top Left
+                    7.1875, 13.88,                     // World Top Right
+                    -6.0625, 10.625,                     // World Bottom Left
+                    5.8125, 0);                     // World Bottom Right
         }   //SampleCamParams
     }   //class SampleCamParams
 
@@ -156,7 +156,7 @@ public class Vision
     private static final TrcOpenCvColorBlobPipeline.FilterContourParams sampleFilterContourParams =
             new TrcOpenCvColorBlobPipeline.FilterContourParams()
                     .setMinArea(1000.0)
-                    .setMinPerimeter(200.0)
+                    .setMinPerimeter(100.0)
                     .setWidthRange(20.0, 180.0)
                     .setHeightRange(20.0, 180.0)
                     .setSolidityRange(0.0, 100.0)
@@ -171,18 +171,19 @@ public class Vision
                     .setSolidityRange(0.0, 100.0)
                     .setVerticesRange(0.0, 1000.0)
                     .setAspectRatioRange(0.5, 2.5);
-
-    private static double sampleWidth = 1.5;
-    private static double sampleHeight = 3.5;
-
-    // Camera intrinsicis
-    double fx = 294;
-    double fy = 294;
-    double cx = 302;
-    double cy = 250;
+    private static final double sampleWidth = 3.5;
+    private static final double sampleHeight = 1.5;
+    // Logitech C920
+    private static final double fx = 294;
+    private static final double fy = 294;
+    private static final double cx = 302;
+    private static final double cy = 250;
+    // Distortion coefficients (k1, k2, p1, p2, k3)
+    private static final MatOfDouble distCoeffs = new MatOfDouble(0, 0, 0, 0, 0);
 
     private final TrcDbgTrace tracer;
     private final Robot robot;
+    private final Mat cameraMatrix = new Mat(3, 3, CvType.CV_64FC1);
     private FtcRawEocvColorBlobPipeline rawColorBlobPipeline;
     public FtcRawEocvVision rawColorBlobVision;
     public FtcLimelightVision limelightVision;
@@ -196,9 +197,6 @@ public class Vision
     public FtcVisionEocvColorBlob yellowSampleVision;
     private FtcEocvColorBlobProcessor yellowSampleProcessor;
     public FtcVision vision;
-
-    private Mat cameraMatrix = new Mat(3, 3, CvType.CV_64FC1);
-    private MatOfDouble distCoeffs = new MatOfDouble();
 
     /**
      * Constructor: Create an instance of the object.
@@ -222,6 +220,12 @@ public class Vision
                 opMode.hardwareMap.get(WebcamName.class, robot.robotInfo.webCam1.camName): null;
         webcam2 = robot.robotInfo.webCam2 != null?
                 opMode.hardwareMap.get(WebcamName.class, robot.robotInfo.webCam2.camName): null;
+        //Setup Camera matrix with intrinsics
+        cameraMatrix.put(0, 0,
+                fx, 0, cx,
+                0, fy, cy,
+                0, 0, 1);
+
         if (RobotParams.Preferences.tuneColorBlobVision && webcam1 != null)
         {
             OpenCvCamera openCvCamera;
@@ -244,7 +248,8 @@ public class Vision
 
             tracer.traceInfo(moduleName, "Starting RawEocvColorBlobVision...");
             rawColorBlobPipeline = new FtcRawEocvColorBlobPipeline(
-                    "rawColorBlobPipeline", colorConversion, teamcode.FtcDashboard.TuneVision.tuneSampleColorThreshold, tuneFilterContourParams, true);
+                    "rawColorBlobPipeline", colorConversion, teamcode.FtcDashboard.TuneVision.tuneSampleColorThreshold, tuneFilterContourParams, true,
+                    sampleWidth, sampleHeight, RobotParams.Preferences.useSolvePnp? cameraMatrix: null, distCoeffs, robot.robotInfo.webCam1.camPose);
             // By default, display original Mat.
             rawColorBlobPipeline.setVideoOutput(0);
             rawColorBlobPipeline.setAnnotateEnabled(true);
@@ -290,33 +295,21 @@ public class Vision
             if (RobotParams.Preferences.useColorBlobVision && robot.robotInfo.webCam1 != null)
             {
                 tracer.traceInfo(moduleName, "Starting Webcam SampleVision...");
-
-                //Setup Camera matrix with intrinsics
-                cameraMatrix.put(0, 0,
-                        fx, 0, cx,
-                        0, fy, cy,
-                        0, 0, 1);
-                // Distortion coefficients (k1, k2, p1, p2, k3)
-                distCoeffs = new MatOfDouble(0, 0, 0, 0, 0);
-
                 redSampleVision = new FtcVisionEocvColorBlob(
                         LEDIndicator.RED_SAMPLE, colorConversion, redSampleColorThresholds, sampleFilterContourParams,
-                        true, sampleWidth, sampleHeight, cameraMatrix, distCoeffs,
-                        robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
+                        true, robot.robotInfo.webCam1.cameraRect , robot.robotInfo.webCam1.worldRect, true);
                 redSampleProcessor = redSampleVision.getVisionProcessor();
                 visionProcessorsList.add(redSampleProcessor);
 
                 blueSampleVision = new FtcVisionEocvColorBlob(
                         LEDIndicator.BLUE_SAMPLE, colorConversion, blueSampleColorThresholds, sampleFilterContourParams,
-                        true, sampleWidth, sampleHeight, cameraMatrix, distCoeffs,
-                        robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
+                        true, robot.robotInfo.webCam1.cameraRect , robot.robotInfo.webCam1.worldRect, true);
                 blueSampleProcessor = blueSampleVision.getVisionProcessor();
                 visionProcessorsList.add(blueSampleProcessor);
 
                 yellowSampleVision = new FtcVisionEocvColorBlob(
                         LEDIndicator.YELLOW_SAMPLE, colorConversion, yellowSampleColorThresholds, sampleFilterContourParams,
-                        true, sampleWidth, sampleHeight, cameraMatrix, distCoeffs,
-                        robot.robotInfo.webCam1.cameraRect, robot.robotInfo.webCam1.worldRect, true);
+                        true, robot.robotInfo.webCam1.cameraRect , robot.robotInfo.webCam1.worldRect, true);
                 yellowSampleProcessor = yellowSampleVision.getVisionProcessor();
                 visionProcessorsList.add(yellowSampleProcessor);
             }

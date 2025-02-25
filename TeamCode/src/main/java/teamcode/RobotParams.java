@@ -97,14 +97,15 @@ public class RobotParams
         public static final boolean useVision                   = true;
         public static final boolean useWebCam                   = true; // false to use Android phone camera.
         public static final boolean useBuiltinCamBack           = false; // For Android Phone as Robot Controller.
-        public static final boolean tuneColorBlobVision         = true;
+        public static final boolean tuneColorBlobVision         = false;
+        public static final boolean useSolvePnp                 = false;
         public static final boolean useWebcamAprilTagVision     = false;
         public static final boolean useLimelightVision          = false;
         public static final boolean useCameraStreamProcessor    = !inCompetition;
         public static final boolean useAprilTagVision           = false;
-        public static final boolean useColorBlobVision          = false;
+        public static final boolean useColorBlobVision          = true;
         public static final boolean showVisionView              = !inCompetition;
-        public static final boolean showVisionStat              = true;
+        public static final boolean showVisionStat              = false;
         // Drive Base
         public static final boolean useDriveBase                = true;
         public static final boolean usePinpointOdometry         = true;
@@ -170,7 +171,7 @@ public class RobotParams
                 new TrcPose2D(STARTPOS_X,-45.5,-5);
         public static final TrcPose2D[] RED_OBSERVATION_CHAMBER_SCORE_POSE = {
                         new TrcPose2D(9, -35, 180),
-                        new TrcPose2D(7, -34, 180)
+                        new TrcPose2D(7, -33.5, 180)
                 };
 
         // Pickup pose (Observation zone side).
@@ -404,12 +405,12 @@ public class RobotParams
         public static final double ZERO_CAL_POWER                           = -0.25;
         public static final double RESTRICTED_POS_THRESHOLD                 = 50; //Angle in degrees
 
-        public static final double MIN_POS                                  = 10;
+        public static final double MIN_POS                                  = 11;
         public static final double MAX_POS                                  = 95; //110
-        public static final double PICKUP_SAMPLE_POS                        = 10;
-        public static final double PICKUP_SPECIMEN_POS                      = 10;
+        public static final double PICKUP_SAMPLE_POS                        = 11;
+        public static final double PICKUP_SPECIMEN_POS                      = 11;
         public static final double BASKET_SCORE_POS                         = 97;
-        public static final double HIGH_CHAMBER_SCORE_POS                   = 110;
+        public static final double HIGH_CHAMBER_SCORE_POS                   = 109;
         public static final double LEVEL1_ASCENT_POS                        = 60;
         public static final double LEVEL2_ASCENT_START_POS                  = 110;
         public static final double LEVEL2_ASCENT_POS                        = 70;
@@ -418,7 +419,7 @@ public class RobotParams
 
         public static final boolean SOFTWARE_PID_ENABLED                    = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
-                new TrcPidController.PidCoefficients(0.07, 0.4, 0.005, 0.0, 5); //Need to tune
+                new TrcPidController.PidCoefficients(0.068, 0.38, 0.005, 0.0, 5); //Need to tune
         public static final double PID_TOLERANCE                            = 1.0;
 
         public static final double MAX_GRAVITY_COMP_AT_MIN_SLIDER_LENGTH    = 0.12;
@@ -432,7 +433,6 @@ public class RobotParams
     {
         public static final String SUBSYSTEM_NAME                           = "arm";
         public static final String PRIMARY_SERVO_NAME                       = SUBSYSTEM_NAME + ".primary";
-        public static final MotorType PRIMARY_SERVO_TYPE                    = MotorType.CRServo;
         public static final boolean PRIMARY_SERVO_INVERTED                  = true;
 
         public static final double PICKUP_SPECIMEN_POS                      = 0.63; //0.6
@@ -440,7 +440,7 @@ public class RobotParams
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.63;
 
         //Elevator Scaling Values
-        public static final double SAMPLE_PICKUP_MODE_START                 = 0.57;
+        public static final double SAMPLE_PICKUP_MODE_START                 = 0.58;
         public static final double SAMPLE_PICKUP_MODE_SCALE                 = -0.18;
     }
 
@@ -456,7 +456,7 @@ public class RobotParams
         public static final double HIGH_CHAMBER_SCORE_POS                   = 0.19;
 
         //Elevator Scaling Values
-        public static final double SAMPLE_PICKUP_MODE_START                 = 0.7;
+        public static final double SAMPLE_PICKUP_MODE_START                 = 0.71;
         public static final double SAMPLE_PICKUP_MODE_SCALE                 = -0.14;
     }   //class WristParamsVertical
 
@@ -469,8 +469,8 @@ public class RobotParams
 
         public static final double OPEN_POS                                 = 0.10;
         public static final double CLOSE_TIME                               = 0.13;
-        public static final double CLOSE_POS                                = 0.48;
-        public static final double OPEN_TIME                                = 0.2;
+        public static final double CLOSE_POS                                = 0.485;
+        public static final double OPEN_TIME                                = 0.1;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR                 = false;
         public static final String REV_V3_COLOR_SENSOR_NAME                 = SUBSYSTEM_NAME + ".sensor";

@@ -23,7 +23,7 @@ public class FtcDashboard
         public static double[] tuneSampleColorThreshold = {100.0, 250.0, 120.0, 200.0, 30.0, 80.0};
         public static double minArea = 1000;
         public static double maxArea = 100000;
-        public static double minPerimeter = 200;
+        public static double minPerimeter = 100;
         public static double minWidthRange = 20;
         public static double maxWidthRange = 180;
         public static double minHeightRange = 20;

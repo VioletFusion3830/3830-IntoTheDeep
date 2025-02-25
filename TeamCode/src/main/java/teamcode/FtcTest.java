@@ -175,7 +175,7 @@ public class FtcTest extends FtcTeleOp
             case DRIVE_MOTORS_TEST:
                 if (robot.robotDrive != null)
                 {
-                    testCommand = new CmdDriveMotorsTest(robot.robotDrive.driveMotors, 5.0, 0.5);
+                    //testCommand = new CmdDriveMotorsTest(robot.robotDrive.driveMotors, 5.0, 0.5);
                 }
                 break;
 
