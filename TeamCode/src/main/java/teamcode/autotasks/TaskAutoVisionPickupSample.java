@@ -254,6 +254,7 @@ public class TaskAutoVisionPickupSample extends TrcAutoTask<TaskAutoVisionPickup
                 sm.addEvent(event1);
                 sm.addEvent(event2);
                 sm.waitForSingleEvent(event1, State.PICKUP_SAMPLE);
+                break;
 
             case PICKUP_SAMPLE:
                 //Fire and Forget
