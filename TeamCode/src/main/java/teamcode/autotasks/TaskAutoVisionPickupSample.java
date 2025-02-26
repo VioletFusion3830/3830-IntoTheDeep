@@ -170,13 +170,10 @@ public class TaskAutoVisionPickupSample extends TrcAutoTask<TaskAutoVisionPickup
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
         robot.robotDrive.cancel(currOwner);
-        robot.elbow.cancel();
         robot.verticalWrist.cancel();
         robot.arm.cancel();
-        robot.elevator.cancel();
-        robot.clawGrabber.cancel();
-        robot.rotationalWrist.cancel();
-        robot.sampleTeleOpMacros.cancel();
+        robot.elbowElevator.cancel();
+        robot.vision.setSampleVisionEnabled(Vision.SampleType.YellowSample,false);
     }   //stopSubsystems
 
     /**
@@ -227,7 +224,6 @@ public class TaskAutoVisionPickupSample extends TrcAutoTask<TaskAutoVisionPickup
                             taskParams.sampleType, samplePose.x, samplePose.y, samplePose.angle,
                             sampleInfo.objRotatedRectAngle, robot.MapAngleRange(sampleInfo.objRotatedRectAngle, 160));
                     tracer.traceInfo(moduleName, msg);
-                    robot.vision.setSampleVisionEnabled(Vision.SampleType.YellowSample,false);
                     sm.setState(State.MOVE_TO_SAMPLE);
                 }
                 else if (visionExpiredTime == null)

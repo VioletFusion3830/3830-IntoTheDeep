@@ -94,7 +94,7 @@ public class RobotParams
         public static final boolean useBlinkinLED               = false;
         public static final boolean useGobildaLED               = false;
         // Vision
-        public static final boolean useVision                   = true;
+        public static final boolean useVision                   = false;
         public static final boolean useWebCam                   = true; // false to use Android phone camera.
         public static final boolean useBuiltinCamBack           = false; // For Android Phone as Robot Controller.
         public static final boolean tuneColorBlobVision         = false;
@@ -470,7 +470,7 @@ public class RobotParams
 
         public static final double OPEN_POS                                 = 0.10;
         public static final double CLOSE_TIME                               = 0.13;
-        public static final double CLOSE_POS                                = 0.485;
+        public static final double CLOSE_POS                                = 0.495;
         public static final double OPEN_TIME                                = 0.1;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR                 = false;
