@@ -3,6 +3,7 @@ package teamcode.autocommands;
 import teamcode.FtcAuto;
 import teamcode.Robot;
 import teamcode.RobotParams;
+import teamcode.vision.Vision;
 import trclib.pathdrive.TrcPose2D;
 import trclib.robotcore.TrcEvent;
 import trclib.robotcore.TrcRobot;
@@ -27,6 +28,8 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
         SCORE_SAMPLE_BASKET_2,
         PICKUP_SAMPLE_MARK_3,
         SCORE_SAMPLE_BASKET_3,
+        PICKUP_FROM_SUB,
+        SCORE_SAMPLE_FROM_SUB,
         GO_PARK,
         PARK,
         DONE
@@ -37,8 +40,8 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
     private final TrcTimer timer;
     private final TrcEvent event;
     private final TrcStateMachine<State> sm;
-    private int scoreSampleCount = 0;
-    private int maxSampleCount = 3;
+    private int cycleScoreSampleCount = 0;
+    private int maxCycleSampleCount = 3;
 
     /**
      * Constructor: Create an instance of the object.
@@ -128,7 +131,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case SCORE_PRELOAD:
                     // Score the preloaded sample
-                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance,RobotParams.Game.RED_BASKET_SCORE_POSE ,event);
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance,RobotParams.Game.RED_BASKET_SCORE_POSE, 0.2 ,event);
                     sm.waitForSingleEvent(event, State.PICKUP_SAMPLE_MARK_1);
                     break;
 
@@ -140,7 +143,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case SCORE_SAMPLE_BASKET_1:
                     // Score first floor sample into the sample in the basket.
-                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, event);
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, 0.42, event);
                     sm.waitForSingleEvent(event, State.PICKUP_SAMPLE_MARK_2);
                     break;
 
@@ -152,7 +155,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case SCORE_SAMPLE_BASKET_2:
                     // Score second floor sample into the sample in the basket.
-                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, event);
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, 0.42, event);
                     sm.waitForSingleEvent(event, State.PICKUP_SAMPLE_MARK_3);
                     break;
 
@@ -164,8 +167,27 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case SCORE_SAMPLE_BASKET_3:
                     // Score third floor sample into the sample in the basket.
-                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, event);
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, 0.42, event);
                     sm.waitForSingleEvent(event, State.PARK);
+                    break;
+
+                case PICKUP_FROM_SUB:
+                    if(cycleScoreSampleCount < maxCycleSampleCount)
+                    {
+                        cycleScoreSampleCount++;
+                        robot.autoVisionPickupSample.autoPickupSample(autoChoices.alliance, Vision.SampleType.YellowSample, event);
+                        sm.waitForSingleEvent(event, State.SCORE_SAMPLE_FROM_SUB);
+                    }
+                    else
+                    {
+                        sm.setState(State.PARK);
+                    }
+
+                    break;
+
+                case SCORE_SAMPLE_FROM_SUB:
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SUB_SCORE_POSE, 0.5, event);
+                    sm.waitForSingleEvent(event, State.PICKUP_FROM_SUB);
                     break;
 
                 case PARK:

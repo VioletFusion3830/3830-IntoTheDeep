@@ -29,17 +29,19 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
     private static class TaskParams
     {
         final FtcAuto.Alliance alliance;
-        final TrcPose2D scorePose;
+        final TrcPose2D[] scorePose;
+        double elevatorDelay;
 
-        TaskParams(FtcAuto.Alliance alliance, TrcPose2D scorePose)
+        TaskParams(FtcAuto.Alliance alliance, TrcPose2D[] scorePose, double elevatorDelay )
         {
             this.alliance = alliance;
             this.scorePose = scorePose;
+            this.elevatorDelay = elevatorDelay;
         }   //TaskParams
 
         public String toString()
         {
-            return "alliance=" + alliance + ", scorePose=" + scorePose;
+            return "alliance=" + alliance + "isVisionCycle=" + elevatorDelay;
         }
     }   //class TaskParams
 
@@ -70,7 +72,7 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
      *
      * @param completionEvent specifies the event to signal when done, can be null if none provided.
      */
-    public void autoScoreBasket(FtcAuto.Alliance alliance, TrcPose2D scorePose, TrcEvent completionEvent)
+    public void autoScoreBasket(FtcAuto.Alliance alliance, TrcPose2D[] scorePose, double elevatorDelay, TrcEvent completionEvent)
     {
         if (alliance == null)
         {
@@ -78,12 +80,8 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
             alliance = robot.robotDrive.driveBase.getFieldPosition().y < 0.0?
                     FtcAuto.Alliance.RED_ALLIANCE: FtcAuto.Alliance.BLUE_ALLIANCE;
         }
-        if(scorePose == null)
-        {
-            scorePose = RobotParams.Game.RED_BASKET_SCORE_POSE.clone();
-        }
 
-        TaskParams taskParams = new TaskParams(alliance, scorePose);
+        TaskParams taskParams = new TaskParams(alliance, scorePose, elevatorDelay);
         tracer.traceInfo(moduleName, "taskParams=(" + taskParams + "), event=" + completionEvent);
         startAutoTask(State.GO_TO_SCORE_POSITION, taskParams, completionEvent);
     }   //autoAssist
@@ -158,13 +156,8 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
         robot.robotDrive.cancel(currOwner);
-        robot.elbow.cancel();
         robot.verticalWrist.cancel();
         robot.arm.cancel();
-        robot.elevator.cancel();
-        robot.clawGrabber.cancel();
-        robot.rotationalWrist.cancel();
-        //robot.elbowElevatorArm.cancel();
     }   //stopSubsystems
 
     /**
@@ -189,11 +182,11 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
                 robot.robotDrive.purePursuitDrive.start(
                         currOwner, event2, 0.0, false,
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
-                        robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance));
-                robot.elbowElevator.setPosition(null,RobotParams.ElbowParams.BASKET_SCORE_POS,RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,0.42,0,event1);
-                robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,null,0);
+                        robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance, false));
+                robot.elbowElevator.setPosition(null,RobotParams.ElbowParams.BASKET_SCORE_POS,RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,taskParams.elevatorDelay,0,event1);
+                robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PERPENDICULAR_POS,null,0);
                 robot.wristArm.setWristArmPosition(currOwner,0.56,0.48 ,0,null);
-                sm.waitForSingleEvent(event1, State.SET_ARM); //event1
+                sm.waitForSingleEvent(event1, State.SET_ARM);
                 break;
 
             case SET_ARM:

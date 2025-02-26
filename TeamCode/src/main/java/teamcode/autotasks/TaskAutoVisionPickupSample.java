@@ -32,6 +32,7 @@ public class TaskAutoVisionPickupSample extends TrcAutoTask<TaskAutoVisionPickup
         FIND_SAMPLE,
         MOVE_TO_SAMPLE,
         PICKUP_SAMPLE,
+        RETRACT_ELEVATOR,
         DONE
     }   //enum State
 
@@ -261,8 +262,14 @@ public class TaskAutoVisionPickupSample extends TrcAutoTask<TaskAutoVisionPickup
             case PICKUP_SAMPLE:
                 //Fire and Forget
                 robot.wristArm.setWristArmPickupSamplePos(currOwner,0,null);
-                robot.clawGrabber.close(null,0.105,event1);
+                robot.clawGrabber.close(null,0.07,event1);
                 sm.waitForSingleEvent(event1, State.DONE);
+                break;
+
+            case RETRACT_ELEVATOR:
+                robot.wristArm.setWristArmPosition(currOwner, RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START, RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START, 0, null);
+                robot.elbowElevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS, null, null, null);
+                sm.setState(State.DONE);
                 break;
 
             default:
