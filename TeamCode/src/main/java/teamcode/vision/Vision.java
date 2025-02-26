@@ -95,18 +95,18 @@ public class Vision
             camPitch = -49.116;           // degrees up from horizontal
             camRoll = 0.0;
             camPose = new TrcPose3D(camXOffset, camYOffset, camZOffset, camYaw, camPitch, camRoll);
-            camOrientation = OpenCvCameraRotation.UPSIDE_DOWN;
+            camOrientation = OpenCvCameraRotation.UPRIGHT;
             // Homography: cameraRect in pixels, worldRect in inches
             cameraRect = new TrcHomographyMapper.Rectangle(
-                    139, 152,                     // Camera Top Left
-                    467, 157,                    // Camera Top Right
-                    555, 448.0,                    // Camera Bottom Left
-                    581.0, 527);                  // Camera Bottom Right
+                    122, 206,                     // Camera Top Left
+                    466, 190,                    // Camera Top Right
+                    65, 448,                    // Camera Bottom Left
+                    575, 448);                  // Camera Bottom Right
             worldRect = new TrcHomographyMapper.Rectangle(
-                    -10.375, 13.625,                    // World Top Left
-                    7.1875, 13.88,                     // World Top Right
-                    -6.0625, 10.625,                     // World Bottom Left
-                    5.8125, 0);                     // World Bottom Right
+                    -8.406, 11.516,                    // World Top Left
+                    8.438, 12.000,                     // World Top Right
+                    -6.219, 1.438,                     // World Bottom Left
+                    7.156, 1.0625);                     // World Bottom Right
         }   //SampleCamParams
     }   //class SampleCamParams
 

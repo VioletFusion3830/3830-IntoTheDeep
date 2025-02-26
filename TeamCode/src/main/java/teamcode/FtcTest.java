@@ -1172,11 +1172,11 @@ public class FtcTest extends FtcTeleOp
             }
             if (robot.vision.redSampleVision != null)
             {
-                robot.vision.getDetectedSample(Vision.SampleType.RedSample, 0,lineNum++);
+                //robot.vision.getDetectedSample(Vision.SampleType.RedSample, 0,lineNum++);
             }
             if (robot.vision.blueSampleVision != null)
             {
-                robot.vision.getDetectedSample(Vision.SampleType.BlueSample,0, lineNum++);
+                //robot.vision.getDetectedSample(Vision.SampleType.BlueSample,0, lineNum++);
             }
             if (robot.vision.yellowSampleVision != null)
             {
