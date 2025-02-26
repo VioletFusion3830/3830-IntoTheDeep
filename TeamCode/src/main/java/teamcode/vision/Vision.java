@@ -952,8 +952,8 @@ public class Vision
         if (aInvalid && bInvalid) return 0;   // Both are invalid, keep order
 
         // Calculate Euclidean distance from reference point for each object
-        double distA = Math.sqrt(Math.pow(a.objPose.x - targetX, 2) + Math.pow(a.objPose.y - targetY, 2));
-        double distB = Math.sqrt(Math.pow(b.objPose.x - targetX, 2) + Math.pow(b.objPose.y - targetY, 2));
+        double distA = TrcUtil.magnitude(a.objPose.x - targetX, a.objPose.y - targetY);
+        double distB = TrcUtil.magnitude(a.objPose.x - targetX, a.objPose.y - targetY);
 
         return (int)((distA - distB)*100);
     }   // compareDistance

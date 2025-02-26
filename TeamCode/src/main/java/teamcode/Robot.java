@@ -57,6 +57,8 @@ import trclib.robotcore.TrcRobot;
 import trclib.sensor.TrcDigitalInput;
 import trclib.subsystem.TrcServoGrabber;
 import trclib.timer.TrcTimer;
+import trclib.vision.TrcOpenCvColorBlobPipeline;
+import trclib.vision.TrcVisionTargetInfo;
 
 /**
  * This class creates the robot object that consists of sensors, indicators, drive base and all the subsystems.
@@ -445,8 +447,9 @@ public class Robot {
         return RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START - (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * scalePercentage);
     }
 
-    public double setRotationalWristToAnglePos(double angle)
+    public double getRotationalWristAngleFromSamplePos(TrcPose2D samplePos)
     {
+        double angle = samplePos.angle;
         // Map the angle from 90-180 to the range 0-90
         if (angle > 90) {
             angle = 180 - angle;  // Reflect the angle to the 0-90 range
@@ -456,6 +459,34 @@ public class Robot {
         return RobotParams.WristParamsRotational.PERPENDICULAR_POS +
                 (RobotParams.WristParamsRotational.PARALLEL_BASE_P0S - RobotParams.WristParamsRotational.PERPENDICULAR_POS) * (angle / 90);
     }
+
+    public double getElevatorPosFromSamplePos(TrcPose2D samplePos)
+    {
+        double armOffset = 4.5;
+        return elevator.getPosition() + (samplePos.y - armOffset);
+    }
+
+    /**
+     * This method calculates the sample pose from the vision detected sample info.
+     *
+     * @param sampleInfo specifies the detected sample info.
+     * @param logInfo specifies true to log detected info into tracelog, false otherwise.
+     * @return detected sample pose.
+     */
+    public TrcPose2D getDetectedSamplePose(
+            TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject> sampleInfo, boolean logInfo)
+    {
+        TrcPose2D samplePose = robotInfo.webCam1.camPose.toPose2D().addRelativePose(sampleInfo.objPose);
+        samplePose.angle = Math.toDegrees(Math.atan(samplePose.x/samplePose.y));
+
+        if (logInfo)
+        {
+            globalTracer.traceInfo(
+                    moduleName, "detectedSamplePose=%s, adjustedSamplePose=%s", sampleInfo.objPose, samplePose);
+        }
+
+        return samplePose;
+    }   //getDetectedSamplePose
 
     /**
      * This method zero calibrates all subsystems.

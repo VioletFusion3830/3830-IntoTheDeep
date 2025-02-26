@@ -132,17 +132,16 @@ public class RobotParams
     /**
      * This class contains season specific game element information.
      */
-    public static class Game
-    {
-        public static final boolean fieldIsMirrored                 = false;
+    public static class Game {
+        public static final boolean fieldIsMirrored = false;
         // DO NOT CHANGE the AprilTag location numbers. They are from the AprilTag metadata.
         // All AprilTags are at the height of 5.75-inch from the tile floor.
-        public static final double APRILTAG_AUDIENCE_WALL_X                 = -70.25;
-        public static final double APRILTAG_BACK_WALL_X                     = 70.25;
-        public static final double APRILTAG_BLUE_ALLIANCE_WALL_Y            = 70.25;
-        public static final double APRILTAG_RED_ALLIANCE_WALL_Y             = -70.25;
-        public static final double APRILTAG_WALL_OFFSET_Y                   = 46.83;
-        public static final TrcPose2D[] APRILTAG_POSES                      = new TrcPose2D[] {
+        public static final double APRILTAG_AUDIENCE_WALL_X = -70.25;
+        public static final double APRILTAG_BACK_WALL_X = 70.25;
+        public static final double APRILTAG_BLUE_ALLIANCE_WALL_Y = 70.25;
+        public static final double APRILTAG_RED_ALLIANCE_WALL_Y = -70.25;
+        public static final double APRILTAG_WALL_OFFSET_Y = 46.83;
+        public static final TrcPose2D[] APRILTAG_POSES = new TrcPose2D[]{
                 new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, APRILTAG_WALL_OFFSET_Y, -90.0), // TagId 11
                 new TrcPose2D(0.0, APRILTAG_BLUE_ALLIANCE_WALL_Y, 0.0),                 // TagId 12
                 new TrcPose2D(APRILTAG_BACK_WALL_X, APRILTAG_WALL_OFFSET_Y, 90.0),      // TagId 13
@@ -151,45 +150,47 @@ public class RobotParams
                 new TrcPose2D(APRILTAG_AUDIENCE_WALL_X, -APRILTAG_WALL_OFFSET_Y, -90.0) // TagId 16
         };
 
-        public static final double AUTO_PERIOD                      = 30.0; // 30 seconds auto period
-        public static final double TELEOP_PERIOD                    = 120.0;// 2 minutes teleop period
-        public static final double SCORE_BASKET_CYCLE_TIME          = 6.0;  // in seconds
-        public static final double CHAMBER_LENGTH                   = 26.0;
-        public static final double CHAMBER_MAX_SCORE_POS_X          = (CHAMBER_LENGTH / 2.0);
+        public static final double AUTO_PERIOD = 30.0; // 30 seconds auto period
+        public static final double TELEOP_PERIOD = 120.0;// 2 minutes teleop period
+        public static final double SCORE_BASKET_CYCLE_TIME = 6.0;  // in seconds
+        public static final double CHAMBER_LENGTH = 26.0;
+        public static final double CHAMBER_MAX_SCORE_POS_X = (CHAMBER_LENGTH / 2.0);
 
         // Blue alliance positions will be derived using adjustPoseByAlliance.
         // Robot start locations in inches.
-        public static final double STARTPOS_X                                   = Robot.ROBOT_WIDTH/2.0;
-        public static final double STARTPOS_Y                                   = Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH/2.0;
+        public static final double STARTPOS_X = Robot.ROBOT_WIDTH / 2.0;
+        public static final double STARTPOS_Y = Field.HALF_FIELD_INCHES - Robot.ROBOT_LENGTH / 2.0;
         // Red Net Zone start pose face the net zone touching the alliance wall with the robot's in front of net zone.
-        public static final TrcPose2D STARTPOSE_RED_NET_ZONE_SAMPLE    = new TrcPose2D((((Field.FULL_TILE_INCHES)+(Robot.ROBOT_LENGTH/2)-Field.HALF_FIELD_INCHES)),(Robot.ROBOT_WIDTH/2.0)-Field.HALF_FIELD_INCHES, 90);
+        public static final TrcPose2D STARTPOSE_RED_NET_ZONE_SAMPLE = new TrcPose2D((((Field.FULL_TILE_INCHES) + (Robot.ROBOT_LENGTH / 2) - Field.HALF_FIELD_INCHES)), (Robot.ROBOT_WIDTH / 2.0) - Field.HALF_FIELD_INCHES, 90);
         // Red Observation Zone start pose face forwards robot 1 in form center tile and touch back wall.
-        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE   = new TrcPose2D(STARTPOS_X, -STARTPOS_Y, 0);
+        public static final TrcPose2D STARTPOSE_RED_OBSERVATION_ZONE = new TrcPose2D(STARTPOS_X, -STARTPOS_Y, 0);
 
         // Score pose (Observation zone side).
         public static final TrcPose2D RED_OBSERVATION_FORWARD_CHAMBER_SCORE_POSE =
-                new TrcPose2D(STARTPOS_X,-45.5,-5);
+                new TrcPose2D(STARTPOS_X, -45.5, -5);
         public static final TrcPose2D[] RED_OBSERVATION_CHAMBER_SCORE_POSE = {
-                        new TrcPose2D(9, -35, 180),
-                        new TrcPose2D(7, -33.5, 180)
-                };
+                new TrcPose2D(9, -35, 180),
+                new TrcPose2D(7, -33.5, 180)
+        };
 
         // Pickup pose (Observation zone side).
-        public static final TrcPose2D[] RED_OBSERVATION_ZONE_CYCLE_PICKUP   = {
+        public static final TrcPose2D[] RED_OBSERVATION_ZONE_CYCLE_PICKUP = {
                 new TrcPose2D(32, -42, 180.0),
                 new TrcPose2D(34.5, -48.7, 180.0)
         };
-        public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP   =
+        public static final TrcPose2D RED_OBSERVATION_ZONE_PICKUP =
                 new TrcPose2D(36, -48, 180.0);
 
         // Score poses (Net zone side).
-        public static final TrcPose2D RED_BASKET_SCORE_POSE         =
+        public static final TrcPose2D RED_BASKET_SCORE_POSE =
                 new TrcPose2D(-56, -56, 45.0);
-        public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE    =
-                new TrcPose2D(-(Robot.ROBOT_WIDTH/2.0), -38, 180);
+        public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE =
+                new TrcPose2D(-(Robot.ROBOT_WIDTH / 2.0), -38, 180);
         // Pickup pose (Net zone side).
-        public static final TrcPose2D RED_NET_ZONE_PICKUP =
-                new TrcPose2D(-1.8 * Field.FULL_TILE_INCHES, -1.82 * Field.FULL_TILE_INCHES, 0.0);
+        public static final TrcPose2D[] RED_NET_ZONE_VISION_PICKUP_POSE = {
+                new TrcPose2D(-33, -9, 90.0),
+                new TrcPose2D(-28,-9,90)
+        };
         // Park pose (Net zone side).
         public static final TrcPose2D[] RED_ASCENT_ZONE_PARK_POSE     = {
                 new TrcPose2D(-33, -10, 90.0),
@@ -382,7 +383,7 @@ public class RobotParams
         public static final boolean SOFTWARE_PID_ENABLED                        = true;
         public static final TrcPidController.PidCoefficients PID_COEFFS     =
                 new TrcPidController.PidCoefficients(0.15,0, 0.002,0,0); //0.27
-        public static final double PID_TOLERANCE                            = 0.75;
+        public static final double PID_TOLERANCE                            = 0.5;
 
         public static final double MAX_GRAVITY_COMP_POWER                   = 0.10;
         public static final double STALL_MIN_POWER                          = Math.abs(ZERO_CAL_POWER);
