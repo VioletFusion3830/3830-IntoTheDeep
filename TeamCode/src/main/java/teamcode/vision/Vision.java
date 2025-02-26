@@ -941,7 +941,7 @@ public class Vision
             TrcVisionTargetInfo<TrcOpenCvColorBlobPipeline.DetectedObject> b)
     {
         double targetX = 0.0;  // X reference point
-        double targetY = 4.5;  // Y reference point
+        double targetY = 3.25;  // Y reference point
 
         // Ignore objects behind 4.5 inches (i only want to use my elevator for y axis)
         boolean aInvalid = a.objPose.y < targetY;

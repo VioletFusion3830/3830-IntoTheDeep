@@ -31,6 +31,7 @@ import ftclib.drivebase.FtcSwerveDrive;
 import ftclib.driverio.FtcGamepad;
 import ftclib.robotcore.FtcOpMode;
 import teamcode.subsystems.Claw;
+import teamcode.vision.Vision;
 import trclib.controller.TrcPidController;
 import trclib.dataprocessor.TrcUtil;
 import trclib.drivebase.TrcDriveBase;
@@ -392,22 +393,21 @@ public class FtcTeleOp extends FtcOpMode
 //                    }
 //                }
 //                }
-                if (robot.sampleTeleOpMacros != null && pressed)
+                if (robot.autoVisionPickupSample != null && pressed)
                 {
-                    if (!robot.sampleTeleOpMacros.isActive())
+                    if (!robot.autoVisionPickupSample.isActive())
                     {
-                        robot.sampleTeleOpMacros.autoSetSubsystemsSampleScorePos(null);
+                        robot.autoVisionPickupSample.autoPickupSample(FtcAuto.Alliance.RED_ALLIANCE, Vision.SampleType.YellowSample,null);
                     }
                     else
                     {
-                        robot.globalTracer.traceInfo(moduleName, ">>>>> Cancel TeleOp Macro");
-                        robot.sampleTeleOpMacros.cancel();
+                        robot.globalTracer.traceInfo(moduleName, ">>>>> Vision Pickup Sample");
+                        robot.autoVisionPickupSample.cancel();
                     }
                 }
                 break;
 
             case B:
-
 //                robot.globalTracer.traceInfo(moduleName, ">>>>> DriverAltFunc=" + pressed);
 //                driverAltFunc = pressed;
                 //Arm replacement code

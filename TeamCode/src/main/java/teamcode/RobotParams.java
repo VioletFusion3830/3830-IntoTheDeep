@@ -101,10 +101,10 @@ public class RobotParams
         public static final boolean useSolvePnp                 = false;
         public static final boolean useWebcamAprilTagVision     = false;
         public static final boolean useLimelightVision          = false;
-        public static final boolean useCameraStreamProcessor    = !inCompetition;
+        public static final boolean useCameraStreamProcessor    = false;
         public static final boolean useAprilTagVision           = false;
         public static final boolean useColorBlobVision          = true;
-        public static final boolean showVisionView              = !inCompetition;
+        public static final boolean showVisionView              = false;
         public static final boolean showVisionStat              = false;
         // Drive Base
         public static final boolean useDriveBase                = true;
@@ -321,7 +321,7 @@ public class RobotParams
             enablePurePursuitDriveSquareRootPid = true;
             drivePidTolerance = 0.5;
             turnPidTolerance = 1;
-            xDrivePidCoeffs = new PidCoefficients(0.055,0.0, 0.0037, 0.0,0);
+            xDrivePidCoeffs = new PidCoefficients(0.053,0.0, 0.0039, 0.0,0);
             xDrivePidPowerLimit = 1.0;
             xDriveMaxPidRampRate = null;
             yDrivePidCoeffs = new PidCoefficients(0.028, 0.0, 0.0031, 0.0, 0); //0.028 , 0.0031 //0.026 0.0034

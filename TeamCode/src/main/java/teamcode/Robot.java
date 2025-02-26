@@ -437,7 +437,7 @@ public class Robot {
 
     public double armPickupSamplePos()
     {
-        return armReadySamplePickupPos()-0.22;
+        return armReadySamplePickupPos()-0.19;
     }
 
     public double verticalWristReadySamplePickupPos()
@@ -452,37 +452,54 @@ public class Robot {
         return RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START - (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * scalePercentage);
     }
 
-    public double MapAngleRange(Double angle)
+    public double MapAngleRange(Double angle, double clipPoint)
     {
         // Map the angle from 90-180 to the range 0-90
-        if (angle > 90) {
+        if (angle > clipPoint) {
             angle = 180 - angle;  // Reflect the angle to the 0-90 range
         }
         return angle;
     }
 
-    public double getRotationalWristAngleFromSamplePos(Double contourAngle)
+    public double getRotationalWristAngleFromSamplePos(double contourAngle)
     {
-        contourAngle = MapAngleRange(contourAngle);
         // Linear interpolation formula to map the angle to a position
         return RobotParams.WristParamsRotational.PERPENDICULAR_POS +
-                (RobotParams.WristParamsRotational.PARALLEL_BASE_P0S - RobotParams.WristParamsRotational.PERPENDICULAR_POS) * (contourAngle / 90);
+                (RobotParams.WristParamsRotational.PARALLEL_BASE_P0S - 0) * (contourAngle / 180);
     }
 
     public double getElevatorPosFromSamplePos(TrcPose2D samplePos, Double contourAngle)
     {
-        double armOffset = 4.5;
-        contourAngle = MapAngleRange(contourAngle);
-        if(contourAngle >= 45)
+        double armOffset = 4.0;
+        contourAngle = MapAngleRange(contourAngle, 90);
+        if(contourAngle >= 60)
         {
-            armOffset += 1.5;
+            armOffset -= 1.75;
+        }
+        else if(contourAngle >= 30)
+        {
+            armOffset -= 1.5;
         }
         else
         {
-            armOffset += 0.75;
+            armOffset -= 0.75;
         }
 
         return elevator.getPosition() + (samplePos.y - armOffset);
+    }
+
+    public double getStrafePosFromSamplePose(TrcPose2D samplePos)
+    {
+        double samplePosX = samplePos.x;
+        if(samplePosX >= 2.5)
+        {
+            samplePosX -= 1;
+        }
+        else if(samplePosX <= -2)
+        {
+            samplePosX -= 0.5;
+        }
+        return samplePosX;
     }
 
     /**

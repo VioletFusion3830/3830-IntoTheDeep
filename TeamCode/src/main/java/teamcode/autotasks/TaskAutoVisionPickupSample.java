@@ -205,9 +205,11 @@ public class TaskAutoVisionPickupSample extends TrcAutoTask<TaskAutoVisionPickup
 //                        currOwner, event2, 0.0, false,
 //                        robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
 //                        robot.adjustPoseByAlliance(RobotParams.Game.RED_NET_ZONE_VISION_PICKUP_POSE, taskParams.alliance, false));
-                robot.elbowElevator.setPosition(12.5, RobotParams.ElevatorParams.PICKUP_SAMPLE_POS, null,0,0.44, event1);
+                robot.vision.setSampleVisionEnabled(Vision.SampleType.YellowSample,true);
+                robot.elbowElevator.setPosition(12.2, RobotParams.ElevatorParams.PICKUP_SAMPLE_POS, null,0,0.44, event1);
                 robot.rotationalWrist.setPosition(null, 0, RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null, 0);
                 robot.wristArm.setWristArmPosition(currOwner, 1.0, RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START, 0, null);
+                robot.clawGrabber.open();
                 sm.addEvent(event1);
 //                sm.addEvent(event2);
                 sm.waitForEvents(State.FIND_SAMPLE, true);
@@ -221,11 +223,11 @@ public class TaskAutoVisionPickupSample extends TrcAutoTask<TaskAutoVisionPickup
                     samplePose = robot.getDetectedSamplePose(sampleInfo, true);
                     // Vision found the sample.
                     String msg = String.format(
-                            Locale.US, "%s is found at x %.1f, y %.1f, angle=%.1f, rotatedAngle=%.1f",
+                            Locale.US, "%s is found at x %.1f, y %.1f, angle=%.1f, rotatedAngle=%.1f, rotatedAngleMaped=%.1f",
                             taskParams.sampleType, samplePose.x, samplePose.y, samplePose.angle,
-                            sampleInfo.objRotatedAngle);
+                            sampleInfo.objRotatedRectAngle, robot.MapAngleRange(sampleInfo.objRotatedRectAngle, 160));
                     tracer.traceInfo(moduleName, msg);
-                    robot.speak(msg);
+                    robot.vision.setSampleVisionEnabled(Vision.SampleType.YellowSample,false);
                     sm.setState(State.MOVE_TO_SAMPLE);
                 }
                 else if (visionExpiredTime == null)
@@ -242,25 +244,25 @@ public class TaskAutoVisionPickupSample extends TrcAutoTask<TaskAutoVisionPickup
                 break;
 
             case MOVE_TO_SAMPLE:
-                double elevatorLen = robot.getElevatorPosFromSamplePos(samplePose, sampleInfo.objRotatedAngle);
+                double elevatorLen = robot.getElevatorPosFromSamplePos(samplePose, sampleInfo.objRotatedRectAngle);
                 robot.elbowElevator.setPosition(elevatorLen, null, null, event1);
                 robot.robotDrive.purePursuitDrive.start(
                         currOwner, event2, 0.0, true,
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                         new TrcPose2D(samplePose.x, 0.0, 0.0));
-                double wristAngle = robot.getRotationalWristAngleFromSamplePos(sampleInfo.objRotatedAngle);
+                double wristAngle = robot.getRotationalWristAngleFromSamplePos(sampleInfo.objRotatedRectAngle);
                 robot.rotationalWrist.setPosition(wristAngle);
-                robot.wristArm.setWristArmPosition(robot.armReadySamplePickupPos()-.1, robot.verticalWristPickupSamplePos());
+                robot.wristArm.setWristArmPosition(currOwner, 0.5, robot.verticalWristPickupSamplePos(), 0, null);
                 sm.addEvent(event1);
                 sm.addEvent(event2);
-                sm.waitForSingleEvent(event1, State.PICKUP_SAMPLE);
+                sm.waitForEvents(State.PICKUP_SAMPLE, true);
                 break;
 
             case PICKUP_SAMPLE:
                 //Fire and Forget
-                robot.wristArm.setWristArmPickupSamplePos();
-                robot.clawGrabber.open(null,0.105,null);
-                sm.setState(State.DONE);
+                robot.wristArm.setWristArmPickupSamplePos(currOwner,0,null);
+                robot.clawGrabber.close(null,0.105,event1);
+                sm.waitForSingleEvent(event1, State.DONE);
                 break;
 
             default:
