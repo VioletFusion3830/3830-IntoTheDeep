@@ -242,13 +242,13 @@ public class TaskAutoVisionPickupSample extends TrcAutoTask<TaskAutoVisionPickup
                 break;
 
             case MOVE_TO_SAMPLE:
-                double elevatorLen = robot.getElevatorPosFromSamplePos(samplePose);
+                double elevatorLen = robot.getElevatorPosFromSamplePos(samplePose, sampleInfo.objRotatedAngle);
                 robot.elbowElevator.setPosition(elevatorLen, null, null, event1);
                 robot.robotDrive.purePursuitDrive.start(
                         currOwner, event2, 0.0, true,
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                         new TrcPose2D(samplePose.x, 0.0, 0.0));
-                double wristAngle = robot.getRotationalWristAngleFromSamplePos(samplePose);
+                double wristAngle = robot.getRotationalWristAngleFromSamplePos(sampleInfo.objRotatedAngle);
                 robot.rotationalWrist.setPosition(wristAngle);
                 robot.wristArm.setWristArmPosition(robot.armReadySamplePickupPos()-.1, robot.verticalWristPickupSamplePos());
                 sm.addEvent(event1);

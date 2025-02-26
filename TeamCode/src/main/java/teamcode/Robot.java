@@ -33,6 +33,7 @@ import ftclib.robotcore.FtcOpMode;
 import ftclib.sensor.FtcRobotBattery;
 import teamcode.autotasks.TaskAutoHang;
 import teamcode.autotasks.TaskAutoSweepSamples;
+import teamcode.autotasks.TaskAutoVisionPickupSample;
 import teamcode.autotasks.TaskSampleTeleOpMacros;
 import teamcode.autotasks.TaskAutoPickupSample;
 import teamcode.autotasks.TaskAutoPickupSpecimen;
@@ -103,6 +104,7 @@ public class Robot {
     public TaskAutoPickupSample autoPickupSample;
     public TaskAutoSweepSamples autoSweepSamples;
     public TaskSpecimenTeleOpMacros specimenTeleOpMacros;
+    public TaskAutoVisionPickupSample autoVisionPickupSample;
 
     public enum GamePieceType {
         SPECIMEN,
@@ -203,6 +205,8 @@ public class Robot {
                 sampleTeleOpMacros = new TaskSampleTeleOpMacros("sampleTeleOpMacros", this);
                 autoSweepSamples = new TaskAutoSweepSamples("AutoSweepSamples", this);
                 specimenTeleOpMacros = new TaskSpecimenTeleOpMacros("specimenTeleOpMacros", this);
+                autoVisionPickupSample = new TaskAutoVisionPickupSample("AutoVisionPickupSample", this);
+
             }
         }
 
@@ -423,6 +427,7 @@ public class Robot {
         if (sampleTeleOpMacros != null) sampleTeleOpMacros.cancel();
         if (autoSweepSamples != null) autoSweepSamples.cancel();
         if (specimenTeleOpMacros != null) specimenTeleOpMacros.cancel();
+        if (autoVisionPickupSample != null) autoVisionPickupSample.cancel();
     }   //cancelAll
 
     public double verticalWristPickupSamplePos()
@@ -447,22 +452,36 @@ public class Robot {
         return RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START - (RobotParams.ArmParams.SAMPLE_PICKUP_MODE_SCALE * scalePercentage);
     }
 
-    public double getRotationalWristAngleFromSamplePos(TrcPose2D samplePos)
+    public double MapAngleRange(Double angle)
     {
-        double angle = samplePos.angle;
         // Map the angle from 90-180 to the range 0-90
         if (angle > 90) {
             angle = 180 - angle;  // Reflect the angle to the 0-90 range
         }
-
-        // Linear interpolation formula to map the angle to a position
-        return RobotParams.WristParamsRotational.PERPENDICULAR_POS +
-                (RobotParams.WristParamsRotational.PARALLEL_BASE_P0S - RobotParams.WristParamsRotational.PERPENDICULAR_POS) * (angle / 90);
+        return angle;
     }
 
-    public double getElevatorPosFromSamplePos(TrcPose2D samplePos)
+    public double getRotationalWristAngleFromSamplePos(Double contourAngle)
+    {
+        contourAngle = MapAngleRange(contourAngle);
+        // Linear interpolation formula to map the angle to a position
+        return RobotParams.WristParamsRotational.PERPENDICULAR_POS +
+                (RobotParams.WristParamsRotational.PARALLEL_BASE_P0S - RobotParams.WristParamsRotational.PERPENDICULAR_POS) * (contourAngle / 90);
+    }
+
+    public double getElevatorPosFromSamplePos(TrcPose2D samplePos, Double contourAngle)
     {
         double armOffset = 4.5;
+        contourAngle = MapAngleRange(contourAngle);
+        if(contourAngle >= 45)
+        {
+            armOffset += 1.5;
+        }
+        else
+        {
+            armOffset += 0.75;
+        }
+
         return elevator.getPosition() + (samplePos.y - armOffset);
     }
 
