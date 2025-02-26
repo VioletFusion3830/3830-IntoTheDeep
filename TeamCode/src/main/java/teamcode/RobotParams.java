@@ -182,10 +182,14 @@ public class RobotParams
                 new TrcPose2D(36, -48, 180.0);
 
         // Score poses (Net zone side).
-        public static final TrcPose2D RED_BASKET_SCORE_POSE =
-                new TrcPose2D(-56, -56, 45.0);
-        public static final TrcPose2D RED_NET_CHAMBER_SCORE_POSE =
-                new TrcPose2D(-(Robot.ROBOT_WIDTH / 2.0), -38, 180);
+        public static final TrcPose2D[] RED_BASKET_SCORE_POSE = {
+                new TrcPose2D(-56, -56, 45.0)
+        };
+
+        public static final TrcPose2D[] RED_BASKET_SUB_SCORE_POSE = {
+                new TrcPose2D(-20, -12, 45.0),
+                new TrcPose2D(-56, -56, 45.0)
+        };
         // Pickup pose (Net zone side).
         public static final TrcPose2D[] RED_NET_ZONE_VISION_PICKUP_POSE = {
                 new TrcPose2D(-33, -9, 90.0),
