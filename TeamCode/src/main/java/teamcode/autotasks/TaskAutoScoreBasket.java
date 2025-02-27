@@ -183,7 +183,8 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
                         currOwner, event2, 0.0, false,
                         robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                         robot.adjustPoseByAlliance(taskParams.scorePose, taskParams.alliance, false));
-                robot.elbowElevator.setPosition(null,RobotParams.ElbowParams.BASKET_SCORE_POS,RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,taskParams.elevatorDelay,0,event1);
+                robot.elevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS);
+                robot.elbowElevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS,RobotParams.ElbowParams.BASKET_SCORE_POS,RobotParams.ElevatorParams.HIGH_BASKET_SCORE_POS,taskParams.elevatorDelay,0,event1);
                 robot.rotationalWrist.setPosition(null,0,RobotParams.WristParamsRotational.PERPENDICULAR_POS,null,0);
                 robot.wristArm.setWristArmPosition(currOwner,0.56,0.48 ,0,null);
                 sm.waitForSingleEvent(event1, State.SET_ARM);
@@ -191,22 +192,20 @@ public class TaskAutoScoreBasket extends TrcAutoTask<TaskAutoScoreBasket.State>
 
             case SET_ARM:
                 robot.wristArm.setWristArmBasketScorePos(currOwner,0.13, event1);
-                event1.clear();
                 sm.addEvent(event1);
                 sm.addEvent(event2);
                 sm.waitForEvents(State.SCORE_BASKET,false,true);
                 break;
 
             case SCORE_BASKET:
-                event1.clear();
                 robot.clawGrabber.open(null,event1);
-                sm.waitForSingleEvent(event1,State.RETRACT_ELEVATOR_ARM,false,0.2);
+                sm.waitForSingleEvent(event1,State.RETRACT_ELEVATOR_ARM);
                 break;
 
             case RETRACT_ELEVATOR_ARM:
                 //retract elevator, elbow, and arm "fire and forget"
                 robot.wristArm.setWristArmPosition(currOwner,RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START,RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START,0,null);
-                robot.elbowElevator.setPosition(true,RobotParams.ElevatorParams.PICKUP_SAMPLE_POS,RobotParams.ElbowParams.PICKUP_SAMPLE_POS,null, null);
+                robot.elbowElevator.setPosition(RobotParams.ElevatorParams.PICKUP_SAMPLE_POS,null,null, null);
                 sm.setState(State.DONE);
                 break;
 

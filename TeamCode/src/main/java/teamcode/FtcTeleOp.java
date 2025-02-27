@@ -58,7 +58,7 @@ public class FtcTeleOp extends FtcOpMode
     private double elevatorPrevPower = 0.0, armPrevPos = 0.0, elbowPrevPower = 0.0, rotationalWristPrevPos = 0.0;
     private Double elevatorLimit = null;
     public static Claw.SamplePickupType SamplePickupType = Claw.SamplePickupType.anySample;
-    public static boolean isSamplePickupMode = true, isSampleArmScaling = true, isClawGrabbing = false, isClawDroping = false;
+    public static boolean isSamplePickupMode = true, isSampleArmScaling = true, isClawGrabbing = false, isClawDroping = false, isSampleScoreMode = false;
     public boolean headinglock = false;
     private ElapsedTime runtime;
     private ElapsedTime dropRuntime;
@@ -407,13 +407,14 @@ public class FtcTeleOp extends FtcOpMode
                 {
                     if (robot.clawGrabber.isClosed())
                     {
-                        if(isSamplePickupMode)
+                        if(isSamplePickupMode && isSampleScoreMode)
                         {
                             isClawDroping = true;
                             robot.claw.getClawGrabber().open();
                             robot.wristArm.setWristArmPosition(null, 0.13, RobotParams.ArmParams.SAMPLE_PICKUP_MODE_START, RobotParams.WristParamsVertical.SAMPLE_PICKUP_MODE_START,0,null);
                             robot.rotationalWrist.setPosition(null,0.13,RobotParams.WristParamsRotational.PARALLEL_BASE_P0S, null,0);
                             dropRuntime.reset();
+                            isSampleScoreMode = false;
                         }
                         else
                         {
@@ -484,6 +485,7 @@ public class FtcTeleOp extends FtcOpMode
                 if(pressed && robot.wristArm != null)
                 {
                     isSamplePickupMode = false;
+                    isSampleArmScaling = false;
                     robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                     robot.wristArm.setWristArmPickupSpecimenPos();
                     robot.elbowElevator.setPosition(RobotParams.ElbowParams.PICKUP_SPECIMEN_POS,RobotParams.ElevatorParams.PICKUP_SPECIMEN_POS,null);
@@ -494,6 +496,7 @@ public class FtcTeleOp extends FtcOpMode
                 //Clip Specamin pos
                 if(pressed) {
                     isSamplePickupMode = false;
+                    isSampleArmScaling = false;
                     robot.arm.setPosition(0.73);
                     robot.elbowElevator.setPosition(87.0,23.0,null);
                 }
@@ -509,6 +512,7 @@ public class FtcTeleOp extends FtcOpMode
                         //used
                         isSamplePickupMode = true;
                         isSampleArmScaling = true;
+                        isSampleScoreMode = false;
                         robot.wristArm.setWristArmPickupReadySamplePos();
                         robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                     }
@@ -517,6 +521,7 @@ public class FtcTeleOp extends FtcOpMode
                         //used
                         isSamplePickupMode = true;
                         isSampleArmScaling = false;
+                        isSampleScoreMode = true;
                         robot.wristArm.setWristArmBasketScorePos();
                         robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PERPENDICULAR_POS);
                     }
@@ -528,6 +533,7 @@ public class FtcTeleOp extends FtcOpMode
                 if(pressed)
                 {
                     isSamplePickupMode = false;
+                    isSampleArmScaling = false;
                     robot.elbowElevator.setPosition(87.0,18.0,0.2,0,null);
                     robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
                     robot.wristArm.setWristArmHighChamberScorePos();

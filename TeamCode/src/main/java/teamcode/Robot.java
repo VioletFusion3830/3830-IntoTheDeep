@@ -470,22 +470,23 @@ public class Robot {
 
     public double getElevatorPosFromSamplePos(TrcPose2D samplePos, Double contourAngle)
     {
-        double armOffset = 4.0;
+        double elevatorPos = elevator.getPosition() - 12.3;
+        double elbowArmOffset = (elevatorPos/12) + 4.1;
         contourAngle = MapAngleRange(contourAngle, 90);
         if(contourAngle >= 60)
         {
-            armOffset -= 1.75;
+            elbowArmOffset -= 1.25;
         }
         else if(contourAngle >= 30)
         {
-            armOffset -= 1.5;
+            elbowArmOffset -= 1.0;
         }
         else
         {
-            armOffset -= 0.75;
+            elbowArmOffset -= 0.5; //0.75
         }
 
-        return elevator.getPosition() + (samplePos.y - armOffset);
+        return elevator.getPosition() + (samplePos.y - elbowArmOffset);
     }
 
     public double getStrafePosFromSamplePose(TrcPose2D samplePos)

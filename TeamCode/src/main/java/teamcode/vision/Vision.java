@@ -166,8 +166,8 @@ public class Vision
             new TrcOpenCvColorBlobPipeline.FilterContourParams()
                     .setMinArea(1000.0)
                     .setMinPerimeter(200.0)
-                    .setWidthRange(0.0, 1000.0)
-                    .setHeightRange(0.0, 1000.0)
+                    .setWidthRange(20.0, 180.0)
+                    .setHeightRange(20.0, 180.0)
                     .setSolidityRange(0.0, 100.0)
                     .setVerticesRange(0.0, 1000.0)
                     .setAspectRatioRange(0.5, 2.5);
@@ -943,9 +943,9 @@ public class Vision
         double targetX = 0.0;  // X reference point
         double targetY = 3.25;  // Y reference point
 
-        // Ignore objects behind 4.5 inches (i only want to use my elevator for y axis)
-        boolean aInvalid = a.objPose.y < targetY;
-        boolean bInvalid = b.objPose.y < targetY;
+        // Ignore objects behind 3.25 inches (i only want to use my elevator for y axis)
+        boolean aInvalid = a.objPose.y < 3.25 || a.objPose.x > 5.9;
+        boolean bInvalid = b.objPose.y < 3.25 || b.objPose.x > 5.9;
 
         if (aInvalid && !bInvalid) return 1;  // a is invalid, so b is prioritized
         if (!aInvalid && bInvalid) return -1; // b is invalid, so a is prioritized
@@ -953,7 +953,7 @@ public class Vision
 
         // Calculate Euclidean distance from reference point for each object
         double distA = TrcUtil.magnitude(a.objPose.x - targetX, a.objPose.y - targetY);
-        double distB = TrcUtil.magnitude(a.objPose.x - targetX, a.objPose.y - targetY);
+        double distB = TrcUtil.magnitude(b.objPose.x - targetX, b.objPose.y - targetY);
 
         return (int)((distA - distB)*100);
     }   // compareDistance

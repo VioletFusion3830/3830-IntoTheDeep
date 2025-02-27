@@ -94,7 +94,7 @@ public class RobotParams
         public static final boolean useBlinkinLED               = false;
         public static final boolean useGobildaLED               = false;
         // Vision
-        public static final boolean useVision                   = false;
+        public static final boolean useVision                   = true;
         public static final boolean useWebCam                   = true; // false to use Android phone camera.
         public static final boolean useBuiltinCamBack           = false; // For Android Phone as Robot Controller.
         public static final boolean tuneColorBlobVision         = false;
@@ -183,17 +183,17 @@ public class RobotParams
 
         // Score poses (Net zone side).
         public static final TrcPose2D[] RED_BASKET_SCORE_POSE = {
-                new TrcPose2D(-56, -56, 45.0)
+                new TrcPose2D(-57, -55, 45.0)
         };
 
         public static final TrcPose2D[] RED_BASKET_SUB_SCORE_POSE = {
-                new TrcPose2D(-20, -12, 45.0),
+                new TrcPose2D(-25, -10, 45.0),
                 new TrcPose2D(-56, -56, 45.0)
         };
         // Pickup pose (Net zone side).
         public static final TrcPose2D[] RED_NET_ZONE_VISION_PICKUP_POSE = {
-                new TrcPose2D(-33, -9, 90.0),
-                new TrcPose2D(-28,-9,90)
+                new TrcPose2D(-35, -9, 90.0),
+                new TrcPose2D(-26.5,-9,90)
         };
         // Park pose (Net zone side).
         public static final TrcPose2D[] RED_ASCENT_ZONE_PARK_POSE     = {
@@ -375,7 +375,7 @@ public class RobotParams
         public static final double MAX_POS                                  = 44; //44
         public static final double PICKUP_SAMPLE_POS                        = 13.5;
         public static final double PICKUP_SPECIMEN_POS                      = 13.5;
-        public static final double HIGH_BASKET_SCORE_POS                    = 34;
+        public static final double HIGH_BASKET_SCORE_POS                    = 33.5;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 18;
         public static final double HIGH_CHAMBER_CLIP_POS                    = 23.3;
         public static final double LEVEL1_ASCENT_POS                        = 13.5;
@@ -474,8 +474,8 @@ public class RobotParams
 
         public static final double OPEN_POS                                 = 0.10;
         public static final double CLOSE_TIME                               = 0.13;
-        public static final double CLOSE_POS                                = 0.495;
-        public static final double OPEN_TIME                                = 0.1;
+        public static final double CLOSE_POS                                = 0.5;
+        public static final double OPEN_TIME                                = 0.13;
 
         public static final boolean USE_REV_V3_COLOR_SENSOR                 = false;
         public static final String REV_V3_COLOR_SENSOR_NAME                 = SUBSYSTEM_NAME + ".sensor";
@@ -492,7 +492,7 @@ public class RobotParams
 
         public static final double ANALOG_INCREMENT                         = 0.04;
         public static final double PARALLEL_BASE_P0S                        = 0.56;
-        public static final double PARALLEL_SECONDARY_POS                   = 0.28;
+        public static final double PARALLEL_SECONDARY_POS                   = 0.00;
         public static final double PERPENDICULAR_POS                        = 0.300;
         public static final double[] POS_PRESETS                            = {PARALLEL_BASE_P0S, PERPENDICULAR_POS};
     }   //class WristParamsRotational

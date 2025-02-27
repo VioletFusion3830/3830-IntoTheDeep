@@ -41,7 +41,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
     private final TrcEvent event;
     private final TrcStateMachine<State> sm;
     private int cycleScoreSampleCount = 0;
-    private int maxCycleSampleCount = 3;
+    private int maxCycleSampleCount = 2;
 
     /**
      * Constructor: Create an instance of the object.
@@ -137,13 +137,13 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case PICKUP_SAMPLE_MARK_1:
                     // Pickup first floor sample.
-                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance,new TrcPose2D(-48.5,-43.5,0), RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,event);
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance,new TrcPose2D(-48.5,-43.7,0), RobotParams.WristParamsRotational.PARALLEL_BASE_P0S,event);
                     sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_1);
                     break;
 
                 case SCORE_SAMPLE_BASKET_1:
                     // Score first floor sample into the sample in the basket.
-                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, 0.42, event);
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, 0.4, event);
                     sm.waitForSingleEvent(event, State.PICKUP_SAMPLE_MARK_2);
                     break;
 
@@ -155,20 +155,20 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
 
                 case SCORE_SAMPLE_BASKET_2:
                     // Score second floor sample into the sample in the basket.
-                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, 0.42, event);
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, 0.4, event);
                     sm.waitForSingleEvent(event, State.PICKUP_SAMPLE_MARK_3);
                     break;
 
                 case PICKUP_SAMPLE_MARK_3:
                     // Pickup third floor sample.
-                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-57.5,-40,-35), 0.7,event);
+                    robot.autoPickupSample.autoPickupSample(autoChoices.alliance, new TrcPose2D(-57.5,-40.5,-35), 0.7,event);
                     sm.waitForSingleEvent(event, State.SCORE_SAMPLE_BASKET_3);
                     break;
 
                 case SCORE_SAMPLE_BASKET_3:
                     // Score third floor sample into the sample in the basket.
-                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, 0.42, event);
-                    sm.waitForSingleEvent(event, State.PARK);
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SCORE_POSE, 0.4, event);
+                    sm.waitForSingleEvent(event, State.PICKUP_FROM_SUB);
                     break;
 
                 case PICKUP_FROM_SUB:
@@ -186,7 +186,7 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                     break;
 
                 case SCORE_SAMPLE_FROM_SUB:
-                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SUB_SCORE_POSE, 0.5, event);
+                    robot.scoreBasketTask.autoScoreBasket(autoChoices.alliance, RobotParams.Game.RED_BASKET_SUB_SCORE_POSE, 0.8, event);
                     sm.waitForSingleEvent(event, State.PICKUP_FROM_SUB);
                     break;
 
@@ -198,9 +198,9 @@ public class CmdAutoNetZone implements TrcRobot.RobotCommand
                                 robot.robotInfo.profiledMaxVelocity, robot.robotInfo.profiledMaxAcceleration, robot.robotInfo.profiledMaxDeceleration,
                                 robot.adjustPoseByAlliance(
                                         RobotParams.Game.RED_ASCENT_ZONE_PARK_POSE, autoChoices.alliance, false));
-                        robot.elbowElevator.setPosition(true,14.0,59.0,null,null);
-                        //robot.elbow.setPosition(null,0,60,true,1,null,0);
-                        robot.wristArm.setWristArmPosition(0.49,0.5);
+                        robot.rotationalWrist.setPosition(RobotParams.WristParamsRotational.PARALLEL_BASE_P0S);
+                        robot.elbowElevator.setPosition(true,14.0,54.0,null,null);
+                        robot.wristArm.setWristArmPosition(0.46,0.6);
                         sm.waitForSingleEvent(event, State.DONE);
                     }
                     else
