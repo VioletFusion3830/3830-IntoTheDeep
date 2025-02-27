@@ -40,6 +40,8 @@ public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.S
 
     public enum State
     {
+        SCORE_SAMPLE,
+        RESET_ARM,
         SET_ARM_POS,
         GRAB,
         RESET_ARM_POS,
@@ -166,7 +168,6 @@ public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.S
     {
         tracer.traceInfo(moduleName, "Stopping subsystems.");
         robot.arm.cancel();
-        robot.clawGrabber.cancel();
         robot.verticalWrist.cancel();
         robot.rotationalWrist.cancel();
         robot.elbowElevator.cancel();
@@ -190,6 +191,9 @@ public class TaskSampleTeleOpMacros extends TrcAutoTask<TaskSampleTeleOpMacros.S
 
         switch (state)
         {
+            case SCORE_SAMPLE:
+
+            case RESET_ARM:
             //Auto-assisted Pickup Sample
             case SET_ARM_POS:
                 robot.wristArm.setWristArmPickupSamplePos(currOwner,.1, event);
