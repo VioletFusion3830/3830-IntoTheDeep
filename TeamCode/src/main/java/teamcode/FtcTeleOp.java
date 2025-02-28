@@ -58,7 +58,7 @@ public class FtcTeleOp extends FtcOpMode
     private double elevatorPrevPower = 0.0, armPrevPos = 0.0, elbowPrevPower = 0.0, rotationalWristPrevPos = 0.0;
     private Double elevatorLimit = null;
     public static Claw.SamplePickupType SamplePickupType = Claw.SamplePickupType.anySample;
-    public static boolean isSamplePickupMode = true, isSampleArmScaling = true, isClawGrabbing = false, isClawDroping = false, isSampleScoreMode = false;
+    public static boolean isSamplePickupMode = true, isSampleArmScaling = true, isClawGrabbing = false, isClawDroping = false, isSampleScoreMode = true;
     public boolean headinglock = false;
     private ElapsedTime runtime;
     private ElapsedTime dropRuntime;

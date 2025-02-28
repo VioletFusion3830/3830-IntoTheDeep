@@ -237,7 +237,7 @@ public class TaskElbowElevator extends TrcAutoTask<TaskElbowElevator.State> {
                 {
                     // Setting target elbow angle
                     elbow.setPosition(
-                                currOwner, elbowDelay, taskParams.elbowAngle, true, RobotParams.ElevatorParams.POWER_LIMIT, elbowEvent, 1);
+                                currOwner, elbowDelay, taskParams.elbowAngle, true, RobotParams.ElevatorParams.POWER_LIMIT, elbowEvent, 1.5);
                     if (safeSequence)
                     {
                         //preform safe sequence, so wait for elbow event.
