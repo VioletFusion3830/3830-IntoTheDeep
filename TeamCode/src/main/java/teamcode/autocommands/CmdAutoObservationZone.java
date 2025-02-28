@@ -185,7 +185,7 @@ public class CmdAutoObservationZone implements TrcRobot.RobotCommand
                     if(scoreSpecimenCount == 1)
                     {
                         scorePose = new TrcPose2D[]{
-                                new TrcPose2D(11, -38, 180),
+                                new TrcPose2D(11, -37, 180),
                                 new TrcPose2D(10, -36, 180),
                                 new TrcPose2D(7, -34, 180)
                         };

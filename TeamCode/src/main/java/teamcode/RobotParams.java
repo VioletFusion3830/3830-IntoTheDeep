@@ -377,7 +377,7 @@ public class RobotParams
         public static final double PICKUP_SPECIMEN_POS                      = 13.5;
         public static final double HIGH_BASKET_SCORE_POS                    = 33.5;
         public static final double HIGH_CHAMBER_SCORE_POS                   = 17.5;
-        public static final double HIGH_CHAMBER_CLIP_POS                    = 23;
+        public static final double HIGH_CHAMBER_CLIP_POS                    = 23.5;
         public static final double LEVEL1_ASCENT_POS                        = 13.5;
         public static final double LEVEL2_ASCENT_START_POS                  = 25;
         public static final double LEVEL2_ASCENT_POS                        = 14;

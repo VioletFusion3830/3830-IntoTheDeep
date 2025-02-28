@@ -944,8 +944,8 @@ public class Vision
         double targetY = 3.25;  // Y reference point
 
         // Ignore objects behind 3.25 inches (i only want to use my elevator for y axis)
-        boolean aInvalid = a.objPose.y < 3.25 || a.objPose.x > 5.9;
-        boolean bInvalid = b.objPose.y < 3.25 || b.objPose.x > 5.9;
+        boolean aInvalid = a.objPose.y < 3.25 || a.objPose.x > 5.9 || a.objPose.y > 25;
+        boolean bInvalid = b.objPose.y < 3.25 || b.objPose.x > 5.9 || b.objPose.y > 25;
 
         if (aInvalid && !bInvalid) return 1;  // a is invalid, so b is prioritized
         if (!aInvalid && bInvalid) return -1; // b is invalid, so a is prioritized
